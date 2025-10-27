@@ -33,17 +33,17 @@
                </font>
             </Label>
             <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="33.0" size="30" />
-            <Button fx:id="btnKH" layoutX="80.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Quản lý khách hàng">
+            <Button fx:id="btnKH" layoutX="80.0" layoutY="350.0" mnemonicParsing="false" onAction="#khachHang" prefHeight="30.0" prefWidth="160.0" text="Quản lý khách hàng">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btnHD" layoutX="80.0" layoutY="300.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Tra cứu hóa đơn">
+            <Button fx:id="btnHD" layoutX="80.0" layoutY="300.0" mnemonicParsing="false" onAction="#traCuuHoaDon" prefHeight="30.0" prefWidth="160.0" text="Tra cứu hóa đơn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btnMonAn" layoutX="80.0" layoutY="250.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Quản lý món ăn">
+            <Button fx:id="btnMonAn" layoutX="80.0" layoutY="250.0" mnemonicParsing="false" onAction="#monAn" prefHeight="30.0" prefWidth="160.0" text="Quản lý món ăn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>

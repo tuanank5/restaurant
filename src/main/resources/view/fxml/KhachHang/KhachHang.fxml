@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
    <center>
       <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <top>
@@ -31,7 +31,7 @@
             <BorderPane prefHeight="640.0" prefWidth="900.0" BorderPane.alignment="CENTER">
                <center>
    <BorderPane prefHeight="200.0" prefWidth="900.0" BorderPane.alignment="CENTER"> <center> 
-<TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"> 
+<TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"> 
 <columns> <TableColumn prefWidth="150.0" text="Mã khách hàng" /> <TableColumn prefWidth="160.0" text="Tên khách hàng" /> <TableColumn prefWidth="150.0" text="Số điện thoại" /> <TableColumn prefWidth="150.0" text="Email" /> <TableColumn minWidth="8.800048828125" prefWidth="141.60003662109375" text="Hạng khách hàng" /> <TableColumn prefWidth="149.5999755859375" text="Điểm tích luỹ" />
                               <TableColumn prefWidth="180.0" text="Địa chỉ" /> </columns>
                            <columnResizePolicy>
@@ -46,17 +46,17 @@
                            <left>
                               <Pane prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button layoutX="40.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: green;" text="(+) Thêm khách hàng" textFill="WHITE">
+                                    <Button fx:id="btnThemKhachHang" layoutX="40.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: green;" text="(+) Thêm khách hàng" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="219.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="Xuất Excel" textFill="WHITE">
+                                    <Button fx:id="btnXuatExcel" layoutX="219.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="Xuất Excel" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="324.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: #cc851d;" text="Tất cả" textFill="WHITE">
+                                    <Button fx:id="btnTatCa" layoutX="324.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: #cc851d;" text="Tất cả" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
@@ -72,7 +72,7 @@
                                           <Font name="System Bold Italic" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField layoutX="51.0" layoutY="50.0" prefWidth="200.0" />
+                                    <TextField fx:id="txtTimKiem" layoutX="51.0" layoutY="50.0" prefWidth="200.0" />
                                  </children>
                               </Pane>
                            </right>

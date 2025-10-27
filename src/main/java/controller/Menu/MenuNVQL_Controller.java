@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import config.RestaurantApplication;
 import controller.Dashboard_Controller;
+import controller.KhachHang.KhachHang_Controller;
 import controller.NhanVien.NhanVien_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
@@ -25,6 +26,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MenuNVQL_Controller {
