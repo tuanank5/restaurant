@@ -37,12 +37,6 @@ public class MenuNVQL_Controller {
     private BorderPane borderPane;
 
     @FXML
-    private Button btnBan;
-
-    @FXML
-    private Button btnDangXuat;
-
-    @FXML
     private Button btnDashboard;
 
     @FXML
@@ -52,10 +46,10 @@ public class MenuNVQL_Controller {
     private Button btnKhuyenMai;
 
     @FXML
-    private Button btnMonAn;
+    private Button btnNV;
 
     @FXML
-    private Button btnNhanVien;
+    private Button btnQLBan;
 
     @FXML
     private Button btnTaiKhoan;

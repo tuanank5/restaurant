@@ -53,7 +53,7 @@ public class Login_Controller implements Initializable{
     
     @FXML
     public void login(ActionEvent actionEvent) {
-    	try {
+        try {
             // Lấy ra thông tin Tài Khoàn
             String user = txtUserName.getText().trim();
             String pass = txtPassword.getText().trim();
@@ -66,47 +66,53 @@ public class Login_Controller implements Initializable{
                         .getDatabaseContext()
                         .newEntity_DAO(TaiKhoan_DAO.class)
                         .getDanhSach(TaiKhoan.class, filter);
+
                 if (!taiKhoans.isEmpty()) {
                     this.taiKhoan = taiKhoans.get(0);
+
                     if (taiKhoan.kiemTraDangNhap(user, pass)) {
                         // Cập nhật lại ngày giờ đăng nhập
-                    	LocalDate localDate = LocalDate.now();
-                    	Date dateNow = Date.valueOf(localDate);
-                    	
+                        LocalDate localDate = LocalDate.now();
+                        Date dateNow = Date.valueOf(localDate);
                         this.taiKhoan.setNgayDangNhap(dateNow);
                         RestaurantApplication.getInstance()
                                 .getDatabaseContext()
                                 .newEntity_DAO(TaiKhoan_DAO.class)
                                 .capNhat(taiKhoan);
-                        // Phân quyền
-                        if (1 == 1) {
-                        	FXMLLoader fxmlLoader = new FXMLLoader(
-                        			getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
-                            Parent root = fxmlLoader.load();
-                            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                            Scene scene = new Scene(root);
-                            
+
+                        //PHÂN QUYỀN GIAO DIỆN
+                        // Lấy chức vụ từ nhân viên liên kết
+                        String chucVu = taiKhoan.getNhanVien().getChucVu();
+
+                        FXMLLoader fxmlLoader;
+                        Parent root;
+                        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                        Scene scene;
+
+                        if (chucVu != null && chucVu.equalsIgnoreCase("QL")) {
+                            //Giao diện quản lý
+                            fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
+                            root = fxmlLoader.load();
+                            scene = new Scene(root);
+
                             MenuNVQL_Controller menuNVQLController = fxmlLoader.getController();
                             menuNVQLController.setThongTin(taiKhoan);
-
-                            stage.setScene(scene);
-                            stage.setMaximized(true);
-                            stage.show();
                         } else {
-//                            FXMLLoader fxmlLoader = new FXMLLoader(
-//                                    getClass().getResource("/view/fxml/Menu/MenuNhanVien.fxml"));
-//                            Parent root = fxmlLoader.load();
-//                            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-//                            Scene scene = new Scene(root);
-//
-//                            MenuNhanVienController menuNhanVienController = fxmlLoader.getController();
-//                            menuNhanVienController.setThongTin(taiKhoan);
-//
-//                            stage.setScene(scene);
-//                            stage.setMaximized(true);
-//                            stage.show();
+                            //Giao diện nhân viên
+                            fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
+                            root = fxmlLoader.load();
+                            scene = new Scene(root);
+
+                            controller.Menu.MenuNV_Controller menuNhanVienController = fxmlLoader.getController();
+                            menuNhanVienController.setThongTin(taiKhoan);
                         }
+
+                        stage.setScene(scene);
+                        stage.setMaximized(true);
+                        stage.show();
+
                         showAlert("Thông báo", "Đăng nhập thành công!", Alert.AlertType.INFORMATION);
+
                     } else {
                         showAlert("Cảnh báo", "Tên đăng nhập hoặc mật khẩu không chính xác! Vui lòng thử lại",
                                 Alert.AlertType.WARNING);
