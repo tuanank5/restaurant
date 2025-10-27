@@ -172,7 +172,31 @@ public class MenuNV_Controller {
 			borderPane.setCenter(monAnPane);
 		}catch (IOException e) {
 			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Hóa đơn"+ e.getMessage());
+			System.out.print("Không thể tải giao diện Món ăn"+ e.getMessage());
+		}
+    }
+	@FXML
+    private void caLam(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KetCa/KetCaNV.fxml"));
+			Pane ketCaPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(ketCaPane);
+		}catch (IOException e) {
+			e.printStackTrace();
+			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
+		}
+    }
+	@FXML
+    void datTimBan(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/DatBan/DatBan.fxml"));
+			Pane datBanPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(datBanPane);
+		}catch (IOException e) {
+			e.printStackTrace();
+			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
 		}
     }
 }

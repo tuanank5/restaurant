@@ -17,7 +17,7 @@
                   <Font name="Times New Roman Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="btnDatTimBan" layoutX="80.0" layoutY="100.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Đặt/ tìm kiếm bàn">
+            <Button fx:id="btnDatTimBan" layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#datTimBan" prefHeight="30.0" prefWidth="160.0" text="Đặt/ tìm kiếm bàn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
@@ -54,7 +54,7 @@
             <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="325.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="375.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="225.0" size="25" />
-            <Button fx:id="btnCaLam" layoutX="80.0" layoutY="200.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Ca làm việc">
+            <Button fx:id="btnCaLam" layoutX="80.0" layoutY="200.0" mnemonicParsing="false" onAction="#caLam" prefHeight="30.0" prefWidth="160.0" text="Ca làm việc">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
