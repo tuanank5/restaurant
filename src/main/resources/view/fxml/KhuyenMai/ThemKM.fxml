@@ -26,17 +26,17 @@
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label layoutX="158.0" layoutY="7.0" text="Danh sách khuyến mãi">
+                  <Label layoutX="457.0" layoutY="5.0" text="Danh sách khuyến mãi">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="298.0" layoutY="6.0" prefHeight="17.0" prefWidth="2.0" text="/">
+                  <Label layoutX="597.0" layoutY="5.0" prefHeight="17.0" prefWidth="2.0" text="/">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="317.0" layoutY="8.0" text="Thêm khuyến mãi">
+                  <Label layoutX="612.0" layoutY="6.0" text="Thêm khuyến mãi">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
