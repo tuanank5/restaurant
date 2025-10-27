@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+         <top>
+            <BorderPane prefHeight="60.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+               <right>
+                  <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+               </right>
+               <left>
+                  <Pane prefHeight="60.0" prefWidth="555.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="25.0" layoutY="21.0" text="Danh sách tài khoản">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="203.0" layoutY="26.0" text="/" />
+                        <Label layoutX="217.0" layoutY="22.0" text="Chi tiết tài khoản">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </left>
+            </BorderPane>
+         </top>
+         <center>
+            <BorderPane prefHeight="640.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+               <top>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="335.0" text="Danh sách tài khoản " BorderPane.alignment="CENTER">
+                     <padding>
+                        <Insets bottom="30.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold Italic" size="30.0" />
+                     </font>
+                  </Label>
+               </top>
+               <bottom>
+                  <BorderPane prefHeight="45.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+                     <right>
+                        <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #2C3E50;" text="Xuất Excel" textFill="WHITE" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" right="20.0" />
+                           </BorderPane.margin>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Button>
+                     </right>
+                     <left>
+                        <Pane prefHeight="45.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+                     </left>
+                  </BorderPane>
+               </bottom>
+               <center>
+    <BorderPane prefHeight="555.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+        <left>
+            <Pane prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+                <children>
+                    <Label layoutX="15.0" layoutY="30.0" prefHeight="17.0" prefWidth="35.0" text="Ngày:" />
+                    <Label layoutX="460.0" layoutY="30.0" text="Năm:" />
+                              <Label layoutX="237.0" layoutY="30.0" text="Tháng:" />
+                              <ComboBox layoutX="55.0" layoutY="30.0" prefHeight="25.0" prefWidth="120.0" promptText="Chọn ngày " />
+                              <ComboBox layoutX="280.0" layoutY="30.0" prefHeight="25.0" prefWidth="120.0" promptText="Chọn tháng" />
+                              <ComboBox layoutX="500.0" layoutY="30.0" prefWidth="120.0" promptText="Chọn năm" />
+                              <CheckBox layoutX="180.0" layoutY="35.0" mnemonicParsing="false" />
+                              <CheckBox layoutX="405.0" layoutY="35.0" mnemonicParsing="false" />
+                              <CheckBox layoutX="625.0" layoutY="35.0" mnemonicParsing="false" />
+                              <Button layoutX="60.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: green;" text="Lọc" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                              <Button cacheShape="false" layoutX="150.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: blue;" text="Tất cả" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                </children>
+                           <BorderPane.margin>
+                              <Insets left="20.0" />
+                           </BorderPane.margin>
+            </Pane>
+        </left>
+                     <bottom>
+                         <TableView prefHeight="355.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="Mã tài khoản" />
+                      <TableColumn prefWidth="75.0" text="Tên tài khoản" />
+                        <TableColumn prefWidth="75.0" text="Họ tên nhân viên" />
+                        <TableColumn prefWidth="75.0" text="Ngày đăng nhập" />
+                        <TableColumn prefWidth="75.0" text="Ngày đăng xuất" />
+                        <TableColumn prefWidth="75.0" text="Ngày sửa đổi" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                           <BorderPane.margin>
+                              <Insets bottom="20.0" />
+                           </BorderPane.margin>
+                  </TableView>
+                     </bottom>
+                     <center>
+                        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <TextField layoutX="30.0" layoutY="54.0" prefHeight="25.0" prefWidth="180.0" />
+                              <Label layoutX="23.0" layoutY="24.0" text="Tìm kiếm:">
+                                 <font>
+                                    <Font name="System Bold Italic" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                     </center>
+    </BorderPane>
+</center>
+
+            </BorderPane>
+         </center></BorderPane>
+   </center>
+</BorderPane>
