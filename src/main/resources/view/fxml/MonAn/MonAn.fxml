@@ -15,9 +15,9 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <top>
-            <BorderPane prefHeight="70.0" prefWidth="901.0" BorderPane.alignment="CENTER">
+            <BorderPane prefHeight="70.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <center>
                   <Label text="Quản lý món ăn" BorderPane.alignment="CENTER">
                      <font>
@@ -30,9 +30,9 @@
          <center>
             <BorderPane prefHeight="300.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <top>
-                  <BorderPane prefHeight="300.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                  <BorderPane prefHeight="325.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
                      <left>
-                        <Pane prefHeight="187.0" prefWidth="600.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
+                        <Pane prefHeight="88.0" prefWidth="600.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
                            <children>
                               <ImageView fitHeight="200.0" fitWidth="400.0" layoutX="140.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -46,8 +46,8 @@
                            </BorderPane.margin>
                         </Pane>
                      </left>
-                     <right>
-                        <Pane prefHeight="262.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                     <center>
+                        <Pane prefHeight="262.0" prefWidth="518.0" BorderPane.alignment="CENTER">
                            <children>
                               <Label layoutX="30.0" layoutY="20.0" text="Mã món ăn :" />
                               <TextField layoutX="120.0" layoutY="15.0" prefHeight="25.0" prefWidth="320.0" />
@@ -77,7 +77,7 @@
                               <Insets right="40.0" />
                            </BorderPane.margin>
                         </Pane>
-                     </right>
+                     </center>
                   </BorderPane>
                </top>
                <center>
