@@ -43,7 +43,7 @@ public class QuanLyBan_Controller {
     private TableColumn<Ban, String> colMaBan;
 
     @FXML
-    private TableColumn<Ban, LoaiBan> colMaLoaiBan;
+    private TableColumn<Ban, String> colMaLoaiBan;
 
     @FXML
     private TableColumn<Ban, String> colTrangThai;
@@ -60,6 +60,35 @@ public class QuanLyBan_Controller {
     }
 
     private ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
+
+    @FXML
+    public void initialize() {
+        // Thiết lập các cột TableView
+        colMaBan.setCellValueFactory(new PropertyValueFactory<>("maBan"));
+        colViTri.setCellValueFactory(new PropertyValueFactory<>("viTri"));
+        
+        colTrangThai.setCellValueFactory(cellData -> {
+            String trangThai = cellData.getValue().getTrangThai();
+            return new SimpleStringProperty(trangThai != null ? trangThai : "Trống");
+        });
+
+        // Chú ý: colMaLoaiBan phải là TableColumn<Ban, String>
+        colMaLoaiBan.setCellValueFactory(cellData -> {
+            LoaiBan loaiBan = cellData.getValue().getLoaiBan();
+            String tenLoai = (loaiBan != null) ? loaiBan.getTenLoaiBan() : "";
+            return new SimpleStringProperty(tenLoai);
+        });
+
+        // Load dữ liệu từ SQL
+        List<Ban> list = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(Ban_DAO.class)
+                .getDanhSach(Ban.class, null);
+
+        // Đưa dữ liệu vào ObservableList và hiển thị lên TableView
+        danhSachBan.setAll(list);
+        tblBan.setItems(danhSachBan);
+    }
 
    
 }
