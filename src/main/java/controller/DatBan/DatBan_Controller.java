@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import config.RestaurantApplication;
+import dao.Ban_DAO;
 import dao.LoaiBan_DAO;
 import dao.NhanVien_DAO;
 import entity.Ban;
@@ -40,7 +41,7 @@ public class DatBan_Controller {
     private ComboBox<String> cmbKM;
 
     @FXML
-    private ComboBox<LoaiBan> cmbLoaiBan;
+    private ComboBox<String> cmbLoaiBan;
 
     @FXML
     private ComboBox<String> cmbTrangThai;
@@ -74,6 +75,7 @@ public class DatBan_Controller {
     
     private ObservableList<NhanVien> danhSachNhanVien = FXCollections.observableArrayList();
     private List<LoaiBan> danhSachLoaiBanDB;
+    private List<Ban> danhSachBanDB;
     
     @FXML
     private void initialize() {
@@ -102,7 +104,20 @@ public class DatBan_Controller {
                 .getDatabaseContext()
                 .newEntity_DAO(LoaiBan_DAO.class)
                 .getDanhSach(LoaiBan.class, filter);
+        cmbLoaiBan.getItems().add("Tất cả");
+        for(LoaiBan loaiBan : danhSachLoaiBanDB) {
+        	cmbLoaiBan.getItems().add(loaiBan.getTenLoaiBan());
+        }
         
-        cmbLoaiBan.getItems().addAll(danhSachLoaiBanDB);
+        cmbLoaiBan.getSelectionModel().selectFirst();
+        
+        danhSachBanDB = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(Ban_DAO.class)
+                .getDanhSach(Ban.class, filter);
+        
+        cmbTrangThai.getItems().add("Đã đặt");
+        cmbTrangThai.getItems().add("Trống");
+        
     }
 }
