@@ -48,7 +48,7 @@ CREATE TABLE DonDatBan
  
 CREATE TABLE DonLapDoiHuyBan
 (
-	maDonLapDoiHuyBan VARCHAR(20) PRIMARY KEY,
+	maDatBan VARCHAR(20) PRIMARY KEY,
 	lyDo NVARCHAR(200),
 	ngayGioLapDon DATETIME DEFAULT GETDATE(),
 	tienHoanTra DECIMAL(10,2) CHECK (tienHoanTra > 0),
