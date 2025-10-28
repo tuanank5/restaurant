@@ -26,7 +26,7 @@ CREATE TABLE LoaiBan
 (
 	maLoaiBan VARCHAR(20) PRIMARY KEY,
 	tenLoaiBan NVARCHAR(50),
-	soLuong INT CHECK (SoLuong >= 0)
+	soLuong INT CHECK (soLuong >= 0)
 );
 
 CREATE TABLE Ban
