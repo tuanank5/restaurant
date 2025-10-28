@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import config.RestaurantApplication;
-import controller.Dashboard_Controller;
+import controller.DashboardNV_Controller;
 import controller.KhachHang.KhachHang_Controller;
 import controller.NhanVien.NhanVien_Controller;
 import dao.TaiKhoan_DAO;
@@ -146,7 +146,7 @@ public class MenuNVQL_Controller {
     }
 	
 	public void dashBoard() {
-		Dashboard_Controller dashBoardController = readyUI("DashBoard/DashboardNVQL").getController();
+		DashboardNV_Controller dashBoardController = readyUI("DashBoard/DashboardNVQL").getController();
 		//NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
 }
