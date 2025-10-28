@@ -26,7 +26,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MenuNV_Controller {
+	
 	public static MenuNV_Controller instance;
+	
 	private TaiKhoan taiKhoan;
 	
 	@FXML
@@ -34,8 +36,6 @@ public class MenuNV_Controller {
 
     @FXML
     private TextField txtThongTin;
-    
-	private EventObject actionEvent;
     
 	public FXMLLoader readyUI(String ui) {
         Parent root = null;
@@ -58,7 +58,7 @@ public class MenuNV_Controller {
 	}
 	
 	@FXML
-	private void dangXuat(ActionEvent actionEvent) {
+	private void btnDangXuat(ActionEvent event) {
         Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
         if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
             return;
@@ -74,9 +74,9 @@ public class MenuNV_Controller {
                     .newEntity_DAO(TaiKhoan_DAO.class)
                     .capNhat(taiKhoan);
             
-            // Để Nhân chỉnh lại - load lên bị lỗi
+            // Để chỉnh lại - load lên bị lỗi
             try {
-                Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 currentStage.close();
                 
                 FXMLLoader fxmlLoader = new FXMLLoader(
@@ -125,7 +125,7 @@ public class MenuNV_Controller {
     }
 
     @FXML
-    void btnDatTimBan(ActionEvent event) {
+    void btnDatBan(ActionEvent event) {
     	try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/DatBan/DatBan.fxml"));
 			Pane datBanPane = loader.load();
