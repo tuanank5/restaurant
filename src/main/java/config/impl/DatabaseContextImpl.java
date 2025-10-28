@@ -15,6 +15,9 @@ public class DatabaseContextImpl implements DatabaseContext{
         if (entityType == NhanVien_DAO.class) {
             return (R) new NhanVien_DAOImpl();
         }
+        if(entityType == HangKhachHang_DAO.class) {
+        	return (R) new HangKhachHang_DAOImpl();
+        }
         if (entityType == KhachHang_DAO.class) {
             return (R) new KhachHang_DAOlmpl();
         }

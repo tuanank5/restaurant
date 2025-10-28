@@ -16,6 +16,7 @@ import dao.KhachHang_DAO;
 import dao.impl.HangKhachHang_DAOImpl;
 import entity.HangKhachHang;
 import entity.KhachHang;
+import entity.LoaiBan;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,7 +51,7 @@ public class ThemKhachHang_Controller {
     private Button btnXoa;
 
     @FXML
-    private ComboBox<HangKhachHang> comBoxHangKH;
+    private ComboBox<String> comBoxHangKH;
 
     @FXML
     private Label lblDanhSachKhachHang;
@@ -73,10 +74,13 @@ public class ThemKhachHang_Controller {
 	private String ui;
 	
 	private KhachHang khachHang;
+	
+	private List<HangKhachHang> danhSachHangKhachHangDB;
     
     @FXML
     public void initialize() {
         Platform.runLater(() -> txtKhachHang.requestFocus());
+        loadData();
     }
     
     public FXMLLoader readyUI(String ui) {
@@ -204,7 +208,7 @@ public class ThemKhachHang_Controller {
         String email = txtEmail.getText().trim();
         String diaChi = txtDiaChi.getText().trim();
         String diemStr = txtDiemTichLuy.getText().trim();
-        HangKhachHang hangKH = comBoxHangKH.getValue();
+        String hangKH = comBoxHangKH.getValue();
 
         DatabaseContext databaseContext = RestaurantApplication
                 .getInstance()
@@ -307,28 +311,23 @@ public class ThemKhachHang_Controller {
         txtDiemTichLuy.setText("");
         comBoxHangKH.setValue(null);
     }
-    
+    private void loadData() {
+        Map<String,Object> filter = new HashMap<>();
+        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(HangKhachHang_DAO.class)
+                .getDanhSach(HangKhachHang.class, filter);
+        comBoxHangKH.getItems().clear();
+        comBoxHangKH.getItems().add("Tất cả");
+        for(HangKhachHang hang : danhSachHangKhachHangDB) {
+            comBoxHangKH.getItems().add(hang.getTenHang());
+        }
+        comBoxHangKH.getSelectionModel().selectFirst();
+    }
+
     // Dùng để lấy ra sau đó setText lại cho đường dẫn
     public void setUrl(String nameUrl, String currentPage) {
         lblDanhSachKhachHang.setText(nameUrl);
         this.ui = currentPage;
     }
-//    private void loadComboBoxHangKhachHang() {
-//        HangKhachHang_DAO hangDAO = new HangKhachHang_DAOImpl();
-//        List<HangKhachHang> dsHang = hangDAO.getAll();
-//        comBoxHangKH.setItems(FXCollections.observableArrayList(dsHang));
-//        // Chọn mặc định hạng đầu tiên
-//        comBoxHangKH.getSelectionModel().selectFirst();
-//    }
-//    
-//    public void initialize(URL location, ResourceBundle resources) {
-//        // Gọi hàm load dữ liệu vào ComboBox
-//        loadComboBoxHangKhachHang();
-//        comBoxHangKH.setOnAction(event -> {
-//            HangKhachHang hangChon = comBoxHangKH.getSelectionModel().getSelectedItem();
-//            if (hangChon != null) {
-//                System.out.println("Hạng KH được chọn: " + hangChon.getTenHang());
-//            }
-//        });
-//    }
 }

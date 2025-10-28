@@ -94,7 +94,7 @@ public class HangKhachHang {
 //    }
     @Override
     public String toString() {
-        return tenHang;
+        return this.tenHang;
     }
 
 	@Override
