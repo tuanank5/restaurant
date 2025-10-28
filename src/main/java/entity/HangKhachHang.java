@@ -92,4 +92,48 @@ public class HangKhachHang {
         return "HangKhachHang [maHang=" + maHang + ", tenHang=" + tenHang + ", diemHang=" + diemHang
                 + ", giamGia=" + giamGia + ", moTa=" + moTa + "]";
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + diemHang;
+		result = prime * result + giamGia;
+		result = prime * result + ((maHang == null) ? 0 : maHang.hashCode());
+		result = prime * result + ((moTa == null) ? 0 : moTa.hashCode());
+		result = prime * result + ((tenHang == null) ? 0 : tenHang.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HangKhachHang other = (HangKhachHang) obj;
+		if (diemHang != other.diemHang)
+			return false;
+		if (giamGia != other.giamGia)
+			return false;
+		if (maHang == null) {
+			if (other.maHang != null)
+				return false;
+		} else if (!maHang.equals(other.maHang))
+			return false;
+		if (moTa == null) {
+			if (other.moTa != null)
+				return false;
+		} else if (!moTa.equals(other.moTa))
+			return false;
+		if (tenHang == null) {
+			if (other.tenHang != null)
+				return false;
+		} else if (!tenHang.equals(other.tenHang))
+			return false;
+		return true;
+	}
+    
 }
