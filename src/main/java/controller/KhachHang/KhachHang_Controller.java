@@ -83,12 +83,10 @@ public class KhachHang_Controller {
 
     @FXML
     private TextField txtTimKiem;
-
     private ObservableList<KhachHang> danhSachKhachHang = FXCollections.observableArrayList();
     private List<KhachHang> danhSachKhachHangDB;
     private final int LIMIT = 15;
     private String status = "all";
-
     @FXML
     private void initialize() {
         setValueTable();
@@ -177,11 +175,7 @@ public class KhachHang_Controller {
     }
 
     private void showThemHanhKhach() {
-        if (menuController != null) {
-            menuController.readyUI("KhachHang/ThemKhachHang");
-        } else {
-            System.err.println("MenuNV_Controller chưa được khởi tạo!");
-        }
+        MenuNV_Controller.instance.readyUI("KhachHang/ThemKhachHang");
     }
 
     private void phanTrang(int soLuongBanGhi) {

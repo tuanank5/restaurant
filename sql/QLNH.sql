@@ -5,6 +5,7 @@ USE QLNH
 CREATE TABLE HangKhachHang
 (
 	maHang VARCHAR(20) PRIMARY KEY,
+	tenHang NVARCHAR(100),
 	diemHang INT CHECK (diemHang >= 0),
 	giamGia DECIMAL(5,2) CHECK (giamGia BETWEEN 0 AND 100),
 	moTa NVARCHAR(200)

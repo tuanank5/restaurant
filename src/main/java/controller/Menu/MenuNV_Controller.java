@@ -38,6 +38,9 @@ public class MenuNV_Controller {
     private void initialize() {
         instance = this; // Gán instance khi FXML được load
     }
+    public static MenuNV_Controller getInstance() {
+        return instance;
+    }
     
 	public FXMLLoader readyUI(String ui) {
         Parent root = null;
