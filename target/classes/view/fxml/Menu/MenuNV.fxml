@@ -17,12 +17,12 @@
                   <Font name="Times New Roman Bold" size="18.0" />
                </font>
             </Label>
-            <Button layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" text="Đặt/Tìm kiếm bàn">
+            <Button layoutX="80.0" layoutY="150.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" text="Đặt/Tìm kiếm bàn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <Button layoutX="80.0" layoutY="150.0" mnemonicParsing="false" onAction="#btnDoiHuyBan" prefHeight="30.0" prefWidth="160.0" text="Đổi/Hủy bàn">
+            <Button layoutX="80.0" layoutY="200.0" mnemonicParsing="false" onAction="#btnDoiHuyBan" prefHeight="30.0" prefWidth="160.0" text="Đổi/Hủy bàn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
@@ -33,28 +33,28 @@
                </font>
             </Label>
             <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="33.0" size="30" />
-            <Button layoutX="80.0" layoutY="350.0" mnemonicParsing="false" onAction="#btnKhachHang" prefHeight="30.0" prefWidth="160.0" text="Quản lý khách hàng">
+            <Button layoutX="80.0" layoutY="400.0" mnemonicParsing="false" onAction="#btnKhachHang" prefHeight="30.0" prefWidth="160.0" text="Quản lý khách hàng">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <Button layoutX="80.0" layoutY="300.0" mnemonicParsing="false" onAction="#btnHoaDon" prefHeight="30.0" prefWidth="160.0" text="Tra cứu hóa đơn">
+            <Button layoutX="80.0" layoutY="350.0" mnemonicParsing="false" onAction="#btnHoaDon" prefHeight="30.0" prefWidth="160.0" text="Tra cứu hóa đơn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <Button layoutX="80.0" layoutY="250.0" mnemonicParsing="false" onAction="#btnMonAn" prefHeight="30.0" prefWidth="160.0" text="Quản lý món ăn">
+            <Button layoutX="80.0" layoutY="300.0" mnemonicParsing="false" onAction="#btnMonAn" prefHeight="30.0" prefWidth="160.0" text="Quản lý món ăn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <FontAwesomeIconView fill="#f9c410" glyphName="SEARCH" layoutX="20.0" layoutY="125.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="ARROWS_H" layoutX="20.0" layoutY="175.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="GEAR" layoutX="20.0" layoutY="275.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="325.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="375.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="225.0" size="25" />
-            <Button layoutX="80.0" layoutY="200.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" text="Ca làm việc">
+            <FontAwesomeIconView fill="#f9c410" glyphName="SEARCH" layoutX="20.0" layoutY="175.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="ARROWS_H" layoutX="20.0" layoutY="225.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="GEAR" layoutX="20.0" layoutY="325.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="375.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="425.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="275.0" size="25" />
+            <Button layoutX="80.0" layoutY="250.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" text="Ca làm việc">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
@@ -78,6 +78,12 @@
                </font>
             </Button>
             <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="160.0" />
+            <Button layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" text="Dashboard">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+            </Button>
+            <FontAwesomeIconView fill="#f9c410" glyphName="DASHBOARD" layoutX="20.0" layoutY="125.0" size="25" />
          </children>
       </Pane>
    </left>
