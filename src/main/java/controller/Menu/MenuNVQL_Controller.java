@@ -157,4 +157,77 @@ public class MenuNVQL_Controller {
 		
 		NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
+	@FXML
+    void datTimBan(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/DatBan/DatBan.fxml"));
+			Pane datBanPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(datBanPane);
+		}catch (IOException e) {
+			e.printStackTrace();
+			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
+		}
+    }
+
+    @FXML
+    void dashBoard(ActionEvent event) {
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/TaiKhoan/TaiKhoan.fxml"));
+			Pane dashBoradPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(dashBoradPane);
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+
+    @FXML
+    void khuyenMai(ActionEvent event) {
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KhuyenMai/KhuyenMai.fxml"));
+			Pane khuyenMaiPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(khuyenMaiPane);
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+
+    @FXML
+    void nhanVien(ActionEvent event) {
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/NhanVien/NhanVien.fxml"));
+			Pane nhanVienPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(nhanVienPane);
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+
+    @FXML
+    void taiKhoan(ActionEvent event) {
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/TaiKhoan/TaiKhoan.fxml"));
+			Pane taiKhoanPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(taiKhoanPane);
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+
+    @FXML
+    void thongKe(ActionEvent event) {
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/Thongke/ThongKe.fxml"));
+			Pane thongKePane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(thongKePane);
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+
 }
