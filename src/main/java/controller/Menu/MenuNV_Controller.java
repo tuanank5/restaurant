@@ -108,6 +108,12 @@ public class MenuNV_Controller {
 		//		dashBoardController.setThongTin(taiKhoan);
 		DashboardNV_Controller dashboardNVController = readyUI("Dashboard/DashboardNV").getController();
 	}
+	
+	@FXML
+    void btnDashboard(ActionEvent event) {
+		
+    }
+	
 	@FXML
     void btnCaLam(ActionEvent event) {
 		readyUI("KetCa/KetCa");
