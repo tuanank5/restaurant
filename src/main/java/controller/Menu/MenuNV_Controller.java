@@ -52,15 +52,9 @@ public class MenuNV_Controller {
 	
 	public void setThongTin(TaiKhoan taiKhoan) {
 	    this.taiKhoan = taiKhoan;
-
-	    if (txtThongTin == null) {
-	        System.err.println("txtThongTin chưa được ánh xạ! Kiểm tra fx:id trong MenuNV.fxml.");
-	        return;
-	    }
-	    String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
-	    txtThongTin.setText(hoTen);
-	    System.out.println("Đăng nhập thành công: " + hoTen);
-	    dashBoard();
+        String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
+        txtThongTin.setText(hoTen);
+        dashBoard();
 	}
 	
 	@FXML
@@ -97,7 +91,7 @@ public class MenuNV_Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Để Nhân chỉnh lại - load lên bị lỗi
+            // Để chỉnh lại - load lên bị lỗi
         }
     }
 	
@@ -115,7 +109,7 @@ public class MenuNV_Controller {
 	public void dashBoard() {
 		//		Dashboard_Controller dashBoardController = readyUI("Dashboard").getController();
 		//		dashBoardController.setThongTin(taiKhoan);
-		NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
+		NhanVien_Controller nhanVienController = readyUI("Dashboard/DashboardNV").getController();
 	}
 	@FXML
     void btnCaLam(ActionEvent event) {

@@ -194,7 +194,7 @@ public class MenuNVQL_Controller {
     }
 
     @FXML
-    void thongKe(ActionEvent event) {
+    void btnthongKe(ActionEvent event) {
     	try {
     		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/Thongke/ThongKe.fxml"));
 			Pane thongKePane = loader.load();
