@@ -136,7 +136,7 @@ public class ThemNhanVien_Controller {
         maNV = EmployeeCodeGeneratorUtil.generateEmployeeCode();
         
         boolean gioiTinh = cmbGioiTinh.getValue().contentEquals("Nữ");
-//        String chucVu = cmbChucVu.getValue().contentEquals(LoaiNhanVien.BAN_VE.getName()) ? LoaiNhanVien.BAN_VE : LoaiNhanVien.QUAN_LI_BAN_VE;
+//        String chucVu = cmbChucVu.getValue().contentEquals() ? : ;
 //        boolean trangThai = trangThaiCombobox.getValue().contentEquals("Đang làm việc");
         boolean trangThai = true;
         
