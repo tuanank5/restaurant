@@ -87,10 +87,14 @@ public class HangKhachHang {
     }
 
     // ===== toString() =====
+//    @Override
+//    public String toString() {
+//        return "HangKhachHang [maHang=" + maHang + ", tenHang=" + tenHang + ", diemHang=" + diemHang
+//                + ", giamGia=" + giamGia + ", moTa=" + moTa + "]";
+//    }
     @Override
     public String toString() {
-        return "HangKhachHang [maHang=" + maHang + ", tenHang=" + tenHang + ", diemHang=" + diemHang
-                + ", giamGia=" + giamGia + ", moTa=" + moTa + "]";
+        return tenHang;
     }
 
 	@Override

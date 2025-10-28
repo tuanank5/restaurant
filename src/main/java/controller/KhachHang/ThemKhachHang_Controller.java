@@ -1,17 +1,24 @@
 package controller.KhachHang;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import config.DatabaseContext;
 import config.RestaurantApplication;
+import controller.Menu.MenuNV_Controller;
+import dao.HangKhachHang_DAO;
 import dao.KhachHang_DAO;
+import dao.impl.HangKhachHang_DAOImpl;
 import entity.HangKhachHang;
 import entity.KhachHang;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,10 +98,12 @@ public class ThemKhachHang_Controller {
     		if(!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
     			xacNhanLuu("DatBan/DatBan");
     		}else {
-    			xacNhanLuu("KhachHang/KhachHang");
+    			MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
     		}
     	}else if(src ==  btnLuu) {
     		luuLai();
+    	} else if(src == btnXoa) {
+    		resetAllField();
     	}
     }
     
@@ -304,4 +313,22 @@ public class ThemKhachHang_Controller {
         lblDanhSachKhachHang.setText(nameUrl);
         this.ui = currentPage;
     }
+//    private void loadComboBoxHangKhachHang() {
+//        HangKhachHang_DAO hangDAO = new HangKhachHang_DAOImpl();
+//        List<HangKhachHang> dsHang = hangDAO.getAll();
+//        comBoxHangKH.setItems(FXCollections.observableArrayList(dsHang));
+//        // Chọn mặc định hạng đầu tiên
+//        comBoxHangKH.getSelectionModel().selectFirst();
+//    }
+//    
+//    public void initialize(URL location, ResourceBundle resources) {
+//        // Gọi hàm load dữ liệu vào ComboBox
+//        loadComboBoxHangKhachHang();
+//        comBoxHangKH.setOnAction(event -> {
+//            HangKhachHang hangChon = comBoxHangKH.getSelectionModel().getSelectedItem();
+//            if (hangChon != null) {
+//                System.out.println("Hạng KH được chọn: " + hangChon.getTenHang());
+//            }
+//        });
+//    }
 }

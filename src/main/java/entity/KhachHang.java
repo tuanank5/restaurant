@@ -34,7 +34,7 @@ public class KhachHang {
 	@Column(name = "diaChi", length = 200)
 	private String diaChi;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "maHang", nullable = false)
 	private HangKhachHang hangKhachHang;
 

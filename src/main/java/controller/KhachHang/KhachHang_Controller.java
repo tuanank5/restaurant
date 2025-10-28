@@ -46,15 +46,6 @@ public class KhachHang_Controller {
     private BorderPane borderPane;
 
     @FXML
-    private Button btnTatCa;
-
-    @FXML
-    private Button btnThemKhachHang;
-
-    @FXML
-    private Button btnXuatExcel;
-
-    @FXML
     private HBox hBoxPage;
 
     @FXML
@@ -91,26 +82,37 @@ public class KhachHang_Controller {
     private void initialize() {
         setValueTable();
         loadData();
+        System.out.println("TableView items: " + tableView.getItems().size());
         phanTrang(danhSachKhachHangDB.size());
+    }
+    
+    @FXML
+    void btnTatCa(ActionEvent event) {
+    	status = "all";
+        hBoxPage.setVisible(true);
+        int soLuongBanGhi = locDuLieuTheoTrangThai(status);
+        phanTrang(soLuongBanGhi);
     }
 
     @FXML
-    private void controller(ActionEvent event) {
-        Object src = event.getSource();
-        if (src == btnThemKhachHang) {
-            showThemHanhKhach();
-        } else if (src == btnXuatExcel) {
-            try {
-                xuatExcel();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (src == btnTatCa) {
-            status = "all";
-            hBoxPage.setVisible(true);
-            int soLuongBanGhi = locDuLieuTheoTrangThai(status);
-            phanTrang(soLuongBanGhi);
-        }
+    void btnThemKhachHang(ActionEvent event) {
+    	MenuNV_Controller.instance.readyUI("KhachHang/ThemKhachHang");
+    }
+    
+    @FXML
+    void txtTimKiem(ActionEvent event) {
+    	timKiem();
+    }
+    
+    @FXML
+    void btnXuatExcel(ActionEvent event) throws IOException{
+    	Stage stage = (Stage) tableView.getScene().getWindow();
+        danhSachKhachHang.clear();
+        danhSachKhachHang.addAll(danhSachKhachHangDB);
+        tableView.setItems(danhSachKhachHang);
+        ExportExcelUtil.exportTableViewToExcel(tableView, stage);
+        danhSachKhachHang.clear();
+        loadData();
     }
 
     @FXML
@@ -132,16 +134,6 @@ public class KhachHang_Controller {
         } else if (source == borderPane) {
             huyChonDong();
         }
-    }
-
-    private void xuatExcel() throws IOException {
-        Stage stage = (Stage) tableView.getScene().getWindow();
-        danhSachKhachHang.clear();
-        danhSachKhachHang.addAll(danhSachKhachHangDB);
-        tableView.setItems(danhSachKhachHang);
-        ExportExcelUtil.exportTableViewToExcel(tableView, stage);
-        danhSachKhachHang.clear();
-        loadData();
     }
 
     private void timKiem() {
@@ -172,10 +164,6 @@ public class KhachHang_Controller {
         });
 
         tableView.setItems(filteredData);
-    }
-
-    private void showThemHanhKhach() {
-        MenuNV_Controller.instance.readyUI("KhachHang/ThemKhachHang");
     }
 
     private void phanTrang(int soLuongBanGhi) {
@@ -228,9 +216,8 @@ public class KhachHang_Controller {
         danhSachKhachHangDB = RestaurantApplication.getInstance()
                 .getDatabaseContext()
                 .newEntity_DAO(KhachHang_DAO.class)
-                .getDanhSach(KhachHang.class, filter);
-        List<KhachHang> top15 = danhSachKhachHangDB.subList(0, Math.min(danhSachKhachHangDB.size(), LIMIT));
-        danhSachKhachHang.addAll(top15);
+                .getDanhSach(KhachHang.class, filter);     
+        danhSachKhachHang.addAll(danhSachKhachHangDB);
         tableView.setItems(danhSachKhachHang);
     }
 

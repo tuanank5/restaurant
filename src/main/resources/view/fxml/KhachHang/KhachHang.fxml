@@ -31,12 +31,12 @@
         <VBox prefHeight="600" prefWidth="900" spacing="10" style="-fx-background-color: white;">
             <!-- Action Buttons & Search -->
             <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="15">
-                <Button fx:id="btnThemKhachHang" onAction="#controller" style="-fx-background-color: green; -fx-text-fill: white;" text="(+) Thêm khách hàng" />
-                <Button fx:id="btnXuatExcel" onAction="#controller" style="-fx-background-color: blue; -fx-text-fill: white;" text="Xuất Excel" />
-                <Button fx:id="btnTatCa" onAction="#controller" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả" />
+                <Button onAction="#btnThemKhachHang" style="-fx-background-color: green; -fx-text-fill: white;" text="(+) Thêm khách hàng" />
+                <Button onAction="#btnXuatExcel" style="-fx-background-color: blue; -fx-text-fill: white;" text="Xuất Excel" />
+                <Button onAction="#btnTatCa" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Label text="Tìm kiếm:" />
-                <TextField fx:id="txtTimKiem" prefWidth="200" />
+                <TextField onAction="#txtTimKiem" prefWidth="200" />
             </HBox>
 
             <!-- TableView -->
