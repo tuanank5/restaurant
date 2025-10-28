@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #e3e3e3;" BorderPane.alignment="CENTER">
          <top>
@@ -27,8 +27,9 @@
                      <left>
                         <AnchorPane prefHeight="75.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="50.0" layoutY="17.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="115.0" text="Thêm khuyến mãi" />
-                              <Button fx:id="btnXoaKM" layoutX="200.0" layoutY="17.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="130.0" text="Xóa khuyến mãi" />
+                              <Button fx:id="btnThemKM" layoutX="10.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="115.0" text="Thêm khuyến mãi" />
+                              <Button fx:id="btnXoaKM" layoutX="150.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="130.0" text="Xóa khuyến mãi" />
+                              <Button fx:id="btnSuaKM" layoutX="310.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="115.0" text="Sửa khuyến mãi" />
                            </children>
                         </AnchorPane>
                      </left>
@@ -36,7 +37,7 @@
                         <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
                               <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Tìm kiếm" />
-                              <TextField layoutX="121.0" layoutY="17.0" prefHeight="30.0" prefWidth="350.0" />
+                              <TextField fx:id="txtTimKiem" layoutX="121.0" layoutY="17.0" onAction="#controller" prefHeight="30.0" prefWidth="350.0" />
                            </children>
                         </AnchorPane>
                      </right>
@@ -49,13 +50,13 @@
                <center>
                   <TableView fx:id="tblKM" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="Mã KM" />
-                      <TableColumn prefWidth="75.0" text="Tên KM" />
-                        <TableColumn prefWidth="75.0" text="Loại KM" />
-                        <TableColumn prefWidth="75.0" text="Sản Phẩm KM" />
-                        <TableColumn prefWidth="75.0" text="Ngày bắt đầu" />
-                        <TableColumn prefWidth="75.0" text="Ngày kết thúc" />
-                        <TableColumn prefWidth="75.0" text="Phần trăm giảm giá" />
+                      <TableColumn fx:id="colMaKM" prefWidth="75.0" text="Mã KM" />
+                      <TableColumn fx:id="colTenKM" prefWidth="75.0" text="Tên KM" />
+                        <TableColumn fx:id="colloaiKM" prefWidth="75.0" text="Loại KM" />
+                        <TableColumn fx:id="colSanPhamKM" prefWidth="75.0" text="Sản Phẩm KM" />
+                        <TableColumn fx:id="colNgayBatDau" prefWidth="75.0" text="Ngày bắt đầu" />
+                        <TableColumn fx:id="colNgayKetThuc" prefWidth="75.0" text="Ngày kết thúc" />
+                        <TableColumn fx:id="colPhanTramGiamGia" prefWidth="75.0" text="Phần trăm giảm giá" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
