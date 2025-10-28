@@ -279,10 +279,21 @@ public class ThemKhachHang_Controller {
             comBoxHangKH.requestFocus();
             return null;
         }
-        //Sinh mã khách hàng tự động (ví dụ KH + millis)
-        String maKH = "KH" + System.currentTimeMillis();
-        //Tạo đối tượng KhachHang mới
-        return new KhachHang();
+        KhachHang kh = new KhachHang();
+        kh.setMaKH("KH" + System.currentTimeMillis()); // quan trọng
+        kh.setTenKH(tenKH);
+        kh.setSdt(sdt);
+        kh.setEmail(email);
+        kh.setDiaChi(diaChi);
+        kh.setDiemTichLuy(diemTichLuy);
+        // Lấy object HangKhachHang tương ứng
+        HangKhachHang hang = danhSachHangKhachHangDB.stream()
+            .filter(h -> h.getTenHang().equals(hangKH))
+            .findFirst()
+            .orElse(null);
+        kh.setHangKhachHang(hang);
+
+        return kh;
     }
 
     private void showAlert(String title, String content, Alert.AlertType alertType) {
