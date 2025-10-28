@@ -14,17 +14,17 @@ import jakarta.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "DonLapDoiHuyBan.list",
-        query = "select b from DonLapDoiHuyBan b"
+        query = "select d from DonLapDoiHuyBan d"
     ),
     @NamedQuery(
         name = "DonLapDoiHuyBan.count",
-        query = "select count(maDonLapDoiHuyBan) from DonLapDoiHuyBan"
+        query = "select count(maDatBan) from DonLapDoiHuyBan"
     )
 })
 public class DonLapDoiHuyBan {
 	@Id
-	@Column(name = "maDonLapDoiHuyBan", nullable = false, length = 20)
-    private String maDonLapDoiHuyBan;
+	@Column(name = "maDatBan", nullable = false, length = 20)
+    private String maDatBan;
 
     @Column(name = "lyDo", nullable = false, length = 200)
     private String lyDo;
@@ -43,21 +43,21 @@ public class DonLapDoiHuyBan {
 		
 	}
 
-	public DonLapDoiHuyBan(String maDonLapDoiHuyBan, String lyDo, Date ngayGioLapDon, double tienHoanTra,
+	public DonLapDoiHuyBan(String maDatBan, String lyDo, Date ngayGioLapDon, double tienHoanTra,
 			DonDatBan donDatBan) {
-		this.maDonLapDoiHuyBan = maDonLapDoiHuyBan;
+		this.maDatBan = maDatBan;
 		this.lyDo = lyDo;
 		this.ngayGioLapDon = ngayGioLapDon;
 		this.tienHoanTra = tienHoanTra;
 		this.donDatBan = donDatBan;
 	}
 
-	public String getMaDonLapDoiHuyBan() {
-		return maDonLapDoiHuyBan;
+	public String getMaDatBan() {
+		return maDatBan;
 	}
 
-	public void setMaDonLapDoiHuyBan(String maDonLapDoiHuyBan) {
-		this.maDonLapDoiHuyBan = maDonLapDoiHuyBan;
+	public void setMaDatBan(String maDatBan) {
+		this.maDatBan = maDatBan;
 	}
 
 	public String getLyDo() {
