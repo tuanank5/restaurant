@@ -34,10 +34,6 @@ public class MenuNVQL_Controller {
     @FXML
     private TextField txtThongTin;
 
-    @FXML
-    void btnBan(ActionEvent event) {
-
-    }
 
     @FXML
     void btnDangXuat(ActionEvent event) {
@@ -106,7 +102,12 @@ public class MenuNVQL_Controller {
     void btnThongKe(ActionEvent event) {
     	readyUI("ThongKe/ThongKe");
     }
-	
+    
+    @FXML
+    void btnBan(ActionEvent event) {
+    	readyUI("QuanLyBan/QuanLyBan");
+    }
+    
 	public FXMLLoader readyUI(String ui) {
         Parent root = null;
         FXMLLoader fxmlLoader = new FXMLLoader();
