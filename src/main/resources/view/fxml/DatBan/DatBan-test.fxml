@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.DatBan_Controller">
    <center>
       <BorderPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: blue3e3e3e;" BorderPane.alignment="CENTER">
          <left>
@@ -38,14 +38,10 @@
                                     <Label layoutX="26.0" layoutY="99.0" text="Số lượng :" />
                                     <Label layoutX="26.0" layoutY="139.0" text="Vị trí :" />
                                     <Label layoutX="26.0" layoutY="179.0" text="Trạng thái :" />
-                                    <TextField fx:id="txtSDT2" editable="false" layoutX="121.0" layoutY="174.0" style="-fx-background-color: e3e3e3;" />
-                                    <TextField fx:id="txtTime1" editable="false" layoutX="121.0" layoutY="135.0" style="-fx-background-color: e3e3e3;" />
-                                    <TextField fx:id="txtDiemTichLuy1" editable="false" layoutX="121.0" layoutY="95.0" style="-fx-background-color: e3e3e3;" />
-                                    <TextField fx:id="txtTenKH1" editable="false" layoutX="121.0" layoutY="54.0" style="-fx-background-color: e3e3e3;" />
-                                    <Label layoutX="26.0" layoutY="220.0" text="Giờ nhận bàn" />
-                                    <TextField fx:id="txtTime" editable="false" layoutX="15.0" layoutY="250.0" prefWidth="100.0" style="-fx-background-color: e3e3e3;" />
-                                    <Label layoutX="176.0" layoutY="220.0" text="Giờ trả bàn" />
-                                    <TextField fx:id="txtTime2" editable="false" layoutX="150.0" layoutY="250.0" prefWidth="110.0" style="-fx-background-color: e3e3e3;" />
+                                    <TextField fx:id="txtTrangThai" editable="false" layoutX="121.0" layoutY="174.0" style="-fx-background-color: e3e3e3;" />
+                                    <TextField fx:id="txtViTri" editable="false" layoutX="121.0" layoutY="135.0" style="-fx-background-color: e3e3e3;" />
+                                    <TextField fx:id="txtSoLuong" editable="false" layoutX="121.0" layoutY="95.0" style="-fx-background-color: e3e3e3;" />
+                                    <TextField fx:id="txtLoaiBan" editable="false" layoutX="121.0" layoutY="54.0" style="-fx-background-color: e3e3e3;" />
                                  </children>
                               </Pane>
                            </center>
@@ -73,7 +69,7 @@
                         <TextField fx:id="txtSDT" layoutX="110.0" layoutY="116.0" />
                         <TextField fx:id="txtDiemTichLuy" editable="false" layoutX="110.0" layoutY="76.0" style="-fx-background-color: e3e3e3;" />
                         <TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="35.0" style="-fx-background-color: e3e3e3;" />
-                        <Button layoutX="195.0" layoutY="160.0" mnemonicParsing="false" text="Tìm kiếm" />
+                        <Button fx:id="btnTimKiem" layoutX="195.0" layoutY="160.0" mnemonicParsing="false" text="Tìm kiếm" />
                      </children>
                   </Pane>
                </center>
@@ -86,7 +82,7 @@
                            </font>
                         </Button>
                         <Label layoutX="5.0" layoutY="7.0" text="Mã giảm giá : " />
-                        <ComboBox fx:id="cmbMaKM" layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
+                        <ComboBox fx:id="cmbKM" layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
                         <Label layoutX="5.0" layoutY="35.0" text="VAT : " />
                         <Label layoutX="90.0" layoutY="35.0" text="0" />
                         <Label layoutX="170.0" layoutY="35.0" text="VND" />
@@ -155,25 +151,31 @@
                <center>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <DatePicker layoutX="14.0" layoutY="40.0" />
-                        <Label layoutX="14.0" layoutY="15.0" text="NGÀY ĐẶT BÀN">
+                        <DatePicker fx:id="txtNgayDatBan" layoutX="165.0" layoutY="40.0" />
+                        <Label layoutX="165.0" layoutY="15.0" text="NGÀY ĐẶT BÀN">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="214.0" layoutY="15.0" text="GIỜ BẮT ĐẦU">
+                        <Label layoutX="360.0" layoutY="15.0" text="GIỜ BẮT ĐẦU">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox layoutX="214.0" layoutY="40.0" prefWidth="150.0" />
-                        <Label layoutX="394.0" layoutY="15.0" text="GIỜ KẾT THÚC">
+                        <ComboBox fx:id="cmbGioBD" layoutX="360.0" layoutY="40.0" prefWidth="150.0" />
+                        <Label layoutX="530.0" layoutY="15.0" text="GIỜ KẾT THÚC">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox layoutX="394.0" layoutY="40.0" prefWidth="150.0" />
-                        <Button layoutX="574.0" layoutY="40.0" mnemonicParsing="false" prefWidth="75.0" text="Hiện tại" />
+                        <ComboBox fx:id="cmbGioKT" layoutX="530.0" layoutY="40.0" prefWidth="150.0" />
+                        <Button fx:id="btnHienTai" layoutX="700.0" layoutY="40.0" mnemonicParsing="false" prefWidth="75.0" text="Hiện tại" />
+                        <Label layoutX="40.0" layoutY="15.0" text="TRẠNG THÁI">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cmbTrangThai" layoutX="20.0" layoutY="40.0" prefWidth="120.0" />
                      </children>
                   </Pane>
                </center>
@@ -185,8 +187,8 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtSDT1" layoutX="10.0" layoutY="40.0" />
-                        <ComboBox layoutX="170.0" layoutY="40.0" prefWidth="120.0" />
+                        <TextField fx:id="txtSoLuongKH" layoutX="10.0" layoutY="40.0" />
+                        <ComboBox fx:id="cmbLoaiBan" layoutX="170.0" layoutY="40.0" prefWidth="120.0" />
                         <Label layoutX="200.0" layoutY="15.0" text="LOẠI BÀN">
                            <font>
                               <Font name="System Bold" size="12.0" />
