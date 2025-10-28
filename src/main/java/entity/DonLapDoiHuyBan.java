@@ -18,13 +18,13 @@ import jakarta.persistence.NamedQuery;
     ),
     @NamedQuery(
         name = "DonLapDoiHuyBan.count",
-        query = "select count(maDatBan) from DonLapDoiHuyBan"
+        query = "select count(maDatBans) from DonLapDoiHuyBan"
     )
 })
 public class DonLapDoiHuyBan {
 	@Id
-	@Column(name = "maDatBan", nullable = false, length = 20)
-    private String maDatBan;
+	@Column(name = "maDatBans", nullable = false, length = 20)
+    private String maDatBans;
 
     @Column(name = "lyDo", nullable = false, length = 200)
     private String lyDo;
@@ -45,7 +45,7 @@ public class DonLapDoiHuyBan {
 
 	public DonLapDoiHuyBan(String maDatBan, String lyDo, Date ngayGioLapDon, double tienHoanTra,
 			DonDatBan donDatBan) {
-		this.maDatBan = maDatBan;
+		this.maDatBans = maDatBan;
 		this.lyDo = lyDo;
 		this.ngayGioLapDon = ngayGioLapDon;
 		this.tienHoanTra = tienHoanTra;
@@ -53,11 +53,11 @@ public class DonLapDoiHuyBan {
 	}
 
 	public String getMaDatBan() {
-		return maDatBan;
+		return maDatBans;
 	}
 
 	public void setMaDatBan(String maDatBan) {
-		this.maDatBan = maDatBan;
+		this.maDatBans = maDatBan;
 	}
 
 	public String getLyDo() {

@@ -43,3 +43,9 @@ INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
 ('B08', '8', 1, 'LB01'),
 ('B09', '9', 0, 'LB03'),
 ('B10', '10', 1, 'LB02');
+
+INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, phanTramGiamGia)
+VALUES
+('KM001', N'Giảm 1%', N'Theo %', N'SP', '2025-01-01', '2025-01-15', 1),
+('KM002', N'Giảm 2%', N'Theo %', N'SP', '2025-02-01', '2025-02-10', 2),
+('KM003', N'Giảm 3%', N'Theo %', N'SP', '2025-11-25', '2025-11-30', 3),
