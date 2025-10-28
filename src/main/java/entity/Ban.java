@@ -11,11 +11,11 @@ import jakarta.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "NhanVien.list",
+        name = "Ban.list",
         query = "select nv from NhanVien nv"
     ),
     @NamedQuery(
-        name = "NhanVien.count",
+        name = "Ban.count",
         query = "select count(maNV) from NhanVien"
     )
 })
