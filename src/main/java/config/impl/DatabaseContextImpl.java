@@ -4,7 +4,6 @@ import config.DatabaseContext;
 import dao.*;
 import dao.impl.*;
 import dao.KhachHang_DAO;
-import dao.impl.KhachHang_DAOlmpl;
 
 public class DatabaseContextImpl implements DatabaseContext{
 
@@ -24,6 +23,9 @@ public class DatabaseContextImpl implements DatabaseContext{
         }
         if (entityType == LoaiBan_DAO.class) {
             return (R) new LoaiBan_DAOImpl();
+        }
+        if (entityType == KhuyenMai_DAO.class) {
+            return (R) new KhuyenMai_DAOImpl();
         }
         throw new IllegalArgumentException(
                 "There is no Entity Dao for " +
