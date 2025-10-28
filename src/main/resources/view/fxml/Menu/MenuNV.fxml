@@ -78,7 +78,7 @@
                </font>
             </Button>
             <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="160.0" />
-            <Button layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" text="Dashboard">
+            <Button layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="30.0" prefWidth="160.0" text="Dashboard">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
