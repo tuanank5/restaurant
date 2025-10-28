@@ -53,15 +53,6 @@
                         <Font name="Times New Roman Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" styleClass="close" stylesheets="@../css/Login.css" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/close.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
                </children></AnchorPane>
          </children>
       </AnchorPane>
