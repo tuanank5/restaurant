@@ -91,7 +91,7 @@ public class Login_Controller implements Initializable{
                         Scene scene;
 
                         if (chucVu != null && chucVu.equalsIgnoreCase("QL")) {
-                            //Giao diện quản lý
+                            //Giao diện nhân viên quản lý
                             fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
                             root = fxmlLoader.load();
                             scene = new Scene(root);
