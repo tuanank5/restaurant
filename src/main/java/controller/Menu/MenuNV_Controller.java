@@ -169,7 +169,7 @@ public class MenuNV_Controller {
 	@FXML
     void monAn(ActionEvent event) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/MonAn/QuanLyMonAn.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/MonAn/MonAn.fxml"));
 			Pane monAnPane = loader.load();
 			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
 			borderPane.setCenter(monAnPane);
@@ -182,7 +182,7 @@ public class MenuNV_Controller {
 	@FXML
     private void caLam(ActionEvent event) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KetCa/KetCaNV.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KetCa/KetCa.fxml"));
 			Pane ketCaPane = loader.load();
 			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
 			borderPane.setCenter(ketCaPane);
