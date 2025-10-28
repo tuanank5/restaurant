@@ -28,7 +28,7 @@
                         <AnchorPane prefHeight="75.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                            <children>
                               <Button layoutX="50.0" layoutY="17.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="115.0" text="Thêm khuyến mãi" />
-                              <Button layoutX="200.0" layoutY="17.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" text="Cập nhật khuyến mãi" />
+                              <Button fx:id="btnXoaKM" layoutX="200.0" layoutY="17.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="130.0" text="Xóa khuyến mãi" />
                            </children>
                         </AnchorPane>
                      </left>
@@ -47,7 +47,7 @@
          <center>
             <BorderPane prefHeight="500.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                <center>
-                  <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <TableView fx:id="tblKM" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <columns>
                       <TableColumn prefWidth="75.0" text="Mã KM" />
                       <TableColumn prefWidth="75.0" text="Tên KM" />
