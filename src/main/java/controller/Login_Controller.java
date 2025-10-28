@@ -31,29 +31,18 @@ import javafx.stage.Stage;
 public class Login_Controller implements Initializable{
 	
 	private TaiKhoan taiKhoan;
-	
-	@FXML
-    private Button btnClose;
 
     @FXML
     private Button btnLogin;
-
-    @FXML
-    private AnchorPane main_form;
 
     @FXML
     private PasswordField txtPassword;
 
     @FXML
     private TextField txtUserName;
-
-    @FXML
-    public void close() {
-    	System.exit(0);
-    }
     
     @FXML
-    public void login(ActionEvent actionEvent) {
+    public void login(ActionEvent event) {
         try {
             // Lấy ra thông tin Tài Khoàn
             String user = txtUserName.getText().trim();
@@ -87,7 +76,7 @@ public class Login_Controller implements Initializable{
 
                         FXMLLoader fxmlLoader;
                         Parent root;
-                        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         Scene scene;
 
                         if (chucVu != null && chucVu.equalsIgnoreCase("QL")) {
