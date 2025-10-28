@@ -17,12 +17,12 @@
                   <Font name="Times New Roman Bold" size="18.0" />
                </font>
             </Label>
-            <Button layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDatTimBan" prefHeight="30.0" prefWidth="160.0" text="Đặt/ tìm kiếm bàn">
+            <Button layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" text="Đặt/Tìm kiếm bàn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <Button layoutX="80.0" layoutY="150.0" mnemonicParsing="false" onAction="#btnDoiHuyBan" prefHeight="30.0" prefWidth="160.0" text="Hủy/ đổi bàn">
+            <Button layoutX="80.0" layoutY="150.0" mnemonicParsing="false" onAction="#btnDoiHuyBan" prefHeight="30.0" prefWidth="160.0" text="Đổi/Hủy bàn">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
@@ -72,7 +72,7 @@
                   <Font name="Calibri" size="15.0" />
                </font>
             </Button>
-            <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#dangXuat" prefHeight="30.0" prefWidth="160.0" text="Đăng xuất">
+            <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnDangXuat" prefHeight="30.0" prefWidth="160.0" text="Đăng xuất">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
