@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
+import controller.Menu.MenuNV_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -103,7 +104,7 @@ public class Login_Controller implements Initializable{
                             root = fxmlLoader.load();
                             scene = new Scene(root);
 
-                            controller.Menu.MenuNV_Controller menuNhanVienController = fxmlLoader.getController();
+                            MenuNV_Controller menuNhanVienController = fxmlLoader.getController();
                             menuNhanVienController.setThongTin(taiKhoan);
                         }
 

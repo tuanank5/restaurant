@@ -83,6 +83,7 @@ public class MenuNV_Controller {
 	    System.out.println("Đăng nhập thành công: " + hoTen);
 	    dashBoard();
 	}
+	
 	@FXML
 	private void dangXuat(ActionEvent actionEvent) {
         Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
@@ -137,6 +138,7 @@ public class MenuNV_Controller {
 		//		dashBoardController.setThongTin(taiKhoan);
 		NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
+	
 	@FXML
 	private void khachHang(ActionEvent event) {
 		try {
@@ -163,6 +165,7 @@ public class MenuNV_Controller {
 			System.out.print("Không thể tải giao diện Hóa đơn"+ e.getMessage());
 		}
     }
+	
 	@FXML
     void monAn(ActionEvent event) {
 		try {
@@ -175,6 +178,7 @@ public class MenuNV_Controller {
 			System.out.print("Không thể tải giao diện Món ăn"+ e.getMessage());
 		}
     }
+	
 	@FXML
     private void caLam(ActionEvent event) {
 		try {
@@ -187,6 +191,7 @@ public class MenuNV_Controller {
 			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
 		}
     }
+	
 	@FXML
     void datTimBan(ActionEvent event) {
 		try {

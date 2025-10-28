@@ -61,11 +61,6 @@ public class MenuNVQL_Controller {
 
     @FXML
     private TextField txtThongTin;
-	
-	@FXML
-    void handleLichTrinhAction(ActionEvent event) {
-        readyUI("LichTrinh");
-    }
 
     @FXML
     void handleKhuyenMaiAction(ActionEvent event) {
