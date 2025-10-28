@@ -176,14 +176,6 @@ public class MenuNV_Controller {
 
     @FXML
     void btnMonAn(ActionEvent event) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/MonAn/MonAn.fxml"));
-			Pane monAnPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(monAnPane);
-		}catch (IOException e) {
-			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Món ăn"+ e.getMessage());
-		}
+    	readyUI("MonAn/MonAn");
     }
 }
