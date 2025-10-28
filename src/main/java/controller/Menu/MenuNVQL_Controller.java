@@ -74,6 +74,11 @@ public class MenuNVQL_Controller {
     }
 
     @FXML
+    public void initialize() {
+        instance = this;
+    }
+    
+    @FXML
     void btnDashboard(ActionEvent event) {
 
     }
