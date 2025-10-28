@@ -15,9 +15,9 @@
    <top>
       <BorderPane prefHeight="60.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <center>
-            <Label text="Quản lý bàn" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="173.0" text="Quản lý bàn" BorderPane.alignment="CENTER">
                <font>
-                  <Font name="Times New Roman Bold" size="22.0" />
+                  <Font name="Times New Roman Bold" size="30.0" />
                </font>
             </Label>
          </center>
