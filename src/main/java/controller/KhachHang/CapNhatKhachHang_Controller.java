@@ -80,7 +80,7 @@ public class CapNhatKhachHang_Controller {
             hoanTac();
         } 
         else if (src == btnTaoLaiMK) {
-            xacNhanLuu("KhachHang/ThongTinKhachHang");
+            xacNhanLuu("KhachHang/ThongTinChiTietKhachHang");
         }
     }
 
@@ -108,7 +108,7 @@ public class CapNhatKhachHang_Controller {
             }
             // ESC
             else if (event.getCode() == KeyCode.ESCAPE) {
-                troLai("KhachHang/ThongTinKhachHang");
+                troLai("KhachHang/ThongTinChiTietKhachHang");
             }
             // Ctrl + Z
             else if (event.isControlDown() && event.getCode() == KeyCode.Z) {
@@ -135,7 +135,7 @@ public class CapNhatKhachHang_Controller {
                 if (check) {
                     showAlert("Thông báo", "Cập nhật thông tin khách hàng thành công!", Alert.AlertType.INFORMATION);
                     this.khachHang = khachHangNew;
-                    troLai("KhachHang/ThongTinKhachHang");
+                    troLai("KhachHang/ThongTinChiTietKhachHang");
                 } else {
                     showAlert("Thông báo", "Cập nhật thất bại!", Alert.AlertType.WARNING);
                 }
