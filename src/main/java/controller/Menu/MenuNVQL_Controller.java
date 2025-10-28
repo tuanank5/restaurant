@@ -2,15 +2,11 @@ package controller.Menu;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import config.RestaurantApplication;
-import controller.DashboardNV_Controller;
-import controller.KhachHang.KhachHang_Controller;
-import controller.NhanVien.NhanVien_Controller;
+import controller.Dashboard.DashboardNV_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -20,13 +16,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MenuNVQL_Controller {
