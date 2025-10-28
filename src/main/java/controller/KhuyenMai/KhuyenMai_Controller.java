@@ -107,7 +107,7 @@ public class KhuyenMai_Controller {
         }
     }
 
-    // Tìm kiếm theo tên, mã, sản phẩm
+    // Tìm kiếm theo tên, mã, sản phẩm
     private void timKiem() {
         FilteredList<KhuyenMai> filteredData = new FilteredList<>(danhSachKhuyenMai, p -> true);
 
@@ -126,11 +126,11 @@ public class KhuyenMai_Controller {
         });
     }
 
-    // XÓA
+    // XÓA - ĐÃ SỬA LỖI
     private void xoa() {
         KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
         if (km != null) {
-            Optional<ButtonType> confirm = showAlertConfirm("Bạn có chắc chắn muốn xóa?");
+            Optional<ButtonType> confirm = showAlertConfirm("Bạn có chắc chắn muốn xóa khuyến mãi '" + km.getMaKM() + "'?");
             if (confirm.get().getButtonData() == ButtonBar.ButtonData.NO) return;
 
             if (confirm.get().getButtonData() == ButtonBar.ButtonData.YES) {
@@ -138,14 +138,14 @@ public class KhuyenMai_Controller {
                 boolean check = RestaurantApplication.getInstance()
                         .getDatabaseContext()
                         .newEntity_DAO(KhuyenMai_DAO.class)
-                        .capNhat(km);
+                        .xoa(km); // ĐÃ SỬA: Gọi phương thức .xoa(km) thay vì .capNhat(km)
 
                 if (check) {
                     showAlert("Thông báo", "Xóa thành công!", Alert.AlertType.INFORMATION);
                     danhSachKhuyenMai.remove(km);
                     tblKM.refresh();
                 } else {
-                    showAlert("Thông báo", "Xóa thất bại!", Alert.AlertType.WARNING);
+                    showAlert("Thông báo", "Xóa thất bại! Vui lòng kiểm tra ràng buộc khóa ngoại.", Alert.AlertType.ERROR);
                 }
             }
         }
