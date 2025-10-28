@@ -6,82 +6,58 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
-   <center>
-      <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-         <top>
-            <BorderPane prefHeight="60.0" prefWidth="900.0" BorderPane.alignment="CENTER">
-               <center>
-                  <Pane prefHeight="102.0" prefWidth="1002.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="373.0" layoutY="7.0" prefHeight="45.0" prefWidth="357.0" text="Danh sách khách hàng">
-                           <font>
-                              <Font name="System Bold Italic" size="30.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </Pane>
-               </center>
-            </BorderPane>
-         </top>
-         <center>
-            <BorderPane prefHeight="640.0" prefWidth="900.0" BorderPane.alignment="CENTER">
-               <center>
-   <BorderPane prefHeight="200.0" prefWidth="900.0" BorderPane.alignment="CENTER"> <center> 
-<TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"> 
-<columns> <TableColumn fx:id="tblKhachHang" prefWidth="150.0" text="Mã khách hàng" /> <TableColumn fx:id="tblTenKH" prefWidth="160.0" text="Tên khách hàng" /> <TableColumn fx:id="tblSoDienThoai" prefWidth="150.0" text="Số điện thoại" /> <TableColumn fx:id="tblEmail" prefWidth="150.0" text="Email" /> <TableColumn fx:id="tblHangKH" minWidth="8.800048828125" prefWidth="141.60003662109375" text="Hạng khách hàng" /> <TableColumn fx:id="tblDiemTichLuy" prefWidth="149.5999755859375" text="Điểm tích luỹ" />
-                              <TableColumn fx:id="tblDiaChi" prefWidth="180.0" text="Địa chỉ" /> </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy> </TableView> </center>
-    </BorderPane>
-</center>
-               <top>
-                  <Pane prefHeight="100.0" prefWidth="900.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <BorderPane layoutX="-1.0" prefHeight="100.0" prefWidth="1000.0">
-                           <left>
-                              <Pane prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Button fx:id="btnThemKhachHang" layoutX="40.0" layoutY="38.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: green;" text="(+) Thêm khách hàng" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Button>
-                                    <Button fx:id="btnXuatExcel" layoutX="219.0" layoutY="38.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: blue;" text="Xuất Excel" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Button>
-                                    <Button fx:id="btnTatCa" layoutX="324.0" layoutY="38.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: #cc851d;" text="Tất cả" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </Pane>
-                           </left>
-                           <right>
-                              <Pane prefHeight="100.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Label layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="83.0" text="Tìm kiếm:">
-                                       <font>
-                                          <Font name="System Bold Italic" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="txtTimKiem" layoutX="51.0" layoutY="50.0" onAction="#controller" prefWidth="200.0" />
-                                 </children>
-                              </Pane>
-                           </right>
-                        </BorderPane>
-                     </children>
-                  </Pane>
-               </top>
+<BorderPane fx:id="borderPane" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
 
-            </BorderPane>
-         </center></BorderPane>
-   </center>
+    <!-- Top Header -->
+    <top>
+        <BorderPane prefHeight="60.0" style="-fx-background-color: white;">
+            <center>
+                <Label alignment="CENTER" prefHeight="45.0" prefWidth="357.0" text="Danh sách khách hàng">
+                    <font>
+                        <Font name="System Bold Italic" size="30.0" />
+                    </font>
+                </Label>
+            </center>
+        </BorderPane>
+    </top>
+
+    <!-- Center: TableView và Button thao tác -->
+    <center>
+        <VBox prefHeight="600" prefWidth="900" spacing="10" style="-fx-background-color: white;">
+            <!-- Action Buttons & Search -->
+            <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="15">
+                <Button fx:id="btnThemKhachHang" onAction="#controller" style="-fx-background-color: green; -fx-text-fill: white;" text="(+) Thêm khách hàng" />
+                <Button fx:id="btnXuatExcel" onAction="#controller" style="-fx-background-color: blue; -fx-text-fill: white;" text="Xuất Excel" />
+                <Button fx:id="btnTatCa" onAction="#controller" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label text="Tìm kiếm:" />
+                <TextField fx:id="txtTimKiem" prefWidth="200" />
+            </HBox>
+
+            <!-- TableView -->
+            <TableView fx:id="tableView" prefHeight="500">
+                <columns>
+                    <TableColumn fx:id="tblKhachHang" prefWidth="150" text="Mã khách hàng" />
+                    <TableColumn fx:id="tblTenKH" prefWidth="160" text="Tên khách hàng" />
+                    <TableColumn fx:id="tblSoDienThoai" prefWidth="150" text="Số điện thoại" />
+                    <TableColumn fx:id="tblEmail" prefWidth="150" text="Email" />
+                    <TableColumn fx:id="tblHangKH" prefWidth="140" text="Hạng khách hàng" />
+                    <TableColumn fx:id="tblDiemTichLuy" prefWidth="150" text="Điểm tích lũy" />
+                    <TableColumn fx:id="tblDiaChi" prefWidth="180" text="Địa chỉ" />
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+            </TableView>
+
+            <!-- HBox phân trang -->
+            <HBox fx:id="hBoxPage" alignment="CENTER" prefHeight="40" spacing="10" />
+        </VBox>
+    </center>
+
 </BorderPane>

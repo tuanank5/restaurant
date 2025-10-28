@@ -34,6 +34,11 @@ public class MenuNV_Controller {
     @FXML
     private TextField txtThongTin;
     
+    @FXML
+    private void initialize() {
+        instance = this; // Gán instance khi FXML được load
+    }
+    
 	public FXMLLoader readyUI(String ui) {
         Parent root = null;
         FXMLLoader fxmlLoader = new FXMLLoader();
