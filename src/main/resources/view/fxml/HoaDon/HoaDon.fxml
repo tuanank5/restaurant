@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoaDon.HoaDon_Controller">
    <center>
       <BorderPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <top>
@@ -56,17 +56,17 @@
                               <Label layoutX="30.0" layoutY="120.0" text="Khách hàng:" />
                               <Label layoutX="30.0" layoutY="170.0" text="Tiền cọc:" />
                               <TextField fx:id="txtTienCoc" layoutX="120.0" layoutY="170.0" prefHeight="25.0" prefWidth="320.0" />
-                              <Button fx:id="btnXemChiTiet" layoutX="306.0" layoutY="224.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #e07b00;" text="Xem chi tiết" textFill="WHITE">
+                              <Button fx:id="btnXemChiTiet" layoutX="306.0" layoutY="224.0" mnemonicParsing="false" onAction="#controller" prefWidth="120.0" style="-fx-background-color: #e07b00;" text="Xem chi tiết" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnLamMoi" layoutX="163.0" layoutY="224.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #19692c;" text="Làm mới" textFill="WHITE">
+                              <Button fx:id="btnLamMoi" layoutX="163.0" layoutY="224.0" mnemonicParsing="false" onAction="#controller" prefWidth="120.0" style="-fx-background-color: #19692c;" text="Làm mới" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnTimKiem" layoutX="16.0" layoutY="224.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #0056b3;" text="Tìm kiếm" textFill="WHITE">
+                              <Button fx:id="btnTimKiem" layoutX="16.0" layoutY="224.0" mnemonicParsing="false" onAction="#controller" prefWidth="120.0" style="-fx-background-color: #0056b3;" text="Tìm kiếm" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -130,19 +130,19 @@
                                           <TextField fx:id="txtTongTien" layoutX="140.0" layoutY="132.0" prefWidth="240.0" />
                                           <TextField fx:id="txtVAT" layoutX="489.0" layoutY="48.0" prefWidth="240.0" />
                                           <TextField fx:id="txtTongCong" layoutX="489.0" layoutY="87.0" prefWidth="240.0" />
-                                          <Button fx:id="btnXuatExcel" layoutX="715.0" layoutY="145.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: blue;" text="Xuất Excel" textFill="WHITE">
+                                          <Button fx:id="btnXuatExcel" layoutX="715.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" prefWidth="80.0" style="-fx-background-color: blue;" text="Xuất Excel" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="btnHuy" layoutX="595.0" layoutY="145.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: #800000;" text="Huỷ" textFill="WHITE">
+                                          <Button fx:id="btnHuy" layoutX="595.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" prefWidth="80.0" style="-fx-background-color: #800000;" text="Huỷ" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="btnXacNhan" layoutX="480.0" layoutY="145.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: green;" text="Xác nhận" textFill="WHITE">
+                                          <Button fx:id="btnXacNhan" layoutX="480.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" prefWidth="80.0" style="-fx-background-color: green;" text="Xác nhận" textFill="WHITE">
                                              <font>
-                                                <Font name="System Bold Italic" size="12.0" />
+                                                <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Button>
                                        </children>
