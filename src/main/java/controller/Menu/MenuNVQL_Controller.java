@@ -39,47 +39,79 @@ public class MenuNVQL_Controller {
     private BorderPane borderPane;
 
     @FXML
-    private Button btnDashboard;
-
-    @FXML
-    private Button btnDoiMatKhau;
-
-    @FXML
-    private Button btnKhuyenMai;
-
-    @FXML
-    private Button btnNV;
-
-    @FXML
-    private Button btnQLBan;
-
-    @FXML
-    private Button btnTaiKhoan;
-
-    @FXML
-    private Button btnThongKe;
-
-    @FXML
     private TextField txtThongTin;
 
     @FXML
-    void handleKhuyenMaiAction(ActionEvent event) {
-        readyUI("KhuyenMai/KhuyenMai");
+    void btnBan(ActionEvent event) {
+
     }
 
     @FXML
-    public void handleNhanVienAction(ActionEvent event) {
-        readyUI("NhanVien/NhanVien");
+    void btnDangXuat(ActionEvent event) {
+    	Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
+        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+            return;
+        }
+        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
+            // Cập nhật lại ngày giờ đăng nhập
+        	LocalDate localDate = LocalDate.now();
+        	Date dateNow = Date.valueOf(localDate);
+        	
+            this.taiKhoan.setNgayDangXuat(dateNow);
+            RestaurantApplication.getInstance()
+                    .getDatabaseContext()
+                    .newEntity_DAO(TaiKhoan_DAO.class)
+                    .capNhat(taiKhoan);
+            
+            // Để chỉnh lại - load lên bị lỗi
+            try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                currentStage.close();
+                
+                FXMLLoader fxmlLoader = new FXMLLoader(
+            			getClass().getResource("/view/fxml/Login.fxml"));
+                Parent root = fxmlLoader.load();
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+
+                stage.setScene(scene);
+                stage.setMaximized(true);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Để chỉnh lại - load lên bị lỗi
+        }
     }
 
     @FXML
-    private void handleThongKeAction(ActionEvent event) {
-        readyUI("ThongKe");
+    void btnDashboard(ActionEvent event) {
+
     }
 
     @FXML
-    void handleTaiKhoanAction(ActionEvent event) {
-        readyUI("TaiKhoan/TaiKhoan");
+    void btnDoiMatKhau(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnKhuyenMai(ActionEvent event) {
+    	readyUI("KhuyenMai/KhuyenMai");
+    }
+
+    @FXML
+    void btnNhanVien(ActionEvent event) {
+    	readyUI("NhanVien/NhanVien");
+    }
+
+    @FXML
+    void btnTaiKhoan(ActionEvent event) {
+    	readyUI("TaiKhoan/TaiKhoan");
+    }
+
+    @FXML
+    void btnThongKe(ActionEvent event) {
+    	readyUI("ThongKe/ThongKe");
     }
 	
 	public FXMLLoader readyUI(String ui) {
@@ -102,44 +134,6 @@ public class MenuNVQL_Controller {
         dashBoard();
     }
 	
-	@FXML
-	private void dangXuat(ActionEvent actionEvent) {
-        Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
-            return;
-        }
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
-            // Cập nhật lại ngày giờ đăng nhập
-        	LocalDate localDate = LocalDate.now();
-        	Date dateNow = Date.valueOf(localDate);
-        	
-            this.taiKhoan.setNgayDangXuat(dateNow);
-            RestaurantApplication.getInstance()
-                    .getDatabaseContext()
-                    .newEntity_DAO(TaiKhoan_DAO.class)
-                    .capNhat(taiKhoan);
-            
-            // Để Nhân chỉnh lại - load lên bị lỗi
-            try {
-                Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                currentStage.close();
-                
-                FXMLLoader fxmlLoader = new FXMLLoader(
-            			getClass().getResource("/view/fxml/Login.fxml"));
-                Parent root = fxmlLoader.load();
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
-
-                stage.setScene(scene);
-                stage.setMaximized(true);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // Để Nhân chỉnh lại - load lên bị lỗi
-        }
-    }
-	
 	private Optional<ButtonType> showAlertConfirm(String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Thông báo");
@@ -152,57 +146,7 @@ public class MenuNVQL_Controller {
     }
 	
 	public void dashBoard() {
-		Dashboard_Controller dashBoardController = readyUI("DashBoard/Dashboard").getController();
-		dashBoardController.setThongTin(taiKhoan);		
+		Dashboard_Controller dashBoardController = readyUI("DashBoard/DashboardNVQL").getController();
 		//NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
-
-    @FXML
-    void khuyenMai(ActionEvent event) {
-    	try {
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KhuyenMai/KhuyenMai.fxml"));
-			Pane khuyenMaiPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(khuyenMaiPane);
-    	}catch(IOException e) {
-    		e.printStackTrace();
-    	}
-    }
-
-    @FXML
-    void nhanVien(ActionEvent event) {
-    	try {
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/NhanVien/NhanVien.fxml"));
-			Pane nhanVienPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(nhanVienPane);
-    	}catch(IOException e) {
-    		e.printStackTrace();
-    	}
-    }
-
-    @FXML
-    void taiKhoan(ActionEvent event) {
-    	try {
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/TaiKhoan/TaiKhoan.fxml"));
-			Pane taiKhoanPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(taiKhoanPane);
-    	}catch(IOException e) {
-    		e.printStackTrace();
-    	}
-    }
-
-    @FXML
-    void btnthongKe(ActionEvent event) {
-    	try {
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/Thongke/ThongKe.fxml"));
-			Pane thongKePane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(thongKePane);
-    	}catch(IOException e) {
-    		e.printStackTrace();
-    	}
-    }
-
 }
