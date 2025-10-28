@@ -62,7 +62,6 @@ public class ThemKhuyenMai_Controller {
 
     private String ui;
 
-
     @FXML
     public void initialize() {
         Platform.runLater(() -> txtTenKM.requestFocus());

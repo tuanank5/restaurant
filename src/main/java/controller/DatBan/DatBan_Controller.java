@@ -37,12 +37,16 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class DatBan_Controller {
+	@FXML
+    private GridPane gridPaneBan;
+	
 	@FXML
     private Button btnDatBan;
 
@@ -107,9 +111,9 @@ public class DatBan_Controller {
     private void controller(ActionEvent event) throws IOException {
         Object source = event.getSource();
         if (source == txtSoLuongKH) {
-//            showThemNhanVien();
+      
         } else if (source == cmbLoaiBan) {
-//            xuatExcel();
+        
         } else if (source == cmbTrangThai) {
         	
         } else if (source == txtNgayDatBan) {
@@ -169,105 +173,84 @@ public class DatBan_Controller {
     	cmbGioKT.getSelectionModel().selectFirst();
     }
     
-//    private void hienThiBan() {
-//        gridPaneGheTrai.getChildren().clear();
-//        gridPaneGheTrai.getRowConstraints().clear();
-//        gridPaneGheTrai.getColumnConstraints().clear();
-//
-//        gridPaneGheTrai.setHgap(10); // Khoảng cách giữa các cột
-//        gridPaneGheTrai.setVgap(10); // Khoảng cách giữa các hàng
-//
-//        // Cấu hình ScrollPane nếu cần
-//        if (!(gridPaneGheTrai.getParent() instanceof ScrollPane)) {
-//            ScrollPane scrollPaneLeft = new ScrollPane(gridPaneGheTrai);
-//            scrollPaneLeft.setFitToWidth(true);
-//            scrollPaneLeft.setPrefHeight(400); // Điều chỉnh chiều cao phù hợp
-//        }
-//
-//        Map<ToaTau, Set<Ghe>> gheDaChonMap = isDi ? gheDaChonMapDi : gheDaChonMapVe;
-//        List<Ghe> danhSachGhe = gheDAO.layDanhSachGheTrongToa(toaTau.getMaTt());
-//        int totalSeats = danhSachGhe.size();
-//        List<Ghe> gheDaMua = gheDAO.layDanhSachGheTrongLichTrinh(
-//                toaTau.getTauByMaTau().getMaTau(),
-//                Date.from(lichTrinh.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-//        Set<String> gheDaMuaSet = new HashSet<>();
-//        for (Ghe ghe : gheDaMua) {
-//            gheDaMuaSet.add(ghe.getMaGhe());
-//        }
-//
-//        gheDaChonMap.putIfAbsent(toaTau, new HashSet<>());
-//
-//        for (int i = 0; i < totalSeats; i++) {
-//            Ghe ghe = danhSachGhe.get(i);
-//            String maGhe = ghe.getMaGhe();
-//            VBox content = new VBox();
-//            Label soGheLabel = new Label("" + ghe.getSoGhe());
-//            soGheLabel.setStyle("-fx-font-size: 14px;"); // Tăng kích thước chữ
-//            Label giaGheLabel = new Label(String.format("%.0fK", ghe.getGiaGhe() / 1000));
-//            giaGheLabel.setStyle("-fx-font-size: 12px;"); // Tăng kích thước chữ
-//
-//            content.getChildren().addAll(soGheLabel, giaGheLabel);
-//            content.setAlignment(Pos.CENTER);
-//
-//            ToggleButton gheButton = new ToggleButton();
-//            gheButton.setGraphic(content);
-//            gheButton.setPrefSize(100, 100); // Tăng kích thước ghế (rộng và cao)
-//            gheButton.setMaxSize(100, 100);
-//
-//            // Thiết lập trạng thái ghế
-//            if (gheDaMuaSet.contains(maGhe)) {
-//                gheButton.setDisable(true);
-//                gheButton.setStyle("-fx-border-color: red;");
-//            } else if (gheDaChonMap.get(toaTau).contains(ghe)) {
-//                gheButton.setSelected(true);
-//                gheButton.setStyle(
+    private void hienThiBan() {
+        gridPaneBan.getChildren().clear();
+        gridPaneBan.getRowConstraints().clear();
+        gridPaneBan.getColumnConstraints().clear();
+
+        gridPaneBan.setHgap(10); // Khoảng cách giữa các cột
+        gridPaneBan.setVgap(10); // Khoảng cách giữa các hàng
+
+        // Cấu hình ScrollPane nếu cần
+        if (!(gridPaneBan.getParent() instanceof ScrollPane)) {
+            ScrollPane scrollPaneLeft = new ScrollPane(gridPaneBan);
+            scrollPaneLeft.setFitToWidth(true);
+            scrollPaneLeft.setPrefHeight(400); // Điều chỉnh chiều cao phù hợp
+        }
+
+        int totalBan = danhSachBanDB.size();
+        
+        for (int i = 0; i < totalBan; i++) {
+            Ban ban = danhSachBanDB.get(i);
+            String maBan = ban.getMaBan();
+            VBox content = new VBox();
+            Label soBanLabel = new Label("" + ban.getViTri());
+            soBanLabel.setStyle("-fx-font-size: 14px;"); // Tăng kích thước chữ
+
+            content.getChildren().addAll(soBanLabel);
+            content.setAlignment(Pos.CENTER);
+
+            ToggleButton banButton = new ToggleButton();
+            banButton.setGraphic(content);
+            banButton.setPrefSize(100, 100); // Tăng kích thước ghế (rộng và cao)
+            banButton.setMaxSize(100, 100);
+
+
+//            if () {
+//            	banButton.setDisable(true);
+//            	banButton.setStyle("-fx-border-color: red;");
+//            } else if () {
+//            	banButton.setSelected(true);
+//            	banButton.setStyle(
 //                        "-fx-border-color: #2bbaba; -fx-border-width: 3; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 //            } else {
-//                gheButton.setStyle("-fx-background-color: white; -fx-border-color: transparent;");
+//            	banButton.setStyle("-fx-background-color: white; -fx-border-color: transparent;");
 //            }
-//
-//            // Xử lý sự kiện khi nhấn vào ghế
-//            gheButton.setOnAction(event -> {
-//                if (!gheDaMuaSet.contains(maGhe)) {
-//                    if (gheButton.isSelected()) {
+
+//            banButton.setOnAction(event -> {
+//                if (!banButton.contains(maBan)) {
+//                    if (banButton.isSelected()) {
 //                        // Thêm viền bo góc và thay đổi màu viền khi ghế được chọn
-//                        gheButton.setStyle(
+//                    	banButton.setStyle(
 //                                "-fx-border-color: #2bbaba; -fx-border-width: 3; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
-//                        gheDaChonMap.get(toaTau).add(ghe);
-//                        themVe(ghe, toaTau, isDi);
-//                        System.out.println(veList);
 //                    } else {
 //                        // Bỏ viền và màu khi ghế không được chọn
-//                        gheButton.setStyle(
+//                    	banButton.setStyle(
 //                                "-fx-background-color: white; -fx-border-color: transparent; -fx-border-radius: 10; -fx-background-radius: 10;");
-//                        gheDaChonMap.get(toaTau).remove(ghe);
-//                        xoaVe(ghe, isDi);
-//                        System.out.println(veList);
 //                    }
 //                }
 //            });
-//
-//            int row = i / 4; // Số hàng
-//            int column = i % 4; // Số cột
-//
-//            if (column >= 2) {
-//                column++;
-//            }
-//            dsGhelb.setVisible(false);
-//            gridPaneGheTrai.add(gheButton, column, row);
-//        }
-//
-//        // Điều chỉnh phần trăm chiều rộng cho mỗi cột
-//        for (int i = 0; i < 5; i++) {
-//            ColumnConstraints columnConstraints = new ColumnConstraints();
-//            columnConstraints.setPercentWidth(20); // Điều chỉnh lại chiều rộng các cột để có kích thước mong muốn
-//            gridPaneGheTrai.getColumnConstraints().add(columnConstraints);
-//        }
-//
-//        for (int i = 0; i < (totalSeats / 4) + 1; i++) {
-//            RowConstraints rowConstraints = new RowConstraints();
-//            rowConstraints.setPrefHeight(100); // Tăng chiều cao hàng để ghế lớn hơn
-//            gridPaneGheTrai.getRowConstraints().add(rowConstraints);
-//        }
-//    }
+
+            int row = i / 4; // Số hàng
+            int column = i % 4; // Số cột
+
+            if (column >= 2) {
+                column++;
+            }
+            gridPaneBan.add(banButton, column, row);
+        }
+
+        // Điều chỉnh phần trăm chiều rộng cho mỗi cột
+        for (int i = 0; i < 5; i++) {
+            ColumnConstraints columnConstraints = new ColumnConstraints();
+            columnConstraints.setPercentWidth(20); // Điều chỉnh lại chiều rộng các cột để có kích thước mong muốn
+            gridPaneBan.getColumnConstraints().add(columnConstraints);
+        }
+
+        for (int i = 0; i < (totalBan / 4) + 1; i++) {
+            RowConstraints rowConstraints = new RowConstraints();
+            rowConstraints.setPrefHeight(100); // Tăng chiều cao hàng để bàn lớn hơn
+            gridPaneBan.getRowConstraints().add(rowConstraints);
+        }
+    }
 }
