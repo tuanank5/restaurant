@@ -14,12 +14,12 @@ VALUES
 
 
 --Chèn dữ liệu vào bảng HangKhachHang
-INSERT INTO HangKhachHang (maHang, tenHang, diemHang, giamGia, moTa)
+INSERT INTO HangKhachHang (maHang, diemHang, giamGia, moTa)
 VALUES
-('H1', N'Thường', 0, 0, N'Hạng thường - không giảm giá'),
-('H2', N'Bạc', 100, 5, N'Hạng Bạc - giảm 5%'),
-('H3', N'Vàng', 300, 10, N'Hạng Vàng - giảm 10%'),
-('H4', N'Kim Cương', 600, 15, N'Hạng Kim Cương - giảm 15%');
+('H1', 0, 0, N'Hạng thường - không giảm giá'),
+('H2', 100, 5, N'Hạng Bạc - giảm 5%'),
+('H3', 300, 10, N'Hạng Vàng - giảm 10%'),
+('H4', 600, 15, N'Hạng Kim Cương - giảm 15%');
 
 --Chèn dữ liệu vào bảng HangKhachHang
 INSERT INTO KhachHang (maKH, tenKH, sdt, diaChi, maHang, diemTichLuy)
@@ -43,4 +43,3 @@ INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
 ('B08', '8', 1, 'LB01'),
 ('B09', '9', 0, 'LB03'),
 ('B10', '10', 1, 'LB02');
-
