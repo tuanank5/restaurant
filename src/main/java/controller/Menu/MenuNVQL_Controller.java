@@ -152,35 +152,10 @@ public class MenuNVQL_Controller {
     }
 	
 	public void dashBoard() {
-//		Dashboard_Controller dashBoardController = readyUI("Dashboard").getController();
-//		dashBoardController.setThongTin(taiKhoan);
-		
-		NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
+		Dashboard_Controller dashBoardController = readyUI("DashBoard/Dashboard").getController();
+		dashBoardController.setThongTin(taiKhoan);		
+		//NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
-	@FXML
-    void datTimBan(ActionEvent event) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/DatBan/DatBan.fxml"));
-			Pane datBanPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(datBanPane);
-		}catch (IOException e) {
-			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
-		}
-    }
-
-    @FXML
-    void dashBoard(ActionEvent event) {
-    	try {
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/TaiKhoan/TaiKhoan.fxml"));
-			Pane dashBoradPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(dashBoradPane);
-    	}catch(IOException e) {
-    		e.printStackTrace();
-    	}
-    }
 
     @FXML
     void khuyenMai(ActionEvent event) {
