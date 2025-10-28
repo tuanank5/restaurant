@@ -2,18 +2,14 @@ package controller.KhuyenMai;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import config.RestaurantApplication;
 import dao.KhuyenMai_DAO;
 import entity.KhuyenMai;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -31,10 +27,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import util.ComponentUtil;
-import util.ExportExcelUtil;
 
 public class KhuyenMai_Controller {
 
@@ -51,7 +43,7 @@ public class KhuyenMai_Controller {
     private Button btnXoaKM;
 
     @FXML
-    private TableColumn<KhuyenMai, String> colLoaiKM;
+    private TableColumn<KhuyenMai, String> colloaiKM;
 
     @FXML
     private TableColumn<KhuyenMai, String> colMaKM;
@@ -63,7 +55,7 @@ public class KhuyenMai_Controller {
     private TableColumn<KhuyenMai, Date> colNgayKetThuc;
 
     @FXML
-    private TableColumn<KhuyenMai, Integer> colPhanTramKM;
+    private TableColumn<KhuyenMai, Integer> colPhanTramGiamGia;
 
     @FXML
     private TableColumn<KhuyenMai, String> colSanPhamKM;
@@ -77,18 +69,14 @@ public class KhuyenMai_Controller {
     @FXML
     private TextField txtTimKiem;
 
-    @FXML
-    private HBox hBox;
-
     private ObservableList<KhuyenMai> danhSachKhuyenMai = FXCollections.observableArrayList();
     private List<KhuyenMai> danhSachKhuyenMaiDB;
-    private final int LIMIT = 15;
 
     @FXML
     private void initialize() {
         setValueTable();
         loadData();
-        phanTrang(danhSachKhuyenMaiDB.size());
+        timKiem();
     }
 
     @FXML
@@ -97,15 +85,15 @@ public class KhuyenMai_Controller {
 
         if (source == btnXoaKM) {
             xoa();
+        }if (source == txtTimKiem) {
+        	timKiem();
         }
     }
 
     @FXML
     void mouseClicked(MouseEvent event) throws IOException {
         Object source = event.getSource();
-        if (source == txtTimKiem) {
-            timKiem();
-        } else if (source == tblKM) {
+        if (source == tblKM) {
             btnXoaKM.setDisable(false);
         } else if (source == borderPane) {
             huyChonDong();
@@ -114,21 +102,16 @@ public class KhuyenMai_Controller {
 
     @FXML
     void keyPressed(KeyEvent event) {
-        Object source = event.getSource();
-        if (source == borderPane && event.getCode() == KeyCode.ESCAPE) {
+        if (event.getSource() == borderPane && event.getCode() == KeyCode.ESCAPE) {
             huyChonDong();
         }
     }
 
-    // Tìm kiếm
+    // Tìm kiếm theo tên, mã, sản phẩm
     private void timKiem() {
-        ObservableList<KhuyenMai> newList = FXCollections.observableArrayList();
-        newList.addAll(danhSachKhuyenMaiDB);
-        hBox.setVisible(false);
+        FilteredList<KhuyenMai> filteredData = new FilteredList<>(danhSachKhuyenMai, p -> true);
 
-        FilteredList<KhuyenMai> filteredData = new FilteredList<>(newList, p -> true);
-
-        txtTimKiem.textProperty().addListener((observable, oldValue, newValue) -> {
+        txtTimKiem.textProperty().addListener((obs, oldValue, newValue) -> {
             filteredData.setPredicate(km -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
@@ -136,22 +119,14 @@ public class KhuyenMai_Controller {
                 String filter = newValue.toLowerCase();
 
                 return km.getMaKM().toLowerCase().contains(filter)
-                        || km.getTenKM().toLowerCase().contains(filter)
-                        || km.getSanPhamKM().toLowerCase().contains(filter);
+                    || km.getTenKM().toLowerCase().contains(filter)
+                    || km.getSanPhamKM().toLowerCase().contains(filter);
             });
-
-            hBox.setVisible(true);
-            phanTrang(filteredData);
-
-            if (hBox.getChildren().size() > 0 && hBox.getChildren().get(0) instanceof Button) {
-                ((Button) hBox.getChildren().get(0)).fire();
-            }
+            tblKM.setItems(filteredData);
         });
-
-        tblKM.setItems(filteredData);
     }
 
-    // XÓA CỨNG
+    // XÓA
     private void xoa() {
         KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
         if (km != null) {
@@ -176,47 +151,6 @@ public class KhuyenMai_Controller {
         }
     }
 
-    // PHÂN TRANG
-    private void phanTrang(int soLuongBanGhi) {
-        hBox.getChildren().clear();
-        loadCountPage(soLuongBanGhi);
-
-        hBox.getChildren().forEach(button -> {
-            ((Button)button).setOnAction(event -> {
-                int page = Integer.parseInt(((Button)button).getText());
-                int skip = (page - 1) * LIMIT;
-                int endIndex = Math.min(skip + LIMIT, danhSachKhuyenMaiDB.size());
-
-                List<KhuyenMai> sub = danhSachKhuyenMaiDB.subList(skip, endIndex);
-                loadData(sub);
-            });
-        });
-    }
-
-    private void phanTrang(FilteredList<KhuyenMai> list) {
-        hBox.getChildren().clear();
-        loadCountPage(list.size());
-
-        hBox.getChildren().forEach(button -> {
-            ((Button) button).setOnAction(event -> {
-                int page = Integer.parseInt(((Button) button).getText());
-                int skip = (page - 1) * LIMIT;
-
-                int endIndex = Math.min(skip + LIMIT, list.size());
-                List<KhuyenMai> sub = list.subList(skip, endIndex);
-                loadData(sub);
-            });
-        });
-    }
-
-    private void loadCountPage(int total) {
-        int pages = (int) Math.ceil((double) total / LIMIT);
-        for (int i = 0; i < pages; i++) {
-            Button btn = ComponentUtil.createButton(String.valueOf(i + 1), 14);
-            hBox.getChildren().add(btn);
-        }
-    }
-
     private void loadData() {
         Map<String, Object> filter = new HashMap<>();
 
@@ -225,26 +159,19 @@ public class KhuyenMai_Controller {
                 .newEntity_DAO(KhuyenMai_DAO.class)
                 .getDanhSach(KhuyenMai.class, filter);
 
-        List<KhuyenMai> top = danhSachKhuyenMaiDB.subList(0, Math.min(danhSachKhuyenMaiDB.size(), LIMIT));
-        danhSachKhuyenMai.addAll(top);
+        danhSachKhuyenMai.addAll(danhSachKhuyenMaiDB);
 
-        tblKM.setItems(danhSachKhuyenMai);
-    }
-
-    private void loadData(List<KhuyenMai> sub) {
-        danhSachKhuyenMai.clear();
-        danhSachKhuyenMai.addAll(sub);
         tblKM.setItems(danhSachKhuyenMai);
     }
 
     private void setValueTable() {
         colMaKM.setCellValueFactory(new PropertyValueFactory<>("maKM"));
         colTenKM.setCellValueFactory(new PropertyValueFactory<>("tenKM"));
-        colLoaiKM.setCellValueFactory(new PropertyValueFactory<>("loaiKM"));
+        colloaiKM.setCellValueFactory(new PropertyValueFactory<>("loaiKM"));
         colSanPhamKM.setCellValueFactory(new PropertyValueFactory<>("sanPhamKM"));
         colNgayBatDau.setCellValueFactory(new PropertyValueFactory<>("ngayBatDau"));
         colNgayKetThuc.setCellValueFactory(new PropertyValueFactory<>("ngayKetThuc"));
-        colPhanTramKM.setCellValueFactory(new PropertyValueFactory<>("phanTramGiamGia"));
+        colPhanTramGiamGia.setCellValueFactory(new PropertyValueFactory<>("phanTramGiamGia"));
     }
 
     private void huyChonDong() {
