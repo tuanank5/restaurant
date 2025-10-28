@@ -33,27 +33,6 @@ public class MenuNV_Controller {
     private BorderPane borderPane;
 
     @FXML
-    private Button btnCaLam;
-
-    @FXML
-    private Button btnDatTimBan;
-
-    @FXML
-    private Button btnDoiHuyBan;
-
-    @FXML
-    private Button btnDoiMatKhau;
-
-    @FXML
-    private Button btnHD;
-
-    @FXML
-    private Button btnKH;
-
-    @FXML
-    private Button btnMonAn;
-
-    @FXML
     private TextField txtThongTin;
     
 	private EventObject actionEvent;
@@ -138,49 +117,8 @@ public class MenuNV_Controller {
 		//		dashBoardController.setThongTin(taiKhoan);
 		NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
-	
 	@FXML
-	private void khachHang(ActionEvent event) {
-		try {
-	        // Đường dẫn FXML chính xác theo cấu trúc thư mục của bạn
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KhachHang/KhachHang.fxml"));
-	        Pane khachHangPane = loader.load();
-	        // Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-	        borderPane.setCenter(khachHangPane);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        System.out.println("Không thể tải giao diện KhachHang" + e.getMessage());
-	    }
-    }
-	
-	@FXML
-    private void traCuuHoaDon(ActionEvent event) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/HoaDon/HoaDon.fxml"));
-			Pane hoaDonPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(hoaDonPane);
-		}catch (IOException e) {
-			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Hóa đơn"+ e.getMessage());
-		}
-    }
-	
-	@FXML
-    void monAn(ActionEvent event) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/MonAn/MonAn.fxml"));
-			Pane monAnPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(monAnPane);
-		}catch (IOException e) {
-			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Món ăn"+ e.getMessage());
-		}
-    }
-	
-	@FXML
-    private void caLam(ActionEvent event) {
+    void btnCaLam(ActionEvent event) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KetCa/KetCa.fxml"));
 			Pane ketCaPane = loader.load();
@@ -191,10 +129,10 @@ public class MenuNV_Controller {
 			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
 		}
     }
-	
-	@FXML
-    void datTimBan(ActionEvent event) {
-		try {
+
+    @FXML
+    void btnDatTimBan(ActionEvent event) {
+    	try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/DatBan/DatBan.fxml"));
 			Pane datBanPane = loader.load();
 			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
@@ -202,6 +140,56 @@ public class MenuNV_Controller {
 		}catch (IOException e) {
 			e.printStackTrace();
 			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
+		}
+    }
+
+    @FXML
+    void btnDoiHuyBan(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnDoiMatKhau(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnHoaDon(ActionEvent event) {
+    	try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/HoaDon/HoaDon.fxml"));
+			Pane hoaDonPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(hoaDonPane);
+		}catch (IOException e) {
+			e.printStackTrace();
+			System.out.print("Không thể tải giao diện Hóa đơn"+ e.getMessage());
+		}
+    }
+
+    @FXML
+    void btnKhachHang(ActionEvent event) {
+    	try {
+	        // Đường dẫn FXML chính xác theo cấu trúc thư mục của bạn
+	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KhachHang/KhachHang.fxml"));
+	        Pane khachHangPane = loader.load();
+	        // Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+	        borderPane.setCenter(khachHangPane);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        System.out.println("Không thể tải giao diện KhachHang" + e.getMessage());
+	    }
+    }
+
+    @FXML
+    void btnMonAn(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/MonAn/MonAn.fxml"));
+			Pane monAnPane = loader.load();
+			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
+			borderPane.setCenter(monAnPane);
+		}catch (IOException e) {
+			e.printStackTrace();
+			System.out.print("Không thể tải giao diện Món ăn"+ e.getMessage());
 		}
     }
 }
