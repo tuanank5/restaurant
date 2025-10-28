@@ -19,6 +19,12 @@ public class DatabaseContextImpl implements DatabaseContext{
         if (entityType == KhachHang_DAO.class) {
             return (R) new KhachHang_DAOlmpl();
         }
+        if (entityType == Ban_DAO.class) {
+            return (R) new Ban_DAOImpl();
+        }
+        if (entityType == LoaiBan_DAO.class) {
+            return (R) new LoaiBan_DAOImpl();
+        }
         throw new IllegalArgumentException(
                 "There is no Entity Dao for " +
                         entityType.getName()
