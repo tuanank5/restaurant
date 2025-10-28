@@ -58,7 +58,6 @@ public class NhanVien {
 	
 	public NhanVien(String maNV, String tenNV, String chucVu, String email, Date namSinh, String diaChi,
 			boolean gioiTinh, Date ngayVaoLam, boolean trangThai) {
-		super();
 		this.maNV = maNV;
 		this.tenNV = tenNV;
 		this.chucVu = chucVu;
