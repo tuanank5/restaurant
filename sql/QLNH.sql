@@ -25,15 +25,15 @@ CREATE TABLE KhachHang
 CREATE TABLE LoaiBan
 (
 	maLoaiBan VARCHAR(20) PRIMARY KEY,
-	TenLoaiBan NVARCHAR(50),
-	SoLuong INT CHECK (SoLuong >= 0)
+	tenLoaiBan NVARCHAR(50),
+	soLuong INT CHECK (SoLuong >= 0)
 );
 
 CREATE TABLE Ban
 (
 	maBan VARCHAR(20) PRIMARY KEY,
-	ViTri NVARCHAR(100),
-	TrangThai NVARCHAR(50),
+	viTri NVARCHAR(100),
+	trangThai NVARCHAR(50),
 	maLoaiBan VARCHAR(20) REFERENCES LoaiBan(maLoaiBan) ON DELETE CASCADE 
 );
 
