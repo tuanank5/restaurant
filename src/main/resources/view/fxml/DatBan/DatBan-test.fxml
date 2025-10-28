@@ -115,12 +115,10 @@
                                  <children>
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="10.0" layoutY="10.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                                     <Label layoutX="45.0" layoutY="12.0" text="Đã được đặt" />
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="130.0" layoutY="10.0" stroke="#33cc66" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-                                    <Label layoutX="165.0" layoutY="12.0" text="Đang phục vụ" />
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="255.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                                    <Label layoutX="290.0" layoutY="12.0" text="Trống" />
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="340.0" layoutY="10.0" stroke="#2bbaba" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-                                    <Label layoutX="375.0" layoutY="12.0" text="Đang chọn" />
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="130.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                                    <Label layoutX="165.0" layoutY="12.0" text="Trống" />
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="255.0" layoutY="10.0" stroke="#2bbaba" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                                    <Label layoutX="290.0" layoutY="12.0" text="Đang chọn" />
                                  </children>
                               </Pane>
                            </left>
