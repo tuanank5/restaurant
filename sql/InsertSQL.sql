@@ -27,20 +27,20 @@ VALUES ('KH001', N'Nguyễn Văn A', '0901111111', N'123 Lê Lợi, TP.HCM', 'H1
 
 --Chèn dữ liệu cho loaiBan
 INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
-('LB01', 'Bàn VIP', 10),
+('LB01', 'Bàn nhỏ', 10),
 ('LB02', 'Bàn thường', 20),
-('LB03', 'Bàn ngoài trời', 15);
+('LB03', 'Bàn lớn', 15);
 
 -- Thêm dữ liệu cho Ban
 INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
-('B01', 'Tầng 1', 1, 'LB01'),
-('B02', 'Tầng 1', 0, 'LB01'),
-('B03', 'Tầng 1', 1, 'LB02'),
-('B04', 'Tầng 2', 0, 'LB02'),
-('B05', 'Ngoài trời', 1, 'LB03'),
-('B06', 'Ngoài trời', 0, 'LB03'),
-('B07', 'Tầng 2', 1, 'LB02'),
-('B08', 'Tầng 1', 1, 'LB01'),
-('B09', 'Ngoài trời', 0, 'LB03'),
-('B10', 'Tầng 2', 1, 'LB02');
+('B01', '1', 1, 'LB01'),
+('B02', '2', 0, 'LB01'),
+('B03', '3', 1, 'LB02'),
+('B04', '4', 0, 'LB02'),
+('B05', '5', 1, 'LB03'),
+('B06', '6', 0, 'LB03'),
+('B07', '7', 1, 'LB02'),
+('B08', '8', 1, 'LB01'),
+('B09', '9', 0, 'LB03'),
+('B10', '10', 1, 'LB02');
 
