@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
+             version="3.2">
+  <persistence-unit name="default">
+  
+    <class>entity.HangKhachHang</class>
+    <class>entity.KhachHang</class>
+    <class>entity.LoaiBan</class>
+    <class>entity.Ban</class>
+    <class>entity.DonDatBan</class>
+    <class>entity.DonLapDoiHuyBan</class>
+    <class>entity.NhanVien</class>
+    <class>entity.TaiKhoan</class>
+    <class>entity.KhuyenMai</class>
+    <class>entity.MonAn</class>
+    <class>entity.Coc</class>
+    <class>entity.HoaDon</class>
+    <class>entity.ChiTietHoaDon</class>
+    <class>entity.CaLamViec</class>
+    <class>entity.PhanCong</class>
+    
+    <properties>
+	  <!-- JDBC cho Hibernate / JPA -->
+      <property name="javax.persistence.jdbc.url" 
+              value="jdbc:sqlserver://localhost:1433;databaseName=QLNH;encrypt=true;trustServerCertificate=true"/>
+      <property name="javax.persistence.jdbc.driver" 
+              value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="javax.persistence.jdbc.password" value="123"/>
+
+      <!-- Hibernate config -->
+      <property name="hibernate.dialect" 
+              value="org.hibernate.dialect.SQLServerDialect"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>
