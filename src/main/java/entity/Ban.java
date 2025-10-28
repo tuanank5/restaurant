@@ -31,7 +31,7 @@ public class Ban {
     private String trangThai;
 
     @ManyToOne
-    @JoinColumn(name = "loaiBan", referencedColumnName = "loaiBan", nullable = false)
+    @JoinColumn(name = "maLoaiBan", referencedColumnName = "maLoaiBan", nullable = false)
     private LoaiBan loaiBan;
 
 	public Ban() {
