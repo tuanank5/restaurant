@@ -21,6 +21,26 @@ VALUES
 ('H3', N'Vàng', 300, 10, N'Hạng Vàng - giảm 10%'),
 ('H4', N'Kim Cương', 600, 15, N'Hạng Kim Cương - giảm 15%');
 
---Chèn dữ liệu vào bảng HangKhac
+--Chèn dữ liệu vào bảng HangKhachHang
 INSERT INTO KhachHang (maKH, tenKH, sdt, diaChi, maHang, diemTichLuy)
 VALUES ('KH001', N'Nguyễn Văn A', '0901111111', N'123 Lê Lợi, TP.HCM', 'H1', 50);
+
+--Chèn dữ liệu cho loaiBan
+INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
+('LB01', 'Bàn VIP', 10),
+('LB02', 'Bàn thường', 20),
+('LB03', 'Bàn ngoài trời', 15);
+
+-- Thêm dữ liệu cho Ban
+INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
+('B01', 'Tầng 1', 1, 'LB01'),
+('B02', 'Tầng 1', 0, 'LB01'),
+('B03', 'Tầng 1', 1, 'LB02'),
+('B04', 'Tầng 2', 0, 'LB02'),
+('B05', 'Ngoài trời', 1, 'LB03'),
+('B06', 'Ngoài trời', 0, 'LB03'),
+('B07', 'Tầng 2', 1, 'LB02'),
+('B08', 'Tầng 1', 1, 'LB01'),
+('B09', 'Ngoài trời', 0, 'LB03'),
+('B10', 'Tầng 2', 1, 'LB02');
+
