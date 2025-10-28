@@ -3,11 +3,10 @@ package controller.Menu;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.EventObject;
 import java.util.Optional;
 
 import config.RestaurantApplication;
-import controller.NhanVien.NhanVien_Controller;
+import controller.Dashboard.DashboardNV_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -17,12 +16,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MenuNV_Controller {
@@ -109,32 +106,16 @@ public class MenuNV_Controller {
 	public void dashBoard() {
 		//		Dashboard_Controller dashBoardController = readyUI("Dashboard").getController();
 		//		dashBoardController.setThongTin(taiKhoan);
-		NhanVien_Controller nhanVienController = readyUI("Dashboard/DashboardNV").getController();
+		DashboardNV_Controller dashboardNVController = readyUI("Dashboard/DashboardNV").getController();
 	}
 	@FXML
     void btnCaLam(ActionEvent event) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KetCa/KetCa.fxml"));
-			Pane ketCaPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(ketCaPane);
-		}catch (IOException e) {
-			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
-		}
+		readyUI("KetCa/KetCa");
     }
 
     @FXML
     void btnDatBan(ActionEvent event) {
-    	try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/DatBan/DatBan.fxml"));
-			Pane datBanPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(datBanPane);
-		}catch (IOException e) {
-			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Đặt bàn"+ e.getMessage());
-		}
+    	readyUI("DatBan/DatBan");
     }
 
     @FXML
@@ -149,29 +130,12 @@ public class MenuNV_Controller {
 
     @FXML
     void btnHoaDon(ActionEvent event) {
-    	try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/HoaDon/HoaDon.fxml"));
-			Pane hoaDonPane = loader.load();
-			// Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-			borderPane.setCenter(hoaDonPane);
-		}catch (IOException e) {
-			e.printStackTrace();
-			System.out.print("Không thể tải giao diện Hóa đơn"+ e.getMessage());
-		}
+    	readyUI("HoaDon/HoaDon");
     }
 
     @FXML
     void btnKhachHang(ActionEvent event) {
-    	try {
-	        // Đường dẫn FXML chính xác theo cấu trúc thư mục của bạn
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KhachHang/KhachHang.fxml"));
-	        Pane khachHangPane = loader.load();
-	        // Hiển thị giao diện Khách Hàng vào vùng center của BorderPane
-	        borderPane.setCenter(khachHangPane);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        System.out.println("Không thể tải giao diện KhachHang" + e.getMessage());
-	    }
+    	readyUI("KhachHang/KhachHang");
     }
 
     @FXML
