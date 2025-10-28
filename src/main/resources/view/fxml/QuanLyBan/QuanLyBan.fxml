@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Ban.QuanLyBan_Controller">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Ban.QuanLyBan_Controller">
    <top>
       <BorderPane prefHeight="60.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <center>
@@ -87,10 +87,10 @@
                <center>
                   <TableView fx:id="tblBan" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <columns>
-                        <TableColumn prefWidth="75.0" text="Mã bàn" />
-                        <TableColumn prefWidth="75.0" text="Vị trí" />
-                        <TableColumn prefWidth="75.0" text="Trạng thái" />
-                        <TableColumn prefWidth="75.0" text="Mã loại bàn" />
+                        <TableColumn fx:id="colMaBan" prefWidth="75.0" text="Mã bàn" />
+                        <TableColumn fx:id="colViTri" prefWidth="75.0" text="Vị trí" />
+                        <TableColumn fx:id="colTrangThai" prefWidth="75.0" text="Trạng thái" />
+                        <TableColumn fx:id="colMaLoaiBan" prefWidth="75.0" text="Mã loại bàn" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
