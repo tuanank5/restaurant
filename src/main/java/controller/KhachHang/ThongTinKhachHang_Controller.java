@@ -65,7 +65,7 @@ public class ThongTinKhachHang_Controller {
     private void controller(ActionEvent event) {
     	Object source = event.getSource();
         if (source == btnSuaTT) {
-            //showThongTin();
+            showThongTin();
         } else if (source == btnTroLai) {
             troLai();
         }
@@ -88,12 +88,11 @@ public class ThongTinKhachHang_Controller {
     }
     
     private void showThongTin() {
-    	
-    }
-    
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
-        hienThiThongTin(khachHang);
+    	if (khachHang != null) {
+            CapNhatKhachHang_Controller capNhatHanhKhachController =
+                    MenuNV_Controller.instance.readyUI("KhachHang/CapNhatKhachHang").getController();
+            capNhatHanhKhachController.setKhachHang(khachHang);
+        }
     }
     
     public void hienThiThongTin(KhachHang khachHang) {
@@ -109,6 +108,11 @@ public class ThongTinKhachHang_Controller {
         	}
         	String diemTichLuy = txtDiemTichLuy.getText();
         }
+    }
+    
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
+        hienThiThongTin(khachHang);
     }
     
     public void troLai() {

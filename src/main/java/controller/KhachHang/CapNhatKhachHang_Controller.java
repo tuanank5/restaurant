@@ -1,8 +1,11 @@
 package controller.KhachHang;
 
+import java.io.IOException;
 import java.util.Optional;
 
+import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
+import dao.KhachHang_DAO;
 import entity.HangKhachHang;
 import entity.KhachHang;
 import javafx.application.Platform;
@@ -15,6 +18,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 public class CapNhatKhachHang_Controller {
@@ -66,7 +72,121 @@ public class CapNhatKhachHang_Controller {
     
     @FXML
     void controller(ActionEvent event) {
+    	Object src = event.getSource();
+        if (src == btnLuuLai) {
+            luuLai();
+        } 
+        else if (src == btnHoanTac) {
+            hoanTac();
+        } 
+        else if (src == btnTaoLaiMK) {
+            xacNhanLuu("KhachHang/ThongTinKhachHang");
+        }
+    }
 
+    
+    @FXML
+    void mouseClicked(MouseEvent event) throws IOException {
+        Object source = event.getSource();
+        // Khi người dùng click vào label "Danh Sách Khách Hàng"
+        if (source == lblDanhSachKhachHang) {
+            xacNhanLuu("KhachHang/KhachHang");
+        } 
+        // Khi người dùng click vào label "Thông Tin Chi Tiết"
+        else if (source == lblThongTinChiTiet) {
+            xacNhanLuu("KhachHang/ThongTinChiTietKhachHang");
+        }
+    }
+    
+    @FXML
+    void keyPressed(KeyEvent event) {
+        Object source = event.getSource();
+        if (source == borderPane) {
+            // Ctrl + S
+            if (event.isControlDown() && event.getCode() == KeyCode.S) {
+                luuLai();
+            }
+            // ESC
+            else if (event.getCode() == KeyCode.ESCAPE) {
+                troLai("KhachHang/ThongTinKhachHang");
+            }
+            // Ctrl + Z
+            else if (event.isControlDown() && event.getCode() == KeyCode.Z) {
+                hoanTac();
+            }
+        }
+    }
+    
+    //Sự kiện
+    private void luuLai() {
+        KhachHang khachHangNew = getKhachHangNew();
+        if (khachHangNew != null) {
+            Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc chắn muốn lưu thay đổi?");
+            if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+                return;
+            }
+
+            if (buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
+                boolean check = RestaurantApplication.getInstance()
+                        .getDatabaseContext()
+                        .newEntity_DAO(KhachHang_DAO.class)
+                        .capNhat(khachHangNew);
+
+                if (check) {
+                    showAlert("Thông báo", "Cập nhật thông tin khách hàng thành công!", Alert.AlertType.INFORMATION);
+                    this.khachHang = khachHangNew;
+                    troLai("KhachHang/ThongTinKhachHang");
+                } else {
+                    showAlert("Thông báo", "Cập nhật thất bại!", Alert.AlertType.WARNING);
+                }
+            }
+        } else {
+            showAlert("Lỗi", "Xảy ra lỗi khi cập nhật thông tin khách hàng!", Alert.AlertType.ERROR);
+        }
+    }
+    
+    private void hoanTac(){
+        Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc chắn muốn hoàn tác?");
+        if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+            return;
+        }
+        boolean check = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(KhachHang_DAO.class)
+                .capNhat(khachHang);
+        if (check) {
+            showAlert("Thông báo", "Hoàn tác thành công!", Alert.AlertType.INFORMATION);
+            hienThiThongTin(khachHang);
+        } else {
+            showAlert("Thông báo", "Hoàn tác thất bại!", Alert.AlertType.WARNING);
+        }
+    }
+    
+    private void xacNhanLuu(String ui) {
+        KhachHang khachHangNew = getKhachHangNew();
+        if (khachHangNew != null && !khachHangNew.equals(khachHang)) {
+            Optional<ButtonType> buttonType = showAlertConfirm("Bạn có muốn lưu cập nhật?");
+            
+            if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+                troLai(ui);
+            } 
+            else if (buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
+                //Lưu dữ liệu khách hàng vào CSDL
+                boolean check = RestaurantApplication.getInstance()
+                        .getDatabaseContext()
+                        .newEntity_DAO(KhachHang_DAO.class)
+                        .capNhat(khachHangNew);
+                if (check) {
+                    showAlert("Thông báo", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
+                    this.khachHang = khachHangNew;
+                    troLai(ui);
+                } else {
+                    showAlert("Thông báo", "Cập nhật thất bại!", Alert.AlertType.WARNING);
+                }
+            }
+        } else {
+            troLai(ui);
+        }
     }
     
     private void troLai(String ui) {
