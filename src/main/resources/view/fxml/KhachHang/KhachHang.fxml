@@ -36,7 +36,7 @@
                 <Button onAction="#btnTatCa" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Label text="Tìm kiếm:" />
-                <TextField onAction="#txtTimKiem" prefWidth="200" />
+                <TextField fx:id="txtTimKiem" onMouseClicked="#mouseClicked" prefWidth="200" />
             </HBox>
 
             <!-- TableView -->

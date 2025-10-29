@@ -100,11 +100,6 @@ public class KhachHang_Controller {
     }
     
     @FXML
-    void txtTimKiem(ActionEvent event) {
-    	timKiem();
-    }
-    
-    @FXML
     void btnXuatExcel(ActionEvent event) throws IOException{
     	Stage stage = (Stage) tableView.getScene().getWindow();
         danhSachKhachHang.clear();

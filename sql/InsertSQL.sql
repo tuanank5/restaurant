@@ -48,4 +48,4 @@ INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, 
 VALUES
 ('KM001', N'Giảm 1%', N'Theo %', N'SP', '2025-01-01', '2025-01-15', 1),
 ('KM002', N'Giảm 2%', N'Theo %', N'SP', '2025-02-01', '2025-02-10', 2),
-('KM003', N'Giảm 3%', N'Theo %', N'SP', '2025-11-25', '2025-11-30', 3),
+('KM003', N'Giảm 3%', N'Theo %', N'SP', '2025-11-25', '2025-11-30', 3);
