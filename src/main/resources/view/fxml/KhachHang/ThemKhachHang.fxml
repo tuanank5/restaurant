@@ -47,7 +47,7 @@
                   <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
                         <!-- ĐÃ SỬA: onAction trỏ đến hàm xử lý -->
-                        <Button fx:id="btnTroLai" layoutX="94.0" layoutY="19.0" mnemonicParsing="false" onAction="#on" style="-fx-background-color: #2C3E50;" text="Trở lại (ESC)" textFill="WHITE">
+                        <Button fx:id="btnTroLai" layoutX="94.0" layoutY="19.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: #2C3E50;" text="Trở lại (ESC)" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

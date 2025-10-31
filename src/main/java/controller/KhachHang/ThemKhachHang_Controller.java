@@ -280,7 +280,7 @@ public class ThemKhachHang_Controller {
             return null;
         }
         KhachHang kh = new KhachHang();
-        kh.setMaKH("KH" + System.currentTimeMillis()); // quan trọng
+        kh.setMaKH(phatSinhMaKH()); // quan trọng
         kh.setTenKH(tenKH);
         kh.setSdt(sdt);
         kh.setEmail(email);
@@ -296,6 +296,28 @@ public class ThemKhachHang_Controller {
         return kh;
     }
 
+    private String phatSinhMaKH(){
+    	KhachHang_DAO dao = RestaurantApplication.getInstance()
+    			.getDatabaseContext()
+    			.newEntity_DAO(KhachHang_DAO.class);
+    	//Lấy danh sách khách hàng hiện có
+    	List<KhachHang> dsKH = dao.getDanhSach(KhachHang.class, new HashMap<>());
+    	//Tìm mã KH > nhất hiện tại
+    	int max = 0;
+    	for(KhachHang kh : dsKH) {
+    		String ma = kh.getMaKH();
+    		if(ma != null && ma.startsWith("KH")) {
+    			try {
+    				int num = Integer.parseInt(ma.substring(2));
+    				if(num > max) max = num;
+    			}catch (NumberFormatException e) {
+					// TODO: handle exception
+				}
+    		}
+    	}
+    	return String.format("KH%03d", max + 1);
+    }
+    
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
