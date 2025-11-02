@@ -14,16 +14,16 @@ VALUES
 
 
 --Chèn dữ liệu vào bảng HangKhachHang
-INSERT INTO HangKhachHang (maHang, diemHang, giamGia, moTa)
-VALUES
-('H1', 0, 0, N'Hạng thường - không giảm giá'),
-('H2', 100, 5, N'Hạng Bạc - giảm 5%'),
-('H3', 300, 10, N'Hạng Vàng - giảm 10%'),
-('H4', 600, 15, N'Hạng Kim Cương - giảm 15%');
+INSERT INTO HangKhachHang (maHang, tenHang, diemHang, giamGia, moTa) VALUES
+('H1', N'Hang Dong', 0, 0.00, N'Khách hàng mới, chưa có ưu đãi'),
+('H2', N'Hang Bac', 1000, 5.00, N'Khách hàng thân thiết, được giảm 5%'),
+('H3', N'Hang Vang', 3000, 10.00, N'Khách hàng VIP, giảm 10% trên hóa đơn');
 
 --Chèn dữ liệu vào bảng HangKhachHang
-INSERT INTO KhachHang (maKH, tenKH, sdt, diaChi, maHang, diemTichLuy)
-VALUES ('KH001', N'Nguyễn Văn A', '0901111111', N'123 Lê Lợi, TP.HCM', 'H1', 50);
+INSERT INTO KhachHang (maKH, tenKH, sdt, email, diaChi, diemTichLuy, maHang) VALUES
+('KH001', N'Nguyễn Văn An', '0901234567', 'an.nguyen@example.com', N'123 Trần Hưng Đạo, Q1, TP.HCM', 500, 'H1'),
+('KH002', N'Lê Thị Bình', '0912345678', 'binh.le@example.com', N'45 Nguyễn Huệ, Q1, TP.HCM', 1200, 'H2'),
+('KH003', N'Trần Quốc Cường', '0987654321', 'cuong.tran@example.com', N'56 Lê Lợi, Q3, TP.HCM', 3500, 'H3');
 
 --Chèn dữ liệu cho loaiBan
 INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
@@ -43,3 +43,9 @@ INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
 ('B08', '8', 1, 'LB01'),
 ('B09', '9', 0, 'LB03'),
 ('B10', '10', 1, 'LB02');
+
+INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, phanTramGiamGia)
+VALUES
+('KM001', N'Giảm 1%', N'Theo %', N'SP', '2025-01-01', '2025-01-15', 1),
+('KM002', N'Giảm 2%', N'Theo %', N'SP', '2025-02-01', '2025-02-10', 2),
+('KM003', N'Giảm 3%', N'Theo %', N'SP', '2025-11-25', '2025-11-30', 3);
