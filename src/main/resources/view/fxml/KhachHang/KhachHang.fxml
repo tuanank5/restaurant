@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
+<BorderPane fx:id="borderPane" onKeyPressed="#keyPressed" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
 
     <!-- Top Header -->
     <top>
