@@ -12,7 +12,7 @@ import jakarta.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "Ban.list",
-        query = "SELECT B FORM Ban B"
+        query = "SELECT B FROM Ban B"
     ),
     @NamedQuery(
         name = "Ban.count",

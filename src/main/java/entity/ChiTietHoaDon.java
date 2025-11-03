@@ -25,11 +25,11 @@ public class ChiTietHoaDon {
     private double thanhTien;
     
     @ManyToOne
-    @JoinColumn(name = "maHD", referencedColumnName = "maNV", nullable = false)
+    @JoinColumn(name = "maHD", referencedColumnName = "maHD", nullable = false)
     private HoaDon hoaDon;
 
     @ManyToOne
-    @JoinColumn(name = "maMon", referencedColumnName = "maNV", nullable = false)
+    @JoinColumn(name = "maMon", referencedColumnName = "maMon", nullable = false)
     private MonAn monAn;
 
 	public ChiTietHoaDon() {

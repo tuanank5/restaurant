@@ -9,7 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-//có sai
+//
 @Entity
 @NamedQueries({
     @NamedQuery(
@@ -18,13 +18,13 @@ import jakarta.persistence.NamedQuery;
     ),
     @NamedQuery(
         name = "DonLapDoiHuyBan.count",
-        query = "SELECT COUNT(maDatBans) FROM DonLapDoiHuyBan"
+        query = "SELECT COUNT(maDatBan) FROM DonLapDoiHuyBan"
     )
 })
 public class DonLapDoiHuyBan {
 	@Id
-	@Column(name = "maDatBans", nullable = false, length = 20)
-    private String maDatBans;
+	@Column(name = "maDatBan", nullable = false, length = 20)
+    private String maDatBan;
 
     @Column(name = "lyDo", nullable = false, length = 200)
     private String lyDo;
@@ -36,16 +36,16 @@ public class DonLapDoiHuyBan {
     private double tienHoanTra;
 
     @ManyToOne
-    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
+    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false, insertable = false, updatable = false)
     private DonDatBan donDatBan;
-
+    
 	public DonLapDoiHuyBan() {
 		
 	}
 
 	public DonLapDoiHuyBan(String maDatBan, String lyDo, Date ngayGioLapDon, double tienHoanTra,
 			DonDatBan donDatBan) {
-		this.maDatBans = maDatBan;
+		this.maDatBan = maDatBan;
 		this.lyDo = lyDo;
 		this.ngayGioLapDon = ngayGioLapDon;
 		this.tienHoanTra = tienHoanTra;
@@ -53,11 +53,11 @@ public class DonLapDoiHuyBan {
 	}
 
 	public String getMaDatBan() {
-		return maDatBans;
+		return maDatBan;
 	}
 
 	public void setMaDatBan(String maDatBan) {
-		this.maDatBans = maDatBan;
+		this.maDatBan = maDatBan;
 	}
 
 	public String getLyDo() {

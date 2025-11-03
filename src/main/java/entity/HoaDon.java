@@ -18,7 +18,7 @@ import jakarta.persistence.NamedQuery;
     ),
     @NamedQuery(
         name = "HoaDon.count",
-        query = "SELECT COUNT(HD.maHoaDon) FROM HoaDon HD"
+        query = "SELECT COUNT(HD.maHD) FROM HoaDon HD"
     ),
     @NamedQuery(
         name = "HoaDon.trangThai",
@@ -27,8 +27,8 @@ import jakarta.persistence.NamedQuery;
 })
 public class HoaDon {
     @Id
-    @Column(name = "maHoaDon", nullable = false, length = 20)
-    private String maHoaDon;
+    @Column(name = "maHD", nullable = false, length = 20)
+    private String maHD;
 
     @Column(name = "ngayLap", nullable = false)
     private Date ngayLap;
@@ -78,10 +78,10 @@ public class HoaDon {
     	
     }
 
-	public HoaDon(String maHoaDon, Date ngayLap, double tongTien, double thue, String trangThai, String kieuThanhToan,
+	public HoaDon(String maHD, Date ngayLap, double tongTien, double thue, String trangThai, String kieuThanhToan,
 			double tienNhan, double tienThua, KhachHang khachHang, KhuyenMai khuyenMai, NhanVien nhanVien, Ban ban,
 			Coc coc) {
-		this.maHoaDon = maHoaDon;
+		this.maHD = maHD;
 		this.ngayLap = ngayLap;
 		this.tongTien = tongTien;
 		this.thue = thue;
@@ -97,11 +97,11 @@ public class HoaDon {
 	}
 
 	public String getMaHoaDon() {
-		return maHoaDon;
+		return maHD;
 	}
 
-	public void setMaHoaDon(String maHoaDon) {
-		this.maHoaDon = maHoaDon;
+	public void setMaHoaDon(String maHD) {
+		this.maHD = maHD;
 	}
 
 	public Date getNgayLap() {
@@ -204,7 +204,7 @@ public class HoaDon {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((maHoaDon == null) ? 0 : maHoaDon.hashCode());
+		result = prime * result + ((maHD == null) ? 0 : maHD.hashCode());
 		return result;
 	}
 
@@ -217,17 +217,17 @@ public class HoaDon {
 		if (getClass() != obj.getClass())
 			return false;
 		HoaDon other = (HoaDon) obj;
-		if (maHoaDon == null) {
-			if (other.maHoaDon != null)
+		if (maHD == null) {
+			if (other.maHD != null)
 				return false;
-		} else if (!maHoaDon.equals(other.maHoaDon))
+		} else if (!maHD.equals(other.maHD))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "HoaDon [maHoaDon=" + maHoaDon + ", ngayLap=" + ngayLap + ", tongTien=" + tongTien + ", thue=" + thue
+		return "HoaDon [maHoaDon=" + maHD + ", ngayLap=" + ngayLap + ", tongTien=" + tongTien + ", thue=" + thue
 				+ ", trangThai=" + trangThai + ", kieuThanhToan=" + kieuThanhToan + ", tienNhan=" + tienNhan
 				+ ", tienThua=" + tienThua + ", khachHang=" + khachHang + ", khuyenMai=" + khuyenMai + ", nhanVien="
 				+ nhanVien + ", ban=" + ban + ", coc=" + coc + "]";
