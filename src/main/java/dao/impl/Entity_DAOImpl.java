@@ -18,7 +18,7 @@ import jakarta.persistence.criteria.Root;
 public class Entity_DAOImpl<E> implements Entity_DAO<E> {
 	protected final RestaurantApplication restaurantApplication = RestaurantApplication.getInstance();
     protected final EntityManagerFactory entityManagerFactory = restaurantApplication.getEntityManagerFactory();
-
+    
     @Override
     public boolean themNhieu(List<E> listEntity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();

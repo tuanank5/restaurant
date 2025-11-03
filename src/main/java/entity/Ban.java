@@ -77,6 +77,13 @@ public class Ban {
 		this.loaiBan = loaiBan;
 	}
 
+	 // Thêm phương thức getSoLuong để lấy số lượng chỗ từ LoaiBan
+    public int getSoLuong() {
+        if (loaiBan != null) {
+            return loaiBan.getSoLuong();
+        }
+        return 0;
+    } 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
