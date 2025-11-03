@@ -7,24 +7,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-//
+import jakarta.persistence.Table;
+
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "DonLapDoiHuyBan.list",
-        query = "SELECT D FROM DonLapDoiHuyBan D"
-    ),
-    @NamedQuery(
-        name = "DonLapDoiHuyBan.count",
-        query = "SELECT COUNT(maDatBan) FROM DonLapDoiHuyBan"
-    )
-})
+@Table(name = "DonLapDoiHuyBan")
 public class DonLapDoiHuyBan {
 	@Id
-	@Column(name = "maDatBan", nullable = false, length = 20)
-    private String maDatBan;
+    @ManyToOne
+    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
+    private DonDatBan donDatBan;
 
     @Column(name = "lyDo", nullable = false, length = 200)
     private String lyDo;
@@ -35,29 +26,23 @@ public class DonLapDoiHuyBan {
     @Column(name = "tienHoanTra", nullable = false)
     private double tienHoanTra;
 
-    @ManyToOne
-    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false, insertable = false, updatable = false)
-    private DonDatBan donDatBan;
-    
 	public DonLapDoiHuyBan() {
 		
 	}
 
-	public DonLapDoiHuyBan(String maDatBan, String lyDo, Date ngayGioLapDon, double tienHoanTra,
-			DonDatBan donDatBan) {
-		this.maDatBan = maDatBan;
+	public DonLapDoiHuyBan(DonDatBan donDatBan, String lyDo, Date ngayGioLapDon, double tienHoanTra) {
+		this.donDatBan = donDatBan;
 		this.lyDo = lyDo;
 		this.ngayGioLapDon = ngayGioLapDon;
 		this.tienHoanTra = tienHoanTra;
+	}
+
+	public DonDatBan getDonDatBan() {
+		return donDatBan;
+	}
+
+	public void setDonDatBan(DonDatBan donDatBan) {
 		this.donDatBan = donDatBan;
-	}
-
-	public String getMaDatBan() {
-		return maDatBan;
-	}
-
-	public void setMaDatBan(String maDatBan) {
-		this.maDatBan = maDatBan;
 	}
 
 	public String getLyDo() {
@@ -84,13 +69,36 @@ public class DonLapDoiHuyBan {
 		this.tienHoanTra = tienHoanTra;
 	}
 
-	public DonDatBan getDonDatBan() {
-		return donDatBan;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((donDatBan == null) ? 0 : donDatBan.hashCode());
+		return result;
 	}
 
-	public void setDonDatBan(DonDatBan donDatBan) {
-		this.donDatBan = donDatBan;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DonLapDoiHuyBan other = (DonLapDoiHuyBan) obj;
+		if (donDatBan == null) {
+			if (other.donDatBan != null)
+				return false;
+		} else if (!donDatBan.equals(other.donDatBan))
+			return false;
+		return true;
 	}
-    
+
+	@Override
+	public String toString() {
+		return "DonLapDoiHuyBan [donDatBan=" + donDatBan + ", lyDo=" + lyDo + ", ngayGioLapDon=" + ngayGioLapDon
+				+ ", tienHoanTra=" + tienHoanTra + "]";
+	}
+
 	
 }

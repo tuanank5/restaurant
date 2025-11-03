@@ -20,7 +20,6 @@ import jakarta.persistence.NamedQuery;
     )
 })
 public class KhachHang {
-
 	@Id
 	@Column(name = "maKH", nullable = false, length = 20)
 	private String maKH;

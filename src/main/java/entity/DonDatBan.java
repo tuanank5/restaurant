@@ -7,20 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "DonDatBan.list",
-        query = "SELECT B FROM DonDatBan B"
-    ),
-    @NamedQuery(
-        name = "DonDatBan.count",
-        query = "SELECT COUNT(maDatBan) FROM DonDatBan"
-    )
-})
+@Table(name = "DonLapDoiHuyBan")
 public class DonDatBan {
 	@Id
 	@Column(name = "maDatBan", nullable = false, length = 20)

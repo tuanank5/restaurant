@@ -370,9 +370,9 @@ VALUES
 
 --Chèn dữ liệu cho loaiBan
 INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
-('LB01', 'Bàn nhỏ', 10),
-('LB02', 'Bàn thường', 20),
-('LB03', 'Bàn lớn', 15);
+('LB01', N'Bàn nhỏ', 10),
+('LB02', N'Bàn thường', 20),
+('LB03', N'Bàn lớn', 15);
 
 -- Thêm dữ liệu cho Ban
 INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
