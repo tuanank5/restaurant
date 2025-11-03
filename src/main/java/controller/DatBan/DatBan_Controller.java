@@ -7,6 +7,7 @@ import entity.KhachHang;
 import entity.Ban;
 import entity.LoaiBan;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,6 +23,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.List;
+import dao.DonDatBan_DAO;
+import dao.impl.DonDatBan_DAOImpl;
+import entity.DonDatBan;
 
 
 
@@ -48,6 +52,9 @@ public class DatBan_Controller implements Initializable {
     // --- Button và GridPane ---
     @FXML private Button btnDatBan;
     @FXML private GridPane gridPaneBan;
+    
+    @FXML
+    private DatePicker dpNgayDatBan;
 
     // --- DAO ---
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
@@ -57,6 +64,10 @@ public class DatBan_Controller implements Initializable {
     private List<Ban> danhSachBan = new ArrayList<>();
     private Ban banDangChon = null;
     private Button buttonBanDangChonUI = null;
+    @FXML
+    private TextField txtSoLuongKH;
+    
+    private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -72,7 +83,7 @@ public class DatBan_Controller implements Initializable {
         btnDatBan.setOnAction(this::handleDatBan);
         btnDatBan.setDisable(true);
         
-        btnTimKiem.setOnAction(e -> layThongTinKhachHang());
+        btnTimKiem.setOnAction(this::timKiemKhachHang);
     }
 
     private void khoiTaoComboBoxes() {
@@ -165,6 +176,23 @@ public class DatBan_Controller implements Initializable {
         if (kh != null) {
             txtTenKH.setText(kh.getTenKH());
             txtDiemTichLuy.setText(String.valueOf(kh.getDiemTichLuy()));
+
+            // --- Lấy danh sách các đơn đặt bàn của khách hàng ---
+            List<DonDatBan> dsDon = donDatBanDAO.timTheoKhachHang(kh);
+
+            if (!dsDon.isEmpty()) {
+                StringBuilder sb = new StringBuilder("Khách hàng này đã đặt các bàn:\n");
+                for (DonDatBan don : dsDon) {
+                    sb.append("- Bàn: ").append(don.getBan().getMaBan())
+                      .append(" (").append(don.getBan().getLoaiBan().getTenLoaiBan()).append(")")
+                      .append(", Giờ: ").append(don.getGioBatDau()).append(" - ").append(don.getGioKetThuc())
+                      .append("\n");
+                }
+                showAlert(Alert.AlertType.INFORMATION, sb.toString());
+            } else {
+                showAlert(Alert.AlertType.INFORMATION, "Khách hàng chưa từng đặt bàn nào.");
+            }
+
         } else {
             txtTenKH.clear();
             txtDiemTichLuy.clear();
@@ -208,7 +236,7 @@ public class DatBan_Controller implements Initializable {
         txtTrangThai.setText(ban.getTrangThai());
         txtViTri.setText(ban.getViTri());
         txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
-        txtSoLuong.setText("Không có số lượng trong Entity");
+        txtSoLuong.setText(String.valueOf(ban.getSoLuong()));
 
         if (buttonBanDangChonUI != null)
             buttonBanDangChonUI.setStyle(getStyleByStatusAndType(banDangChon.getTrangThai(), banDangChon.getLoaiBan().getTenLoaiBan()));
@@ -223,16 +251,143 @@ public class DatBan_Controller implements Initializable {
             return;
         }
 
+        String sdt = txtSDT.getText().trim();
+        KhachHang kh = khachHangDAO.timTheoSDT(sdt);
+
+        if (kh == null) {
+            showAlert(AlertType.WARNING, "Vui lòng nhập số điện thoại khách hàng hợp lệ trước khi đặt bàn!");
+            return;
+        }
+     // Lấy ngày đặt từ DatePicker
+        LocalDate ngayChon = dpNgayDatBan.getValue();
+        if (ngayChon == null) {
+            showAlert(AlertType.WARNING, "Vui lòng chọn ngày đặt bàn!");
+            return;
+        }
+
+        // Tạo đơn đặt bàn mới
+        DonDatBan don = new DonDatBan();
+        don.setMaDatBan("DDB" + System.currentTimeMillis());
+        don.setKhachHang(kh);
+        don.setBan(banDangChon);
+        don.setNgayGioLapDon(java.sql.Date.valueOf(ngayChon));
+        don.setSoLuong(banDangChon.getSoLuong());
+        don.setGioBatDau(java.time.LocalTime.parse(cmbGioBatDau.getValue()));
+        don.setGioKetThuc(java.time.LocalTime.parse(cmbGioKetThuc.getValue()));
+
+        // Cập nhật trạng thái bàn
         banDangChon.setTrangThai("Đã được đặt");
 
-        if (banDAO.sua(banDangChon)) {
+        boolean thanhCong = donDatBanDAO.them(don);
+        if (thanhCong) {
+            banDAO.sua(banDangChon);
             showAlert(AlertType.INFORMATION, "Đặt bàn thành công!");
             loadDanhSachBan();
         } else {
-            showAlert(AlertType.ERROR, "Lỗi khi cập nhật trạng thái bàn!");
+            showAlert(AlertType.ERROR, "Lỗi khi thêm đơn đặt bàn!");
+        }
+    }
+    //Tìm kiếm đơn đặt bàn của Khách Hàng
+    @FXML
+    private void timKiemKhachHang(ActionEvent event) {
+        String sdt = txtSDT.getText().trim();
+        if (sdt.isEmpty()) {
+            showAlert(AlertType.WARNING, "Vui lòng nhập số điện thoại khách hàng!");
+            return;
+        }
+        
+        KhachHang kh = khachHangDAO.timTheoSDT(sdt);
+        if (kh == null) {
+            showAlert(AlertType.INFORMATION, "Không tìm thấy khách hàng với số điện thoại này!");
+            clearThongTinKhachHang();
+            resetThongTinBan();
+            return;
+        }
+
+        txtTenKH.setText(kh.getTenKH());
+        txtDiemTichLuy.setText(String.valueOf(kh.getDiemTichLuy()));
+
+        List<DonDatBan> danhSachDon = donDatBanDAO.timTheoKhachHang(kh);
+
+        if (danhSachDon == null || danhSachDon.isEmpty()) {
+            showAlert(AlertType.INFORMATION, "Khách hàng này chưa từng đặt bàn!");
+            resetThongTinBan();
+            return;
+        }
+        // Lấy đơn đặt bàn mới nhất (nếu bạn muốn theo ngày thì sort/ORDER BY trong DAO)
+        DonDatBan donGanNhat = danhSachDon.get(danhSachDon.size() - 1);
+        Ban ban = donGanNhat.getBan();
+        
+        if (ban != null) {
+            // Cập nhật TextField thông tin bàn
+            txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
+            txtSoLuong.setText(String.valueOf(ban.getSoLuong()));
+            txtSoLuongKH.setText(String.valueOf(ban.getSoLuong()));
+            txtViTri.setText(ban.getViTri());
+            txtTrangThai.setText(ban.getTrangThai());
+            cmbLoaiBan.setValue(ban.getLoaiBan().getTenLoaiBan());
+            dpNgayDatBan.setValue(donGanNhat.getNgayGioLapDon().toLocalDate());
+            cmbGioBatDau.setValue(donGanNhat.getGioBatDau().toString());
+            cmbGioKetThuc.setValue(donGanNhat.getGioKetThuc().toString());
+
+            // Highlight nút bàn tương ứng trong GridPane
+            for (javafx.scene.Node node : gridPaneBan.getChildren()) {
+                if (node instanceof Button btn) {
+                    if (btn.getText().contains(ban.getMaBan())) {
+                        handleChonBan(ban, btn); // đánh dấu bàn đang chọn
+                        break; // chỉ highlight 1 bàn
+                    }
+                }
+            }
+        } else {
+            // Nếu khách chưa đặt bàn nào
+            resetThongTinBan();
+        }
+        
+        // --- Thông tin bàn ---
+        if (donGanNhat.getBan() != null) {
+            txtLoaiBan.setText(donGanNhat.getBan().getLoaiBan().getTenLoaiBan());
+            txtSoLuongKH.setText(String.valueOf(donGanNhat.getBan().getSoLuong()));
+            txtViTri.setText(donGanNhat.getBan().getViTri());
+            txtTrangThai.setText(donGanNhat.getBan().getTrangThai());
+        } else {
+            txtLoaiBan.clear();
+            txtSoLuong.clear();
+            txtViTri.clear();
+            txtTrangThai.clear();
+        }
+        // --- Loại bàn (ComboBox<String>) ---
+        if (donGanNhat.getBan() != null && donGanNhat.getBan().getLoaiBan() != null) {
+            cmbLoaiBan.setValue(donGanNhat.getBan().getLoaiBan().getTenLoaiBan());
+        	txtLoaiBan.setText(donGanNhat.getBan().getLoaiBan().getTenLoaiBan());
+        } else {
+            cmbLoaiBan.setValue(null);
+            txtLoaiBan.setText(null);
+        }
+
+        // --- Ngày đặt (DatePicker) ---
+        if (donGanNhat.getNgayGioLapDon() != null) {
+            // ngayGioLapDon là java.sql.Date theo entity bạn gửi
+        	dpNgayDatBan.setValue(donGanNhat.getNgayGioLapDon().toLocalDate());
+        } else {
+        	dpNgayDatBan.setValue(null);
+        }
+
+        // --- Giờ bắt đầu / kết thúc (LocalTime) ---
+        if (donGanNhat.getGioBatDau() != null) {
+            cmbGioBatDau.setValue(donGanNhat.getGioBatDau().toString()); // hoặc format nếu cần
+        } else {
+            cmbGioBatDau.setValue(null);
+        }
+
+        if (donGanNhat.getGioKetThuc() != null) {
+            cmbGioKetThuc.setValue(donGanNhat.getGioKetThuc().toString());
+        } else {
+            cmbGioKetThuc.setValue(null);
         }
     }
 
+    
     private void resetThongTinBan() {
         txtTrangThai.clear();
         txtViTri.clear();
@@ -241,6 +396,11 @@ public class DatBan_Controller implements Initializable {
         btnDatBan.setDisable(true);
     }
 
+    private void clearThongTinKhachHang() {
+        txtTenKH.clear();
+        txtDiemTichLuy.clear();
+    }
+    
     private void showAlert(AlertType type, String msg) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);

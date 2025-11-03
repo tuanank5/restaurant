@@ -74,7 +74,7 @@
                         <TextField fx:id="txtSDT" layoutX="110.0" layoutY="116.0" />
                         <TextField fx:id="txtDiemTichLuy" editable="false" layoutX="110.0" layoutY="76.0" style="-fx-background-color: e3e3e3;" />
                         <TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="35.0" style="-fx-background-color: e3e3e3;" />
-                        <Button fx:id="btnTimKiem" layoutX="195.0" layoutY="160.0" mnemonicParsing="false" text="Tìm kiếm" />
+                        <Button fx:id="btnTimKiem" layoutX="195.0" layoutY="160.0" mnemonicParsing="false" onAction="#timKiemKhachHang" text="Tìm kiếm" />
                      </children>
                   </Pane>
                </center>
@@ -175,7 +175,7 @@
                <center>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <DatePicker fx:id="txtNgayDatBan" layoutX="165.0" layoutY="40.0" />
+                        <DatePicker fx:id="dpNgayDatBan" layoutX="165.0" layoutY="40.0" />
                         <Label layoutX="165.0" layoutY="15.0" text="NGÀY ĐẶT BÀN">
                            <font>
                               <Font name="System Bold" size="12.0" />

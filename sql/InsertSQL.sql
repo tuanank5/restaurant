@@ -1,5 +1,5 @@
 ﻿-- Chèn dữ liệu vào bảng NhanVien
-select * from NhanVien
+--select * from NhanVien
 
 INSERT INTO [dbo].[NhanVien] (maNV, tenNV, chucVu, email, namSinh, diaChi, gioiTinh, ngayVaoLam, trangThai)
 VALUES 
@@ -106,7 +106,7 @@ VALUES
 -- Chèn dữ liệu vào bảng TaiKhoan
 -- Chèn dữ liệu vào bảng TaiKhoan (50 bản ghi)
 
-select * from TaiKhoan
+--select * from TaiKhoan
 
 INSERT INTO [dbo].[TaiKhoan] (maTaiKhoan, tenTaiKhoan, matKhau, ngayDangNhap, ngayDangXuat, ngaySuaDoi, maNV)
 VALUES 
@@ -165,14 +165,14 @@ VALUES
 ('TK050', 'NV0050', 'nv_pass50', '2024-02-29', '2024-03-01', '2024-09-27', 'NV060');
 
 --Chèn dữ liệu vào bảng HangKhachHang
-select * from HangKhachHang
+--select * from HangKhachHang
 
 INSERT INTO HangKhachHang (maHang, diemHang, giamGia, moTa, tenHang)
 VALUES
-('H1', 0, 0, N'Không giảm giá', N'Hạng Thường'),
+('H1', 10, 10, N'Không giảm giá', N'Hạng Đồng'),
 ('H2', 100, 5, N'Giảm 5%', N'Hạng Bạc'),
 ('H3', 300, 10, N'Giảm 10%', N'Hạng Vàng'),
-('H4', 600, 15, N'Giảm 15%', N'Hạng Kim Cương');
+('H4', 600, 15, N'Giảm 15%', N'Hạng Vàng');
 -- Chèn dữ liệu vào bảng HangKhachHang
 -- Chèn dữ liệu vào bảng KhachHang (200 bản ghi) với maKH là KHxxxx
 
@@ -185,7 +185,7 @@ VALUES
 --        ELSE 'H4'                               -- Hạng Kim Cương
 --    END;
 
-select * from KhachHang
+--select * from KhachHang
 
 INSERT INTO KhachHang (maKH, tenKH, sdt, email, diaChi, diemTichLuy, maHang)
 VALUES
@@ -375,17 +375,17 @@ INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
 ('LB03', N'Bàn lớn', 15);
 
 -- Thêm dữ liệu cho Ban
-INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
-('B01', N'Khu A', N'Trống', 'LB01'),
-('B02', N'Khu A', N'Đã được đặt', 'LB01'),
-('B03', N'Khu B', N'Trống', 'LB02'),
-('B04', N'Khu B', N'Đang phục vụ', 'LB02'),
-('B05', N'Khu C', N'Trống', 'LB03'),
-('B06', N'Khu C', N'Đã được đặt', 'LB03'),
-('B07', N'Khu B', N'Trống', 'LB02'),
-('B08', N'Khu A', N'Trống', 'LB01'),
-('B09', N'Khu C', N'Đang phục vụ', 'LB03'),
-('B10', N'Khu B', N'Đã được đặt', 'LB02');
+	INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan, soLuong) VALUES
+	('B01', N'Khu A', N'Trống', 'LB01', 2),
+	('B02', N'Khu A', N'Đã được đặt', 'LB01', 2),
+	('B03', N'Khu B', N'Trống', 'LB02', 4),
+	('B04', N'Khu B', N'Đang phục vụ', 'LB02', 4),
+	('B05', N'Khu C', N'Trống', 'LB03', 6),
+	('B06', N'Khu C', N'Đã được đặt', 'LB03', 6),
+	('B07', N'Khu B', N'Trống', 'LB02', 4),
+	('B08', N'Khu A', N'Trống', 'LB01', 2),
+	('B09', N'Khu C', N'Đang phục vụ', 'LB03', 6),
+	('B10', N'Khu B', N'Đã được đặt', 'LB02', 4);
 
 -- Thêm dữ liệu cho KhuyenMai
 INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, phanTramGiamGia)
@@ -402,3 +402,5 @@ VALUES
 ('KM010', N'Ưu đãi VIP cuối tuần', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-21', '2025-11-23', 18),
 ('KM011', N'Giảm giá Salad', N'Khuyến mãi món ăn', N'SP015', '2025-11-05', '2025-11-12', 10),
 ('KM012', N'Giảm 15% tổng hóa đơn cuối tháng', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-25', '2025-11-30', 15);
+
+SELECT * FROM DonDatBan WHERE maKH = 'KH0001'

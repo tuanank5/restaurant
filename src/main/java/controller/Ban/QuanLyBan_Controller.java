@@ -186,7 +186,7 @@ public class QuanLyBan_Controller {
             return;
         }
 
-        Ban ban = new Ban(maBan, viTri, trangThai, loaiBan);
+        Ban ban = new Ban(maBan, viTri, trangThai, 0, loaiBan);
 
         boolean check = RestaurantApplication.getInstance()
                 .getDatabaseContext()

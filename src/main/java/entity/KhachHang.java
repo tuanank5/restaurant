@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -7,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @NamedQueries({
@@ -42,6 +45,9 @@ public class KhachHang {
 	@ManyToOne
     @JoinColumn(name = "maHang", referencedColumnName = "maHang", nullable = false)
     private HangKhachHang hangKhachHang;
+	//
+	@OneToMany(mappedBy = "khachHang")
+	private List<DonDatBan> danhSachDon;
 	
 	public KhachHang() {
 		

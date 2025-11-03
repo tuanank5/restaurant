@@ -8,33 +8,32 @@ import jakarta.persistence.Persistence;
 import java.util.List;
 
 public class KhachHang_DAOlmpl extends Entity_DAOImpl<KhachHang> implements KhachHang_DAO {
+    
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+
+    private EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
 
     @Override
     public KhachHang timTheoSDT(String sdt) {
-        EntityManagerFactory emf = null;
-        EntityManager em = null;
-        KhachHang kh = null;
-
+        EntityManager em = getEntityManager();
         try {
-            emf = Persistence.createEntityManagerFactory("CRKPU"); // tên persistence-unit
-            em = emf.createEntityManager();
-
             List<KhachHang> ds = em.createQuery(
                     "SELECT k FROM KhachHang k WHERE k.sdt = :sdt", KhachHang.class)
                     .setParameter("sdt", sdt)
                     .getResultList();
 
             if (!ds.isEmpty()) {
-                kh = ds.get(0);
+                return ds.get(0);
             }
+            return null;
 
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         } finally {
-            if (em != null) em.close();
-            if (emf != null) emf.close();
+            em.close();
         }
-
-        return kh;
     }
 }
