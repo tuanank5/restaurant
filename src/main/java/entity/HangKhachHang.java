@@ -5,39 +5,40 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "HangKhachHang")
 @NamedQueries({
-    @NamedQuery(name = "HangKhachHang.findAll", query = "SELECT h FROM HangKhachHang h"),
-    @NamedQuery(name = "HangKhachHang.findByMaHang", query = "SELECT h FROM HangKhachHang h WHERE h.maHang = :maHang")
+    @NamedQuery(
+        name = "HangKhachHang.findAll",
+        query = "SELECT H FROM HangKhachHang H"
+    ),
+    @NamedQuery(
+        name = "HangKhachHang.findByMaHang",
+        query = "SELECT H FROM HangKhachHang H WHERE H.maHang = :maHang"
+    )
 })
 public class HangKhachHang {
-
     @Id
     @Column(name = "maHang", nullable = false, length = 20)
     private String maHang;
 
-    @Column(name = "tenHang", nullable = false, length = 50)
+    @Column(name = "tenHang", nullable = false, length = 100)
     private String tenHang;
 
     @Column(name = "diemHang", nullable = false)
     private int diemHang;
 
     @Column(name = "giamGia", nullable = false)
-    private int giamGia;
+    private double giamGia;
 
     @Column(name = "moTa", length = 200)
     private String moTa;
 
-    // ===== Constructors =====
     public HangKhachHang() {
-        super();
+    	
     }
 
-    public HangKhachHang(String maHang, String tenHang, int diemHang, int giamGia, String moTa) {
-        super();
+    public HangKhachHang(String maHang, String tenHang, int diemHang, double giamGia, String moTa) {
         this.maHang = maHang;
         this.tenHang = tenHang;
         this.diemHang = diemHang;
@@ -45,7 +46,6 @@ public class HangKhachHang {
         this.moTa = moTa;
     }
 
-    // ===== Getters & Setters =====
     public String getMaHang() {
         return maHang;
     }
@@ -70,11 +70,11 @@ public class HangKhachHang {
         this.diemHang = diemHang;
     }
 
-    public int getGiamGia() {
+    public double getGiamGia() {
         return giamGia;
     }
 
-    public void setGiamGia(int giamGia) {
+    public void setGiamGia(double giamGia) {
         this.giamGia = giamGia;
     }
 
@@ -86,23 +86,14 @@ public class HangKhachHang {
         this.moTa = moTa;
     }
 
-    // ===== toString() =====
-//    @Override
-//    public String toString() {
-//        return "HangKhachHang [maHang=" + maHang + ", tenHang=" + tenHang + ", diemHang=" + diemHang
-//                + ", giamGia=" + giamGia + ", moTa=" + moTa + "]";
-//    }
-    @Override
-    public String toString() {
-        return this.tenHang;
-    }
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + diemHang;
-		result = prime * result + giamGia;
+		long temp;
+		temp = Double.doubleToLongBits(giamGia);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((maHang == null) ? 0 : maHang.hashCode());
 		result = prime * result + ((moTa == null) ? 0 : moTa.hashCode());
 		result = prime * result + ((tenHang == null) ? 0 : tenHang.hashCode());
@@ -120,7 +111,7 @@ public class HangKhachHang {
 		HangKhachHang other = (HangKhachHang) obj;
 		if (diemHang != other.diemHang)
 			return false;
-		if (giamGia != other.giamGia)
+		if (Double.doubleToLongBits(giamGia) != Double.doubleToLongBits(other.giamGia))
 			return false;
 		if (maHang == null) {
 			if (other.maHang != null)
@@ -139,5 +130,11 @@ public class HangKhachHang {
 			return false;
 		return true;
 	}
+
+    @Override
+    public String toString() {
+        return this.tenHang;
+    }
+    
     
 }

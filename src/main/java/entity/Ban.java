@@ -12,11 +12,11 @@ import jakarta.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "Ban.list",
-        query = "select b from Ban b"
+        query = "SELECT B FORM Ban B"
     ),
     @NamedQuery(
         name = "Ban.count",
-        query = "select count(maBan) from Ban"
+        query = "SELECT COUNT(maBan) FROM Ban"
     )
 })
 public class Ban {
@@ -101,5 +101,11 @@ public class Ban {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Ban [maBan=" + maBan + ", viTri=" + viTri + ", trangThai=" + trangThai + ", loaiBan=" + loaiBan + "]";
+	}
+
     
 }

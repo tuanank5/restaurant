@@ -10,11 +10,11 @@ import jakarta.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "LoaiBan.list",
-        query = "select lb from LoaiBan lb"
+        query = "SELECT LB FROM LoaiBan LB"
     ),
     @NamedQuery(
         name = "LoaiBan.count",
-        query = "select count(lb.maLoaiBan) from LoaiBan lb"
+        query = "SELECT COUNT(LB.maLoaiBan) FROM LoaiBan LB"
     )
 })
 public class LoaiBan {
@@ -23,13 +23,15 @@ public class LoaiBan {
     @Column(name = "maLoaiBan", nullable = false, length = 20)
     private String maLoaiBan;
 
-    @Column(name = "tenLoaiBan", nullable = false, length = 100)
+    @Column(name = "tenLoaiBan", nullable = false, length = 50)
     private String tenLoaiBan;
 
     @Column(name = "soLuong", nullable = false)
     private int soLuong;
 
-    public LoaiBan() {}
+    public LoaiBan() {
+    	
+    }
 
     public LoaiBan(String maLoaiBan, String tenLoaiBan, int soLuong) {
         this.maLoaiBan = maLoaiBan;
@@ -61,16 +63,35 @@ public class LoaiBan {
         this.soLuong = soLuong;
     }
 
-    @Override
-    public int hashCode() {
-        return maLoaiBan == null ? 0 : maLoaiBan.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((maLoaiBan == null) ? 0 : maLoaiBan.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof LoaiBan)) return false;
-        LoaiBan other = (LoaiBan) obj;
-        return maLoaiBan != null && maLoaiBan.equals(other.maLoaiBan);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LoaiBan other = (LoaiBan) obj;
+		if (maLoaiBan == null) {
+			if (other.maLoaiBan != null)
+				return false;
+		} else if (!maLoaiBan.equals(other.maLoaiBan))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "LoaiBan [maLoaiBan=" + maLoaiBan + ", tenLoaiBan=" + tenLoaiBan + ", soLuong=" + soLuong + "]";
+	}
+
+    
 }

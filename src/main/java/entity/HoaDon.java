@@ -4,7 +4,6 @@ import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,15 +14,15 @@ import jakarta.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "HoaDon.list",
-        query = "SELECT hd FROM HoaDon hd"
+        query = "SELECT HD FROM HoaDon HD"
     ),
     @NamedQuery(
         name = "HoaDon.count",
-        query = "SELECT COUNT(hd.maHoaDon) FROM HoaDon hd"
+        query = "SELECT COUNT(HD.maHoaDon) FROM HoaDon HD"
     ),
     @NamedQuery(
         name = "HoaDon.trangThai",
-        query = "SELECT hd FROM HoaDon hd WHERE hd.trangThai = :status"
+        query = "SELECT HD FROM HoaDon HD WHERE HD.trangThai = :status"
     )
 })
 public class HoaDon {
@@ -34,139 +33,205 @@ public class HoaDon {
     @Column(name = "ngayLap", nullable = false)
     private Date ngayLap;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "maKH", nullable = false)
-    private KhachHang khachHang;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "maNV", nullable = false)
-    private NhanVien nhanVien;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "maKM", nullable = true)
-    private KhuyenMai khuyenMai;
-
+    @Column(name = "tongTien", nullable = false)
+    private double tongTien;
+    
+    @Column(name = "thue", nullable = false)
+    private double thue;
+    
     @Column(name = "trangThai", nullable = false, length = 50)
     private String trangThai;
 
-    @Column(name = "kieuThanhToan", nullable = false, columnDefinition = "BIT DEFAULT 1")
-    private boolean kieuThanhToan; // true = tiền mặt, false = chuyển khoản
+//    @Column(name = "kieuThanhToan", nullable = false, columnDefinition = "BIT DEFAULT 1")
+//    private boolean kieuThanhToan; // true = tiền mặt, false = chuyển khoản
+    
+    @Column(name = "kieuThanhToan", nullable = false, length = 50)
+    private String kieuThanhToan;
+    
+    @Column(name = "tienNhan", nullable = false)
+    private double tienNhan;
+    
+    @Column(name = "tienThua", nullable = false)
+    private double tienThua;
 
-    // -------------------------
-    // Constructors
-    // -------------------------
-    public HoaDon() {}
+    @ManyToOne
+    @JoinColumn(name = "maKH", referencedColumnName = "maKH", nullable = false)
+    private KhachHang khachHang;
 
-    public HoaDon(String maHoaDon, Date ngayLap, KhachHang khachHang, NhanVien nhanVien,
-                  KhuyenMai khuyenMai, String trangThai, boolean kieuThanhToan) {
-        super();
-        this.maHoaDon = maHoaDon;
-        this.ngayLap = ngayLap;
-        this.khachHang = khachHang;
-        this.nhanVien = nhanVien;
-        this.khuyenMai = khuyenMai;
-        this.trangThai = trangThai;
-        this.kieuThanhToan = kieuThanhToan;
+    @ManyToOne
+    @JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = false)
+    private KhuyenMai khuyenMai;
+    
+    @ManyToOne
+    @JoinColumn(name = "maNV", referencedColumnName = "maNV", nullable = false)
+    private NhanVien nhanVien;
+
+    @ManyToOne
+    @JoinColumn(name = "maBan", referencedColumnName = "maBan", nullable = false)
+    private Ban ban;
+    
+    @ManyToOne
+    @JoinColumn(name = "maCoc", referencedColumnName = "maCoc", nullable = false)
+    private Coc coc;
+    
+    public HoaDon() {
+    	
     }
 
-    // -------------------------
-    // Getters & Setters
-    // -------------------------
-    public String getMaHoaDon() {
-        return maHoaDon;
-    }
+	public HoaDon(String maHoaDon, Date ngayLap, double tongTien, double thue, String trangThai, String kieuThanhToan,
+			double tienNhan, double tienThua, KhachHang khachHang, KhuyenMai khuyenMai, NhanVien nhanVien, Ban ban,
+			Coc coc) {
+		this.maHoaDon = maHoaDon;
+		this.ngayLap = ngayLap;
+		this.tongTien = tongTien;
+		this.thue = thue;
+		this.trangThai = trangThai;
+		this.kieuThanhToan = kieuThanhToan;
+		this.tienNhan = tienNhan;
+		this.tienThua = tienThua;
+		this.khachHang = khachHang;
+		this.khuyenMai = khuyenMai;
+		this.nhanVien = nhanVien;
+		this.ban = ban;
+		this.coc = coc;
+	}
 
-    public void setMaHoaDon(String maHoaDon) {
-        this.maHoaDon = maHoaDon;
-    }
+	public String getMaHoaDon() {
+		return maHoaDon;
+	}
 
-    public Date getNgayLap() {
-        return ngayLap;
-    }
+	public void setMaHoaDon(String maHoaDon) {
+		this.maHoaDon = maHoaDon;
+	}
 
-    public void setNgayLap(Date ngayLap) {
-        this.ngayLap = ngayLap;
-    }
+	public Date getNgayLap() {
+		return ngayLap;
+	}
 
-    public KhachHang getKhachHang() {
-        return khachHang;
-    }
+	public void setNgayLap(Date ngayLap) {
+		this.ngayLap = ngayLap;
+	}
 
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
-    }
+	public double getTongTien() {
+		return tongTien;
+	}
 
-    public NhanVien getNhanVien() {
-        return nhanVien;
-    }
+	public void setTongTien(double tongTien) {
+		this.tongTien = tongTien;
+	}
 
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
-    }
+	public double getThue() {
+		return thue;
+	}
 
-    public KhuyenMai getKhuyenMai() {
-        return khuyenMai;
-    }
+	public void setThue(double thue) {
+		this.thue = thue;
+	}
 
-    public void setKhuyenMai(KhuyenMai khuyenMai) {
-        this.khuyenMai = khuyenMai;
-    }
+	public String getTrangThai() {
+		return trangThai;
+	}
 
-    public String getTrangThai() {
-        return trangThai;
-    }
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
+	}
 
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
+	public String getKieuThanhToan() {
+		return kieuThanhToan;
+	}
 
-    public boolean isKieuThanhToan() {
-        return kieuThanhToan;
-    }
+	public void setKieuThanhToan(String kieuThanhToan) {
+		this.kieuThanhToan = kieuThanhToan;
+	}
 
-    public void setKieuThanhToan(boolean kieuThanhToan) {
-        this.kieuThanhToan = kieuThanhToan;
-    }
+	public double getTienNhan() {
+		return tienNhan;
+	}
 
-    // -------------------------
-    // hashCode & equals
-    // -------------------------
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((maHoaDon == null) ? 0 : maHoaDon.hashCode());
-        return result;
-    }
+	public void setTienNhan(double tienNhan) {
+		this.tienNhan = tienNhan;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        HoaDon other = (HoaDon) obj;
-        if (maHoaDon == null) {
-            if (other.maHoaDon != null)
-                return false;
-        } else if (!maHoaDon.equals(other.maHoaDon))
-            return false;
-        return true;
-    }
+	public double getTienThua() {
+		return tienThua;
+	}
 
-    // -------------------------
-    // toString()
-    // -------------------------
-    @Override
-    public String toString() {
-        return "HoaDon [maHoaDon=" + maHoaDon 
-            + ", ngayLap=" + ngayLap 
-            + ", khachHang=" + (khachHang != null ? khachHang.getMaKH() : "null")
-            + ", nhanVien=" + (nhanVien != null ? nhanVien.getMaNV() : "null")
-            + ", khuyenMai=" + (khuyenMai != null ? khuyenMai.getMaKM() : "null")
-            + ", trangThai=" + trangThai
-            + ", kieuThanhToan=" + kieuThanhToan + "]";
-    }
+	public void setTienThua(double tienThua) {
+		this.tienThua = tienThua;
+	}
+
+	public KhachHang getKhachHang() {
+		return khachHang;
+	}
+
+	public void setKhachHang(KhachHang khachHang) {
+		this.khachHang = khachHang;
+	}
+
+	public KhuyenMai getKhuyenMai() {
+		return khuyenMai;
+	}
+
+	public void setKhuyenMai(KhuyenMai khuyenMai) {
+		this.khuyenMai = khuyenMai;
+	}
+
+	public NhanVien getNhanVien() {
+		return nhanVien;
+	}
+
+	public void setNhanVien(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
+	}
+
+	public Ban getBan() {
+		return ban;
+	}
+
+	public void setBan(Ban ban) {
+		this.ban = ban;
+	}
+
+	public Coc getCoc() {
+		return coc;
+	}
+
+	public void setCoc(Coc coc) {
+		this.coc = coc;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((maHoaDon == null) ? 0 : maHoaDon.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HoaDon other = (HoaDon) obj;
+		if (maHoaDon == null) {
+			if (other.maHoaDon != null)
+				return false;
+		} else if (!maHoaDon.equals(other.maHoaDon))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "HoaDon [maHoaDon=" + maHoaDon + ", ngayLap=" + ngayLap + ", tongTien=" + tongTien + ", thue=" + thue
+				+ ", trangThai=" + trangThai + ", kieuThanhToan=" + kieuThanhToan + ", tienNhan=" + tienNhan
+				+ ", tienThua=" + tienThua + ", khachHang=" + khachHang + ", khuyenMai=" + khuyenMai + ", nhanVien="
+				+ nhanVien + ", ban=" + ban + ", coc=" + coc + "]";
+	}
+
+    
 }

@@ -2,6 +2,29 @@
 
 USE QLNH
 
+CREATE TABLE LoaiBan
+(
+	maLoaiBan VARCHAR(20) PRIMARY KEY,
+	tenLoaiBan NVARCHAR(50),
+	soLuong INT CHECK (soLuong >= 0)
+);
+
+CREATE TABLE Ban
+(
+	maBan VARCHAR(20) PRIMARY KEY,
+	viTri NVARCHAR(100),
+	trangThai NVARCHAR(50),
+	maLoaiBan VARCHAR(20) REFERENCES LoaiBan(maLoaiBan) ON DELETE CASCADE 
+);
+
+CREATE TABLE Coc
+(
+	maCoc VARCHAR(20) PRIMARY KEY,
+	loaiCoc BIT,
+	phanTramCoc INT CHECK (phanTramCoc BETWEEN 0 AND 100),
+	soTienCoc DECIMAL(10,2) CHECK (soTienCoc > 0)
+);
+
 CREATE TABLE HangKhachHang
 (
 	maHang VARCHAR(20) PRIMARY KEY,
@@ -19,23 +42,8 @@ CREATE TABLE KhachHang
 	email VARCHAR(100) UNIQUE,
 	diaChi NVARCHAR(200),
 	diemTichLuy INT DEFAULT 0 CHECK (diemTichLuy >= 0),
-	maHang VARCHAR(20) NULL,
+	maHang VARCHAR(20) NULL, --?
 	FOREIGN KEY (maHang) REFERENCES HangKhachHang(maHang) ON DELETE SET NULL
-);
-
-CREATE TABLE LoaiBan
-(
-	maLoaiBan VARCHAR(20) PRIMARY KEY,
-	tenLoaiBan NVARCHAR(50),
-	soLuong INT CHECK (soLuong >= 0)
-);
-
-CREATE TABLE Ban
-(
-	maBan VARCHAR(20) PRIMARY KEY,
-	viTri NVARCHAR(100),
-	trangThai NVARCHAR(50),
-	maLoaiBan VARCHAR(20) REFERENCES LoaiBan(maLoaiBan) ON DELETE CASCADE 
 );
 
 CREATE TABLE DonDatBan
@@ -55,29 +63,6 @@ CREATE TABLE DonLapDoiHuyBan
 	FOREIGN KEY (maDatBan) REFERENCES DonDatBan(maDatBan) ON DELETE CASCADE
 );
 
-CREATE TABLE NhanVien
-(
-	maNV VARCHAR(20) PRIMARY KEY,
-	tenNV NVARCHAR(100) NOT NULL,
-	chucVu NVARCHAR(50),
-	email VARCHAR(100) UNIQUE,
-	namSinh DATE,
-	diaChi NVARCHAR(200),
-	gioiTinh BIT,
-	ngayVaoLam DATE,
-	trangThai BIT DEFAULT 1
-);
-
-CREATE TABLE TaiKhoan
-(
-	maTaiKhoan VARCHAR(20) PRIMARY KEY,
-	tenTaiKhoan VARCHAR(20),
-	matKhau VARCHAR(20),
-	ngayDangNhap DATE,
-	ngayDangXuat DATE,
-	ngaySuaDoi DATE,
-	maNV VARCHAR(20) REFERENCES NhanVien(maNV) ON DELETE CASCADE
-);
 
 CREATE TABLE KhuyenMai
 (
@@ -98,12 +83,17 @@ CREATE TABLE MonAn
 	maKM VARCHAR(20) NULL REFERENCES KhuyenMai(maKM)
 );
 
-CREATE TABLE Coc
+CREATE TABLE NhanVien
 (
-	maCoc VARCHAR(20) PRIMARY KEY,
-	loaiCoc BIT,
-	phanTramCoc INT CHECK (phanTramCoc BETWEEN 0 AND 100),
-	soTienCoc DECIMAL(10,2) CHECK (soTienCoc > 0)
+	maNV VARCHAR(20) PRIMARY KEY,
+	tenNV NVARCHAR(100) NOT NULL,
+	chucVu NVARCHAR(50),
+	email VARCHAR(100) UNIQUE,
+	namSinh DATE,
+	diaChi NVARCHAR(200),
+	gioiTinh BIT,
+	ngayVaoLam DATE,
+	trangThai BIT DEFAULT 1
 );
 
 CREATE TABLE HoaDon
@@ -128,10 +118,22 @@ CREATE TABLE ChiTietHoaDon
 	maHD VARCHAR(20),
 	maMon VARCHAR(20),
 	soLuong INT CHECK (soLuong > 0),
-	thanhTien DECIMAL(12,2) CHECK (thanhTien >= 0),
+	thanhTien DECIMAL(12,2) CHECK (thanhTien >= 0), -- ko có
 	PRIMARY KEY (maHD, maMon),
 	FOREIGN KEY (maHD) REFERENCES HoaDon(maHD) ON DELETE CASCADE,
 	FOREIGN KEY (maMon) REFERENCES MonAn(maMon) ON DELETE CASCADE
+);
+
+
+CREATE TABLE TaiKhoan
+(
+	maTaiKhoan VARCHAR(20) PRIMARY KEY,
+	tenTaiKhoan VARCHAR(20),
+	matKhau VARCHAR(20),
+	ngayDangNhap DATE,
+	ngayDangXuat DATE,
+	ngaySuaDoi DATE,
+	maNV VARCHAR(20) REFERENCES NhanVien(maNV) ON DELETE CASCADE
 );
 
 CREATE TABLE CaLamViec

@@ -12,14 +12,15 @@ import jakarta.persistence.NamedQueries;
 @NamedQueries({
     @NamedQuery(
         name = "KhuyenMai.list",
-        query = "select km from KhuyenMai km"
+        query = "SELECT KM FROM KhuyenMai KM"
     ),
     @NamedQuery(
         name = "KhuyenMai.count",
-        query = "select count(maKM) from KhuyenMai"
+        query = "SELECT COUNT(maKM) FROM KhuyenMai"
     )
 })
-
+//@Entity
+//@Table(name = "KhuyenMai")
 public class KhuyenMai {
     @Id
     @Column(name = "maKM", nullable = false, length = 20)
@@ -119,13 +120,7 @@ public class KhuyenMai {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((loaiKM == null) ? 0 : loaiKM.hashCode());
 		result = prime * result + ((maKM == null) ? 0 : maKM.hashCode());
-		result = prime * result + ((ngayBatDau == null) ? 0 : ngayBatDau.hashCode());
-		result = prime * result + ((ngayKetThuc == null) ? 0 : ngayKetThuc.hashCode());
-		result = prime * result + phanTramGiamGia;
-		result = prime * result + ((sanPhamKM == null) ? 0 : sanPhamKM.hashCode());
-		result = prime * result + ((tenKM == null) ? 0 : tenKM.hashCode());
 		return result;
 	}
 
@@ -138,40 +133,21 @@ public class KhuyenMai {
 		if (getClass() != obj.getClass())
 			return false;
 		KhuyenMai other = (KhuyenMai) obj;
-		if (loaiKM == null) {
-			if (other.loaiKM != null)
-				return false;
-		} else if (!loaiKM.equals(other.loaiKM))
-			return false;
 		if (maKM == null) {
 			if (other.maKM != null)
 				return false;
 		} else if (!maKM.equals(other.maKM))
 			return false;
-		if (ngayBatDau == null) {
-			if (other.ngayBatDau != null)
-				return false;
-		} else if (!ngayBatDau.equals(other.ngayBatDau))
-			return false;
-		if (ngayKetThuc == null) {
-			if (other.ngayKetThuc != null)
-				return false;
-		} else if (!ngayKetThuc.equals(other.ngayKetThuc))
-			return false;
-		if (phanTramGiamGia != other.phanTramGiamGia)
-			return false;
-		if (sanPhamKM == null) {
-			if (other.sanPhamKM != null)
-				return false;
-		} else if (!sanPhamKM.equals(other.sanPhamKM))
-			return false;
-		if (tenKM == null) {
-			if (other.tenKM != null)
-				return false;
-		} else if (!tenKM.equals(other.tenKM))
-			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "KhuyenMai [maKM=" + maKM + ", tenKM=" + tenKM + ", loaiKM=" + loaiKM + ", sanPhamKM=" + sanPhamKM
+				+ ", ngayBatDau=" + ngayBatDau + ", ngayKetThuc=" + ngayKetThuc + ", phanTramGiamGia=" + phanTramGiamGia
+				+ "]";
+	}
+	
 	
 }
 

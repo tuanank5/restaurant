@@ -14,11 +14,11 @@ import jakarta.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "DonDatBan.list",
-        query = "select b from DonDatBan b"
+        query = "SELECT B FROM DonDatBan B"
     ),
     @NamedQuery(
         name = "DonDatBan.count",
-        query = "select count(maDatBan) from DonDatBan"
+        query = "SELECT COUNT(maDatBan) FROM DonDatBan"
     )
 })
 public class DonDatBan {
@@ -78,6 +78,37 @@ public class DonDatBan {
 
 	public void setBan(Ban ban) {
 		this.ban = ban;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((maDatBan == null) ? 0 : maDatBan.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DonDatBan other = (DonDatBan) obj;
+		if (maDatBan == null) {
+			if (other.maDatBan != null)
+				return false;
+		} else if (!maDatBan.equals(other.maDatBan))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "DonDatBan [maDatBan=" + maDatBan + ", ngayGioLapDon=" + ngayGioLapDon + ", khachHang=" + khachHang
+				+ ", ban=" + ban + "]";
 	}
 	
 	

@@ -2,19 +2,22 @@ package entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "KhachHang")
 @NamedQueries({
-	@NamedQuery(name = "KhachHang.findAll", query = "SELECT kh FROM KhachHang kh"),
-	@NamedQuery(name = "KhachHang.findByMaKH", query = "SELECT kh FROM KhachHang kh WHERE kh.maKH = :maKH")
+    @NamedQuery(
+        name = "KhachHang.findAll",
+        query = "SELECT KH FROM KhachHang KH"
+    ),
+    @NamedQuery(
+        name = "KhachHang.findByMaKH",
+        query = "SELECT KH FROM KhachHang KH WHERE KH.maKH = :maKH"
+    )
 })
 public class KhachHang {
 
@@ -25,7 +28,7 @@ public class KhachHang {
 	@Column(name = "tenKH", nullable = false, length = 100)
 	private String tenKH;
 
-	@Column(name = "sdt", nullable = false, length = 15)
+	@Column(name = "sdt", nullable = false, length = 20)
 	private String sdt;
 
 	@Column(name = "email", length = 100)
@@ -33,32 +36,29 @@ public class KhachHang {
 
 	@Column(name = "diaChi", length = 200)
 	private String diaChi;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "maHang", nullable = false)
-	private HangKhachHang hangKhachHang;
-
+	
 	@Column(name = "diemTichLuy")
 	private int diemTichLuy;
-
-	// ===== Constructors =====
+	
+	@ManyToOne
+    @JoinColumn(name = "maHang", referencedColumnName = "maHang", nullable = false)
+    private HangKhachHang hangKhachHang;
+	
 	public KhachHang() {
-		super();
+		
 	}
 
 	public KhachHang(String maKH, String tenKH, String sdt, String email, String diaChi,
-			HangKhachHang hangKhachHang, int diemTichLuy) {
-		super();
+			int diemTichLuy, HangKhachHang hangKhachHang) {
 		this.maKH = maKH;
 		this.tenKH = tenKH;
 		this.sdt = sdt;
 		this.email = email;
 		this.diaChi = diaChi;
-		this.hangKhachHang = hangKhachHang;
 		this.diemTichLuy = diemTichLuy;
+		this.hangKhachHang = hangKhachHang;
 	}
 
-	// ===== Getters & Setters =====
 	public String getMaKH() {
 		return maKH;
 	}
@@ -99,14 +99,6 @@ public class KhachHang {
 		this.diaChi = diaChi;
 	}
 
-	public HangKhachHang getHangKhachHang() {
-		return hangKhachHang;
-	}
-
-	public void setHangKhachHang(HangKhachHang hangKhachHang) {
-		this.hangKhachHang = hangKhachHang;
-	}
-
 	public int getDiemTichLuy() {
 		return diemTichLuy;
 	}
@@ -115,13 +107,12 @@ public class KhachHang {
 		this.diemTichLuy = diemTichLuy;
 	}
 
-	// ===== toString() =====
-	@Override
-	public String toString() {
-		return "KhachHang [maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt + ", email=" + email + ", diaChi="
-				+ diaChi + ", hangKhachHang="
-				+ (hangKhachHang != null ? hangKhachHang.getTenHang() : "null")
-				+ ", diemTichLuy=" + diemTichLuy + "]";
+	public HangKhachHang getHangKhachHang() {
+		return hangKhachHang;
+	}
+
+	public void setHangKhachHang(HangKhachHang hangKhachHang) {
+		this.hangKhachHang = hangKhachHang;
 	}
 
 	@Override
@@ -129,8 +120,8 @@ public class KhachHang {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((diaChi == null) ? 0 : diaChi.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + diemTichLuy;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((hangKhachHang == null) ? 0 : hangKhachHang.hashCode());
 		result = prime * result + ((maKH == null) ? 0 : maKH.hashCode());
 		result = prime * result + ((sdt == null) ? 0 : sdt.hashCode());
@@ -152,12 +143,12 @@ public class KhachHang {
 				return false;
 		} else if (!diaChi.equals(other.diaChi))
 			return false;
+		if (diemTichLuy != other.diemTichLuy)
+			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
-			return false;
-		if (diemTichLuy != other.diemTichLuy)
 			return false;
 		if (hangKhachHang == null) {
 			if (other.hangKhachHang != null)
@@ -181,4 +172,12 @@ public class KhachHang {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "KhachHang [maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt + ", email=" + email + ", diaChi="
+				+ diaChi + ", diemTichLuy=" + diemTichLuy + ", hangKhachHang=" + hangKhachHang + "]";
+	}
+
+	
 }

@@ -12,15 +12,16 @@ import jakarta.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "NhanVien.list",
-        query = "select nv from NhanVien nv"
+        query = "SELECT NV FROM NhanVien NV"
     ),
     @NamedQuery(
         name = "NhanVien.count",
-        query = "select count(maNV) from NhanVien"
+        query = "SELECT COUNT(maNV) FROM NhanVien"
     ),
+    //
     @NamedQuery(
     	name = "NhanVien.state",
-    	query = "select nv from NhanVien nv where trangThai = :status"
+    	query = "SELECT NV FROM NhanVien NV WHERE trangThai = :status"
     )
 })
 public class NhanVien {
@@ -206,6 +207,14 @@ public class NhanVien {
 		if (trangThai != other.trangThai)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "NhanVien [maNV=" + maNV + ", tenNV=" + tenNV + ", chucVu=" + chucVu + ", email=" + email + ", namSinh="
+				+ namSinh + ", diaChi=" + diaChi + ", gioiTinh=" + gioiTinh + ", ngayVaoLam=" + ngayVaoLam
+				+ ", trangThai=" + trangThai + "]";
 	} 
+	
 	
 }

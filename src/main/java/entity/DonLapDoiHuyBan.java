@@ -9,16 +9,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-
+//có sai
 @Entity
 @NamedQueries({
     @NamedQuery(
         name = "DonLapDoiHuyBan.list",
-        query = "select d from DonLapDoiHuyBan d"
+        query = "SELECT D FROM DonLapDoiHuyBan D"
     ),
     @NamedQuery(
         name = "DonLapDoiHuyBan.count",
-        query = "select count(maDatBans) from DonLapDoiHuyBan"
+        query = "SELECT COUNT(maDatBans) FROM DonLapDoiHuyBan"
     )
 })
 public class DonLapDoiHuyBan {
