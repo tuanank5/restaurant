@@ -177,21 +177,8 @@ public class DatBan_Controller implements Initializable {
             txtTenKH.setText(kh.getTenKH());
             txtDiemTichLuy.setText(String.valueOf(kh.getDiemTichLuy()));
 
-            // --- Lấy danh sách các đơn đặt bàn của khách hàng ---
+            //Lấy danh sách các đơn đặt bàn của khách hàng
             List<DonDatBan> dsDon = donDatBanDAO.timTheoKhachHang(kh);
-
-            if (!dsDon.isEmpty()) {
-                StringBuilder sb = new StringBuilder("Khách hàng này đã đặt các bàn:\n");
-                for (DonDatBan don : dsDon) {
-                    sb.append("- Bàn: ").append(don.getBan().getMaBan())
-                      .append(" (").append(don.getBan().getLoaiBan().getTenLoaiBan()).append(")")
-                      .append(", Giờ: ").append(don.getGioBatDau()).append(" - ").append(don.getGioKetThuc())
-                      .append("\n");
-                }
-                showAlert(Alert.AlertType.INFORMATION, sb.toString());
-            } else {
-                showAlert(Alert.AlertType.INFORMATION, "Khách hàng chưa từng đặt bàn nào.");
-            }
 
         } else {
             txtTenKH.clear();
