@@ -1,10 +1,11 @@
 ﻿-- Chèn dữ liệu vào bảng NhanVien
 select * from NhanVien
+
 INSERT INTO [dbo].[NhanVien] (maNV, tenNV, chucVu, email, namSinh, diaChi, gioiTinh, ngayVaoLam, trangThai)
 VALUES 
---('NV001', N'Nguyễn Văn A', N'QL', 'nv.a@example.com', '1990-01-01', N'Số 1, Đường A, TP.HCM', 1, '2020-01-01', 1),
---('NV002', N'Trần Thị B', N'NV', 'nv.b@example.com', '1992-02-02', N'Số 2, Đường B, Hà Nội', 0, '2021-02-01', 1),
---('NV003', N'Lê Văn C', N'QL', 'nv.c@example.com', '1995-03-03', N'Số 3, Đường C, Đà Nẵng', 1, '2019-03-01', 1),
+('NV001', N'Nguyễn Văn A', N'QL', 'nv.a@example.com', '1990-01-01', N'Số 1, Đường A, TP.HCM', 1, '2020-01-01', 1),
+('NV002', N'Trần Thị B', N'NV', 'nv.b@example.com', '1992-02-02', N'Số 2, Đường B, Hà Nội', 0, '2021-02-01', 1),
+('NV003', N'Lê Văn C', N'QL', 'nv.c@example.com', '1995-03-03', N'Số 3, Đường C, Đà Nẵng', 1, '2019-03-01', 1),
 ('NV004', N'Phạm Thị D', N'NV', 'nv.d@example.com', '1988-04-04', N'Số 4, Đường D, Cần Thơ', 0, '2022-04-01', 1),
 ('NV005', N'Hoàng Văn E', N'QL', 'nv.e@example.com', '1991-05-05', N'Số 5, Đường E, Hải Phòng', 1, '2018-05-01', 1),
 ('NV006', N'Đỗ Thị F', N'NV', 'nv.f@example.com', '1993-06-06', N'Số 6, Đường F, Huế', 0, '2023-06-01', 1),
@@ -104,13 +105,15 @@ VALUES
 ('NV100', N'Nguyễn Thị WWWW', N'NV', 'nv.wwww@example.com', '1997-04-23', N'Số 100, Đường WWWW, Tuyên Quang', 0, '2021-04-11', 1);
 -- Chèn dữ liệu vào bảng TaiKhoan
 -- Chèn dữ liệu vào bảng TaiKhoan (50 bản ghi)
+
 select * from TaiKhoan
+
 INSERT INTO [dbo].[TaiKhoan] (maTaiKhoan, tenTaiKhoan, matKhau, ngayDangNhap, ngayDangXuat, ngaySuaDoi, maNV)
 VALUES 
 -- 20 Tài khoản Quản lý (QLxxxx)
---('TK001', 'QL0001', 'ql_pass01', '2024-01-01', '2024-01-02', '2024-05-10', 'NV001'),
---('TK002', 'QL0002', 'ql_pass02', '2024-01-05', '2024-01-06', '2024-05-15', 'NV003'),
---('TK003', 'QL0003', 'ql_pass03', '2024-01-10', '2024-01-11', '2024-05-20', 'NV005'),
+('TK001', 'QL0001', '1', '2024-01-01', '2024-01-02', '2024-05-10', 'NV001'),
+('TK002', 'QL0002', 'ql_pass02', '2024-01-05', '2024-01-06', '2024-05-15', 'NV003'),
+('TK003', 'QL0003', 'ql_pass03', '2024-01-10', '2024-01-11', '2024-05-20', 'NV005'),
 ('TK004', 'QL0004', 'ql_pass04', '2024-01-15', '2024-01-16', '2024-05-25', 'NV007'),
 ('TK005', 'QL0005', 'ql_pass05', '2024-01-20', '2024-01-21', '2024-05-30', 'NV009'),
 ('TK006', 'QL0006', 'ql_pass06', '2024-01-25', '2024-01-26', '2024-06-04', 'NV011'),
@@ -130,7 +133,7 @@ VALUES
 ('TK020', 'QL0020', 'ql_pass20', '2024-04-07', '2024-04-08', '2024-08-13', 'NV039'),
 
 -- 30 Tài khoản Nhân viên (NVxxxx)
-('TK021', 'NV0021', 'nv_pass21', '2023-10-01', '2023-10-02', '2024-05-05', 'NV002'),
+('TK021', 'NV0021', '1', '2023-10-01', '2023-10-02', '2024-05-05', 'NV002'),
 ('TK022', 'NV0022', 'nv_pass22', '2023-10-05', '2023-10-06', '2024-05-10', 'NV004'),
 ('TK023', 'NV0023', 'nv_pass23', '2023-10-10', '2023-10-11', '2024-05-15', 'NV006'),
 ('TK024', 'NV0024', 'nv_pass24', '2023-10-15', '2023-10-16', '2024-05-20', 'NV008'),
@@ -161,10 +164,8 @@ VALUES
 ('TK049', 'NV0049', 'nv_pass49', '2024-02-24', '2024-02-25', '2024-09-22', 'NV058'),
 ('TK050', 'NV0050', 'nv_pass50', '2024-02-29', '2024-03-01', '2024-09-27', 'NV060');
 
-
 --Chèn dữ liệu vào bảng HangKhachHang
 select * from HangKhachHang
-
 
 INSERT INTO HangKhachHang (maHang, diemHang, giamGia, moTa, tenHang)
 VALUES
@@ -172,9 +173,7 @@ VALUES
 ('H2', 100, 5, N'Giảm 5%', N'Hạng Bạc'),
 ('H3', 300, 10, N'Giảm 10%', N'Hạng Vàng'),
 ('H4', 600, 15, N'Giảm 15%', N'Hạng Kim Cương');
-
-
---Chèn dữ liệu vào bảng HangKhachHang
+-- Chèn dữ liệu vào bảng HangKhachHang
 -- Chèn dữ liệu vào bảng KhachHang (200 bản ghi) với maKH là KHxxxx
 
 --UPDATE KhachHang
@@ -187,6 +186,7 @@ VALUES
 --    END;
 
 select * from KhachHang
+
 INSERT INTO KhachHang (maKH, tenKH, sdt, email, diaChi, diemTichLuy, maHang)
 VALUES
 ('KH0001', N'Nguyễn Văn A', '0901000001', 'kh0001@email.com', N'123 Lê Lợi, Quận 1, TP.HCM', 1250, 'H4'),
@@ -367,8 +367,6 @@ VALUES
 ('KH0176', N'Phạm Thị FT', '0901000176', 'kh0176@email.com', N'34 Tôn Đức Thắng, Quận 1, TP.HCM', 150, 'H2'),
 ('KH0177', N'Võ Văn FU', '0901000177', 'kh0177@email.com', N'45 Nguyễn Văn Cừ, Quận 5, TP.HCM', 640, 'H4'),
 ('KH0178', N'Nguyễn Thị FV', '0901000178', 'kh0178@email.com', N'23 Nguyễn Thị Thập, Quận 7, TP.HCM', 480, 'H3');
-
-
 
 --Chèn dữ liệu cho loaiBan
 INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
