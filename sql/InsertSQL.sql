@@ -376,13 +376,14 @@ INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
 
 -- Thêm dữ liệu cho Ban
 INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
-('B01', '1', 1, 'LB01'),
-('B02', '2', 0, 'LB01'),
-('B03', '3', 1, 'LB02'),
-('B04', '4', 0, 'LB02'),
-('B05', '5', 1, 'LB03'),
-('B06', '6', 0, 'LB03'),
-('B07', '7', 1, 'LB02'),
-('B08', '8', 1, 'LB01'),
-('B09', '9', 0, 'LB03'),
-('B10', '10', 1, 'LB02');
+('B01', N'Khu A', N'Trống', 'LB01'),
+('B02', N'Khu A', N'Đã được đặt', 'LB01'),
+('B03', N'Khu B', N'Trống', 'LB02'),
+('B04', N'Khu B', N'Đang phục vụ', 'LB02'),
+('B05', N'Khu C', N'Trống', 'LB03'),
+('B06', N'Khu C', N'Đã được đặt', 'LB03'),
+('B07', N'Khu B', N'Trống', 'LB02'),
+('B08', N'Khu A', N'Trống', 'LB01'),
+('B09', N'Khu C', N'Đang phục vụ', 'LB03'),
+('B10', N'Khu B', N'Đã được đặt', 'LB02');
+
