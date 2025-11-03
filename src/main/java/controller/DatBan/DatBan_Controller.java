@@ -1,7 +1,9 @@
 package controller.DatBan;
-
+import dao.KhachHang_DAO;
 import dao.Ban_DAO;
 import dao.impl.Ban_DAOImpl;
+import dao.impl.KhachHang_DAOlmpl;
+import entity.KhachHang;
 import entity.Ban;
 import entity.LoaiBan;
 import java.net.URL;
@@ -16,25 +18,43 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import java.util.List;
+
 
 
 public class DatBan_Controller implements Initializable {
-
+	
+	// --- TextField thông tin bàn ---
     @FXML private TextField txtTrangThai;
     @FXML private TextField txtViTri;
     @FXML private TextField txtSoLuong;
     @FXML private TextField txtLoaiBan;
-
+    
+    // --- ComboBox lọc ---
     @FXML private ComboBox<String> cmbTrangThai;
     @FXML private ComboBox<String> cmbLoaiBan;
     @FXML private ComboBox<String> cmbGioBatDau;
     @FXML private ComboBox<String> cmbGioKetThuc; 
     
+    // --- TextField thông tin khách hàng ---
+    @FXML
+    private Button btnTimKiem;
+    @FXML
+    private TextField txtTenKH, txtDiemTichLuy, txtSDT;
+    
+    // --- Button và GridPane ---
     @FXML private Button btnDatBan;
     @FXML private GridPane gridPaneBan;
 
-    private List<Ban> danhSachBan = new ArrayList<>();
+    // --- DAO ---
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private Ban_DAO banDAO = new Ban_DAOImpl();
+    
+    // --- Danh sách và trạng thái ---
+    private List<Ban> danhSachBan = new ArrayList<>();
     private Ban banDangChon = null;
     private Button buttonBanDangChonUI = null;
 
@@ -51,6 +71,8 @@ public class DatBan_Controller implements Initializable {
         
         btnDatBan.setOnAction(this::handleDatBan);
         btnDatBan.setDisable(true);
+        
+        btnTimKiem.setOnAction(e -> layThongTinKhachHang());
     }
 
     private void khoiTaoComboBoxes() {
@@ -129,6 +151,27 @@ public class DatBan_Controller implements Initializable {
         }
     }
 
+    
+ // --- Lấy thông tin khách hàng ---
+    private void layThongTinKhachHang() {
+        String sdt = txtSDT.getText().trim();
+        if (sdt.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Vui lòng nhập số điện thoại khách hàng!");
+            return;
+        }
+
+        KhachHang kh = khachHangDAO.timTheoSDT(sdt);
+
+        if (kh != null) {
+            txtTenKH.setText(kh.getTenKH());
+            txtDiemTichLuy.setText(String.valueOf(kh.getDiemTichLuy()));
+        } else {
+            txtTenKH.clear();
+            txtDiemTichLuy.clear();
+            showAlert(Alert.AlertType.WARNING, "Không tìm thấy khách hàng với số điện thoại này!");
+        }
+    }
+
 
     private String getStyleByStatusAndType(String trangThai, String loaiBan) {
         String colorLoai;
@@ -204,4 +247,8 @@ public class DatBan_Controller implements Initializable {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    
+
+
+
 }
