@@ -55,7 +55,7 @@
       </BorderPane>
    </top>
   <center>
-   <BorderPane prefHeight="450.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+   <BorderPane onKeyPressed="#keyPressed" prefHeight="450.0" prefWidth="600.0" BorderPane.alignment="CENTER">
       <left>
          <Pane prefHeight="514.0" prefWidth="223.0" BorderPane.alignment="CENTER">
             <children>

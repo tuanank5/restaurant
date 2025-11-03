@@ -100,7 +100,8 @@ public class ThemKhachHang_Controller {
     	Object src = event.getSource();
     	if(src == btnTroLai) {
     		if(!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
-    			xacNhanLuu("DatBan/DatBan");
+    			//xacNhanLuu("DatBan/DatBan");
+    			MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
     		}else {
     			MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
     		}
@@ -118,10 +119,12 @@ public class ThemKhachHang_Controller {
         if (source == lblDanhSachKhachHang) {
             if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
                 // Nếu không phải ở danh sách chính, xác nhận lưu và quay lại giao diện gọi đến
-                xacNhanLuu("DatBan/DatBan");
+                //xacNhanLuu("DatBan/DatBan");
+                MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
             } else {
                 // Nếu đang ở trang danh sách khách hàng chính, quay lại danh sách khách hàng
-                xacNhanLuu("KhachHang/KhachHang");
+                //xacNhanLuu("KhachHang/KhachHang");
+                MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
             }
         }
     }
@@ -138,9 +141,11 @@ public class ThemKhachHang_Controller {
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 //Nếu không đang ở màn hình "Danh Sách Nhân Viên"
                 if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Nhân Viên")) {
-                    xacNhanLuu("DatBan/DatBan"); // Ví dụ quay về trang chính hoặc form trước đó
+                    //xacNhanLuu("DatBan/DatBan");
+                    MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");// Ví dụ quay về trang chính hoặc form trước đó
                 } else {
-                    xacNhanLuu("KhachHang/KhachHang"); // Quay lại danh sách nhân viên
+                    //xacNhanLuu("KhachHang/KhachHang");
+                    MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");// Quay lại danh sách nhân viên
                 }
             }
         }
@@ -153,7 +158,7 @@ public class ThemKhachHang_Controller {
             Optional<ButtonType> buttonType = showAlertConfirm("Bạn có muốn lưu thông tin khách hàng không?");
             if (buttonType.isPresent()) {
                 if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
-                	readyUI(ui);
+                	MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
                 } else if (buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
                     // Thực hiện lưu khách hàng mới
                     boolean check = RestaurantApplication.getInstance()
@@ -163,14 +168,15 @@ public class ThemKhachHang_Controller {
                     if (check) {
                         showAlert("Thông báo", "Thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
                         this.khachHang = khachHangNew;
-                        readyUI(ui); // Quay lại trang trước sau khi lưu
+                        //readyUI(ui); // Quay lại trang trước sau khi lưu
+                        MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
                     } else {
                         showAlert("Thông báo", "Thêm khách hàng thất bại!", Alert.AlertType.WARNING);
                     }
                 }
             }
         } else {
-            readyUI(ui);
+        	MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
         }
     }
     
