@@ -186,13 +186,13 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="cmbGioBD" layoutX="360.0" layoutY="40.0" prefWidth="150.0" />
+                        <ComboBox fx:id="cmbGioBatDau" layoutX="360.0" layoutY="40.0" prefWidth="150.0" />
                         <Label layoutX="530.0" layoutY="15.0" text="GIỜ KẾT THÚC">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="cmbGioKT" layoutX="530.0" layoutY="40.0" prefWidth="150.0" />
+                        <ComboBox fx:id="cmbGioKetThuc" layoutX="530.0" layoutY="40.0" prefWidth="150.0" />
                         <Button fx:id="btnHienTai" layoutX="700.0" layoutY="40.0" mnemonicParsing="false" prefWidth="75.0" text="Hiện tại" />
                         <Label layoutX="40.0" layoutY="15.0" text="TRẠNG THÁI">
                            <font>

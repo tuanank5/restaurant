@@ -27,7 +27,9 @@ public class DatBan_Controller implements Initializable {
 
     @FXML private ComboBox<String> cmbTrangThai;
     @FXML private ComboBox<String> cmbLoaiBan;
-
+    @FXML private ComboBox<String> cmbGioBatDau;
+    @FXML private ComboBox<String> cmbGioKetThuc; 
+    
     @FXML private Button btnDatBan;
     @FXML private GridPane gridPaneBan;
 
@@ -39,12 +41,15 @@ public class DatBan_Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         khoiTaoComboBoxes();
+        khoiTaoGio();
         loadDanhSachBan();
 
         cmbTrangThai.setOnAction(e -> loadDanhSachBan());
         cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
+        cmbGioBatDau.setOnAction(e -> loadDanhSachBan());
+        cmbGioKetThuc.setOnAction(e -> loadDanhSachBan());
+        
         btnDatBan.setOnAction(this::handleDatBan);
-
         btnDatBan.setDisable(true);
     }
 
@@ -65,6 +70,18 @@ public class DatBan_Controller implements Initializable {
             }
         }
         cmbLoaiBan.getSelectionModel().select("Tất cả");
+    }
+    
+    private void khoiTaoGio() {
+        cmbGioBatDau.getItems().clear();
+        cmbGioKetThuc.getItems().clear();
+        for (int h = 0; h < 24; h++) {
+            String gio = String.format("%02d:00", h);
+            cmbGioBatDau.getItems().add(gio);
+            cmbGioKetThuc.getItems().add(gio);
+        }
+        cmbGioBatDau.getSelectionModel().select("08:00");
+        cmbGioKetThuc.getSelectionModel().select("22:00");
     }
 
     private void loadDanhSachBan() {
