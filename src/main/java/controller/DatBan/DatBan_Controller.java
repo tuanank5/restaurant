@@ -3,6 +3,7 @@ package controller.DatBan;
 import dao.Ban_DAO;
 import dao.impl.Ban_DAOImpl;
 import entity.Ban;
+import entity.LoaiBan;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +49,21 @@ public class DatBan_Controller implements Initializable {
     }
 
     private void khoiTaoComboBoxes() {
+    	 // ComboBox trạng thái
+        cmbTrangThai.getItems().clear();
         cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
         cmbTrangThai.getSelectionModel().select("Tất cả");
 
-        cmbLoaiBan.getItems().addAll("Tất cả", "Nhỏ", "Thường", "Lớn");
+        // Lấy danh sách loại bàn từ danh sách bàn
+        cmbLoaiBan.getItems().clear();
+        cmbLoaiBan.getItems().add("Tất cả");
+        List<Ban> danhSachBanTemp = banDAO.getDanhSach("Ban.list", Ban.class);
+        for (Ban ban : danhSachBanTemp) {
+            String tenLoai = ban.getLoaiBan().getTenLoaiBan();
+            if (!cmbLoaiBan.getItems().contains(tenLoai)) {
+                cmbLoaiBan.getItems().add(tenLoai);
+            }
+        }
         cmbLoaiBan.getSelectionModel().select("Tất cả");
     }
 
