@@ -240,25 +240,12 @@ public class KhachHang_Controller {
     }
 
     private void showThongTin(int countClick) {
-        if (countClick == 2) {
-            KhachHang khachHang = tableView.getSelectionModel().getSelectedItem();
-            if (khachHang != null) {
-                if (menuController != null) {
-                    FXMLLoader loader = menuController.readyUI("KhachHang/ThongTinChiTietKhachHang");
-                    if (loader != null) {
-                        ThongTinKhachHang_Controller thongTin = loader.getController();
-                        if (thongTin != null) {
-                            thongTin.setKhachHang(khachHang);
-                        } else {
-                            System.err.println("ThongTinKhachHang_Controller null");
-                        }
-                    } else {
-                        System.err.println("FXMLLoader null");
-                    }
-                } else {
-                    System.err.println("MenuNV_Controller chưa được khởi tạo!");
-                }
-            }
+        if(countClick == 2) {
+        	KhachHang khachHang = tableView.getSelectionModel().getSelectedItem();
+        	if(khachHang != null) {
+        		ThongTinKhachHang_Controller thongTinKhachHang = MenuNV_Controller.instance.readyUI("KhachHang/ThongTinChiTietKhachHang").getController();
+        		thongTinKhachHang.setKhachHang(khachHang);
+        	}
         }
     }
 

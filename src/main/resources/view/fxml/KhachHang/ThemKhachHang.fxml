@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.ThemKhachHang_Controller">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.ThemKhachHang_Controller">
 
    <!-- ====== HEADER ====== -->
    <top>
@@ -28,7 +28,7 @@
                <left>
                   <Pane prefHeight="63.0" prefWidth="399.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="lblDanhSachKhachHang" layoutX="14.0" layoutY="24.0" prefHeight="25.0" prefWidth="169.0" text="Danh sách khách hàng">
+                        <Label fx:id="lblDanhSachKhachHang" layoutX="14.0" layoutY="24.0" onMouseClicked="#mouseClicked" prefHeight="25.0" prefWidth="169.0" text="Danh sách khách hàng">
                            <font>
                               <Font size="16.0" />
                            </font>

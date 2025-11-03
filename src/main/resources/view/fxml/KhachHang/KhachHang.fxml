@@ -40,7 +40,7 @@
             </HBox>
 
             <!-- TableView -->
-            <TableView fx:id="tableView" prefHeight="500">
+            <TableView fx:id="tableView" onMouseClicked="#mouseClicked" prefHeight="500">
                 <columns>
                     <TableColumn fx:id="tblKhachHang" prefWidth="150" text="Mã khách hàng" />
                     <TableColumn fx:id="tblTenKH" prefWidth="160" text="Tên khách hàng" />

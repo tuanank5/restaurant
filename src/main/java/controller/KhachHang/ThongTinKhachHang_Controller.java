@@ -1,8 +1,13 @@
 package controller.KhachHang;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
+import dao.HangKhachHang_DAO;
 import entity.HangKhachHang;
 import entity.KhachHang;
 import javafx.application.Platform;
@@ -33,7 +38,7 @@ public class ThongTinKhachHang_Controller {
     private Button btnTroLai;
 
     @FXML
-    private ComboBox<HangKhachHang> comBoxHangKH;
+    private ComboBox<String> comBoxHangKH;
     
     @FXML
     private Label lblDanhSachKhachHang;
@@ -57,9 +62,12 @@ public class ThongTinKhachHang_Controller {
     private TextField txtTenKH;
 
 	private KhachHang khachHang;
+	
+	private List<HangKhachHang> danhSachHangKhachHangDB;
     
     public void initialize() {
         Platform.runLater(() -> btnTroLai.requestFocus());
+        loadData();
     }
     @FXML
     private void controller(ActionEvent event) {
@@ -102,11 +110,11 @@ public class ThongTinKhachHang_Controller {
         	txtSDT.setText(khachHang.getSdt());
         	txtEmail.setText(khachHang.getEmail());
         	txtDiaChi.setText(khachHang.getDiaChi());
+        	txtDiemTichLuy.setText(String.valueOf(khachHang.getDiemTichLuy()));
         	HangKhachHang hang = khachHang.getHangKhachHang();
         	if(hang != null) {
-        		comBoxHangKH.setValue(hang);
+        		comBoxHangKH.setValue(hang.getTenHang());
         	}
-        	String diemTichLuy = txtDiemTichLuy.getText();
         }
     }
     
@@ -114,7 +122,19 @@ public class ThongTinKhachHang_Controller {
         this.khachHang = khachHang;
         hienThiThongTin(khachHang);
     }
-    
+    private void loadData() {
+        Map<String,Object> filter = new HashMap<>();
+        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(HangKhachHang_DAO.class)
+                .getDanhSach(HangKhachHang.class, filter);
+        comBoxHangKH.getItems().clear();
+        comBoxHangKH.getItems().add("Tất cả");
+        for(HangKhachHang hang : danhSachHangKhachHangDB) {
+            comBoxHangKH.getItems().add(hang.getTenHang());
+        }
+        comBoxHangKH.getSelectionModel().selectFirst();
+    }
     public void troLai() {
     	MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
     }

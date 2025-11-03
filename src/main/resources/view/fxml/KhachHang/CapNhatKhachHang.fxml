@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1259.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="700.0" prefWidth="1259.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.CapNhatKhachHang_Controller">
    <center>
       <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <top>
@@ -27,13 +27,13 @@
                <left>
                   <Pane prefHeight="60.0" prefWidth="744.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="lblDanhSachKhachHang" layoutX="25.0" layoutY="21.0" text="Danh sách khách hàng">
+                        <Label fx:id="lblDanhSachKhachHang" layoutX="25.0" layoutY="21.0" onMouseClicked="#mouseClicked" text="Danh sách khách hàng">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
                         <Label layoutX="190.0" layoutY="25.0" text="/" />
-                        <Label fx:id="lblThongTinChiTiet" layoutX="202.0" layoutY="21.0" text="Thông tin chi tiết">
+                        <Label fx:id="lblThongTinChiTiet" layoutX="202.0" layoutY="21.0" onMouseClicked="#mouseClicked" text="Thông tin chi tiết">
                            <font>
                               <Font size="16.0" />
                            </font>

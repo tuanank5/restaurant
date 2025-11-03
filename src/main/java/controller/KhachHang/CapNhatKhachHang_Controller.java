@@ -1,10 +1,14 @@
 package controller.KhachHang;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
+import dao.HangKhachHang_DAO;
 import dao.KhachHang_DAO;
 import entity.HangKhachHang;
 import entity.KhachHang;
@@ -37,7 +41,7 @@ public class CapNhatKhachHang_Controller {
     private Button btnTaoLaiMK;
 
     @FXML
-    private ComboBox<HangKhachHang> comBoxHangKH;
+    private ComboBox<String> comBoxHangKH;
 
     @FXML
     private Label lblDanhSachKhachHang;
@@ -64,10 +68,13 @@ public class CapNhatKhachHang_Controller {
     private TextField txtTenKH;
     
     private KhachHang khachHang;
+    
+    private List<HangKhachHang> danhSachHangKhachHangDB;
 
     @FXML
     public void initialize() {
         Platform.runLater(() -> txtTenKH.requestFocus());
+        loadData();
     }
     
     @FXML
@@ -207,11 +214,10 @@ public class CapNhatKhachHang_Controller {
             txtEmail.setText(khachHang.getEmail());
             txtDiaChi.setText(khachHang.getDiaChi());
             txtDiemTichLuy.setText(String.valueOf(khachHang.getDiemTichLuy()));
-            if (khachHang.getHangKhachHang() != null) {
-                comBoxHangKH.setValue(khachHang.getHangKhachHang());
-            } else {
-                comBoxHangKH.setValue(null);
-            }
+            HangKhachHang hang = khachHang.getHangKhachHang();
+        	if(hang != null) {
+        		comBoxHangKH.setValue(hang.getTenHang());
+        	}
         }
     }
 
@@ -227,7 +233,7 @@ public class CapNhatKhachHang_Controller {
         String email = txtEmail.getText().trim();
         String diaChi = txtDiaChi.getText().trim();
         String diemStr = txtDiemTichLuy.getText().trim();
-        HangKhachHang hangKH = comBoxHangKH.getValue();
+        String hangKH = comBoxHangKH.getValue();
 
         //Kiểm tra các trường bắt buộc
         if (tenKH.isEmpty()) {
@@ -287,10 +293,35 @@ public class CapNhatKhachHang_Controller {
             comBoxHangKH.requestFocus();
             return null;
         }
-        // Tạo đối tượng KhachHang mới
-        return new KhachHang();
+        KhachHang kh = new KhachHang();
+        kh.setMaKH(maKH);
+        kh.setTenKH(tenKH);
+        kh.setSdt(sdt);
+        kh.setEmail(email);
+        kh.setDiaChi(diaChi);
+        kh.setDiemTichLuy(diemTichLuy);
+        HangKhachHang hang = danhSachHangKhachHangDB.stream()
+                .filter(h -> h.getTenHang().equals(hangKH))
+                .findFirst()
+                .orElse(null);
+        kh.setHangKhachHang(hang);
+            
+        return kh;
     }
-
+    
+    private void loadData() {
+        Map<String,Object> filter = new HashMap<>();
+        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(HangKhachHang_DAO.class)
+                .getDanhSach(HangKhachHang.class, filter);
+        comBoxHangKH.getItems().clear();
+        comBoxHangKH.getItems().add("Tất cả");
+        for(HangKhachHang hang : danhSachHangKhachHangDB) {
+            comBoxHangKH.getItems().add(hang.getTenHang());
+        }
+        comBoxHangKH.getSelectionModel().selectFirst();
+    }
     
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
