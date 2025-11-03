@@ -387,3 +387,18 @@ INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
 ('B09', N'Khu C', N'Đang phục vụ', 'LB03'),
 ('B10', N'Khu B', N'Đã được đặt', 'LB02');
 
+-- Thêm dữ liệu cho KhuyenMai
+INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, phanTramGiamGia)
+VALUES
+('KM001', N'Ưu đãi VIP tháng 11', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-01', '2025-11-30', 20),
+('KM002', N'Giảm giá Pizza đặc biệt', N'Khuyến mãi món ăn', N'SP004', '2025-11-05', '2025-11-15', 15),
+('KM003', N'Giảm 10% tổng hóa đơn cuối tuần', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-07', '2025-11-08', 10),
+('KM004', N'Ưu đãi VIP cuối tháng', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-20', '2025-11-30', 25),
+('KM005', N'Giảm giá Mỳ Ý', N'Khuyến mãi món ăn', N'SP010', '2025-11-10', '2025-11-20', 12),
+('KM006', N'Giảm 5% tổng hóa đơn', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-15', '2025-11-17', 5),
+('KM007', N'Ưu đãi VIP đầu tháng', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-01', '2025-11-07', 15),
+('KM008', N'Giảm giá Burger đặc biệt', N'Khuyến mãi món ăn', N'SP007', '2025-11-12', '2025-11-22', 20),
+('KM009', N'Giảm 8% tổng hóa đơn thứ 6', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-14', '2025-11-14', 8),
+('KM010', N'Ưu đãi VIP cuối tuần', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-21', '2025-11-23', 18),
+('KM011', N'Giảm giá Salad', N'Khuyến mãi món ăn', N'SP015', '2025-11-05', '2025-11-12', 10),
+('KM012', N'Giảm 15% tổng hóa đơn cuối tháng', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-25', '2025-11-30', 15);
