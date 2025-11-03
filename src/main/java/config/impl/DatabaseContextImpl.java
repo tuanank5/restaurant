@@ -19,7 +19,6 @@ public class DatabaseContextImpl implements DatabaseContext{
 		if (entityType == DonDatBan_DAO.class) {
             return (R) new DonDatBan_DAOImpl();
         }
-
 		if (entityType == DonLapDoiHuyBan_DAO.class) {
             return (R) new DonLapDoiHuyBan_DAOImpl();
         }
@@ -37,6 +36,9 @@ public class DatabaseContextImpl implements DatabaseContext{
         }
 		if (entityType == LoaiBan_DAO.class) {
             return (R) new LoaiBan_DAOImpl();
+        }
+		if (entityType == MonAn_DAO.class) {
+            return (R) new MonAn_DAOImpl();
         }
 		if (entityType == NhanVien_DAO.class) {
             return (R) new NhanVien_DAOImpl();
