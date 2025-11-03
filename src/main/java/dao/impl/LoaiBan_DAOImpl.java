@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 public class LoaiBan_DAOImpl extends Entity_DAOImpl<LoaiBan> implements LoaiBan_DAO {
-
     @Override
     public LoaiBan timLoaiBanTheoTen(String tenLoaiBan) {
         if (tenLoaiBan == null || tenLoaiBan.trim().isEmpty()) return null;
@@ -23,4 +22,6 @@ public class LoaiBan_DAOImpl extends Entity_DAOImpl<LoaiBan> implements LoaiBan_
             em.close();
         }
     }
+    
+    
 }

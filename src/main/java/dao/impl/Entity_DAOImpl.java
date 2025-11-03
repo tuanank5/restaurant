@@ -15,7 +15,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-public class Entity_DAOImpl<E> implements Entity_DAO<E>{
+public class Entity_DAOImpl<E> implements Entity_DAO<E> {
 	protected final RestaurantApplication restaurantApplication = RestaurantApplication.getInstance();
     protected final EntityManagerFactory entityManagerFactory = restaurantApplication.getEntityManagerFactory();
 
@@ -277,4 +277,5 @@ public class Entity_DAOImpl<E> implements Entity_DAO<E>{
         return false;
     }
 
+    
 }

@@ -58,5 +58,6 @@ public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
             em.close();
         }
     }
-
+    
+    
 }

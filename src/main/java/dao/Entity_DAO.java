@@ -8,7 +8,7 @@ public interface Entity_DAO<E> {
 	boolean them(E entity);
     boolean themNhieu(List<E> listEntity);
     boolean capNhat(E entity);
-    boolean xoa(E entity); 
+    boolean xoa(E entity);
 
     List<E> getDanhSach(String namedQuery, Class<E> entityType);
     List<E> getDanhSach(String namedQuery, Class<E> entityType, int limit, int skip);
