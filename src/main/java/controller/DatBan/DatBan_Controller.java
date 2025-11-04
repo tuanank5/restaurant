@@ -220,7 +220,7 @@ public class DatBan_Controller implements Initializable {
 
     private void handleChonBan(Ban ban, Button btnBan) {
     	banDangChon = ban;
-        // Nếu bàn đã được đặt hoặc đang phục vụ thì không cho đặt
+        // Nếu bàn đã được đặt hoặc đang phục vụ thì không cho đặt nữa
         if ("Đã được đặt".equals(ban.getTrangThai()) || "Đang phục vụ".equals(ban.getTrangThai())) {
             btnDatBan.setDisable(true); // không cho nhấn đặt bàn
             showAlert(AlertType.INFORMATION, "Bàn này đã được đặt hoặc đang phục vụ, không thể đặt lại!");
