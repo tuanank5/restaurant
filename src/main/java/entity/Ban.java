@@ -31,8 +31,8 @@ public class Ban {
     @Column(name = "trangThai", nullable = false, length = 50)
     private String trangThai;
 
-    @Column(name = "soLuong", nullable = false)
-    private int soLuong;   // 🆕 Thêm số lượng riêng cho mỗi bàn
+//    @Column(name = "soLuong", nullable = false)
+//    private int soLuong;   // Thêm số lượng riêng cho mỗi bàn
 
     @ManyToOne
     @JoinColumn(name = "maLoaiBan", referencedColumnName = "maLoaiBan", nullable = false)
@@ -46,7 +46,7 @@ public class Ban {
         this.maBan = maBan;
         this.viTri = viTri;
         this.trangThai = trangThai;
-        this.soLuong = soLuong;
+        //this.soLuong = soLuong;
         this.loaiBan = loaiBan;
     }
 
@@ -75,13 +75,13 @@ public class Ban {
         this.trangThai = trangThai;
     }
 
-    public int getSoLuong() {
-        return soLuong;
-    }
-
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
-    }
+//    public int getSoLuong() {
+//        return soLuong;
+//    }
+//
+//    public void setSoLuong(int soLuong) {
+//        this.soLuong = soLuong;
+//    }
 
     public LoaiBan getLoaiBan() {
         return loaiBan;
@@ -120,6 +120,6 @@ public class Ban {
     @Override
     public String toString() {
         return "Ban [maBan=" + maBan + ", viTri=" + viTri + ", trangThai=" + trangThai +
-               ", soLuong=" + soLuong + ", loaiBan=" + loaiBan + "]";
+               ", loaiBan=" + loaiBan + "]";
     }
 }
