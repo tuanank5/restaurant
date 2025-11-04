@@ -49,5 +49,12 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
             em.close();
         }
     }
-
+//    public DonDatBan timTheoBan(Ban ban) {
+//    	EntityManager em = getEntityManager();
+//        List<DonDatBan> ds = em.createQuery("SELECT d FROM DonDatBan d WHERE d.ban = :ban ORDER BY d.ngayGioLapDon DESC", DonDatBan.class)
+//                               .setParameter("ban", ban)
+//                               .setMaxResults(1)
+//                               .getResultList();
+//        return ds.isEmpty() ? null : ds.get(0);
+//    }
 }
