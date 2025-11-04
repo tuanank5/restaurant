@@ -97,10 +97,10 @@
                         <Label text="Tên khuyến mãi:" GridPane.rowIndex="1" />
                         <Label text="Loại khuyến mãi:" GridPane.rowIndex="2" />
                         <Label text="Sản phẩm khuyến mãi:" GridPane.rowIndex="3" />
-                        <TextField GridPane.columnIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <ComboBox prefHeight="26.0" prefWidth="446.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMaKM" editable="false" style="-fx-background-color: #dddddd;" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtTenKM" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtSanPhamKM" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="comBoxLoaiKM" prefHeight="26.0" prefWidth="446.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <BorderPane.margin>
                         <Insets left="50.0" />
@@ -123,12 +123,12 @@
                         <Label text="Ngày bắt đầu:" />
                         <Label text="Ngày kết thúc:" GridPane.rowIndex="1" />
                         <Label text="Phần trăm giảm giá:" GridPane.rowIndex="2" />
-                        <DatePicker prefHeight="26.0" prefWidth="371.0" GridPane.columnIndex="1" />
-                        <DatePicker prefHeight="26.0" prefWidth="404.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <ComboBox prefHeight="26.0" prefWidth="363.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <DatePicker fx:id="dpNgayBatDau" prefHeight="26.0" prefWidth="371.0" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="dpNgayKetThuc" prefHeight="26.0" prefWidth="404.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="comBoxPhanTram" prefHeight="26.0" prefWidth="363.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <BorderPane.margin>
-                        <Insets right="50.0" />
+                        <Insets left="20.0" right="30.0" />
                      </BorderPane.margin>
                   </GridPane>
                </right>

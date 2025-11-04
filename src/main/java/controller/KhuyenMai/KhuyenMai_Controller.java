@@ -1,6 +1,5 @@
 package controller.KhuyenMai;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -30,137 +23,152 @@ import javafx.scene.layout.BorderPane;
 
 public class KhuyenMai_Controller {
 
-    @FXML
-    private BorderPane borderPane;
+    @FXML private BorderPane borderPane;
 
-    @FXML
-    private Button btnThemKM;
+    @FXML private Button btnThemKM;
+    @FXML private Button btnSuaKM;
+    @FXML private Button btnXoaKM;
 
-    @FXML
-    private Button btnSuaKM;
+    @FXML private TableColumn<KhuyenMai, String> colMaKM;
+    @FXML private TableColumn<KhuyenMai, String> colTenKM;
+    @FXML private TableColumn<KhuyenMai, String> colloaiKM;
+    @FXML private TableColumn<KhuyenMai, String> colSanPhamKM;
+    @FXML private TableColumn<KhuyenMai, Date> colNgayBatDau;
+    @FXML private TableColumn<KhuyenMai, Date> colNgayKetThuc;
+    @FXML private TableColumn<KhuyenMai, Integer> colPhanTramGiamGia;
 
-    @FXML
-    private Button btnXoaKM;
+    @FXML private TableView<KhuyenMai> tblKM;
+    @FXML private TextField txtTimKiem;
 
-    @FXML
-    private TableColumn<KhuyenMai, String> colloaiKM;
-
-    @FXML
-    private TableColumn<KhuyenMai, String> colMaKM;
-
-    @FXML
-    private TableColumn<KhuyenMai, Date> colNgayBatDau;
-
-    @FXML
-    private TableColumn<KhuyenMai, Date> colNgayKetThuc;
-
-    @FXML
-    private TableColumn<KhuyenMai, Integer> colPhanTramGiamGia;
-
-    @FXML
-    private TableColumn<KhuyenMai, String> colSanPhamKM;
-
-    @FXML
-    private TableColumn<KhuyenMai, String> colTenKM;
-
-    @FXML
-    private TableView<KhuyenMai> tblKM;
-
-    @FXML
-    private TextField txtTimKiem;
+    @FXML private TextField txtMaKM, txtTenKM, txtSanPhamKM;
+    @FXML private ComboBox<String> comBoxLoaiKM;
+    @FXML private ComboBox<Integer> comBoxPhanTram;
+    @FXML private DatePicker dpNgayBatDau, dpNgayKetThuc;
 
     private ObservableList<KhuyenMai> danhSachKhuyenMai = FXCollections.observableArrayList();
-    private List<KhuyenMai> danhSachKhuyenMaiDB;
+
+    private final KhuyenMai_DAO khuyenMaiDAO = RestaurantApplication.getInstance()
+            .getDatabaseContext()
+            .newEntity_DAO(KhuyenMai_DAO.class);
 
     @FXML
     private void initialize() {
         setValueTable();
+        setComboBoxValue();
         loadData();
         timKiem();
+        btnSuaKM.setDisable(true);
+        btnXoaKM.setDisable(true);
+    }
+
+    private void setComboBoxValue() {
+        comBoxLoaiKM.setItems(FXCollections.observableArrayList("Theo sản phẩm", "Toàn bộ hóa đơn"));
+        comBoxPhanTram.setItems(FXCollections.observableArrayList(5,10,15,20,25,30,40,50));
     }
 
     @FXML
-    private void controller(ActionEvent event) throws IOException {
-        Object source = event.getSource();
-
-        if (source == btnXoaKM) {
-            xoa();
-        }if (source == txtTimKiem) {
-        	timKiem();
-        }
+    private void controller(ActionEvent event) {
+        if (event.getSource() == btnThemKM) them();
+        if (event.getSource() == btnSuaKM) sua();
+        if (event.getSource() == btnXoaKM) xoa();
     }
 
     @FXML
-    void mouseClicked(MouseEvent event) throws IOException {
-        Object source = event.getSource();
-        if (source == tblKM) {
+    void mouseClicked(MouseEvent event) {
+        KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
+        if (km != null) {
+            btnSuaKM.setDisable(false);
             btnXoaKM.setDisable(false);
-        } else if (source == borderPane) {
-            huyChonDong();
+            fillForm(km);
         }
     }
 
     @FXML
     void keyPressed(KeyEvent event) {
-        if (event.getSource() == borderPane && event.getCode() == KeyCode.ESCAPE) {
-            huyChonDong();
+        if (event.getCode() == KeyCode.ESCAPE) huyChonDong();
+    }
+
+    private void them() {
+        try {
+        	// ✅ Tự tạo Mã KM
+            String max = khuyenMaiDAO.getMaxMaKM();
+            String maMoi = (max == null) ? "KM001" :
+                    "KM" + String.format("%03d", Integer.parseInt(max.substring(2)) + 1);
+
+            KhuyenMai km = new KhuyenMai(
+                    maMoi,
+                    txtTenKM.getText().trim(),
+                    comBoxLoaiKM.getValue(),
+                    txtSanPhamKM.getText().trim(),
+                    Date.valueOf(dpNgayBatDau.getValue()),
+                    Date.valueOf(dpNgayKetThuc.getValue()),
+                    comBoxPhanTram.getValue()
+            );
+
+            if (khuyenMaiDAO.them(km)) {
+                loadData();
+                showAlert("Thành công", "Thêm khuyến mãi thành công!", Alert.AlertType.INFORMATION);
+            }
+
+        } catch (Exception e) {
+            showAlert("Lỗi", "Vui lòng nhập đầy đủ và đúng thông tin!", Alert.AlertType.ERROR);
         }
     }
 
-    // Tìm kiếm theo tên, mã, sản phẩm
-    private void timKiem() {
-        FilteredList<KhuyenMai> filteredData = new FilteredList<>(danhSachKhuyenMai, p -> true);
+    private void sua() {
+        KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
+        if (km == null) return;
 
-        txtTimKiem.textProperty().addListener((obs, oldValue, newValue) -> {
-            filteredData.setPredicate(km -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String filter = newValue.toLowerCase();
+        try {
+            km.setTenKM(txtTenKM.getText().trim());
+            km.setLoaiKM(comBoxLoaiKM.getValue());
+            km.setSanPhamKM(txtSanPhamKM.getText().trim());
+            km.setNgayBatDau(Date.valueOf(dpNgayBatDau.getValue()));
+            km.setNgayKetThuc(Date.valueOf(dpNgayKetThuc.getValue()));
+            km.setPhanTramGiamGia(comBoxPhanTram.getValue());
 
-                return km.getMaKM().toLowerCase().contains(filter)
-                    || km.getTenKM().toLowerCase().contains(filter)
-                    || km.getSanPhamKM().toLowerCase().contains(filter);
-            });
-            tblKM.setItems(filteredData);
-        });
+            if (khuyenMaiDAO.sua(km)) {
+                loadData();
+                showAlert("Thành công", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
+            }
+
+        } catch (Exception e) {
+            showAlert("Lỗi", "Dữ liệu không hợp lệ!", Alert.AlertType.ERROR);
+        }
     }
 
-    // XÓA - ĐÃ SỬA LỖI
     private void xoa() {
         KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
-        if (km != null) {
-            Optional<ButtonType> confirm = showAlertConfirm("Bạn có chắc chắn muốn xóa khuyến mãi '" + km.getMaKM() + "'?");
-            if (confirm.get().getButtonData() == ButtonBar.ButtonData.NO) return;
+        if (km == null) return;
 
-            if (confirm.get().getButtonData() == ButtonBar.ButtonData.YES) {
-
-                boolean check = RestaurantApplication.getInstance()
-                        .getDatabaseContext()
-                        .newEntity_DAO(KhuyenMai_DAO.class)
-                        .xoa(km); // ĐÃ SỬA: Gọi phương thức .xoa(km) thay vì .capNhat(km)
-
-                if (check) {
-                    showAlert("Thông báo", "Xóa thành công!", Alert.AlertType.INFORMATION);
-                    danhSachKhuyenMai.remove(km);
-                    tblKM.refresh();
-                } else {
-                    showAlert("Thông báo", "Xóa thất bại! Vui lòng kiểm tra ràng buộc khóa ngoại.", Alert.AlertType.ERROR);
-                }
+        Optional<ButtonType> confirm = showAlertConfirm("Bạn có chắc muốn xóa?");
+        if (confirm.get().getButtonData() == ButtonBar.ButtonData.YES) {
+            if (khuyenMaiDAO.xoa(km.getMaKM())) {
+                loadData();
+                showAlert("Thành công", "Xóa thành công!", Alert.AlertType.INFORMATION);
             }
         }
     }
 
+    private void fillForm(KhuyenMai km) {
+        txtMaKM.setText(km.getMaKM());
+        txtTenKM.setText(km.getTenKM());
+        txtSanPhamKM.setText(km.getSanPhamKM());
+        comBoxLoaiKM.setValue(km.getLoaiKM());
+        comBoxPhanTram.setValue(km.getPhanTramGiamGia());
+        dpNgayBatDau.setValue(km.getNgayBatDau().toLocalDate());
+        dpNgayKetThuc.setValue(km.getNgayKetThuc().toLocalDate());
+    }
+
+    private void huyChonDong() {
+        tblKM.getSelectionModel().clearSelection();
+        btnSuaKM.setDisable(true);
+        btnXoaKM.setDisable(true);
+    }
+
     private void loadData() {
-        Map<String, Object> filter = new HashMap<>();
-
-        danhSachKhuyenMaiDB = RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(KhuyenMai_DAO.class)
-                .getDanhSach(KhuyenMai.class, filter);
-
-        danhSachKhuyenMai.addAll(danhSachKhuyenMaiDB);
-
+        List<KhuyenMai> list = khuyenMaiDAO.getDanhSach(KhuyenMai.class, new HashMap<>());
+        danhSachKhuyenMai.setAll(list);
         tblKM.setItems(danhSachKhuyenMai);
     }
 
@@ -174,8 +182,16 @@ public class KhuyenMai_Controller {
         colPhanTramGiamGia.setCellValueFactory(new PropertyValueFactory<>("phanTramGiamGia"));
     }
 
-    private void huyChonDong() {
-        tblKM.getSelectionModel().clearSelection();
+    private void timKiem() {
+        FilteredList<KhuyenMai> filtered = new FilteredList<>(danhSachKhuyenMai, p -> true);
+
+        txtTimKiem.textProperty().addListener((obs, oldValue, newValue) ->
+                filtered.setPredicate(km -> km.getMaKM().toLowerCase().contains(newValue.toLowerCase())
+                        || km.getTenKM().toLowerCase().contains(newValue.toLowerCase())
+                        || km.getSanPhamKM().toLowerCase().contains(newValue.toLowerCase()))
+        );
+
+        tblKM.setItems(filtered);
     }
 
     private void showAlert(String title, String content, Alert.AlertType type) {
@@ -187,15 +203,12 @@ public class KhuyenMai_Controller {
 
     private Optional<ButtonType> showAlertConfirm(String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Thông báo");
         alert.setHeaderText(content);
-
-        ButtonType yes = new ButtonType("Có", ButtonBar.ButtonData.YES);
-        ButtonType no = new ButtonType("Không", ButtonBar.ButtonData.NO);
-        ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(yes, no, cancel);
-
+        alert.getButtonTypes().setAll(
+                new ButtonType("Có", ButtonBar.ButtonData.YES),
+                new ButtonType("Không", ButtonBar.ButtonData.NO)
+        );
         return alert.showAndWait();
     }
 }
+       
