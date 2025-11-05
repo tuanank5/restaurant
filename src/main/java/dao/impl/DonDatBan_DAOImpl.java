@@ -9,7 +9,6 @@ import dao.DonDatBan_DAO;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.KhachHang;
-import entity.Ve;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
