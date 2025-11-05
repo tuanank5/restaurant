@@ -256,17 +256,18 @@ public class DatBan_Controller implements Initializable {
             cmbGioKetThuc.setValue(donGanNhat.getGioKetThuc().toString());
 
             for (javafx.scene.Node node : gridPaneBan.getChildren()) {
-                if (node instanceof Button btn) {
+                if (node instanceof Button) {
+                    Button btn = (Button) node; // Ép kiểu thủ công
                     if (btn.getText().contains(ban.getMaBan())) {
                         handleChonBan(ban, btn);
                         break;
                     }
                 }
             }
-        } else {
-            resetThongTinBan();
         }
     }
+
+    
 
     private void resetThongTinBan() {
         txtTrangThai.clear();
