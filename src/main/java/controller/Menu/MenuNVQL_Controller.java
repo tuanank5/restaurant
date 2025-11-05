@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import config.RestaurantApplication;
+import controller.Dashboard.DashboardNVQL_Controller;
 import controller.Dashboard.a;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
@@ -145,7 +146,7 @@ public class MenuNVQL_Controller {
     }
 	
 	public void dashBoard() {
-		a dashboardNVQLController = readyUI("Dashboard/DashboardNVQL").getController();
+		DashboardNVQL_Controller dashboardNVQLController = readyUI("Dashboard/DashboardNVQL").getController();
 		//NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
 }
