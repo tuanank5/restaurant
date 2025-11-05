@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 
 public class DashboardNVQL_Controller {
-	@FXML
 	public ScrollPane pane_Dashboard;
 	
 	@FXML
@@ -16,13 +15,13 @@ public class DashboardNVQL_Controller {
         loadTabContent(pane_Dashboard, "/view/fxml/Dashboard/a.fxml");
     }
 
-    private void loadTabContent(ScrollPane tab, String fxmlFile){
+    private void loadTabContent(ScrollPane pane, String fxmlFile){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Node content = loader.load();
-            tab.setContent(content);
-            tab.setFitToHeight(true);
-            tab.setFitToWidth(true);
+            pane.setContent(content);
+            pane.setFitToHeight(true);
+            pane.setFitToWidth(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
