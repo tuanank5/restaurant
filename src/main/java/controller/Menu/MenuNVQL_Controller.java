@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import config.RestaurantApplication;
-import controller.Dashboard.DashboardNVQL_Controller;
+import controller.Dashboard.a;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -80,7 +80,7 @@ public class MenuNVQL_Controller {
     
     @FXML
     void btnDashboard(ActionEvent event) {
-
+    	readyUI("Dashboard/DashboardNVQL");
     }
 
     @FXML
@@ -145,7 +145,7 @@ public class MenuNVQL_Controller {
     }
 	
 	public void dashBoard() {
-		DashboardNVQL_Controller dashboardNVQLController = readyUI("Dashboard/DashboardNVQL").getController();
+		a dashboardNVQLController = readyUI("Dashboard/DashboardNVQL").getController();
 		//NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
 	}
 }
