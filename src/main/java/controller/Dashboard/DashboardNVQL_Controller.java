@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 
 public class DashboardNVQL_Controller {
+	@FXML
 	public ScrollPane pane_Dashboard;
 	
 	@FXML
