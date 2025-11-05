@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <children>
+      <HBox prefHeight="100.0" prefWidth="1100.0">
+         <children>
+            <AnchorPane prefHeight="100.0" prefWidth="275.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+               <children>
+                  <JFXRadioButton layoutX="14.0" layoutY="14.0" text="Thống kê theo tháng/năm" />
+                  <JFXComboBox layoutX="14.0" layoutY="37.0" promptText="Tháng" />
+                  <JFXComboBox layoutX="157.0" layoutY="37.0" promptText="Năm" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="100.0" prefWidth="550.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+               <children>
+                  <JFXRadioButton layoutX="14.0" layoutY="14.0" text="Thống kê theo ngày" />
+                  <Label layoutX="14.0" layoutY="42.0" text="Từ ngày" />
+                  <DatePicker layoutX="74.0" layoutY="38.0" />
+                  <Label layoutX="269.0" layoutY="42.0" text="Đến ngày" />
+                  <DatePicker layoutX="339.0" layoutY="38.0" />
+               </children>
+            </AnchorPane>
+            <JFXButton prefHeight="50.0" prefWidth="150.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" text="Lọc" />
+         </children>
+      </HBox>
+      <HBox layoutY="100.0" prefHeight="100.0" prefWidth="1100.0">
+         <children>
+            <AnchorPane prefHeight="100.0" prefWidth="275.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" HBox.hgrow="ALWAYS">
+               <children>
+                  <FontAwesomeIconView layoutX="132.0" layoutY="35.0" />
+                  <Label layoutX="124.0" layoutY="42.0" text="Label" />
+                  <Label layoutX="109.0" layoutY="68.0" text="Doanh thu" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="275.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" HBox.hgrow="ALWAYS">
+               <children>
+                  <FontAwesomeIconView layoutX="132.0" layoutY="35.0" />
+                  <Label layoutX="124.0" layoutY="41.0" text="Label" />
+                  <Label layoutX="115.0" layoutY="68.0" text="Hóa đơn" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="275.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" HBox.hgrow="ALWAYS">
+               <children>
+                  <FontAwesomeIconView layoutX="132.0" layoutY="35.0" />
+                  <Label layoutX="124.0" layoutY="42.0" text="Label" />
+                  <Label layoutX="105.0" layoutY="68.0" text="Đơn đặt bàn" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="275.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" HBox.hgrow="ALWAYS">
+               <children>
+                  <FontAwesomeIconView layoutX="132.0" layoutY="35.0" />
+                  <Label layoutX="124.0" layoutY="42.0" text="Label" />
+                  <Label layoutX="106.0" layoutY="68.0" text="Hành khách" />
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+      <VBox layoutY="200.0" prefHeight="400.0" prefWidth="1100.0">
+         <children>
+            <AnchorPane prefHeight="350.0" prefWidth="1100.0">
+               <children>
+                  <AreaChart prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </AreaChart>
+                  <BarChart prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="Doanh thu theo tháng">
+                    <xAxis>
+                      <CategoryAxis label="Tháng" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis label="Doanh thu" side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </AnchorPane>
+            <Label prefHeight="50.0" prefWidth="1100.0" />
+         </children>
+      </VBox>
+      <HBox alignment="TOP_CENTER" layoutX="1.0" layoutY="600.0" prefWidth="1100.0">
+         <children>
+            <Label text="Đơn đặt bàn">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <VBox layoutY="635.0" prefHeight="400.0" prefWidth="1100.0">
+         <children>
+            <AnchorPane prefHeight="350.0" prefWidth="1100.0">
+               <children>
+                  <BarChart prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="Số lượng đơn đặt bàn">
+                    <xAxis>
+                      <CategoryAxis label="Thời gian" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis label="Số lượng" side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </AnchorPane>
+            <Label prefHeight="50.0" prefWidth="1100.0" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
