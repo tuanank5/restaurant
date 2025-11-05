@@ -1,13 +1,16 @@
 package controller.DatBan;
 
+import dao.KhuyenMai_DAO;
 import dao.KhachHang_DAO;
 import dao.Ban_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
+import dao.impl.KhuyenMai_DAOImpl;
 import dao.DonDatBan_DAO;
 import dao.impl.DonDatBan_DAOImpl;
 import entity.Ban;
 import entity.KhachHang;
+import entity.KhuyenMai;
 import entity.DonDatBan;
 import entity.LoaiBan;
 import javafx.event.ActionEvent;
@@ -41,6 +44,10 @@ public class DatBan_Controller implements Initializable {
     // --- TextField thông tin khách hàng ---
     @FXML private TextField txtTenKH, txtDiemTichLuy, txtSDT;
     @FXML private Button btnTimKiem;
+    
+ // --- thông tin khuyến mãi ---
+    @FXML
+    private ComboBox<KhuyenMai> cmbKM;
 
     // --- Button và GridPane ---
     @FXML private Button btnDatBan;
@@ -51,6 +58,7 @@ public class DatBan_Controller implements Initializable {
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private Ban_DAO banDAO = new Ban_DAOImpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
+    private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
 
     // --- Danh sách và trạng thái ---
     private List<Ban> danhSachBan = new ArrayList<>();
@@ -61,6 +69,7 @@ public class DatBan_Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         khoiTaoComboBoxes();
         khoiTaoGio();
+        khoiTaoComboBoxKhuyenMai();
         loadDanhSachBan();
 
         cmbTrangThai.setOnAction(e -> loadDanhSachBan());
@@ -73,6 +82,30 @@ public class DatBan_Controller implements Initializable {
 
         btnTimKiem.setOnAction(this::timKiemKhachHang);
     }
+    
+    // --- Khởi tạo ComboBox Khuyến mãi ---
+    private void khoiTaoComboBoxKhuyenMai() {
+        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
+        if (danhSachKM != null && !danhSachKM.isEmpty()) {
+            cmbKM.getItems().setAll(danhSachKM);
+            // Hiển thị tên KM + %
+            cmbKM.setCellFactory(lv -> new ListCell<KhuyenMai>() {
+                @Override
+                protected void updateItem(KhuyenMai item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+                }
+            });
+            cmbKM.setButtonCell(new ListCell<KhuyenMai>() {
+                @Override
+                protected void updateItem(KhuyenMai item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+                }
+            });
+        }
+    }
+
 
     private void khoiTaoComboBoxes() {
         cmbTrangThai.getItems().clear();
