@@ -140,14 +140,27 @@ public class QuanLyBan_Controller {
                 setText(empty || item == null ? "" : item.getTenLoaiBan());
             }
         });
+     // Mặc định disable nút Sửa/Xóa
+        btnSua.setDisable(true);
+        btnXoa.setDisable(true);
         //Sửa
         tblBan.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+            	// Có dòng được chọn → enable nút Sửa/Xóa
+                btnSua.setDisable(false);
+                btnXoa.setDisable(false);
                 // Điền dữ liệu vào các TextField và ComboBox
                 txtMaBan.setText(newSelection.getMaBan()); // Mã bàn vẫn giữ, không sửa
                 txtViTri.setText(newSelection.getViTri());
                 comBoxTrangThai.setValue(newSelection.getTrangThai());
                 comBoxLoaiBan.setValue(newSelection.getLoaiBan());
+            }else {
+                // Không có dòng nào được chọn → disable nút Sửa/Xóa
+                btnSua.setDisable(true);
+                btnXoa.setDisable(true);
+
+                // Reset form
+                resetForm();
             }
         });
 
