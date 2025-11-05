@@ -1,15 +1,20 @@
 package dao.impl;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import dao.DonDatBan_DAO;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.KhachHang;
+import entity.Ve;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 
 public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonDatBan_DAO {
 
@@ -60,5 +65,63 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         } finally {
             em.close();
         }
+    }
+
+	@Override
+	public List<DonDatBan> getAllDonDatBan() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            // Truy vấn để lấy tất cả hóa đơn
+        	dsDon = entityManager.createQuery("SELECT DDB FROM DonDatBan DDB", DonDatBan.class).getResultList();
+
+        } finally {
+            entityManager.close(); // Đóng EntityManager
+        }
+
+        return dsDon;
+	}
+
+	@Override
+	public List<DonDatBan> getAllDonDatBanTheoThang(int thang, int nam) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            String jpql = "SELECT DDB FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGio) = :thang AND FUNCTION('YEAR', DDB.ngayGio) = :nam";
+            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
+            query.setParameter("thang", thang);
+            query.setParameter("nam", nam);
+
+            dsDon = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsDon;
+	}
+	
+	@Override
+    public List<String> getKhachHangTheoThang(int thang, int nam) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<String> dsKH = null;
+
+        try {
+            String jpql = "SELECT DISTINCT DDB.maKH" +
+                    "FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayLap) = :thang AND FUNCTION('YEAR', DDB.ngayLap) = :nam ";
+
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
+            query.setParameter("thang", thang);
+            query.setParameter("nam", nam);
+
+            dsKH = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsKH;
     }
 }

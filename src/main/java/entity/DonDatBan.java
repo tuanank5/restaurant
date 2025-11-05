@@ -17,6 +17,7 @@ public class DonDatBan {
     @Column(name = "maDatBan", nullable = false, length = 20)
     private String maDatBan;
 
+    // sao thêm chữ LapDon vậy
     @Column(name = "ngayGio", nullable = false)
     private Date ngayGioLapDon;
 

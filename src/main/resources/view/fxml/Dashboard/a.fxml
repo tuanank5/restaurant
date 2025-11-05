@@ -69,8 +69,8 @@
             <AnchorPane prefHeight="200.0" prefWidth="275.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" HBox.hgrow="ALWAYS">
                <children>
                   <FontAwesomeIconView layoutX="132.0" layoutY="35.0" />
-                  <Label fx:id="lblHanhKhach" layoutX="124.0" layoutY="42.0" text="Label" />
-                  <Label layoutX="106.0" layoutY="68.0" text="Hành khách" />
+                  <Label fx:id="lblKhachHang" layoutX="124.0" layoutY="42.0" text="Label" />
+                  <Label layoutX="107.0" layoutY="68.0" text="Khách hàng" />
                </children>
             </AnchorPane>
          </children>

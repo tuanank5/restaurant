@@ -11,7 +11,9 @@ public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
 	List<DonDatBan> timTheoKhachHang(KhachHang kh);
 	List<DonDatBan> timTheoBan(Ban ban);
 	
-	List<Ve> getAllVe();
+	List<DonDatBan> getAllDonDatBan();
 
-    List<Ve> getAllVeTheoThang(int thang, int nam);
+    List<DonDatBan> getAllDonDatBanTheoThang(int thang, int nam);
+    
+    List<String> getKhachHangTheoThang(int thang, int nam);
 }
