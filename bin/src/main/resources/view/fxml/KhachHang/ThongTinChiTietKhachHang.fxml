@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.ThongTinKhachHang_Controller">
    <top>
       <BorderPane prefHeight="69.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <center>
@@ -25,7 +25,7 @@
                <left>
                   <Pane prefHeight="63.0" prefWidth="399.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label layoutX="14.0" layoutY="24.0" prefHeight="25.0" prefWidth="169.0" text="Danh sách khách hàng">
+                        <Label fx:id="lblDanhSachKhachHang" layoutX="14.0" layoutY="24.0" onMouseClicked="#mouseClicked" prefHeight="25.0" prefWidth="169.0" text="Danh sách khách hàng">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -42,7 +42,7 @@
                <right>
                   <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button layoutX="94.0" layoutY="19.0" mnemonicParsing="false" style="-fx-background-color: #2C3E50;" text="Trở lại (ESC)" textFill="WHITE">
+                        <Button fx:id="btnTroLai" layoutX="94.0" layoutY="19.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: #2C3E50;" text="Trở lại (ESC)" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -55,7 +55,7 @@
       </BorderPane>
    </top>
   <center>
-   <BorderPane prefHeight="450.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+   <BorderPane onKeyPressed="#keyPressed" prefHeight="450.0" prefWidth="600.0" BorderPane.alignment="CENTER">
       <left>
          <Pane prefHeight="514.0" prefWidth="223.0" BorderPane.alignment="CENTER">
             <children>
@@ -75,13 +75,13 @@
       <right>
          <Pane prefHeight="514.0" prefWidth="374.0" BorderPane.alignment="CENTER">
             <children>
-               <TextField layoutX="15.0" layoutY="115.0" prefHeight="25.0" prefWidth="300.0" />
-               <TextField layoutX="15.0" layoutY="200.0" prefHeight="25.0" prefWidth="300.0" />
-               <TextField layoutX="15.0" layoutY="270.0" prefHeight="25.0" prefWidth="300.0" />
-               <TextField layoutX="15.0" layoutY="340.0" prefHeight="25.0" prefWidth="300.0" />
-               <TextField layoutX="15.0" layoutY="460.0" prefHeight="25.0" prefWidth="300.0" />
-               <ComboBox layoutX="15.0" layoutY="400.0" prefWidth="300.0" />
-                  <TextField layoutX="15.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" />
+               <TextField fx:id="txtTenKH" layoutX="15.0" layoutY="115.0" prefHeight="25.0" prefWidth="300.0" />
+               <TextField fx:id="txtSDT" layoutX="15.0" layoutY="200.0" prefHeight="25.0" prefWidth="300.0" />
+               <TextField fx:id="txtEmail" layoutX="15.0" layoutY="270.0" prefHeight="25.0" prefWidth="300.0" />
+               <TextField fx:id="txtDiaChi" layoutX="15.0" layoutY="340.0" prefHeight="25.0" prefWidth="300.0" />
+               <TextField fx:id="txtDiemTichLuy" layoutX="15.0" layoutY="460.0" prefHeight="25.0" prefWidth="300.0" />
+               <ComboBox fx:id="comBoxHangKH" layoutX="15.0" layoutY="400.0" prefWidth="300.0" />
+                  <TextField fx:id="txtMaKH" layoutX="15.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" />
             </children>
                <BorderPane.margin>
                   <Insets right="50.0" />
@@ -98,7 +98,7 @@
                <center>
                   <AnchorPane prefHeight="50.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button layoutX="14.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Huỷ bỏ (X)" textFill="WHITE">
+                        <Button fx:id="btnHuy" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: red;" text="Huỷ bỏ (X)" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -113,7 +113,7 @@
                <center>
                   <AnchorPane prefHeight="50.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button layoutX="180.0" layoutY="12.0" mnemonicParsing="false" style="-fx-background-color: green;" text="Sửa thông tin" textFill="WHITE">
+                        <Button fx:id="btnSuaTT" layoutX="180.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: green;" text="Sửa thông tin" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

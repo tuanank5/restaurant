@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 public class DatBan_Controller implements Initializable {
 
-    // --- TextField thông tin bàn ---
+    // --- TextField thông tin bàn
     @FXML private TextField txtTrangThai;
     @FXML private TextField txtViTri;
     @FXML private TextField txtSoLuong;
