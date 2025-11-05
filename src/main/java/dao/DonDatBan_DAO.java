@@ -5,7 +5,6 @@ import java.util.List;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.KhachHang;
-import entity.Ve;
 
 public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
 	List<DonDatBan> timTheoKhachHang(KhachHang kh);
