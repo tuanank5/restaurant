@@ -185,6 +185,7 @@ public class DashboardNVQL_Controller {
         List<HoaDon> dsHD = hoaDon_DAO.getAllHoaDonTheoThang(thang, nam);
         
         List<Ve> dsVe = vedao.getAllVeTheoThang(selectedThang, selectedNam);
+        
         List<String> dsHK = vedao.getHanhKhachTheoThang(selectedThang, selectedNam);
         Double tongDoanhThu = hddao.getTongDoanhThuTheoThang(selectedThang, selectedNam);
         String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
