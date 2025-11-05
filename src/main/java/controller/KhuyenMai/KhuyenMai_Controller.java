@@ -59,6 +59,15 @@ public class KhuyenMai_Controller {
         timKiem();
         btnSuaKM.setDisable(true);
         btnXoaKM.setDisable(true);
+        tblKM.setOnMouseClicked(event -> {
+            KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
+            if (km != null) {
+                fillForm(km); // Điền dữ liệu lên form
+                btnSuaKM.setDisable(false);
+                btnXoaKM.setDisable(false);
+            }
+        });
+
     }
 
     private void setComboBoxValue() {
@@ -79,12 +88,17 @@ public class KhuyenMai_Controller {
 
     @FXML
     void mouseClicked(MouseEvent event) {
-        KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
-        if (km != null) {
-            btnSuaKM.setDisable(false);
-            btnXoaKM.setDisable(false);
-            fillForm(km);
-        }
+    	 KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
+    	    if (km != null) {
+    	        btnSuaKM.setDisable(false);
+    	        btnXoaKM.setDisable(false);
+    	        fillForm(km); // Gọi phương thức điền form
+    	    } else {
+    	        // Nếu không còn dòng nào được chọn
+    	        btnSuaKM.setDisable(true);
+    	        btnXoaKM.setDisable(true);
+    	        clearForm();
+    	    }
     }
 
     @FXML
@@ -112,6 +126,7 @@ public class KhuyenMai_Controller {
             if (khuyenMaiDAO.them(km)) {
                 loadData();
                 showAlert("Thành công", "Thêm khuyến mãi thành công!", Alert.AlertType.INFORMATION);
+                clearForm(); // ✅ Clear form sau khi thêm
             }
 
         } catch (Exception e) {
@@ -213,6 +228,17 @@ public class KhuyenMai_Controller {
                 new ButtonType("Không", ButtonBar.ButtonData.NO)
         );
         return alert.showAndWait();
+    }
+    
+ // Phương thức xóa form
+    private void clearForm() {
+        txtMaKM.clear();
+        txtTenKM.clear();
+        txtSanPhamKM.clear();
+        comBoxLoaiKM.getSelectionModel().clearSelection();
+        comBoxPhanTram.getSelectionModel().clearSelection();
+        dpNgayBatDau.setValue(null);
+        dpNgayKetThuc.setValue(null);
     }
 }
        
