@@ -102,5 +102,72 @@ public class MonAn_Controller implements Initializable{
 	            System.out.println("Danh sách món ăn rỗng hoặc dữ liệu chưa đúng FK KhuyenMai!");
 	        }
 	    }
+	    
+	    @FXML
+	    private void handleThemMon() {
+	        try {
+	            String maMon = txtMaMon.getText().trim();
+	            String tenMon = txtTenMon.getText().trim();
+	            String donGiaStr = txtDonGia.getText().trim();
+	            KhuyenMai km = cmbKM.getValue(); // Lấy KM từ ComboBox
+
+	            // --- Kiểm tra dữ liệu nhập ---
+	            if (maMon.isEmpty() || tenMon.isEmpty() || donGiaStr.isEmpty() || km == null) {
+	                Alert alert = new Alert(Alert.AlertType.WARNING);
+	                alert.setTitle("Thông báo");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Vui lòng nhập đầy đủ thông tin món ăn và chọn khuyến mãi!");
+	                alert.showAndWait();
+	                return;
+	            }
+
+	            double donGia;
+	            try {
+	                donGia = Double.parseDouble(donGiaStr);
+	            } catch (NumberFormatException e) {
+	                Alert alert = new Alert(Alert.AlertType.ERROR);
+	                alert.setTitle("Lỗi nhập dữ liệu");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Đơn giá phải là số hợp lệ!");
+	                alert.showAndWait();
+	                return;
+	            }
+
+	            // --- Tạo đối tượng MonAn ---
+	            MonAn mon = new MonAn(maMon, tenMon, donGia, km, duongDanAnh);
+
+	            // --- Thêm vào DB ---
+	            boolean themThanhCong = monDAO.them(mon);
+	            if (themThanhCong) {
+	                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	                alert.setTitle("Thêm món ăn");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Thêm món ăn thành công!");
+	                alert.showAndWait();
+
+	                // Cập nhật TableView
+	                loadTable();
+
+	                // Xóa dữ liệu nhập
+	                txtMaMon.clear();
+	                txtTenMon.clear();
+	                txtDonGia.clear();
+	                cmbKM.getSelectionModel().clearSelection();
+	                img.setImage(null);
+	                duongDanAnh = null;
+	            } else {
+	                Alert alert = new Alert(Alert.AlertType.ERROR);
+	                alert.setTitle("Lỗi");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Thêm món ăn thất bại! Kiểm tra dữ liệu và FK KhuyenMai.");
+	                alert.showAndWait();
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+
 	}
 	          

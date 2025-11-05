@@ -160,7 +160,7 @@ public class DatBan_Controller implements Initializable {
 
                 Button btnBan = new Button(ban.getMaBan() + "\n(" + soLuongHienThi + " chỗ)");
                 btnBan.setPrefSize(120, 100);
-                btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getTenLoaiBan()));
+                btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
                 btnBan.setOnAction(e -> handleChonBan(ban, btnBan));
 
                 GridPane.setMargin(btnBan, new Insets(5.0));
@@ -194,9 +194,10 @@ public class DatBan_Controller implements Initializable {
         txtSoLuongKH.setText(String.valueOf(soLuongHienThi));
 
         if (buttonBanDangChonUI != null)
-            buttonBanDangChonUI.setStyle(getStyleByStatusAndType(banDangChon.getTrangThai(), banDangChon.getLoaiBan().getTenLoaiBan()));
-
-        btnBan.setStyle("-fx-background-color:orange; -fx-text-fill:black; -fx-font-weight:bold;");
+            buttonBanDangChonUI.setStyle(getStyleByStatusAndType(
+                banDangChon.getTrangThai(), banDangChon.getLoaiBan().getMaLoaiBan()
+            ));
+        btnBan.setStyle("-fx-background-color:yellow; -fx-text-fill:black; -fx-font-weight:bold;");
         buttonBanDangChonUI = btnBan;
     }
 
@@ -321,26 +322,43 @@ public class DatBan_Controller implements Initializable {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+//    ("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
+    private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
+        String backgroundColor = "white";
+        String borderColor = "black";
 
-    private String getStyleByStatusAndType(String trangThai, String loaiBan) {
-        String colorLoai;
-        switch (loaiBan) {
-            case "Nhỏ": colorLoai = "#7FFF7F"; break;
-            case "Thường": colorLoai = "#0066cc"; break;
-            case "Lớn": colorLoai = "#33cc66"; break;
-            default: colorLoai = "#888888";
+        if (trangThai != null && !trangThai.isEmpty()) {
+            switch (trangThai) {
+                case "Đã được đặt":
+                    borderColor = "red";
+                    break;
+                case "Trống":
+                    borderColor = "black";
+                    break;
+                case "Đang phục vụ":
+                    borderColor = "#00CED1";
+                    break;
+            }
         }
 
-        String borderColor;
-        switch (trangThai) {
-            case "Đã được đặt": borderColor = "red"; break;
-            case "Đang phục vụ": borderColor = "yellow"; break;
-            default: borderColor = "black"; break;
+        switch (maLoaiBan) {
+            case "LB01": backgroundColor = "#7FFF7F"; break;
+            case "LB02": backgroundColor = "#0066CC"; break;
+            case "LB03": backgroundColor = "#33CC66"; break;
         }
 
         return String.format(
-                "-fx-background-color:%s; -fx-border-color:%s; -fx-border-radius:5; -fx-background-radius:5; -fx-text-fill:white; -fx-font-weight:bold;",
-                colorLoai, borderColor
+            "-fx-background-color: %s;" +
+            "-fx-border-color: %s;" +
+            "-fx-border-width: 2;" +
+            "-fx-border-radius: 5;" +
+            "-fx-background-radius: 5;" +
+            "-fx-min-width: 60px;" +
+            "-fx-min-height: 40px;",
+            backgroundColor, borderColor
         );
     }
+
+
 }
+
