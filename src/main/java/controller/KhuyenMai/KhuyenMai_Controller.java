@@ -62,7 +62,11 @@ public class KhuyenMai_Controller {
     }
 
     private void setComboBoxValue() {
-        comBoxLoaiKM.setItems(FXCollections.observableArrayList("Theo sản phẩm", "Toàn bộ hóa đơn"));
+        comBoxLoaiKM.setItems(FXCollections.observableArrayList(
+        		"Ưu đãi cho khách hàng VIP",
+                "Khuyến mãi món ăn",
+                "Khuyến mãi trên tổng hóa đơn"
+                ));
         comBoxPhanTram.setItems(FXCollections.observableArrayList(5,10,15,20,25,30,40,50));
     }
 
