@@ -62,6 +62,11 @@
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>5.4.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.trainticket</groupId>
+			<artifactId>TrainTicket</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
     </dependencies>
     <build>
         <plugins>
