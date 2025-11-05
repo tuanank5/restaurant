@@ -89,7 +89,7 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         List<DonDatBan> dsDon = null;
 
         try {
-            String jpql = "SELECT DDB FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGio) = :thang AND FUNCTION('YEAR', DDB.ngayGio) = :nam";
+            String jpql = "SELECT DDB FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGioLapDon) = :thang AND FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
             TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
             query.setParameter("thang", thang);
             query.setParameter("nam", nam);
@@ -109,8 +109,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         List<String> dsKH = null;
 
         try {
-            String jpql = "SELECT DISTINCT DDB.maKH" +
-                    "FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayLap) = :thang AND FUNCTION('YEAR', DDB.ngayLap) = :nam ";
+            String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
+                    "FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGioLapDon) = :thang AND FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam ";
 
             TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
             query.setParameter("thang", thang);
