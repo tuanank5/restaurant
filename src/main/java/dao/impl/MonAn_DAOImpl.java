@@ -1,6 +1,7 @@
 package dao.impl;
 
 import dao.MonAn_DAO;
+import entity.KhuyenMai;
 import entity.MonAn;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -46,7 +47,11 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
+            // Merge khuyến mãi để đảm bảo managed entity
+            KhuyenMai kmManaged = em.merge(mon.getKhuyenMai());
+            mon.setKhuyenMai(kmManaged);
             em.persist(mon);
+            em.flush();
             tx.commit();
             return true;
         } catch (Exception e) {

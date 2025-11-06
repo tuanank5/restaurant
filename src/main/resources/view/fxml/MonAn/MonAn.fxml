@@ -49,7 +49,7 @@
                                  <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnThem" layoutX="38.0" layoutY="224.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #0056b3;" text="Thêm mới" textFill="WHITE">
+                              <Button fx:id="btnThem" layoutX="38.0" layoutY="224.0" mnemonicParsing="false" onAction="#handleThemMon" prefWidth="120.0" style="-fx-background-color: #0056b3;" text="Thêm mới" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -89,7 +89,7 @@
                      </top>
                      <center>
                         <BorderPane prefHeight="317.0" prefWidth="942.0" BorderPane.alignment="CENTER">
-                           <center>
+                           <top>
                               <TableView fx:id="tblMon" prefHeight="300.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                                  <columns>
                                     <TableColumn fx:id="colMa" prefWidth="75.0" text="Mã món ăn" />
@@ -101,7 +101,7 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
-                           </center>
+                           </top>
                         </BorderPane>
                      </center>
                   </BorderPane>
