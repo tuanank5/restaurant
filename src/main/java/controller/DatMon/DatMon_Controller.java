@@ -19,48 +19,51 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import dao.MonAn_DAO;
+import dao.impl.MonAn_DAOImpl;
+import entity.MonAn;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-public class DatMon_Controller {
+
+public class DatMon_Controller implements Initializable {
 
 
     @FXML
     private Button btnThanhToan;
 
+    // --- thông tin khuyến mãi ---
     @FXML
-    private ComboBox<?> cmbKM;
+    private ComboBox<KhuyenMai> cmbKM;
 
     @FXML
-    private TableColumn<?, ?> colDonGia;
+    private TableView<MonAn> tblDS;
 
     @FXML
-    private TableColumn<?, ?> colSTT;
-
+    private TableColumn<MonAn, Integer> colSTT;
     @FXML
-    private TableColumn<?, ?> colSoLuong;
-
+    private TableColumn<MonAn, String> colTenMon;
     @FXML
-    private TableColumn<?, ?> colTenMon;
-
+    private TableColumn<MonAn, Double> colDonGia;
     @FXML
-    private ComboBox<?> comBoxPhanLoai;
-
-    @FXML
-    private ComboBox<?> conBoxTrangThai;
+    private TableColumn<MonAn, Integer> colSoLuong;
 
     @FXML
     private DatePicker dpNgayDatBan;
 
     @FXML
-    private GridPane gridPaneBan;
+    private GridPane gridPaneMon;
 
-    @FXML
-    private TableView<?> tblDS;
 
     @FXML
     private TextField txtDiemTichLuy;
@@ -70,12 +73,93 @@ public class DatMon_Controller {
 
     @FXML
     private TextField txtTenKH;
-
+    
+    //-----Bàn---------
     private Ban banDangChon;
 
     public void setBanDangChon(Ban ban) {
         this.banDangChon = ban;
     }
+    
+    private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+    private List<MonAn> dsMonAn;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        loadMonAnToGrid();
+        dpNgayDatBan.setValue(LocalDate.now());
+
+        // Setup TableView
+        colSTT.setCellValueFactory(col -> 
+            new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
+        colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
+        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
+        colSoLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
+
+        tblDS.setItems(FXCollections.observableArrayList());
+    }
+
+    
+
+    private void loadMonAnToGrid() {
+        dsMonAn = monAnDAO.getDanhSachMonAn();
+        gridPaneMon.getChildren().clear();
+        gridPaneMon.setHgap(10);
+        gridPaneMon.setVgap(10);
+        gridPaneMon.setPadding(new Insets(10));
+
+        int col = 0;
+        int row = 0;
+
+        for (MonAn mon : dsMonAn) {
+
+            ImageView img = new ImageView();
+            String path = mon.getDuongDanAnh();
+            if (path != null && !path.isEmpty()) {
+                try {
+                    Image image = new Image("file:" + path); // hoặc getResourceAsStream nếu là relative path
+                    img.setImage(image);
+                } catch (Exception e) {
+                    System.out.println("Không load được ảnh: " + path);
+                }
+            }
+            img.setFitWidth(90);
+            img.setFitHeight(90);
+            img.setPreserveRatio(true);
+
+            Label lblTen = new Label(mon.getTenMon());
+            lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+
+            Label lblGia = new Label(mon.getDonGia() + " VND");
+
+            Button btnChon = new Button("Chọn");
+            btnChon.setOnAction(e -> chonMon(mon));
+
+            VBox box = new VBox(img, lblTen, lblGia, btnChon);
+            box.setSpacing(6);
+            box.setPadding(new Insets(8));
+            box.setPrefSize(130, 160);
+            box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; -fx-alignment:center; -fx-border-radius:8; -fx-background-radius:8;");
+
+            gridPaneMon.add(box, col, row);
+
+            col++;
+            if (col == 4) {
+                col = 0;
+                row++;
+            }
+        }
+    }
+
+	private void chonMon(MonAn mon) {
+	    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	    alert.setTitle("Chọn món");
+	    alert.setHeaderText(null);
+	    alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
+	    alert.showAndWait();
+	}
+
+
     
     
 }
