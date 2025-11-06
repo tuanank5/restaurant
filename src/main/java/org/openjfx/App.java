@@ -18,10 +18,10 @@ public class App extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-//		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Login.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Login.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
-		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Dashboard/DashboardNVQL.fxml"));
+//		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Dashboard/DashboardNVQL.fxml"));
 		
 		Scene scene = new Scene(root);
 		
