@@ -15,16 +15,22 @@ import entity.DonDatBan;
 import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import controller.DatMon.DatMon_Controller;
 
 public class DatBan_Controller implements Initializable {
 
@@ -243,7 +249,33 @@ public class DatBan_Controller implements Initializable {
         if (thanhCong) {
             banDAO.sua(banDangChon);
             showAlert(Alert.AlertType.INFORMATION, "Đặt bàn thành công!");
+
             loadDanhSachBan();
+
+            // 👉 MỞ GIAO DIỆN ĐẶT MÓN
+            try {
+                URL fxml = getClass().getResource("/view/fxml/MonAn/DatMon.fxml");
+                if (fxml == null) {
+                    System.out.println("❌ Không tìm thấy file DatMon.fxml");
+                    return;
+                }
+
+                FXMLLoader loader = new FXMLLoader(fxml);
+                Parent root = loader.load();
+
+                // Gửi bàn đang chọn sang DatMon_Controller
+                DatMon_Controller controller = loader.getController();
+                controller.setBanDangChon(banDangChon); // <--- truyền bàn sang
+
+                Stage stage = new Stage();
+                stage.setTitle("Đặt Món");
+                stage.setScene(new Scene(root));
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else {
             showAlert(Alert.AlertType.ERROR, "Lỗi khi thêm đơn đặt bàn!");
         }
