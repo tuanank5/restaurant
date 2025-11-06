@@ -63,16 +63,17 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
     }
 
     @Override
-    public boolean sua(MonAn mon) {
+    public boolean capNhat(MonAn mon) {
         EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
         try {
-            em.getTransaction().begin();
-            em.merge(mon);
-            em.getTransaction().commit();
+            tx.begin();
+            em.merge(mon); // merge để cập nhật dữ liệu
+            tx.commit();
             return true;
         } catch (Exception e) {
-            if (em.getTransaction().isActive())
-                em.getTransaction().rollback();
+            if (tx.isActive()) tx.rollback();
+            e.printStackTrace();
             return false;
         } finally {
             em.close();
