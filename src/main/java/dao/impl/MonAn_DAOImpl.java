@@ -83,19 +83,22 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
     @Override
     public boolean xoa(String maMon) {
         EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
         try {
-            em.getTransaction().begin();
+            tx.begin();
             MonAn mon = em.find(MonAn.class, maMon);
-            if (mon != null)
+            if (mon != null) {
                 em.remove(mon);
-            em.getTransaction().commit();
+            }
+            tx.commit();
             return true;
         } catch (Exception e) {
-            if (em.getTransaction().isActive())
-                em.getTransaction().rollback();
+            if (tx.isActive()) tx.rollback();
+            e.printStackTrace();
             return false;
         } finally {
             em.close();
         }
     }
+
 }

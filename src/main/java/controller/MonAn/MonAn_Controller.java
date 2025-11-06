@@ -102,7 +102,56 @@ public class MonAn_Controller implements Initializable{
 	        loadTable();
 	        btnThem.setOnAction(e -> handleThemMon());
 	        btnSua.setOnAction(e -> handleSuaMon());
+	        btnXoa.setOnAction(e -> handleXoaMon());
 	    }
+	    
+	    @FXML
+	    private void handleXoaMon() {
+	        try {
+	            MonAn monChon = tblMon.getSelectionModel().getSelectedItem();
+	            if (monChon == null) {
+	                Alert alert = new Alert(Alert.AlertType.WARNING);
+	                alert.setTitle("Thông báo");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Vui lòng chọn món ăn để xóa!");
+	                alert.showAndWait();
+	                return;
+	            }
+
+	            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+	            confirm.setTitle("Xác nhận xóa");
+	            confirm.setHeaderText(null);
+	            confirm.setContentText("Bạn có chắc muốn xóa món: " + monChon.getTenMon() + " ?");
+	            
+	            // Nếu nhấn Hủy thì thoát
+	            if (confirm.showAndWait().get() != ButtonType.OK) {
+	                return;
+	            }
+
+	            boolean xoaThanhCong = monDAO.xoa(monChon.getMaMon());
+	            if (xoaThanhCong) {
+	                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	                alert.setTitle("Xóa món ăn");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Xóa món ăn thành công!");
+	                alert.showAndWait();
+
+	                loadTable();      // load lại bảng
+	                tblMon.refresh(); // làm mới hiển thị
+	                resetForm();      // xóa dữ liệu trên form
+	            } else {
+	                Alert alert = new Alert(Alert.AlertType.ERROR);
+	                alert.setTitle("Lỗi");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Xóa món ăn thất bại!");
+	                alert.showAndWait();
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+
 
 	    @FXML
 	    private void handleSuaMon() {
