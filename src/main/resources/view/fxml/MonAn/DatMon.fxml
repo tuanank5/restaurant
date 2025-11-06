@@ -3,16 +3,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatMon.DatMon_Controller">
    <center>
       <BorderPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #e3e3e3;" BorderPane.alignment="CENTER">
          <center>
@@ -38,15 +42,15 @@
                                     </Pane>
                                  </top>
                                  <center>
-                                    <TableView prefHeight="350.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+                                    <TableView fx:id="tblChiTiet" prefHeight="350.0" prefWidth="295.0" BorderPane.alignment="CENTER">
                                        <columns>
-                                          <TableColumn prefWidth="30.0" text="STT" />
-                                          <TableColumn prefWidth="150.0" text="Tên món" />
-                                          <TableColumn prefWidth="30.0" text="SL" />
-                                          <TableColumn prefWidth="90.0" text="Đơn giá" />
+                                          <TableColumn fx:id="colSTT" prefWidth="30.0" text="STT" />
+                                          <TableColumn fx:id="colTenMon" prefWidth="150.0" text="Tên món" />
+                                          <TableColumn fx:id="colSoLuong" prefWidth="30.0" text="SL" />
+                                          <TableColumn fx:id="colDonGia" prefWidth="90.0" text="Đơn giá" />
                                        </columns>
                                        <BorderPane.margin>
-                                          <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                       <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                        </BorderPane.margin>
                                     </TableView>
                                  </center>
@@ -57,13 +61,13 @@
                      <bottom>
                         <Pane prefHeight="80.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="205.0" layoutY="27.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: red;" text="Thanh toán" textFill="WHITE">
+                              <Button fx:id="btnThanhToan" layoutX="205.0" layoutY="27.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: red;" text="Thanh toán" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="11.0" />
                                  </font>
                               </Button>
                               <Label layoutX="5.0" layoutY="5.0" text="Mã giảm giá : " />
-                              <ComboBox layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
+                              <ComboBox fx:id="cmbKM" layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
                               <Label layoutX="5.0" layoutY="35.0" text="VAT : " />
                               <Label layoutX="90.0" layoutY="35.0" text="0" />
                               <Label layoutX="170.0" layoutY="35.0" text="VND" />
@@ -94,19 +98,19 @@
                                     <Font name="Times New Roman Bold" size="13.0" />
                                  </font>
                                  <padding>
-                                    <Insets top="5.0" />
+                                 <Insets top="5.0" />
                                  </padding>
                               </Label>
                               <Label layoutX="15.0" layoutY="30.0" text="Tên KH : " />
                               <Label layoutX="15.0" layoutY="70.0" text="Điểm tích lũy : " />
                               <Label layoutX="15.0" layoutY="110.0" text="Thời gian :" />
                               <Label layoutX="15.0" layoutY="150.0" text="Số điện thoại :" />
-                              <TextField editable="false" layoutX="110.0" layoutY="145.0" style="-fx-background-color: e3e3e3;" />
-                              <TextField editable="false" layoutX="110.0" layoutY="106.0" style="-fx-background-color: e3e3e3;" />
-                              <TextField editable="false" layoutX="110.0" layoutY="66.0" style="-fx-background-color: e3e3e3;" />
-                              <TextField editable="false" layoutX="110.0" layoutY="25.0" style="-fx-background-color: e3e3e3;" />
+                              <TextField fx:id="txtSDT" editable="false" layoutX="110.0" layoutY="145.0" style="-fx-background-color: e3e3e3;" />
+                              <TextField fx:id="txtDiemTichLuy" editable="false" layoutX="110.0" layoutY="66.0" style="-fx-background-color: e3e3e3;" />
+                              <TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="25.0" style="-fx-background-color: e3e3e3;" />
                               <Label layoutX="15.0" layoutY="190.0" text="Bàn :" />
                               <Label layoutX="56.0" layoutY="190.0" text="--" />
+                              <DatePicker fx:id="dpNgayDatBan" layoutX="111.0" layoutY="106.0" prefHeight="25.0" prefWidth="167.0" />
                            </children>
                         </Pane>
                      </center>
@@ -129,18 +133,31 @@
                            <center>
                               <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="Tất cả" />
-                                    <RadioButton layoutX="200.0" mnemonicParsing="false" text="Tráng miệng" />
-                                    <RadioButton layoutX="100.0" mnemonicParsing="false" text="Món ăn" />
-                                    <RadioButton layoutX="300.0" mnemonicParsing="false" text="Nước uống" />
+                                    <RadioButton fx:id="rdTatCa" mnemonicParsing="false" text="Tất cả" />
+                                    <RadioButton fx:id="rdTrangMieng" layoutX="200.0" mnemonicParsing="false" text="Tráng miệng" />
+                                    <RadioButton fx:id="rdMonAn" layoutX="100.0" mnemonicParsing="false" text="Món ăn" />
+                                    <RadioButton fx:id="rdNuocUong" layoutX="300.0" mnemonicParsing="false" text="Nước uống" />
                                  </children>
                               </Pane>
                            </center>
                            <BorderPane.margin>
-                              <Insets bottom="4.0" left="4.0" right="4.0" />
+                           <Insets bottom="4.0" left="4.0" right="4.0" />
                            </BorderPane.margin>
                         </BorderPane>
                      </top>
+                     <center>
+                        <GridPane fx:id="gridPaneBan" BorderPane.alignment="CENTER">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                     </center>
                   </BorderPane>
                </center>
             </BorderPane>
