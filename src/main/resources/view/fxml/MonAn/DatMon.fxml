@@ -107,9 +107,9 @@
                               <TextField fx:id="txtSDT" editable="false" layoutX="110.0" layoutY="145.0" style="-fx-background-color: e3e3e3;" />
                               <TextField fx:id="txtDiemTichLuy" editable="false" layoutX="110.0" layoutY="66.0" style="-fx-background-color: e3e3e3;" />
                               <TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="25.0" style="-fx-background-color: e3e3e3;" />
-                              <Label layoutX="15.0" layoutY="190.0" text="Bàn :" />
-                              <Label layoutX="56.0" layoutY="190.0" text="--" />
+                              <Label layoutX="15.0" layoutY="182.0" text="Bàn :" />
                               <DatePicker fx:id="dpNgayDatBan" layoutX="111.0" layoutY="106.0" prefHeight="25.0" prefWidth="148.0" />
+                              <TextField fx:id="txtBan" layoutX="111.0" layoutY="178.0" />
                            </children>
                         </Pane>
                      </center>

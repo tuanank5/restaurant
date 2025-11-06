@@ -28,6 +28,23 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
     }
 
     @Override
+    public DonDatBan layDonDatTheoBan(String maBan) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<DonDatBan> query = em.createQuery(
+                "SELECT d FROM DonDatBan d WHERE d.ban.maBan = :maBan ORDER BY d.ngayGioLapDon DESC", 
+                DonDatBan.class
+            );
+            query.setParameter("maBan", maBan);
+            return query.setMaxResults(1).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public List<DonDatBan> timTheoKhachHang(KhachHang kh) {
         EntityManager em = getEntityManager();
         try {

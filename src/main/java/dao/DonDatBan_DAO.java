@@ -10,6 +10,7 @@ import entity.KhachHang;
 import entity.LoaiBan;
 
 public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
+	DonDatBan layDonDatTheoBan(String maBan);
 	List<DonDatBan> timTheoKhachHang(KhachHang kh);
 	List<DonDatBan> timTheoBan(Ban ban);
 	

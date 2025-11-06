@@ -20,7 +20,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
+import dao.impl.DonDatBan_DAOImpl;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -81,7 +81,11 @@ public class DatMon_Controller implements Initializable {
 
     public void setBanDangChon(Ban ban) {
         this.banDangChon = ban;
+        loadThongTinKhachHang();
     }
+    
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
+    private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
     private List<MonAn> dsMonAn;
@@ -100,12 +104,12 @@ public class DatMon_Controller implements Initializable {
         colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
         colSoLuong.setCellValueFactory(col -> 
         new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue())));
-        
         tblDS.setItems(FXCollections.observableArrayList());
+        
+        loadThongTinKhachHang();
     }
 
     
-
     private void loadMonAnToGrid() {
         dsMonAn = monAnDAO.getDanhSachMonAn();
         gridPaneMon.getChildren().clear();
@@ -152,6 +156,21 @@ public class DatMon_Controller implements Initializable {
             if (col == columns) {
                 col = 0;
                 row++;
+            }
+        }
+    }
+
+    private void loadThongTinKhachHang() {
+        if (banDangChon != null) {
+            // Giả sử Bàn đã đặt có DonDatBan
+            DonDatBan donDat = donDatBanDAO.layDonDatTheoBan(banDangChon.getMaBan());
+            if (donDat != null) {
+                KhachHang kh = donDat.getKhachHang();
+                if (kh != null) {
+                    txtTenKH.setText(kh.getTenKH());
+                    txtSDT.setText(kh.getSdt());
+                    txtDiemTichLuy.setText(String.valueOf(kh.getDiemTichLuy()));
+                }
             }
         }
     }
