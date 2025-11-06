@@ -4,12 +4,15 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dao.DonDatBan_DAO;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.KhachHang;
+import entity.LoaiBan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
@@ -203,5 +206,107 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
             entityManager.close();
         }
         return dsKH;
+    }
+	
+	@Override
+    public Map<String, Integer> countDonDatBanTheoNam(int year) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Map<String, Integer> demDonDatBan = new HashMap<>();
+        try {
+            String jpql = "SELECT MONTH(DDB.ngayGioLapDon), count(DDB.maDatBan) " +
+                    "FROM DonDatBan DDB " +
+                    "WHERE YEAR(DDB.ngayGioLapDon) = :year " +
+                    "GROUP BY MONTH(DDB.ngayGioLapDon) " +
+                    "ORDER BY MONTH(DDB.ngayGioLapDon)";
+            ;
+            TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+            query.setParameter("year", year);
+
+            for (Object[] result : query.getResultList()) {
+                int thang = (Integer) result[0];
+                Long dem = (Long) result[1];
+                demDonDatBan.put("Tháng " + thang, dem.intValue());
+            }
+        } finally {
+            entityManager.close();
+        }
+        return demDonDatBan;
+    }
+	
+	@Override
+    public Map<LoaiBan, Integer> countLoaiBanTheoThang(int month, int year) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Map<LoaiBan, Integer> demLoaiBan = new HashMap<>();
+        try {
+            String jpql = "SELECT B.loaiBan, count(B.loaiBan) " +
+                    "FROM DonDatBan DDB " +
+                    "JOIN DDB.ban B " +
+                    "WHERE MONTH(DDB.ngayGioLapDon) = :month " +
+                    "AND YEAR(DDB.ngayGioLapDon) = :year " +
+                    "GROUP BY B.loaiBan";
+            TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+            query.setParameter("month", month);
+            query.setParameter("year", year);
+
+            for (Object[] result : query.getResultList()) {
+            	LoaiBan loai = (LoaiBan) result[0];
+                Long dem = (Long) result[1];
+                demLoaiBan.put(loai, dem.intValue());
+            }
+        } finally {
+            entityManager.close();
+        }
+        return demLoaiBan;
+    }
+	
+	@Override
+    public Map<LoaiBan, Integer> countLoaiBanTheoNam(int year) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Map<LoaiBan, Integer> demLoaiBan = new HashMap<>();
+        try {
+            String jpql = "SELECT B.loaiBan, count(B.loaiBan) " +
+                    "FROM DonDatBan DDB " +
+                    "JOIN DDB.ban B " +
+                    "WHERE YEAR(DDB.ngayGioLapDon) = :year " +
+                    "GROUP BY B.loaiBan";
+            
+            TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+            query.setParameter("year", year);
+
+            for (Object[] result : query.getResultList()) {
+            	LoaiBan loai = (LoaiBan) result[0];
+                Long dem = (Long) result[1];
+                demLoaiBan.put(loai, dem.intValue());
+            }
+        } finally {
+            entityManager.close();
+        }
+        return demLoaiBan;
+    }
+	
+	@Override
+    public Map<LoaiBan, Integer> countLoaiBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Map<LoaiBan, Integer> demLoaiBan = new HashMap<>();
+        try {
+            String jpql = "SELECT B.loaiBan, count(B.loaiBan) " +
+                    "FROM DonDatBan DDB " +
+                    "JOIN DDB.ban B " +
+                    "WHERE DDB.ngayGioLapDon BETWEEN :dateStart AND :dateEnd " +
+                    "GROUP BY B.loaiBan";
+            TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+
+            query.setParameter("dateStart", java.sql.Timestamp.valueOf(dateStart.atStartOfDay()));
+            query.setParameter("dateEnd", java.sql.Timestamp.valueOf(dateEnd.atStartOfDay()));
+
+            for (Object[] result : query.getResultList()) {
+            	LoaiBan loai = (LoaiBan) result[0];
+                Long dem = (Long) result[1];
+                demLoaiBan.put(loai, dem.intValue());
+            }
+        } finally {
+            entityManager.close();
+        }
+        return demLoaiBan;
     }
 }

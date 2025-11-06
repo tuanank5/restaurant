@@ -20,6 +20,7 @@ import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
 import entity.DonDatBan;
 import entity.HoaDon;
+import entity.LoaiBan;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
@@ -138,7 +139,7 @@ public class a {
             cmbThang.getItems().add(i);
         }
         int currentYear = LocalDate.now().getYear();
-        for (int i = 2021; i <= currentYear; i++) {
+        for (int i = 2024; i <= currentYear; i++) {
             cmbNam.getItems().add(i);
         }
         
@@ -156,11 +157,11 @@ public class a {
                 showMonthlyData(nam);
             }
             else {
-//                showYearlyData(nam);
+                showYearlyData(nam);
             }
         }
         else if(radNgay.isSelected()){
-//            showCustomDateRangeData();
+            showCustomDateRangeData();
         }
     }
     
@@ -211,7 +212,7 @@ public class a {
 //        ============ UpDate Chart ==============
 //        Map<Double, String> doanhThuTauTheoThang = vedao.doanhThuTauTheoThang(selectedThang, selectedNam);
 //        Map<LoaiHanhKhach, Integer> countLoaiHK = vedao.countLoaiKhachHangTheoThang(selectedThang, selectedNam);
-//        Map<LoaiGhe, Integer> countLoaiGhe = vedao.countLoaiGheTheoThang(selectedThang, selectedNam);
+        Map<LoaiBan, Integer> countLoaiGhe = donDatBan_DAO.countLoaiBanTheoThang(thang, nam);
 //        Map<String, Integer> countSoTuyenMoiTau = ltdao.countTuyenMoiTauTheoThang(selectedThang, selectedNam);
 //        Map<String, Integer> countSoTuyen = vedao.countSoTuyenTheoThang(selectedThang, selectedNam);
 //        Map<String, Integer> countSoGioDi = vedao.countThoiGianDiTheoThang(selectedThang, selectedNam);
@@ -219,7 +220,7 @@ public class a {
         updateChartDoanhThu(dsHD);
         updateChartDonDatBan(dsDon);
 //        updateChartKhachHang(countLoaiHK);
-//        updateChartGhe(countLoaiGhe);
+        updateChartBan(countLoaiGhe);
 //        updateChartDoanhThuTau(doanhThuTauTheoThang);
 //        updateChartSoChuyenTau(countSoTuyenMoiTau);
 //        updateChartSoTuyen(countSoTuyen);
@@ -245,16 +246,17 @@ public class a {
 //        ============ UpDate Chart ==============
 //        Map<Double, String> doanhThuTauTheoNam= vedao.doanhThuTauTheoNam(selectedNam);
 //        Map<LoaiHanhKhach, Integer> countLoaiHK = vedao.countLoaiKhachHangTheoNam(selectedNam);
-//        Map<LoaiGhe, Integer> countLoaiGhe = vedao.countLoaiGheTheoNam(selectedNam);
-//        Map<String, Integer> countSoVe = vedao.countSoVeTheoNam(selectedNam);
+        Map<LoaiBan, Integer> countLoaiGhe = donDatBan_DAO.countLoaiBanTheoNam(nam);
+        Map<String, Integer> countDonDatBan = donDatBan_DAO.countDonDatBanTheoNam(nam);
 //        Map<String, Integer> countSoTuyenMoiTau = ltdao.countTuyenMoiTauTheoNam(selectedNam);
 //        Map<String, Integer> countSoTuyen = vedao.countSoTuyenTheoNam(selectedNam);
 //        Map<String, Integer> countSoGioDi = vedao.countThoiGianDiTheoNam(selectedNam);
 
-//        updateChartDoanhThuTheoNam(doanhThuTungThang);
+        updateChartDoanhThuTheoNam(doanhThuTungThang);
+        updateChartDonDatBanTheoNam(countDonDatBan);
 //        updateChartSoVeTheoNam(countSoVe);
 //        updateChartKhachHang(countLoaiHK);
-//        updateChartGhe(countLoaiGhe);
+        updateChartBan(countLoaiGhe);
 //        updateChartDoanhThuTau(doanhThuTauTheoNam);
 //        updateChartSoChuyenTau(countSoTuyenMoiTau);
 //        updateChartSoTuyen(countSoTuyen);
@@ -265,7 +267,7 @@ public class a {
     	barChart_DoanhThuNam.setVisible(false);
         areaChart_DoanhThu.setVisible(true);
         LocalDate dateStart = txtDateStart.getValue();
-        LocalDate dateEnd = txtDateStart.getValue();
+        LocalDate dateEnd = txtDateEnd.getValue();
 //        ============ UpDate 4 Ô TOP ==============
         List<HoaDon> dsHD = hoaDon_DAO.getHoaDonTheoNgayCuThe(dateStart, dateEnd);
         List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
@@ -278,7 +280,7 @@ public class a {
         updateKHInfo(dsKH);
 //        ============ END - UpDate 4 Ô TOP ==============
 //        ============ UpDate Chart ==============
-//        Map<LoaiGhe, Integer> countLoaiGhe = vedao.countLoaiGheTheoNgayCuThe(start, end);
+        Map<LoaiBan, Integer> countLoaiGhe = donDatBan_DAO.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
 //        Map<LoaiHanhKhach, Integer> countLoaiHK = vedao.countLoaiKhachHangTheoNgayCuThe(start, end);
 //        Map<Double, String> doanhThuTau= vedao.doanhThuTauTheoNgayCuThe(start, end);
 //        Map<String, Integer> countSoTuyenMoiTau = ltdao.countTuyenMoiTauTheoNgayCuThe(start, end);
@@ -288,7 +290,7 @@ public class a {
         updateChartDoanhThu(dsHD);
         updateChartDonDatBan(dsDon);
 //        updateChartKhachHang(countLoaiHK);
-//        updateChartGhe(countLoaiGhe);
+        updateChartBan(countLoaiGhe);
 //        updateChartDoanhThuTau(doanhThuTau);
 //        updateChartSoChuyenTau(countSoTuyenMoiTau);
 //        updateChartSoTuyen(countSoTuyen);
@@ -590,16 +592,16 @@ public class a {
             int nam = cmbNam.getValue();
             int thang = cmbThang.getValue();
 
-            // Tạo danh sách đầy đủ các ngày trong tháng với số lượng vé mặc định là 0
+            // Tạo danh sách đầy đủ các ngày trong tháng với số lượng đơn mặc định là 0
             Map<String, Integer> donDatTheoNgay = new LinkedHashMap<>();
             YearMonth yearMonth = YearMonth.of(nam, thang);
             int daysInMonth = yearMonth.lengthOfMonth();
             for(int day = 1; day <= daysInMonth; day++){
                 LocalDate date = LocalDate.of(nam, thang, day);
-                donDatTheoNgay.put(date.format(formatter), 0); // Set số lượng vé là 0 cho mọi ngày trước tiên
+                donDatTheoNgay.put(date.format(formatter), 0); // Set số lượng đơn là 0 cho mọi ngày trước tiên
             }
 
-            // Cập nhật số lượng vé bán cụ thể trong Map
+            // Cập nhật số lượng đơn bán cụ thể trong Map
             for (DonDatBan don : dsDon){
 //                LocalDate ngayGioLapDon = don.getNgayGioLapDon().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 
@@ -610,7 +612,7 @@ public class a {
             	LocalDate ngayGioLapDon = zonedDateTime.toLocalDate();
                 
                 String ngay = ngayGioLapDon.format(formatter);
-                donDatTheoNgay.put(ngay, donDatTheoNgay.getOrDefault(ngay, 0) + 1); // Tăng số lượng vé bán
+                donDatTheoNgay.put(ngay, donDatTheoNgay.getOrDefault(ngay, 0) + 1); // Tăng số lượng đơn đặt
             }
 
             // Tạo Series cho biểu đồ
@@ -705,7 +707,7 @@ public class a {
 
             // Cập nhật thông tin cho label
             String infoText = String.format(
-                    "Số đơn đặt bàn cao nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất: %d (Ngày: %s)\nSố vé thấp nhất khác 0: %d (Ngày: %s)\nSố đơn đặt bàn trung bình: %.1f\nSố ngày có bán được đơn đặt bàn: %d/%d\nTăng trưởng số vé so với tháng trước: %.2f%%",
+                    "Số đơn đặt bàn cao nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất khác 0: %d (Ngày: %s)\nSố đơn đặt bàn trung bình: %.1f\nSố ngày có đơn đặt bàn: %d/%d\nTăng trưởng số đơn đặt bàn so với tháng trước: %.2f%%",
                     maxSoVe, daysWithMaxText,
                     minSoVe, daysWithMinText,
                     minSoVe2, daysWithMinText2,
@@ -723,11 +725,11 @@ public class a {
             // Tạo danh sách các ngày trong khoảng thời gian đã chọn
             Map<String, Integer> donDatTheoNgay = new LinkedHashMap<>();
             while (!dateStart.isAfter(dateEnd)) {
-            	donDatTheoNgay.put(dateStart.format(formatter), 0); // Set số lượng vé là 0 cho mọi ngày trước tiên
+            	donDatTheoNgay.put(dateStart.format(formatter), 0); // Set số lượng đơn là 0 cho mọi ngày trước tiên
                 dateStart = dateStart.plusDays(1); // Chuyển đến ngày tiếp theo
             }
 
-            // Cập nhật số lượng vé bán cụ thể trong Map
+            // Cập nhật số lượng đơn bán cụ thể trong Map
             for (DonDatBan don : dsDon) {
 //                LocalDate ngayLap = don.getNgayGioLapDon().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 
@@ -739,7 +741,7 @@ public class a {
                 
                 String ngay = ngayGioLapDon.format(formatter);
                 if (donDatTheoNgay.containsKey(ngay)) {
-                	donDatTheoNgay.put(ngay, donDatTheoNgay.get(ngay) + 1); // Tăng số lượng vé bán
+                	donDatTheoNgay.put(ngay, donDatTheoNgay.get(ngay) + 1); // Tăng số lượng đơn bán
                 }
             }
 
@@ -754,7 +756,7 @@ public class a {
                 // Lắng nghe sự kiện khi Node được tạo
                 data.nodeProperty().addListener((observable, oldNode, newNode) -> {
                     if (newNode != null) { // Khi Node được tạo
-                        Tooltip tooltip = new Tooltip("Số vé: " + entry.getValue());
+                        Tooltip tooltip = new Tooltip("Số đơn đặt bàn: " + entry.getValue());
                         tooltip.setShowDelay(Duration.millis(100));
                         tooltip.setHideDelay(Duration.millis(200));
                         Tooltip.install(newNode, tooltip); // Gắn Tooltip vào Node
@@ -827,7 +829,7 @@ public class a {
 
         // Cập nhật thông tin cho label
         String infoText = String.format(
-                "Số vé cao nhất: %d (Ngày: %s)\nSố vé thấp nhất: %d (Ngày: %s)\nSố vé thấp nhất khác 0: %s (Ngày: %s)\nSố vé bán được trung bình: %.1f\nSố ngày bán được vé: %d/%d",
+                "Số đơn đặt bàn cao nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất khác 0: %s (Ngày: %s)\nSố đơn đặt bàn bán được trung bình: %.1f\nSố ngày có đơn đặt bàn: %d/%d",
                 maxSoVe, daysWithMaxText,
                 minSoVe, daysWithMinText,
                 minSoVe2, daysWithMinText2,
@@ -836,6 +838,226 @@ public class a {
         );
         lblThongTinDonDatBan.setText(infoText);
         yAxis.setUpperBound(maxSoVe + 1);
+        }
+    }
+    
+    private void updateChartDoanhThuTheoNam(Map<String, Double> dsMap){
+        barChart_DoanhThuNam.getData().clear();
+        axis.setAutoRanging(true);
+        int nam = cmbNam.getValue();
+
+        // Chuyển đổi Map thành List và sắp xếp theo thứ tự tháng (1 đến 12)
+        List<Map.Entry<String, Double>> entryList = new ArrayList<>(dsMap.entrySet());
+
+        entryList.sort((entry1, entry2) -> {
+            // Loại bỏ tiền tố "Tháng " và chuyển đổi tháng thành số nguyên để so sánh
+            int month1 = Integer.parseInt(entry1.getKey().replace("Tháng ", "").trim());
+            int month2 = Integer.parseInt(entry2.getKey().replace("Tháng ", "").trim());
+            return Integer.compare(month1, month2);
+        });
+        // Tạo Series cho biểu đồ
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Doanh thu theo tháng");
+        barChart_DoanhThuNam.setTitle("DOANH THU CÁC THÁNG TRONG NĂM " + nam);
+        for (Map.Entry<String, Double> entry : entryList) {
+            XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+            series.getData().add(data);
+            // Lắng nghe sự kiện khi Node được tạo
+            data.nodeProperty().addListener((observable, oldNode, newNode) -> {
+                if (newNode != null) { // Khi Node được tạo
+                    Tooltip tooltip = new Tooltip("Doanh Thu: " + decimalFormat.format(entry.getValue()));
+                    tooltip.setShowDelay(Duration.millis(100));
+                    tooltip.setHideDelay(Duration.millis(200));
+                    Tooltip.install(newNode, tooltip); // Gắn Tooltip vào Node
+                }
+            });
+        }
+        // Cập nhật biểu đồ
+        barChart_DoanhThuNam.getData().add(series);
+
+        // ========== Cập nhật thông tin Doanh Thu =============
+        double maxDoanhThu = 0;
+        double minDoanhThu = Double.MAX_VALUE;
+        double totalDoanhThu = hoaDon_DAO.getTongDoanhThuTheoNam(nam);
+        List<String> monthWithMaxRevenue = new ArrayList<>();
+        List<String> monthWithMinRevenue = new ArrayList<>();
+
+        double previousTotalDoanhThu = hoaDon_DAO.getTongDoanhThuTheoNam(nam - 1);
+        double revenueGrowth = 0; // Tăng trưởng doanh thu
+
+        // Duyệt qua từng ngày để tính các thông số
+        for (Map.Entry<String, Double> entry : dsMap.entrySet()) {
+            String thang = entry.getKey();
+            double doanhThu = entry.getValue();
+
+            // Kiểm tra và cập nhật mức doanh thu cao nhất
+            if (doanhThu > maxDoanhThu) {
+                maxDoanhThu = doanhThu;
+                monthWithMaxRevenue.clear(); // Xóa danh sách cũ nếu tìm thấy doanh thu cao hơn
+                monthWithMaxRevenue.add(thang); // Thêm ngày hiện tại vào danh sách
+            } else if (doanhThu == maxDoanhThu) {
+                monthWithMaxRevenue.add(thang); // Thêm ngày vào danh sách nếu doanh thu bằng mức cao nhất
+            }
+
+            // Kiểm tra và cập nhật mức doanh thu thấp nhất
+            if (doanhThu < minDoanhThu) {
+                minDoanhThu = doanhThu;
+                monthWithMinRevenue.clear();
+                monthWithMinRevenue.add(thang);
+            } else if (doanhThu == minDoanhThu) {
+                monthWithMinRevenue.add(thang);
+            }
+        }
+
+        // Tính doanh thu trung bình
+        double averageDoanhThu = totalDoanhThu / dsMap.size();
+
+        // Tính tăng trưởng doanh thu nếu có dữ liệu kỳ trước
+        if (previousTotalDoanhThu > 0) {
+            revenueGrowth = ((totalDoanhThu - previousTotalDoanhThu) / previousTotalDoanhThu) * 100;
+        }
+
+        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu cao nhất
+        String monthsWithMaxText = String.join(", ", monthWithMaxRevenue);
+        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu thấp nhất
+        String monthsWithMinText = String.join(", ", monthWithMinRevenue);
+
+        // Cập nhật thông tin cho label
+        String infoText = String.format(
+                "Doanh thu cao nhất: %s (Tháng: %s)\nDoanh thu thấp nhất: %s (Tháng: %s)\nDoanh thu trung bình: %s\nTăng trưởng doanh thu so với năm trước: %.2f%%",
+                decimalFormat.format(maxDoanhThu), monthsWithMaxText,
+                decimalFormat.format(minDoanhThu), monthsWithMinText,
+                decimalFormat.format(averageDoanhThu),
+                revenueGrowth
+        );
+        lblThongTinDoanhThu.setText(infoText);
+    }
+    
+    private void updateChartDonDatBanTheoNam(Map<String, Integer> dsMap){
+        barChart_DonDatBan.getData().clear();
+        NumberAxis yAxis = (NumberAxis) barChart_DonDatBan.getYAxis();
+        axis.setAutoRanging(true);
+        int nam = cmbNam.getValue();
+
+        // Chuyển đổi Map thành List và sắp xếp theo thứ tự tháng (1 đến 12)
+        List<Map.Entry<String, Integer>> entryList = new ArrayList<>(dsMap.entrySet());
+
+        entryList.sort((entry1, entry2) -> {
+            // Loại bỏ tiền tố "Tháng " và chuyển đổi tháng thành số nguyên để so sánh
+            int month1 = Integer.parseInt(entry1.getKey().replace("Tháng ", "").trim());
+            int month2 = Integer.parseInt(entry2.getKey().replace("Tháng ", "").trim());
+            return Integer.compare(month1, month2);
+        });
+        // Tạo Series cho biểu đồ
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Số đơn đặt bàn theo tháng");
+        barChart_DonDatBan.setTitle("SỐ ĐƠN ĐẶT BÀN BÁN CÁC THÁNG TRONG NĂM " + nam);
+        for (Map.Entry<String, Integer> entry : entryList) {
+            XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+            series.getData().add(data);
+            // Lắng nghe sự kiện khi Node được tạo
+            data.nodeProperty().addListener((observable, oldNode, newNode) -> {
+                if (newNode != null) { // Khi Node được tạo
+                    Tooltip tooltip = new Tooltip("Số đơn đặt bàn: " + entry.getValue());
+                    tooltip.setShowDelay(Duration.millis(100));
+                    tooltip.setHideDelay(Duration.millis(200));
+                    Tooltip.install(newNode, tooltip); // Gắn Tooltip vào Node
+                }
+            });
+
+        }
+        // Cập nhật biểu đồ
+        barChart_DonDatBan.getData().add(series);
+
+        // ========== Cập nhật thông tin Doanh Thu =============
+        int maxSoVe = 0;
+        int minSoVe = Integer.MAX_VALUE;
+        int totalVe = dsMap.values().stream().mapToInt(Integer::intValue).sum();
+        List<String> monthsWithMaxRevenue = new ArrayList<>();
+        List<String> monthsWithMinRevenue = new ArrayList<>();
+
+        int daysWithRevenue = 0;
+        int previousTotalDoanhThu = donDatBan_DAO.getAllDonDatBanTheoNam(nam - 1).size();
+        double revenueGrowth = 0;
+
+        // Duyệt qua từng tháng để tính các thông số
+        for (Map.Entry<String, Integer> entry : dsMap.entrySet()) {
+            String ngay = entry.getKey();
+            double doanhThu = entry.getValue();
+
+            // Kiểm tra và cập nhật mức doanh thu cao nhất
+            if (doanhThu > maxSoVe) {
+                maxSoVe = (int) doanhThu;
+                monthsWithMaxRevenue.clear();
+                monthsWithMaxRevenue.add(ngay);
+            } else if (doanhThu == maxSoVe) {
+                monthsWithMaxRevenue.add(ngay);
+            }
+
+            // Kiểm tra và cập nhật mức doanh thu thấp nhất
+            if (doanhThu < minSoVe) {
+                minSoVe = (int) doanhThu;
+                monthsWithMinRevenue.clear();
+                monthsWithMinRevenue.add(ngay);
+            } else if (doanhThu == minSoVe) {
+                monthsWithMinRevenue.add(ngay);
+            }
+        }
+
+        // Tính doanh thu trung bình
+        double averageDoanhThu = (double) totalVe / dsMap.size();
+
+        // Tính tăng trưởng doanh thu nếu có dữ liệu kỳ trước
+        if (previousTotalDoanhThu > 0) {
+            revenueGrowth = ((double) (totalVe - previousTotalDoanhThu) / previousTotalDoanhThu) * 100;
+        }
+
+        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu cao nhất
+        String daysWithMaxText = String.join(", ", monthsWithMaxRevenue);
+        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu thấp nhất
+        String daysWithMinText = String.join(", ", monthsWithMinRevenue);
+
+        // Cập nhật thông tin cho label
+        String infoText = String.format(
+                "Số đơn đặt bàn cao nhất: %d (Tháng: %s)\nSố đơn đặt bàn thấp nhất: %d (Tháng: %s)\nSố đơn đặt bàn trung bình: %.0f\nTăng trưởng đơn đặt bàn với năm trước: %.2f%%",
+                maxSoVe, daysWithMaxText,
+                minSoVe, daysWithMinText,
+                averageDoanhThu,
+                revenueGrowth
+        );
+        lblThongTinDonDatBan.setText(infoText);
+        yAxis.setUpperBound(maxSoVe + 1);
+    }
+    
+    private void updateChartBan(Map<LoaiBan, Integer> dsBan) {
+        pieChart_LoaiBan.getData().clear();
+
+        // Tính tổng giá trị của tất cả các phần trong biểu đồ
+        double total = dsBan.values().stream().mapToInt(Integer::intValue).sum();
+
+        // Lặp qua các mục trong danh sách và thêm vào biểu đồ
+        for (Map.Entry<LoaiBan, Integer> entry : dsBan.entrySet()) {
+            // Tạo phần của Pie chart
+            PieChart.Data slice = new PieChart.Data(entry.getKey().getTenLoaiBan(), entry.getValue());
+
+            // Tính phần trăm của phần này
+            double percentage = (entry.getValue() / total) * 100;
+
+            // Cập nhật tên của phần để hiển thị phần trăm
+            slice.setName(String.format("%s (%.1f%%)", entry.getKey().getTenLoaiBan(), percentage));
+
+            // Thêm phần vào biểu đồ
+            pieChart_LoaiBan.getData().add(slice);
+
+            // Thêm Tooltip cho phần pie chart
+            Tooltip tooltip = new Tooltip(String.format("%s: %.1f%% \nSố lượng: %d", entry.getKey().getTenLoaiBan(), percentage, entry.getValue()));
+
+            // Đặt thời gian trễ khi hiển thị Tooltip (0 ms để không có delay)
+            tooltip.setShowDelay(Duration.millis(100));
+            tooltip.setHideDelay(Duration.millis(200));  // Vẫn giữ thời gian ẩn Tooltip
+
+            // Đảm bảo Tooltip được áp dụng đúng vào mỗi phần của Pie chart
+            Tooltip.install(slice.getNode(), tooltip);
         }
     }
 }

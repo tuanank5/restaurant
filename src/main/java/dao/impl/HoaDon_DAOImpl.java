@@ -131,7 +131,7 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<HoaDon> danhSachHoaDon = null;
         try {
-            String jpql = "SELECT HD FROM HoaDon HD WHERE HD.ngayLap BETWEEN :startDate AND :endDate";
+            String jpql = "SELECT HD FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd";
             TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
 
             query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
@@ -152,7 +152,7 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
         Double tongDoanhThu = 0.0;
 
         try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE HD.ngayLap BETWEEN :startDate AND :endDate";
+            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd";
             TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
 
             query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));

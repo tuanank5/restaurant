@@ -2,10 +2,12 @@ package dao;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import entity.Ban;
 import entity.DonDatBan;
 import entity.KhachHang;
+import entity.LoaiBan;
 
 public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
 	List<DonDatBan> timTheoKhachHang(KhachHang kh);
@@ -24,4 +26,12 @@ public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
     List<DonDatBan> getAllDonDatBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
     
     List<String> getKhachHangTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
+    
+    public Map<String, Integer> countDonDatBanTheoNam(int year);
+    
+    public Map<LoaiBan, Integer> countLoaiBanTheoThang(int month, int year);
+    
+    public Map<LoaiBan, Integer> countLoaiBanTheoNam(int year);
+    
+    public Map<LoaiBan, Integer> countLoaiBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
 }

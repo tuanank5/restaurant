@@ -21,7 +21,6 @@ public class App extends Application {
 		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Login.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
-//		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Dashboard/DashboardNVQL.fxml"));
 		
 		Scene scene = new Scene(root);
 		

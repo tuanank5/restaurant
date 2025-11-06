@@ -40,7 +40,7 @@
                   <DatePicker fx:id="txtDateEnd" layoutX="339.0" layoutY="38.0" />
                </children>
             </AnchorPane>
-            <JFXButton fx:id="btnLoc" prefHeight="50.0" prefWidth="150.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" text="Lọc" />
+            <JFXButton fx:id="btnLoc" prefHeight="50.0" prefWidth="150.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" text="LỌC" />
          </children>
       </HBox>
       <HBox layoutY="100.0" prefHeight="100.0" prefWidth="1100.0">
@@ -87,7 +87,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </AreaChart>
-                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="Doanh thu theo tháng">
+                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="DOANH THU THEO THÁNG">
                     <xAxis>
                       <CategoryAxis label="Tháng" side="BOTTOM" />
                     </xAxis>
@@ -102,7 +102,7 @@
       </VBox>
       <HBox alignment="TOP_CENTER" layoutX="1.0" layoutY="600.0" prefWidth="1100.0">
          <children>
-            <Label text="Đơn đặt bàn">
+            <Label text="ĐƠN ĐẶT BÀN">
                <font>
                   <Font size="24.0" />
                </font>
@@ -113,7 +113,7 @@
          <children>
             <AnchorPane prefHeight="350.0" prefWidth="1100.0">
                <children>
-                  <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="Số lượng đơn đặt bàn">
+                  <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
                     <xAxis>
                       <CategoryAxis label="Thời gian" side="BOTTOM" />
                     </xAxis>
@@ -128,7 +128,7 @@
       </VBox>
       <HBox layoutY="1035.0" prefHeight="400.0" prefWidth="1100.0">
          <children>
-            <PieChart fx:id="pieChart_LoaiBan" prefWidth="500.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="Tỷ lệ đặt bàn theo loại bàn" />
+            <PieChart fx:id="pieChart_LoaiBan" prefWidth="500.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐẶT BÀN THEO LOẠI BÀN" />
             <PieChart prefWidth="500.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
                <HBox.margin>
                   <Insets left="100.0" />
