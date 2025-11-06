@@ -108,16 +108,16 @@ public class DatMon_Controller implements Initializable {
         gridPaneMon.setVgap(10);
         gridPaneMon.setPadding(new Insets(10));
 
+        int columns = 5;
         int col = 0;
         int row = 0;
 
         for (MonAn mon : dsMonAn) {
-
             ImageView img = new ImageView();
             String path = mon.getDuongDanAnh();
             if (path != null && !path.isEmpty()) {
                 try {
-                    Image image = new Image("file:" + path); // hoặc getResourceAsStream nếu là relative path
+                    Image image = new Image("file:" + path);
                     img.setImage(image);
                 } catch (Exception e) {
                     System.out.println("Không load được ảnh: " + path);
@@ -144,7 +144,7 @@ public class DatMon_Controller implements Initializable {
             gridPaneMon.add(box, col, row);
 
             col++;
-            if (col == 4) {
+            if (col == columns) {
                 col = 0;
                 row++;
             }
