@@ -44,7 +44,7 @@ public class DatBan_Controller implements Initializable {
     // --- TextField thông tin khách hàng ---
     @FXML private TextField txtTenKH, txtDiemTichLuy, txtSDT;
     @FXML private Button btnTimKiem;
-    
+    @FXML private ScrollPane scrollPaneBan;
  // --- thông tin khuyến mãi ---
     @FXML
     private ComboBox<KhuyenMai> cmbKM;
@@ -67,6 +67,9 @@ public class DatBan_Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+//    	 scrollPaneBan.setContent(gridPaneBan); // Gắn gridPaneBan vào scrollPaneBan có trong FXML
+//    	    scrollPaneBan.setFitToWidth(true);
+//    	    scrollPaneBan.setFitToHeight(true);
         khoiTaoComboBoxes();
         khoiTaoGio();
         khoiTaoComboBoxKhuyenMai();
@@ -333,26 +336,25 @@ public class DatBan_Controller implements Initializable {
                     borderColor = "red";
                     break;
                 case "Trống":
-                    borderColor = "black";
+                    borderColor = "white";
                     break;
                 case "Đang phục vụ":
-                    borderColor = "#00CED1";
-                    break;
+                	borderColor = "yellow";
             }
         }
 
         switch (maLoaiBan) {
-            case "LB01": backgroundColor = "#7FFF7F"; break;
-            case "LB02": backgroundColor = "#0066CC"; break;
-            case "LB03": backgroundColor = "#33CC66"; break;
+            case "LB01": backgroundColor = "#2196F3"; break;
+            case "LB02": backgroundColor = "#FFEB3B"; break;
+            case "LB03": backgroundColor = "#FF6F61"; break;
         }
 
         return String.format(
             "-fx-background-color: %s;" +
             "-fx-border-color: %s;" +
-            "-fx-border-width: 2;" +
+            "-fx-border-width: 4;" +
             "-fx-border-radius: 5;" +
-            "-fx-background-radius: 5;" +
+            "-fx-background-radius: 15;" +
             "-fx-min-width: 60px;" +
             "-fx-min-height: 40px;",
             backgroundColor, borderColor
