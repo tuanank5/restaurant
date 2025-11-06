@@ -24,7 +24,9 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import dao.MonAn_DAO;
 import dao.impl.MonAn_DAOImpl;
@@ -84,6 +86,8 @@ public class DatMon_Controller implements Initializable {
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
     private List<MonAn> dsMonAn;
 
+    private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadMonAnToGrid();
@@ -94,8 +98,9 @@ public class DatMon_Controller implements Initializable {
             new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
         colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
         colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-        colSoLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
-
+        colSoLuong.setCellValueFactory(col -> 
+        new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue())));
+        
         tblDS.setItems(FXCollections.observableArrayList());
     }
 
@@ -151,15 +156,26 @@ public class DatMon_Controller implements Initializable {
         }
     }
 
-	private void chonMon(MonAn mon) {
-	    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-	    alert.setTitle("Chọn món");
-	    alert.setHeaderText(null);
-	    alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
-	    alert.showAndWait();
-	}
+    private void chonMon(MonAn mon) {
+        if (dsMonAnDat.containsKey(mon)) {
+            // Nếu đã chọn món, tăng số lượng
+            dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+        } else {
+            // Thêm món mới với số lượng = 1
+            dsMonAnDat.put(mon, 1);
+        }
+
+        // Cập nhật TableView
+        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+        tblDS.refresh();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Chọn món");
+        alert.setHeaderText(null);
+        alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
+        alert.showAndWait();
+    }
 
 
-    
     
 }
