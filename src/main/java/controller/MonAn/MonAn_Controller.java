@@ -82,7 +82,7 @@ public class MonAn_Controller implements Initializable{
 	        // Cột Khuyến mãi hiển thị tên KM + %
 	        colKM.setCellValueFactory(new PropertyValueFactory<>("khuyenMai"));
 	        colKM.setCellFactory(column -> new TableCell<MonAn, KhuyenMai>() {
-	            @Override
+	        	@Override
 	            protected void updateItem(KhuyenMai item, boolean empty) {
 	                super.updateItem(item, empty);
 	                if (empty || item == null) {
@@ -93,10 +93,87 @@ public class MonAn_Controller implements Initializable{
 	            }
 	        });
 
+	        tblMon.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+	            if (newSelection != null) {
+	                hienThiChiTietMon(newSelection);
+	            }
+	        });
+	        
 	        loadTable();
 	        btnThem.setOnAction(e -> handleThemMon());
+	        btnSua.setOnAction(e -> handleSuaMon());
 	    }
 
+	    @FXML
+	    private void handleSuaMon() {
+	        try {
+	            MonAn monChon = tblMon.getSelectionModel().getSelectedItem();
+	            if (monChon == null) {
+	                Alert alert = new Alert(Alert.AlertType.WARNING);
+	                alert.setTitle("Thông báo");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Vui lòng chọn món ăn để sửa!");
+	                alert.showAndWait();
+	                return;
+	            }
+
+	            String tenMon = txtTenMon.getText().trim();
+	            String donGiaStr = txtDonGia.getText().trim();
+	            KhuyenMai km = cmbKM.getValue();
+
+	            if (tenMon.isEmpty() || donGiaStr.isEmpty() || km == null) {
+	                Alert alert = new Alert(Alert.AlertType.WARNING);
+	                alert.setTitle("Thông báo");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Vui lòng nhập đầy đủ thông tin món ăn và chọn khuyến mãi!");
+	                alert.showAndWait();
+	                return;
+	            }
+
+	            double donGia;
+	            try {
+	                donGia = Double.parseDouble(donGiaStr);
+	            } catch (NumberFormatException e) {
+	                Alert alert = new Alert(Alert.AlertType.ERROR);
+	                alert.setTitle("Lỗi nhập dữ liệu");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Đơn giá phải là số hợp lệ!");
+	                alert.showAndWait();
+	                return;
+	            }
+
+	            // Cập nhật thông tin cho đối tượng chọn
+	            monChon.setTenMon(tenMon);
+	            monChon.setDonGia(donGia);
+	            monChon.setKhuyenMai(km);
+	            monChon.setDuongDanAnh(duongDanAnh); // ảnh có thể thay đổi
+
+	            boolean suaThanhCong = monDAO.capNhat(monChon); // Gọi phương thức update trong DAO
+	            if (suaThanhCong) {
+	                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	                alert.setTitle("Sửa món ăn");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Sửa món ăn thành công!");
+	                alert.showAndWait();
+	             // Reload TableView
+	                loadTable();
+	                tblMon.refresh();
+	                // Reset form
+	                resetForm();
+	            } else {
+	                Alert alert = new Alert(Alert.AlertType.ERROR);
+	                alert.setTitle("Lỗi");
+	                alert.setHeaderText(null);
+	                alert.setContentText("Sửa món ăn thất bại!");
+	                alert.showAndWait();
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    
 	    private void khoiTaoComboBoxKhuyenMai() {
 	        // Lấy danh sách Khuyến Mãi từ DB
 	        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
@@ -223,5 +300,35 @@ public class MonAn_Controller implements Initializable{
 	        duongDanAnh = null;
 	    }
 
+	    private void hienThiChiTietMon(MonAn mon) {
+	        txtMaMon.setText(mon.getMaMon());
+	        txtTenMon.setText(mon.getTenMon());
+	        txtDonGia.setText(String.valueOf(mon.getDonGia()));
+
+	        if (mon.getKhuyenMai() != null) {
+	            cmbKM.getSelectionModel().select(mon.getKhuyenMai());
+	        } else {
+	        	cmbKM.getSelectionModel().clearSelection();
+	        }
+
+	        // Hiển thị ảnh và lưu đường dẫn vào biến
+	        if (mon.getDuongDanAnh() != null && !mon.getDuongDanAnh().isEmpty()) {
+	            File file = new File(mon.getDuongDanAnh());
+	            if (file.exists()) {
+	                img.setImage(new Image(file.toURI().toString()));
+	                duongDanAnh = mon.getDuongDanAnh(); // <-- giữ đường dẫn
+	            } else {
+	                img.setImage(null);
+	                duongDanAnh = null;
+	            }
+	        } else {
+	            img.setImage(null);
+	            duongDanAnh = null;
+	        }
+	    }
+
+	    
+
 	}
-	          
+	        
+	        
