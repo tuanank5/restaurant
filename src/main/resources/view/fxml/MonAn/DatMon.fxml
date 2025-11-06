@@ -29,7 +29,7 @@
                                  <top>
                                     <Pane prefHeight="30.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                                        <children>
-                                          <Label alignment="CENTER" layoutY="10.0" prefWidth="300.0" text="Chi tiết hóa đơn">
+                                          <Label alignment="CENTER" layoutY="10.0" prefWidth="300.0" text="Danh sách món ăn">
                                              <font>
                                                 <Font name="Times New Roman Bold" size="15.0" />
                                              </font>
@@ -41,7 +41,7 @@
                                     </Pane>
                                  </top>
                                  <center>
-                                    <TableView fx:id="tblChiTiet" prefHeight="350.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+                                    <TableView fx:id="tblDS" prefHeight="350.0" prefWidth="295.0" BorderPane.alignment="CENTER">
                                        <columns>
                                           <TableColumn fx:id="colSTT" prefWidth="30.0" text="STT" />
                                           <TableColumn fx:id="colTenMon" prefWidth="150.0" text="Tên món" />
@@ -109,7 +109,7 @@
                               <TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="25.0" style="-fx-background-color: e3e3e3;" />
                               <Label layoutX="15.0" layoutY="190.0" text="Bàn :" />
                               <Label layoutX="56.0" layoutY="190.0" text="--" />
-                              <DatePicker fx:id="dpNgayDatBan" layoutX="111.0" layoutY="106.0" prefHeight="25.0" prefWidth="167.0" />
+                              <DatePicker fx:id="dpNgayDatBan" layoutX="111.0" layoutY="106.0" prefHeight="25.0" prefWidth="148.0" />
                            </children>
                         </Pane>
                      </center>
@@ -132,8 +132,8 @@
                            <center>
                               <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBox layoutX="12.0" prefWidth="150.0" promptText="Trạng Thái" />
-                                    <ComboBox layoutX="184.0" prefWidth="150.0" promptText="Phân Loại" />
+                                    <ComboBox fx:id="conBoxTrangThai" layoutX="12.0" prefWidth="150.0" promptText="Trạng Thái" />
+                                    <ComboBox fx:id="comBoxPhanLoai" layoutX="184.0" prefWidth="150.0" promptText="Phân Loại" />
                                  </children>
                               </Pane>
                            </center>

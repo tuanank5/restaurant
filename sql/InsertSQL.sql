@@ -430,3 +430,13 @@ INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tie
     ('HD0008', '2025-10-02', 1100000, 110000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0008', 'KM008', 'NV008', 'B08', 'C008'),
     ('HD0009', '2025-10-03', 1350000, 135000, 'Đã thanh toán', 'Chuyển khoản', 1400000, 50000, 'KH0009', 'KM009', 'NV009', 'B09', 'C009'),
     ('HD0010', '2025-10-04', 1600000, 160000, 'Đã thanh toán', 'Tiền mặt', 1800000, 200000, 'KH0010', 'KM010', 'NV010', 'B10', 'C010');
+    
+    --Thêm MonAn
+   INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh) VALUES
+('SP004', N'Cơm Tấm Sườn', 45000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen4.jpg'),
+('SP005', N'Bún Thịt Nướng', 38000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen5.jpg'),
+('SP006', N'Lẩu Thái Chua Cay', 150000, 'KM002', 'C:\\Users\\MYPC\\Pictures\\nen6.jpg'),
+('SP007', N'Chả Giò', 28000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen7.jpg'),
+('SP008', N'Gà Rán Giòn', 52000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen8.jpg'),
+('SP009', N'Hamburger Bò', 49000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen9.jpg'),
+('SP010', N'Sushi Cá Hồi', 89000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen10.jpg');

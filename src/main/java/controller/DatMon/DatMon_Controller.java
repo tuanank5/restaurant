@@ -48,25 +48,19 @@ public class DatMon_Controller {
     private TableColumn<?, ?> colTenMon;
 
     @FXML
+    private ComboBox<?> comBoxPhanLoai;
+
+    @FXML
+    private ComboBox<?> conBoxTrangThai;
+
+    @FXML
     private DatePicker dpNgayDatBan;
 
     @FXML
     private GridPane gridPaneBan;
 
     @FXML
-    private RadioButton rdMonAn;
-
-    @FXML
-    private RadioButton rdNuocUong;
-
-    @FXML
-    private RadioButton rdTatCa;
-
-    @FXML
-    private RadioButton rdTrangMieng;
-
-    @FXML
-    private TableView<?> tblChiTiet;
+    private TableView<?> tblDS;
 
     @FXML
     private TextField txtDiemTichLuy;
@@ -82,4 +76,6 @@ public class DatMon_Controller {
     public void setBanDangChon(Ban ban) {
         this.banDangChon = ban;
     }
+    
+    
 }
