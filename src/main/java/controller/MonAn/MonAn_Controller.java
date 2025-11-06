@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
+import dao.KhuyenMai_DAO;
 import dao.impl.KhuyenMai_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
 import entity.KhuyenMai;
@@ -23,7 +24,7 @@ import javafx.stage.FileChooser;
 
 public class MonAn_Controller implements Initializable{
 
-	 private MenuNV_Controller menuController; // Reference đến MenuNV_Controller
+	 	private MenuNV_Controller menuController; // Reference đến MenuNV_Controller
 
 	    public void setMenuController(MenuNV_Controller menuController) {
 	        this.menuController = menuController;
@@ -43,6 +44,7 @@ public class MonAn_Controller implements Initializable{
 	    
 	    private MonAn_DAOImpl monDAO = new MonAn_DAOImpl();
 	    private KhuyenMai_DAOImpl kmDAO = new KhuyenMai_DAOImpl();
+	    private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
 
 	    @FXML
 	    private void handleThemAnh() {
@@ -70,6 +72,8 @@ public class MonAn_Controller implements Initializable{
 
 	    @Override
 	    public void initialize(URL url, ResourceBundle rb) {
+	    	khoiTaoComboBoxKhuyenMai();
+	    	 txtMaMon.setText(sinhMaMon());
 	        // --- Cấu hình cột TableView ---
 	        colMa.setCellValueFactory(new PropertyValueFactory<>("maMon"));
 	        colTen.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
@@ -90,6 +94,36 @@ public class MonAn_Controller implements Initializable{
 	        });
 
 	        loadTable();
+	        btnThem.setOnAction(e -> handleThemMon());
+	    }
+
+	    private void khoiTaoComboBoxKhuyenMai() {
+	        // Lấy danh sách Khuyến Mãi từ DB
+	        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
+
+	        if (danhSachKM != null && !danhSachKM.isEmpty()) {
+	            // Đưa danh sách vào ComboBox
+	            cmbKM.getItems().setAll(danhSachKM);
+
+	            // Hiển thị tên KM + %
+	            cmbKM.setCellFactory(lv -> new ListCell<KhuyenMai>() {
+	                @Override
+	                protected void updateItem(KhuyenMai item, boolean empty) {
+	                    super.updateItem(item, empty);
+	                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+	                }
+	            });
+
+	            cmbKM.setButtonCell(new ListCell<KhuyenMai>() {
+	                @Override
+	                protected void updateItem(KhuyenMai item, boolean empty) {
+	                    super.updateItem(item, empty);
+	                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+	                }
+	            });
+	        } else {
+	            cmbKM.getItems().clear(); // Trường hợp danh sách rỗng
+	        }
 	    }
 
 	    // ------------------- Load dữ liệu từ DB lên TableView -------------------
@@ -103,6 +137,7 @@ public class MonAn_Controller implements Initializable{
 	        }
 	    }
 	    
+	    //---------THÊM MÓN------------
 	    @FXML
 	    private void handleThemMon() {
 	        try {
@@ -148,13 +183,9 @@ public class MonAn_Controller implements Initializable{
 	                // Cập nhật TableView
 	                loadTable();
 
-	                // Xóa dữ liệu nhập
-	                txtMaMon.clear();
-	                txtTenMon.clear();
-	                txtDonGia.clear();
-	                cmbKM.getSelectionModel().clearSelection();
-	                img.setImage(null);
-	                duongDanAnh = null;
+	                // Reset form và tự sinh mã món mới
+	                resetForm();
+
 	            } else {
 	                Alert alert = new Alert(Alert.AlertType.ERROR);
 	                alert.setTitle("Lỗi");
@@ -168,6 +199,29 @@ public class MonAn_Controller implements Initializable{
 	        }
 	    }
 
+	    //Sinh mã tự động
+        private String sinhMaMon() {
+            List<MonAn> listMon = monDAO.getDanhSachMonAn();
+            int max = 0;
+            for (MonAn m : listMon) {
+                try {
+                    int so = Integer.parseInt(m.getMaMon().substring(1));
+                    if (so > max) max = so;
+                } catch (Exception e) {
+                    // bỏ qua nếu format khác
+                }
+            }
+            return String.format("M%02d", max + 1); // Ví dụ: M01, M02,...
+        }
+
+	    private void resetForm() {
+	        txtMaMon.setText(sinhMaMon()); // tự sinh mã mới
+	        txtTenMon.clear();
+	        txtDonGia.clear();
+	        cmbKM.getSelectionModel().clearSelection();
+	        img.setImage(null);
+	        duongDanAnh = null;
+	    }
 
 	}
 	          
