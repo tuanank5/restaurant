@@ -1,6 +1,7 @@
 package dao.impl;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -66,61 +67,141 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         }
     }
 
-//	@Override
-//	public List<DonDatBan> getAllDonDatBan() {
-//		EntityManager entityManager = entityManagerFactory.createEntityManager();
-//        List<DonDatBan> dsDon = null;
-//
-//        try {
-//            // Truy vấn để lấy tất cả hóa đơn
-//        	dsDon = entityManager.createQuery("SELECT DDB FROM DonDatBan DDB", DonDatBan.class).getResultList();
-//
-//        } finally {
-//            entityManager.close(); // Đóng EntityManager
-//        }
-//
-//        return dsDon;
-//	}
-//
-//	@Override
-//	public List<DonDatBan> getAllDonDatBanTheoThang(int thang, int nam) {
-//		EntityManager entityManager = entityManagerFactory.createEntityManager();
-//        List<DonDatBan> dsDon = null;
-//
-//        try {
-//            String jpql = "SELECT DDB FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGioLapDon) = :thang AND FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
-//            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
-//            query.setParameter("thang", thang);
-//            query.setParameter("nam", nam);
-//
-//            dsDon = query.getResultList();
-//
-//        } finally {
-//            entityManager.close();
-//        }
-//
-//        return dsDon;
-//	}
-//	
-//	@Override
-//    public List<String> getKhachHangTheoThang(int thang, int nam) {
-//        EntityManager entityManager = entityManagerFactory.createEntityManager();
-//        List<String> dsKH = null;
-//
-//        try {
-//            String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
-//                    "FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGioLapDon) = :thang AND FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam ";
-//
-//            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
-//            query.setParameter("thang", thang);
-//            query.setParameter("nam", nam);
-//
-//            dsKH = query.getResultList();
-//
-//        } finally {
-//            entityManager.close();
-//        }
-//
-//        return dsKH;
-//    }
+	@Override
+	public List<DonDatBan> getAllDonDatBan() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            // Truy vấn để lấy tất cả hóa đơn
+        	dsDon = entityManager.createQuery("SELECT DDB FROM DonDatBan DDB", DonDatBan.class).getResultList();
+
+        } finally {
+            entityManager.close(); // Đóng EntityManager
+        }
+
+        return dsDon;
+	}
+
+	@Override
+	public List<DonDatBan> getAllDonDatBanTheoThang(int thang, int nam) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            String jpql = "SELECT DDB FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGioLapDon) = :thang AND FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
+            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
+            query.setParameter("thang", thang);
+            query.setParameter("nam", nam);
+
+            dsDon = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsDon;
+	}
+	
+	@Override
+    public List<String> getKhachHangTheoThang(int thang, int nam) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<String> dsKH = null;
+
+        try {
+            String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
+                    "FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGioLapDon) = :thang AND FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
+
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
+            query.setParameter("thang", thang);
+            query.setParameter("nam", nam);
+
+            dsKH = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsKH;
+    }
+	
+	@Override
+    public List<DonDatBan> getAllDonDatBanTheoNam(int nam) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            String jpql = "SELECT DDB FROM DonDatBan DDB WHERE FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
+            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
+            query.setParameter("nam", nam);
+
+            dsDon = query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+        return dsDon;
+    }
+	
+	@Override
+    public List<String> getKhachHangTheoNam(int nam) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<String> dsKH = null;
+
+        try {
+        	String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
+                    "FROM DonDatBan DDB WHERE FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
+
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
+            query.setParameter("nam", nam);
+
+            dsKH = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsKH;
+    }
+	
+	@Override
+    public List<DonDatBan> getAllDonDatBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            String jpql = "SELECT DDB FROM DonDatBan DDB WHERE DDB.ngayGioLapDon BETWEEN :dateStart AND :dateEnd";
+            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
+
+            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
+            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
+
+            dsDon = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsDon;
+    }
+	
+	@Override
+    public List<String> getKhachHangTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<String> dsKH = null;
+
+        try {
+        	String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
+                    "FROM DonDatBan DDB WHERE DDB.ngayGioLapDon BETWEEN :dateStart AND :dateEnd";
+
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
+
+            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
+            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
+
+            dsKH = query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+        return dsKH;
+    }
 }
