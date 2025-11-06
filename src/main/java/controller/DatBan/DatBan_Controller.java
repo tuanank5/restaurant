@@ -44,7 +44,7 @@ public class DatBan_Controller implements Initializable {
     // --- TextField thông tin khách hàng ---
     @FXML private TextField txtTenKH, txtDiemTichLuy, txtSDT;
     @FXML private Button btnTimKiem;
-    
+    @FXML private ScrollPane scrollPaneBan;
  // --- thông tin khuyến mãi ---
     @FXML
     private ComboBox<KhuyenMai> cmbKM;
@@ -67,6 +67,9 @@ public class DatBan_Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+//    	 scrollPaneBan.setContent(gridPaneBan); // Gắn gridPaneBan vào scrollPaneBan có trong FXML
+//    	    scrollPaneBan.setFitToWidth(true);
+//    	    scrollPaneBan.setFitToHeight(true);
         khoiTaoComboBoxes();
         khoiTaoGio();
         khoiTaoComboBoxKhuyenMai();
@@ -335,9 +338,6 @@ public class DatBan_Controller implements Initializable {
                 case "Trống":
                     borderColor = "black";
                     break;
-                case "Đang phục vụ":
-                    borderColor = "#00CED1";
-                    break;
             }
         }
 
@@ -350,9 +350,9 @@ public class DatBan_Controller implements Initializable {
         return String.format(
             "-fx-background-color: %s;" +
             "-fx-border-color: %s;" +
-            "-fx-border-width: 2;" +
-            "-fx-border-radius: 5;" +
-            "-fx-background-radius: 5;" +
+            "-fx-border-width: 4;" +
+            "-fx-border-radius: 7;" +
+            "-fx-background-radius: 7;" +
             "-fx-min-width: 60px;" +
             "-fx-min-height: 40px;",
             backgroundColor, borderColor
