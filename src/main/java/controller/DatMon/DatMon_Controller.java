@@ -167,8 +167,7 @@ public class DatMon_Controller implements Initializable {
             MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
 
             // Mở giao diện Chi tiết hóa đơn trong BorderPane chính
-            ChiTietHoaDon_Controller createHoaDon = MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet").getController();
-            //createHoaDon.layThongTin(txtMaKH,M, null, null);
+            MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -33,7 +33,7 @@ public class MenuNV_Controller {
 	public static Ban banDangChon;
 	public static KhachHang khachHangDangChon;
 	
-	private TaiKhoan taiKhoan;
+	public static TaiKhoan taiKhoan;
 
 	@FXML
     private BorderPane borderPane;
