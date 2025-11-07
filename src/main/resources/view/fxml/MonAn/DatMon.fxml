@@ -76,7 +76,7 @@
 						        <Label fx:id="lblTongTienVAT" layoutX="100.0" layoutY="80.0" text="0" />
 						        <Label layoutX="180.0" layoutY="80.0" text="VND" />						
 						        <!-- Nút thanh toán -->
-						        <Button fx:id="btnThanhToan" layoutX="210.0" layoutY="55.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: red;" text="Thanh toán" textFill="WHITE">
+						        <Button layoutX="210.0" layoutY="55.0" mnemonicParsing="false" onAction="#hanhleThanhToan" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: red;" text="Thanh toán" textFill="WHITE">
 						            <font>
 						                <Font name="System Bold" size="11.0" />
 						            </font>

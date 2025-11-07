@@ -3,6 +3,7 @@ package controller.Menu;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Optional;
 
 import config.RestaurantApplication;
@@ -27,6 +28,8 @@ import javafx.stage.Stage;
 public class MenuNV_Controller {
 	
 	public static MenuNV_Controller instance;
+	public static Map<entity.MonAn, Integer> dsMonAnDangChon;
+	public static String tongTienSauVAT;
 	public static Ban banDangChon;
 	public static KhachHang khachHangDangChon;
 	

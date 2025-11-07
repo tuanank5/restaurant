@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import controller.HoaDon.ChiTietHoaDon_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.MonAn_DAO;
 import dao.impl.MonAn_DAOImpl;
@@ -45,9 +46,6 @@ import java.util.Locale;
 
 public class DatMon_Controller implements Initializable {
 
-
-    @FXML
-    private Button btnThanhToan;
 
     // --- thông tin khuyến mãi ---
     @FXML
@@ -159,7 +157,23 @@ public class DatMon_Controller implements Initializable {
 
         loadThongTinKhachHang();
     }
+    
+    @FXML
+    void hanhleThanhToan(ActionEvent event) {
+    	try {
+            // Gán dữ liệu cần thiết vào MenuNV_Controller (giống cách bạn truyền ở DatMon)
+            MenuNV_Controller.banDangChon = banDangChon;
+            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat; // bạn cần tạo biến này trong MenuNV_Controller
+            MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
 
+            // Mở giao diện Chi tiết hóa đơn trong BorderPane chính
+            ChiTietHoaDon_Controller createHoaDon = MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet").getController();
+            //createHoaDon.layThongTin(txtMaKH,M, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     // --- Khởi tạo ComboBox Khuyến mãi ---
     private void khoiTaoComboBoxKhuyenMai() {
         List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
