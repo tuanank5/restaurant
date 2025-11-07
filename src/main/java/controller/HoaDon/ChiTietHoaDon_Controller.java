@@ -29,6 +29,9 @@ public class ChiTietHoaDon_Controller {
 	
 	@FXML
     private Button btnTroLai;
+
+    @FXML
+    private Button btnXuatHD;
 	
     @FXML
     private Label lblTienTra;
@@ -82,10 +85,19 @@ public class ChiTietHoaDon_Controller {
 
     @FXML
     void controller(ActionEvent event) {
-
+    	Object source = event.getSource();
+        if (source == btnTroLai) {
+        	MenuNV_Controller.instance.readyUI("MonAn/DatMon");
+        } else if (source == btnXuatHD) {
+            themHD();
+        } 
     }
     
-    @FXML
+    private void themHD() {
+		
+	}
+
+	@FXML
     private void initialize() {
     	tblMaMonAn.setCellValueFactory(new PropertyValueFactory<>("maMon"));
         tblTenMonAn.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
@@ -109,11 +121,30 @@ public class ChiTietHoaDon_Controller {
         txtNgay.setText(LocalDate.now() + "");
         lblTongThanhToan.setText(tongTienSauVAT);
         
+        txtTien.textProperty().addListener((observable, oldValue, newValue) -> {
+            calculateTienTra();
+        });
     }
 
     
 
-    private void loadDataToTable() {
+    private void calculateTienTra() {
+    	try {
+            double tienNhap = Double.parseDouble(txtTien.getText());
+            double tienTra = Double.parseDouble(tongTienSauVAT) - tienNhap;
+
+            if (tienTra < 0) {
+                lblTienTra.setText("Số tiền trả không hợp lệ!"); // Thông báo khi tienTra âm
+            } else {
+                lblTienTra.setText(String.format("%.2f", tienTra)); // Hiển thị số tiền trả với 2 chữ số thập phân
+            }
+        } catch (NumberFormatException e) {
+            lblTienTra.setText("Vui lòng nhập số hợp lệ!"); // Thông báo khi nhập chữ hoặc ký tự không hợp lệ
+        }
+
+	}
+
+	private void loadDataToTable() {
     	ObservableList<MonAn> data = FXCollections.observableArrayList(dsMonAnDangChon.keySet());
         tblDanhSachMon.setItems(data);
 		
