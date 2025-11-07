@@ -24,11 +24,11 @@
    <children>
       <HBox prefHeight="80.0" prefWidth="1100.0">
          <children>
-            <AnchorPane prefWidth="250.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+            <AnchorPane prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
                <children>
                   <JFXRadioButton fx:id="radThangNam" layoutX="14.0" layoutY="14.0" text="Thống kê theo tháng/năm" />
                   <JFXComboBox fx:id="cmbThang" layoutX="14.0" layoutY="37.0" promptText="Tháng" />
-                  <JFXComboBox fx:id="cmbNam" layoutX="157.0" layoutY="37.0" promptText="Năm" />
+                  <JFXComboBox fx:id="cmbNam" layoutX="124.0" layoutY="37.0" promptText="Năm" />
                </children>
             </AnchorPane>
             <AnchorPane prefWidth="550.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
@@ -40,7 +40,7 @@
                   <DatePicker fx:id="txtDateEnd" layoutX="349.0" layoutY="38.0" />
                </children>
                <HBox.margin>
-                  <Insets left="35.0" />
+                  <Insets left="50.0" />
                </HBox.margin>
             </AnchorPane>
             <JFXButton fx:id="btnLoc" prefHeight="80.0" prefWidth="150.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" text="LỌC">
@@ -107,7 +107,7 @@
                       <CategoryAxis label="Tháng" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis label="Doanh thu" side="LEFT" />
+                      <NumberAxis label="Doanh Thu" side="LEFT" />
                     </yAxis>
                   </BarChart>
                </children>
@@ -115,7 +115,7 @@
             <Label fx:id="lblThongTinDoanhThu" prefHeight="50.0" prefWidth="1100.0" />
          </children>
       </VBox>
-      <HBox layoutX="1.0" layoutY="600.0" prefWidth="1100.0">
+      <HBox layoutX="1.0" layoutY="620.0" prefWidth="1100.0">
          <children>
             <Label text="ĐƠN ĐẶT BÀN">
                <font>
@@ -124,26 +124,26 @@
             </Label>
          </children>
       </HBox>
-      <HBox layoutY="635.0">
+      <HBox layoutY="655.0" prefHeight="400.0" prefWidth="1100.0">
          <children>
-            <VBox prefHeight="400.0" prefWidth="550.0">
+            <VBox prefHeight="400.0" prefWidth="650.0">
                <children>
-                  <AnchorPane prefHeight="350.0" prefWidth="550.0">
+                  <AnchorPane prefHeight="350.0" prefWidth="650.0">
                      <children>
-                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="550.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
+                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="650.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
                           <xAxis>
-                            <CategoryAxis label="Thời gian" side="BOTTOM" />
+                            <CategoryAxis label="Thời Gian" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis label="Số lượng" side="LEFT" />
+                            <NumberAxis label="Số Lượng" side="LEFT" />
                           </yAxis>
                         </BarChart>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="lblThongTinDonDatBan" prefHeight="50.0" prefWidth="550.0" />
+                  <Label fx:id="lblThongTinDonDatBan" prefHeight="50.0" prefWidth="650.0" />
                </children>
             </VBox>
-            <PieChart fx:id="pieChart_LoaiBan" prefWidth="500.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐẶT BÀN THEO LOẠI BÀN">
+            <PieChart fx:id="pieChart_LoaiBan" prefWidth="400.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐẶT BÀN THEO LOẠI BÀN">
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin></PieChart>

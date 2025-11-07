@@ -143,7 +143,7 @@ public class a {
             cmbNam.getItems().add(i);
         }
         
-        cmbThang.setValue(LocalDate.now().getMonthValue() - 1);
+        cmbThang.setValue(LocalDate.now().getMonthValue());
         cmbNam.setValue(currentYear);
 
         txtDateStart.setValue(LocalDate.now());
