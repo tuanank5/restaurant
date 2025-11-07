@@ -404,3 +404,39 @@ VALUES
 ('KM012', N'Giảm 15% tổng hóa đơn cuối tháng', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-25', '2025-11-30', 15);
 
 SELECT * FROM DonDatBan WHERE maKH = 'KH0001'
+
+--Thêm Coc
+INSERT INTO Coc (maCoc, loaiCoc, phanTramCoc, soTienCoc) VALUES
+    ('C001', 1, 10, 100000),
+    ('C002', 0, 20, 200000),
+    ('C003', 1, 15, 150000),
+    ('C004', 0, 25, 250000),
+    ('C005', 1, 5, 50000),
+    ('C006', 0, 30, 300000),
+    ('C007', 1, 10, 100000),
+    ('C008', 0, 20, 200000),
+    ('C009', 1, 15, 150000),
+    ('C010', 0, 25, 250000);
+
+--Thêm HoaDon
+INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tienNhan, tienThua, maKH, maKM, maNV, maBan, maCoc) VALUES
+    ('HD0001', '2025-08-01', 1000000, 100000, 'Đã thanh toán', 'Tiền mặt', 1200000, 200000, 'KH0001', 'KM001', 'NV001', 'B01', 'C001'),
+    ('HD0002', '2025-08-02', 1500000, 150000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0002', 'KM002', 'NV002', 'B02', 'C002'),
+    ('HD0003', '2025-08-03', 2000000, 200000, 'Đã thanh toán', 'Chuyển khoản', 2200000, 200000, 'KH0003', 'KM003', 'NV003', 'B03', 'C003'),
+    ('HD0004', '2025-09-01', 1200000, 120000, 'Đã thanh toán', 'Tiền mặt', 1300000, 80000, 'KH0004', 'KM004', 'NV004', 'B04', 'C004'),
+    ('HD0005', '2025-09-02', 800000, 80000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0005', 'KM005', 'NV005', 'B05', 'C005'),
+    ('HD0006', '2025-09-03', 1700000, 170000, 'Đã thanh toán', 'Chuyển khoản', 1900000, 200000, 'KH0006', 'KM006', 'NV006', 'B06', 'C006'),
+    ('HD0007', '2025-10-01', 950000, 95000, 'Đã thanh toán', 'Tiền mặt', 1000000, 50000, 'KH0007', 'KM007', 'NV007', 'B07', 'C007'),
+    ('HD0008', '2025-10-02', 1100000, 110000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0008', 'KM008', 'NV008', 'B08', 'C008'),
+    ('HD0009', '2025-10-03', 1350000, 135000, 'Đã thanh toán', 'Chuyển khoản', 1400000, 50000, 'KH0009', 'KM009', 'NV009', 'B09', 'C009'),
+    ('HD0010', '2025-10-04', 1600000, 160000, 'Đã thanh toán', 'Tiền mặt', 1800000, 200000, 'KH0010', 'KM010', 'NV010', 'B10', 'C010');
+    
+    --Thêm MonAn
+   INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh) VALUES
+('SP004', N'Cơm Tấm Sườn', 45000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen4.jpg'),
+('SP005', N'Bún Thịt Nướng', 38000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen5.jpg'),
+('SP006', N'Lẩu Thái Chua Cay', 150000, 'KM002', 'C:\\Users\\MYPC\\Pictures\\nen6.jpg'),
+('SP007', N'Chả Giò', 28000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen7.jpg'),
+('SP008', N'Gà Rán Giòn', 52000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen8.jpg'),
+('SP009', N'Hamburger Bò', 49000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen9.jpg'),
+('SP010', N'Sushi Cá Hồi', 89000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen10.jpg');

@@ -187,16 +187,20 @@ public class DatBan_Controller implements Initializable {
                 //btnBan.setOnAction(e -> handleChonBan(ban, btnBan));
                 btnBan.setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2) {
-                        // Double click: nếu bàn đã được đặt thì mở giao diện DatMon
+                        // Double click: nếu bàn đã được đặt hoặc bàn trống thì mở giao diện DatMon
                         if ("Đã được đặt".equals(ban.getTrangThai())) {
                             if (dsDon != null && !dsDon.isEmpty()) {
                                 DonDatBan donGanNhat = dsDon.get(dsDon.size() - 1);
-                                KhachHang khachHang = donGanNhat.getKhachHang();
-                                
+                                KhachHang khachHang = donGanNhat.getKhachHang();                              
                                 // Gán dữ liệu sang MenuNV_Controller để dùng ở giao diện DatMon
                                 MenuNV_Controller.banDangChon = ban;
                                 MenuNV_Controller.khachHangDangChon = khachHang;
                             }
+                            MenuNV_Controller.instance.readyUI("MonAn/DatMon");
+                        } else if ("Trống".equals(ban.getTrangThai())) {
+                            // --- Nếu bàn trống, vẫn cho phép mở giao diện DatMon nhưng không có khách hàng ---
+                            MenuNV_Controller.banDangChon = ban;
+                            MenuNV_Controller.khachHangDangChon = null;
                             MenuNV_Controller.instance.readyUI("MonAn/DatMon");
                         }
                     } else if (event.getClickCount() == 1) {
