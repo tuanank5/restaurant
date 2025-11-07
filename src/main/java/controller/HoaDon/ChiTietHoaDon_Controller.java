@@ -1,7 +1,9 @@
 package controller.HoaDon;
 
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -26,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 public class ChiTietHoaDon_Controller {
+	private static int soHoaDonCuoi = 0;
 	
 	@FXML
     private Button btnTroLai;
@@ -99,54 +102,112 @@ public class ChiTietHoaDon_Controller {
 
 	@FXML
     private void initialize() {
-    	tblMaMonAn.setCellValueFactory(new PropertyValueFactory<>("maMon"));
-        tblTenMonAn.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
-        tblSoLuong.setCellValueFactory(cellData -> {
-            Integer soLuong = dsMonAnDangChon.get(cellData.getValue());
-            return new SimpleStringProperty(String.valueOf(soLuong != null ? soLuong : 0));
-        });
-        tblDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-        tblThanhTien.setCellValueFactory(cellData -> {
-            MonAn monAn = cellData.getValue();
-            Integer soLuong = dsMonAnDangChon.get(monAn); // Lấy số lượng từ map
-            double thanhTien = monAn.getDonGia() * soLuong; // Tính thành tiền
-            return new SimpleStringProperty(String.valueOf(thanhTien)); // Chuyển đổi thành chuỗi
-        });
-        
-        loadDataToTable();
-        
-        txtTenKH.setText(khachHangDangChon.getTenKH());
-        txtSDT.setText(khachHangDangChon.getSdt());
-        txtNV.setText(taiKhoan.getNhanVien().getTenNV());
-        txtNgay.setText(LocalDate.now() + "");
-        lblTongThanhToan.setText(tongTienSauVAT);
-        
-        txtTien.textProperty().addListener((observable, oldValue, newValue) -> {
-            calculateTienTra();
-        });
+		NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+	    // Mã & Tên
+	    tblMaMonAn.setCellValueFactory(new PropertyValueFactory<>("maMon"));
+	    tblTenMonAn.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
+	    // Số lượng
+	    tblSoLuong.setCellValueFactory(cell -> {
+	        Integer sl = dsMonAnDangChon.get(cell.getValue());
+	        return new SimpleStringProperty(String.valueOf(sl != null ? sl : 0));
+	    });
+	    // Đơn giá
+	    tblDonGia.setCellValueFactory(cell -> {
+	        double donGia = cell.getValue().getDonGia();
+	        return new SimpleStringProperty(formatTienVN(donGia));
+	    });
+
+	    // Thành tiền
+	    tblThanhTien.setCellValueFactory(cell -> {
+	        MonAn mon = cell.getValue();
+	        int sl = dsMonAnDangChon.getOrDefault(mon, 0);
+	        double thanhTien = mon.getDonGia() * sl;
+	        return new SimpleStringProperty(formatTienVN(thanhTien));
+	    });
+	    // Load dữ liệu
+	    tblDanhSachMon.setItems(FXCollections.observableArrayList(dsMonAnDangChon.keySet()));
+	    // Thông tin khách, NV, ngày
+	    txtMaHoaDon.setText(taoMaHoaDon());
+	    txtTenKH.setText(khachHangDangChon.getTenKH());
+	    txtSDT.setText(khachHangDangChon.getSdt());
+	    txtNV.setText(taiKhoan.getNhanVien().getTenNV());
+	    txtNgay.setText(LocalDate.now().toString());
+	    // Tổng thanh toán
+	    try {
+	        double tong = Double.parseDouble(tongTienSauVAT);
+	        lblTongThanhToan.setText(formatTienVN(tong));
+	    } catch (NumberFormatException e) {
+	        lblTongThanhToan.setText(tongTienSauVAT);
+	    }
+	    // Tính tiền trả
+	    txtTien.textProperty().addListener((obs, oldVal, newVal) -> calculateTienTra());
     }
 
     
 
     private void calculateTienTra() {
+    	NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
     	try {
             double tienNhap = Double.parseDouble(txtTien.getText());
-            double tienTra = Double.parseDouble(tongTienSauVAT) - tienNhap;
-
-            if (tienTra < 0) {
-                lblTienTra.setText("Số tiền trả không hợp lệ!"); // Thông báo khi tienTra âm
-            } else {
-                lblTienTra.setText(String.format("%.2f", tienTra)); // Hiển thị số tiền trả với 2 chữ số thập phân
-            }
+            double tong = Double.parseDouble(tongTienSauVAT);
+            double tienTra = tienNhap - tong;
+            lblTienTra.setText(tienTra < 0 
+                ?formatTienVN(-tienTra) 
+                :formatTienVN(tienTra));
         } catch (NumberFormatException e) {
-            lblTienTra.setText("Vui lòng nhập số hợp lệ!"); // Thông báo khi nhập chữ hoặc ký tự không hợp lệ
+            lblTienTra.setText("Vui lòng nhập số hợp lệ!");
         }
-
 	}
 
 	private void loadDataToTable() {
     	ObservableList<MonAn> data = FXCollections.observableArrayList(dsMonAnDangChon.keySet());
         tblDanhSachMon.setItems(data);
-		
+        
+        // Format cột giá và thành tiền sang VNĐ
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        tblDonGia.setCellFactory(column -> new TableCell<MonAn, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    try {
+                        double donGia = Double.parseDouble(item);
+                        setText(currencyVN.format(donGia));
+                    } catch (NumberFormatException e) {
+                        setText(item);
+                    }
+                }
+            }
+        });
+
+        tblThanhTien.setCellFactory(column -> new TableCell<MonAn, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    try {
+                        double thanhTien = Double.parseDouble(item);
+                        setText(currencyVN.format(thanhTien));
+                    } catch (NumberFormatException e) {
+                        setText(item);
+                    }
+                }
+            }
+        });
+	}
+	private String formatTienVN(double tien) {
+		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+	    nf.setGroupingUsed(true);
+	    //nf.setMaximumFractionDigits(0); // không hiển thị phần thập phân
+	    return nf.format(tien) + " VND";
+	}
+	
+	private String taoMaHoaDon() {
+	    soHoaDonCuoi++; // tăng số hóa đơn
+	    return String.format("HD%04d", soHoaDonCuoi);
 	}
 }
