@@ -376,15 +376,15 @@ public class DatBan_Controller implements Initializable {
                     borderColor = "red";
                     break;
                 case "Trống":
-                    borderColor = "white";
+                    borderColor = "purple";
                     break;
                 case "Đang phục vụ":
-                	borderColor = "yellow";
+                	borderColor = "#257925";
             }
         }
 
         switch (maLoaiBan) {
-            case "LB01": backgroundColor = "#2196F3"; break;
+            case "LB01": backgroundColor = "#66cccc"; break;
             case "LB02": backgroundColor = "#FFEB3B"; break;
             case "LB03": backgroundColor = "#FF6F61"; break;
         }
@@ -392,7 +392,7 @@ public class DatBan_Controller implements Initializable {
         return String.format(
             "-fx-background-color: %s;" +
             "-fx-border-color: %s;" +
-            "-fx-border-width: 4;" +
+            "-fx-border-width: 6;" +
             "-fx-border-radius: 5;" +
             "-fx-background-radius: 15;" +
             "-fx-min-width: 60px;" +

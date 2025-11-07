@@ -17,232 +17,212 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.DatBan_Controller">
-   <center>
-      <BorderPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: blue3e3e3e;" BorderPane.alignment="CENTER">
-         <left>
-            <BorderPane prefHeight="700.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-               <top>
-                  <Pane prefHeight="300.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <BorderPane prefHeight="300.0" prefWidth="300.0">
-                           <center>
-                              <Pane prefHeight="250.0" prefWidth="0.0" BorderPane.alignment="CENTER">
-                                 <BorderPane.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </BorderPane.margin>
-                                 <children>
-                                    <Label alignment="CENTER" prefWidth="300.0" text="Thông tin bàn">
-                                       <font>
-                                          <Font name="Times New Roman Bold" size="15.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets top="5.0" />
-                                       </padding>
-                                    </Label>
-                                    <Label layoutX="26.0" layoutY="59.0" text="Loại bàn :" />
-                                    <Label layoutX="26.0" layoutY="99.0" text="Số lượng :" />
-                                    <Label layoutX="26.0" layoutY="139.0" text="Vị trí :" />
-                                    <Label layoutX="26.0" layoutY="179.0" text="Trạng thái :" />
-                                    <TextField fx:id="txtTrangThai" editable="false" layoutX="121.0" layoutY="174.0" style="-fx-background-color: e3e3e3;" />
-                                    <TextField fx:id="txtViTri" editable="false" layoutX="121.0" layoutY="135.0" style="-fx-background-color: e3e3e3;" />
-                                    <TextField fx:id="txtSoLuong" editable="false" layoutX="121.0" layoutY="95.0" style="-fx-background-color: e3e3e3;" />
-                                    <TextField fx:id="txtLoaiBan" editable="false" layoutX="121.0" layoutY="54.0" style="-fx-background-color: e3e3e3;" />
-                                 </children>
-                              </Pane>
-                           </center>
-                        </BorderPane>
-                     </children>
-                  </Pane>
-               </top>
-               <center>
-                  <Pane prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets bottom="4.0" left="4.0" right="4.0" />
-                     </BorderPane.margin>
-                     <children>
-                        <Label alignment="CENTER" prefWidth="300.0" text="Thông tin khách hàng">
-                           <font>
-                              <Font name="Times New Roman Bold" size="15.0" />
-                           </font>
-                           <padding>
-                              <Insets top="5.0" />
-                           </padding>
-                        </Label>
-                        <Label layoutX="15.0" layoutY="40.0" text="Tên khách hàng : " />
-                        <Label layoutX="15.0" layoutY="80.0" text="Điểm tích lũy : " />
-                        <Label layoutX="15.0" layoutY="120.0" text="Số điện thoại :" />
-                        <TextField fx:id="txtSDT" layoutX="110.0" layoutY="116.0" />
-                        <TextField fx:id="txtDiemTichLuy" editable="false" layoutX="110.0" layoutY="76.0" style="-fx-background-color: e3e3e3;" />
-                        <TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="35.0" style="-fx-background-color: e3e3e3;" />
-                        <Button fx:id="btnTimKiem" layoutX="195.0" layoutY="160.0" mnemonicParsing="false" onAction="#timKiemKhachHang" text="Tìm kiếm" />
-                     </children>
-                  </Pane>
-               </center>
-               <bottom>
-                  <Pane prefHeight="80.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="btnDatBan"
-        						layoutX="210.0"
-        						layoutY="25.0"
-        						mnemonicParsing="false"
-       							prefHeight="50.0"
-        						prefWidth="70.0"
-        						text="Đặt bàn"
-        						textFill="WHITE"
-        						style="
-            							-fx-background-color: linear-gradient(#4CAF50, #388E3C);
-            							-fx-background-radius: 8;
-            							-fx-font-weight: bold;
- 	          							-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.2, 2, 2);">
-  					 		<font>
-       					 		<Font name="System Bold" size="12.0" />
-   					 		</font>
-						</Button>
-                        <Label layoutX="5.0" layoutY="7.0" text="Mã giảm giá : " />
-                        <ComboBox fx:id="cmbKM" layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
-                        <Label layoutX="5.0" layoutY="35.0" text="VAT : " />
-                        <Label layoutX="90.0" layoutY="35.0" text="0" />
-                        <Label layoutX="170.0" layoutY="35.0" text="VND" />
-                        <Label layoutX="5.0" layoutY="55.0" text="Tổng tiền : " />
-                        <Label layoutX="90.0" layoutY="55.0" text="0" textFill="RED">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="170.0" layoutY="55.0" text="VND" />
-                     </children>
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding>
-                     <BorderPane.margin>
-                        <Insets bottom="4.0" left="4.0" right="4.0" />
-                     </BorderPane.margin>
-                  </Pane>
-               </bottom>
-            </BorderPane>
-         </left>
-         <center>
-            <BorderPane prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-               <center>
-                  <BorderPane prefHeight="630.0" prefWidth="801.0" BorderPane.alignment="CENTER">
-                     <bottom>
-                        <BorderPane prefHeight="40.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-                           <left>
-                              <Pane prefHeight="40.0" prefWidth="450.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="10.0" layoutY="10.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-                                    <Label layoutX="45.0" layoutY="12.0" text="Đã được đặt" />
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="130.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                                    <Label layoutX="165.0" layoutY="12.0" text="Trống" />
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="255.0" layoutY="10.0" stroke="YELLOW" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-                                    <Label layoutX="290.0" layoutY="12.0" text="Đang chọn" />
-                                 </children>
-                              </Pane>
-                           </left>
-                           <right>
-                              <Pane prefHeight="40.0" prefWidth="350.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0066cc" height="20.0" layoutX="130.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                                    <Label layoutX="165.0" layoutY="12.0" text="Bàn thường" />
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#66cccc" height="20.0" layoutX="20.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#33cc66" height="20.0" layoutX="255.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                                    <Label layoutX="290.0" layoutY="12.0" text="Bàn lớn" />
-                                    <Label layoutX="55.0" layoutY="12.0" text="Bàn nhỏ" />
-                                 </children>
-                              </Pane>
-                           </right>
-                        </BorderPane>
-                     </bottom>
-                     <center>
-                        <VBox BorderPane.alignment="CENTER">
-                           <children>
-                              <ScrollPane>
-                                 <content>
-                                    <GridPane fx:id="gridPaneBan">
-										<Button fx:id="btnBan"
-       											prefHeight="80"
-        										prefWidth="120"
-        										text="B01 (10 chỗ)"
-        										style="
-            											-fx-font-size: 14px;
-            											-fx-background-color: linear-gradient(#66ccff, #3399ff);
-            											-fx-background-radius: 10;
-           												-fx-font-weight: bold;
-            											-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.3, 3, 3);" />
-                                       <columnConstraints>
-                                          <ColumnConstraints />
-                                       </columnConstraints>
-                                       <rowConstraints>
-                                          <RowConstraints />
-                                       </rowConstraints>
+<center>
+<BorderPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: blue3e3e3e;" BorderPane.alignment="CENTER">
+<left>
+<BorderPane prefHeight="700.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+<top>
+<Pane prefHeight="300.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+<children>
+<BorderPane prefHeight="300.0" prefWidth="300.0">
+<center>
+<Pane prefHeight="250.0" prefWidth="0.0" BorderPane.alignment="CENTER">
+<BorderPane.margin>
+<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+</BorderPane.margin>
+<children>
+<Label alignment="CENTER" prefWidth="300.0" text="Thông tin bàn">
+<font>
+<Font name="Times New Roman Bold" size="15.0" />
+</font>
+<padding>
+<Insets top="5.0" />
+</padding>
+</Label>
+<Label layoutX="26.0" layoutY="59.0" text="Loại bàn :" />
+<Label layoutX="26.0" layoutY="99.0" text="Số lượng :" />
+<Label layoutX="26.0" layoutY="139.0" text="Vị trí :" />
+<Label layoutX="26.0" layoutY="179.0" text="Trạng thái :" />
+<TextField fx:id="txtTrangThai" editable="false" layoutX="121.0" layoutY="174.0" style="-fx-background-color: e3e3e3;" />
+<TextField fx:id="txtViTri" editable="false" layoutX="121.0" layoutY="135.0" style="-fx-background-color: e3e3e3;" />
+<TextField fx:id="txtSoLuong" editable="false" layoutX="121.0" layoutY="95.0" style="-fx-background-color: e3e3e3;" />
+<TextField fx:id="txtLoaiBan" editable="false" layoutX="121.0" layoutY="54.0" style="-fx-background-color: e3e3e3;" />
+</children>
+</Pane>
+</center>
+</BorderPane>
+</children>
+</Pane>
+</top>
+<center>
+<Pane prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+<BorderPane.margin>
+<Insets bottom="4.0" left="4.0" right="4.0" />
+</BorderPane.margin>
+<children>
+<Label alignment="CENTER" prefWidth="300.0" text="Thông tin khách hàng">
+<font>
+<Font name="Times New Roman Bold" size="15.0" />
+</font>
+<padding>
+<Insets top="5.0" />
+</padding>
+</Label>
+<Label layoutX="15.0" layoutY="40.0" text="Tên khách hàng : " />
+<Label layoutX="15.0" layoutY="80.0" text="Điểm tích lũy : " />
+<Label layoutX="15.0" layoutY="120.0" text="Số điện thoại :" />
+<TextField fx:id="txtSDT" layoutX="110.0" layoutY="116.0" />
+<TextField fx:id="txtDiemTichLuy" editable="false" layoutX="110.0" layoutY="76.0" style="-fx-background-color: e3e3e3;" />
+<TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="35.0" style="-fx-background-color: e3e3e3;" />
+<Button fx:id="btnTimKiem" layoutX="195.0" layoutY="160.0" mnemonicParsing="false" onAction="#timKiemKhachHang" text="Tìm kiếm" />
+</children>
+</Pane>
+</center>
+<bottom>
+<Pane prefHeight="80.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+<children>
+<Button fx:id="btnDatBan" layoutX="210.0" layoutY="25.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="70.0" style=" -fx-background-color: linear-gradient(#4CAF50, #388E3C); -fx-background-radius: 8; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.2, 2, 2);" text="Đặt bàn" textFill="WHITE">
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Button>
+<Label layoutX="5.0" layoutY="7.0" text="Mã giảm giá : " />
+<ComboBox fx:id="cmbKM" layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
+<Label layoutX="5.0" layoutY="35.0" text="VAT : " />
+<Label layoutX="90.0" layoutY="35.0" text="0" />
+<Label layoutX="170.0" layoutY="35.0" text="VND" />
+<Label layoutX="5.0" layoutY="55.0" text="Tổng tiền : " />
+<Label layoutX="90.0" layoutY="55.0" text="0" textFill="RED">
+<font>
+<Font name="System Bold" size="14.0" />
+</font>
+</Label>
+<Label layoutX="170.0" layoutY="55.0" text="VND" />
+</children>
+<padding>
+<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+</padding>
+<BorderPane.margin>
+<Insets bottom="4.0" left="4.0" right="4.0" />
+</BorderPane.margin>
+</Pane>
+</bottom>
+</BorderPane>
+</left>
+<center>
+<BorderPane prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+<center>
+<BorderPane prefHeight="630.0" prefWidth="801.0" BorderPane.alignment="CENTER">
+<bottom>
+<BorderPane prefHeight="40.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+<left>
+<Pane prefHeight="40.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+<children>
+<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="10.0" layoutY="10.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+<Label layoutX="45.0" layoutY="12.0" text="Đã được đặt" />
+<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="130.0" layoutY="10.0" stroke="PURPLE" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+<Label layoutX="165.0" layoutY="12.0" text="Trống" />
+<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="255.0" layoutY="10.0" stroke="#257925" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+<Label layoutX="290.0" layoutY="12.0" text="Đang chọn" />
+</children>
+</Pane>
+</left>
+<right>
+<Pane prefHeight="40.0" prefWidth="350.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+<children>
+<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffeb3b" height="20.0" layoutX="130.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+<Label layoutX="165.0" layoutY="12.0" text="Bàn thường" />
+<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#66cccc" height="20.0" layoutX="20.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff6f61" height="20.0" layoutX="255.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+<Label layoutX="290.0" layoutY="12.0" text="Bàn lớn" />
+<Label layoutX="55.0" layoutY="12.0" text="Bàn nhỏ" />
+</children>
+</Pane>
+</right>
+</BorderPane>
+</bottom>
+<center>
+<VBox BorderPane.alignment="CENTER">
+<children>
+<ScrollPane>
+<content>
+<GridPane fx:id="gridPaneBan">
+<Button fx:id="btnBan" prefHeight="80" prefWidth="120" style=" -fx-font-size: 14px; -fx-background-color: linear-gradient(#66ccff, #3399ff); -fx-background-radius: 10; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.3, 3, 3);" text="B01 (10 chỗ)" />
+<columnConstraints>
+<ColumnConstraints />
+</columnConstraints>
+<rowConstraints>
+<RowConstraints />
+</rowConstraints>
 </GridPane>
 
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </VBox>
-                     </center>
-                  </BorderPane>
-               </center>
-            </BorderPane>
-         </center>
-      </BorderPane>
-   </center>
-   <top>
-      <BorderPane prefHeight="80.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <center>
-            <BorderPane BorderPane.alignment="CENTER">
-               <center>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <DatePicker fx:id="dpNgayDatBan" layoutX="165.0" layoutY="40.0" />
-                        <Label layoutX="165.0" layoutY="15.0" text="NGÀY ĐẶT BÀN">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="360.0" layoutY="15.0" text="GIỜ BẮT ĐẦU">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cmbGioBatDau" layoutX="360.0" layoutY="40.0" prefWidth="150.0" />
-                        <Label layoutX="530.0" layoutY="15.0" text="GIỜ KẾT THÚC">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cmbGioKetThuc" layoutX="530.0" layoutY="40.0" prefWidth="150.0" />
-                        <Button fx:id="btnHienTai" layoutX="700.0" layoutY="40.0" mnemonicParsing="false" prefWidth="75.0" text="Hiện tại" />
-                        <Label layoutX="40.0" layoutY="15.0" text="TRẠNG THÁI">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cmbTrangThai" layoutX="20.0" layoutY="40.0" prefWidth="120.0" />
-                     </children>
-                  </Pane>
-               </center>
-               <left>
-                  <Pane prefHeight="80.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label layoutX="10.0" layoutY="15.0" text="SỐ LƯỢNG KHÁCH HÀNG">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtSoLuongKH" layoutX="10.0" layoutY="40.0" />
-                        <ComboBox fx:id="cmbLoaiBan" layoutX="170.0" layoutY="40.0" prefWidth="120.0" />
-                        <Label layoutX="200.0" layoutY="15.0" text="LOẠI BÀN">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </Pane>
-               </left>
-            </BorderPane>
-         </center>
-      </BorderPane>
-   </top>
+</content>
+</ScrollPane>
+</children>
+</VBox>
+</center>
 </BorderPane>
+</center>
+</BorderPane>
+</center>
+</BorderPane>
+</center>
+<top>
+<BorderPane prefHeight="80.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<center>
+<BorderPane BorderPane.alignment="CENTER">
+<center>
+<Pane prefHeight="200.0" prefWidth="200.0">
+<children>
+<DatePicker fx:id="dpNgayDatBan" layoutX="165.0" layoutY="40.0" />
+<Label layoutX="165.0" layoutY="15.0" text="NGÀY ĐẶT BÀN">
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Label>
+<Label layoutX="360.0" layoutY="15.0" text="GIỜ BẮT ĐẦU">
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Label>
+<ComboBox fx:id="cmbGioBatDau" layoutX="360.0" layoutY="40.0" prefWidth="150.0" />
+<Label layoutX="530.0" layoutY="15.0" text="GIỜ KẾT THÚC">
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Label>
+<ComboBox fx:id="cmbGioKetThuc" layoutX="530.0" layoutY="40.0" prefWidth="150.0" />
+<Button fx:id="btnHienTai" layoutX="700.0" layoutY="40.0" mnemonicParsing="false" prefWidth="75.0" text="Hiện tại" />
+<Label layoutX="40.0" layoutY="15.0" text="TRẠNG THÁI">
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Label>
+<ComboBox fx:id="cmbTrangThai" layoutX="20.0" layoutY="40.0" prefWidth="120.0" />
+</children>
+</Pane>
+</center>
+<left>
+<Pane prefHeight="80.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+<children>
+<Label layoutX="10.0" layoutY="15.0" text="SỐ LƯỢNG KHÁCH HÀNG">
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Label>
+<TextField fx:id="txtSoLuongKH" layoutX="10.0" layoutY="40.0" />
+<ComboBox fx:id="cmbLoaiBan" layoutX="170.0" layoutY="40.0" prefWidth="120.0" />
+<Label layoutX="200.0" layoutY="15.0" text="LOẠI BÀN">
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Label>
+</children>
+</Pane>
+</left>
+</BorderPane>
+</center>
+</BorderPane>
+</top>
+</BorderPane>
+
