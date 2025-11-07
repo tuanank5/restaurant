@@ -83,7 +83,7 @@ public class DatBan_Controller implements Initializable {
 //    	    scrollPaneBan.setFitToHeight(true);
         khoiTaoComboBoxes();
         khoiTaoGio();
-        khoiTaoComboBoxKhuyenMai();
+//        khoiTaoComboBoxKhuyenMai();
         loadDanhSachBan();
 
         cmbTrangThai.setOnAction(e -> loadDanhSachBan());
@@ -107,27 +107,27 @@ public class DatBan_Controller implements Initializable {
     }
     
     // --- Khởi tạo ComboBox Khuyến mãi ---
-    private void khoiTaoComboBoxKhuyenMai() {
-        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
-        if (danhSachKM != null && !danhSachKM.isEmpty()) {
-            cmbKM.getItems().setAll(danhSachKM);
-            // Hiển thị tên KM + %
-            cmbKM.setCellFactory(lv -> new ListCell<KhuyenMai>() {
-                @Override
-                protected void updateItem(KhuyenMai item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
-                }
-            });
-            cmbKM.setButtonCell(new ListCell<KhuyenMai>() {
-                @Override
-                protected void updateItem(KhuyenMai item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
-                }
-            });
-        }
-    }
+//    private void khoiTaoComboBoxKhuyenMai() {
+//        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
+//        if (danhSachKM != null && !danhSachKM.isEmpty()) {
+//            cmbKM.getItems().setAll(danhSachKM);
+//            // Hiển thị tên KM + %
+//            cmbKM.setCellFactory(lv -> new ListCell<KhuyenMai>() {
+//                @Override
+//                protected void updateItem(KhuyenMai item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+//                }
+//            });
+//            cmbKM.setButtonCell(new ListCell<KhuyenMai>() {
+//                @Override
+//                protected void updateItem(KhuyenMai item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+//                }
+//            });
+//        }
+//    }
 
 
     private void khoiTaoComboBoxes() {

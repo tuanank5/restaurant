@@ -81,23 +81,11 @@
 <bottom>
 <Pane prefHeight="80.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
 <children>
-<Button fx:id="btnDatBan" layoutX="210.0" layoutY="25.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="70.0" style=" -fx-background-color: linear-gradient(#4CAF50, #388E3C); -fx-background-radius: 8; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.2, 2, 2);" text="Đặt bàn" textFill="WHITE">
+<Button fx:id="btnDatBan" layoutX="36.0" layoutY="10.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="220.0" style=" -fx-background-color: linear-gradient(#4CAF50, #388E3C); -fx-background-radius: 8; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.2, 2, 2);" text="Đặt bàn" textFill="WHITE">
 <font>
 <Font name="System Bold" size="12.0" />
 </font>
 </Button>
-<Label layoutX="5.0" layoutY="7.0" text="Mã giảm giá : " />
-<ComboBox fx:id="cmbKM" layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
-<Label layoutX="5.0" layoutY="35.0" text="VAT : " />
-<Label layoutX="90.0" layoutY="35.0" text="0" />
-<Label layoutX="170.0" layoutY="35.0" text="VND" />
-<Label layoutX="5.0" layoutY="55.0" text="Tổng tiền : " />
-<Label layoutX="90.0" layoutY="55.0" text="0" textFill="RED">
-<font>
-<Font name="System Bold" size="14.0" />
-</font>
-</Label>
-<Label layoutX="170.0" layoutY="55.0" text="VND" />
 </children>
 <padding>
 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -225,4 +213,3 @@
 </BorderPane>
 </top>
 </BorderPane>
-
