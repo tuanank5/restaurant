@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
 
 import controller.DatMon.DatMon_Controller;
 
+
 public class DatBan_Controller implements Initializable {
 
     // --- TextField thông tin bàn
@@ -266,7 +267,8 @@ public class DatBan_Controller implements Initializable {
                 // Gửi bàn đang chọn sang DatMon_Controller
                 DatMon_Controller controller = loader.getController();
                 controller.setBanDangChon(banDangChon); // <--- truyền bàn sang
-
+                controller.setDonDatBanHienTai(don);
+                
                 Stage stage = new Stage();
                 stage.setTitle("Đặt Món");
                 stage.setScene(new Scene(root));

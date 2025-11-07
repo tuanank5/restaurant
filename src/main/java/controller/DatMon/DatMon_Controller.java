@@ -66,15 +66,12 @@ public class DatMon_Controller implements Initializable {
     @FXML
     private GridPane gridPaneMon;
 
+    @FXML
+    private TextField txtMaBan;
 
     @FXML
-    private TextField txtDiemTichLuy;
-
-    @FXML
-    private TextField txtSDT;
-
-    @FXML
-    private TextField txtTenKH;
+    private TextField txtMaKH;
+    
     
     //-----Bàn---------
     private Ban banDangChon;
@@ -84,10 +81,19 @@ public class DatMon_Controller implements Initializable {
         loadThongTinKhachHang();
     }
     
+    private DonDatBan donDatBanHienTai;
+
+    public void setDonDatBanHienTai(DonDatBan don) {
+        this.donDatBanHienTai = don;
+        loadThongTinKhachHang(); // load ngay khi nhận được
+    }
+
+    
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-    
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+    private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
+    
     private List<MonAn> dsMonAn;
 
     private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
@@ -160,17 +166,25 @@ public class DatMon_Controller implements Initializable {
         }
     }
 
+    // -------------------- LOAD THÔNG TIN KHÁCH HÀNG --------------------
     private void loadThongTinKhachHang() {
-        if (banDangChon != null) {
-            // Giả sử Bàn đã đặt có DonDatBan
+        if (donDatBanHienTai != null) {
+            Ban ban = donDatBanHienTai.getBan();
+            KhachHang kh = donDatBanHienTai.getKhachHang();
+            if (ban != null) {
+                txtMaBan.setText(ban.getMaBan());
+            }
+            if (kh != null) {
+                txtMaKH.setText(kh.getMaKH());
+            }
+            dpNgayDatBan.setValue(donDatBanHienTai.getNgayGioLapDon().toLocalDate());
+        } else if (banDangChon != null) {
+            // fallback lấy bàn nếu chưa set donDatBanHienTai
             DonDatBan donDat = donDatBanDAO.layDonDatTheoBan(banDangChon.getMaBan());
-            if (donDat != null) {
+            if (donDat != null && donDat.getKhachHang() != null) {
                 KhachHang kh = donDat.getKhachHang();
-                if (kh != null) {
-                    txtTenKH.setText(kh.getTenKH());
-                    txtSDT.setText(kh.getSdt());
-                    txtDiemTichLuy.setText(String.valueOf(kh.getDiemTichLuy()));
-                }
+                txtMaKH.setText(kh.getMaKH());
+                dpNgayDatBan.setValue(donDat.getNgayGioLapDon().toLocalDate());
             }
         }
     }

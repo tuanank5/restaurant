@@ -27,6 +27,24 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         return emf.createEntityManager();
     }
 
+ // --- Lấy đơn đặt bàn mới nhất ---
+    public DonDatBan layDonDatMoiNhat() {
+        EntityManager em = getEntityManager(); // giả sử bạn có phương thức này trong Entity_DAOImpl
+        try {
+            TypedQuery<DonDatBan> query = em.createQuery(
+                "SELECT d FROM DonDatBan d ORDER BY d.ngayGioLapDon DESC", DonDatBan.class
+            );
+            query.setMaxResults(1); // chỉ lấy 1 kết quả mới nhất
+            List<DonDatBan> list = query.getResultList();
+            if (!list.isEmpty()) {
+                return list.get(0);
+            }
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
     @Override
     public DonDatBan layDonDatTheoBan(String maBan) {
         EntityManager em = getEntityManager();
