@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import controller.DatMon.DatMon_Controller;
+import controller.Menu.MenuNV_Controller;
 
 
 public class DatBan_Controller implements Initializable {
@@ -71,6 +72,9 @@ public class DatBan_Controller implements Initializable {
     private List<Ban> danhSachBan = new ArrayList<>();
     private Ban banDangChon = null;
     private Button buttonBanDangChonUI = null;
+    
+    private String maBanDangChon;
+    private String maKHDangChon;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -91,6 +95,15 @@ public class DatBan_Controller implements Initializable {
         btnDatBan.setDisable(true);
 
         btnTimKiem.setOnAction(this::timKiemKhachHang);
+        
+        if (MenuNV_Controller.banDangChon != null) {
+        	maBanDangChon = MenuNV_Controller.banDangChon.getMaBan();
+        }
+
+        if (MenuNV_Controller.khachHangDangChon != null) {
+        	maKHDangChon = MenuNV_Controller.khachHangDangChon.getMaKH();
+            txtTenKH.setText(MenuNV_Controller.khachHangDangChon.getTenKH());
+        }
     }
     
     // --- Khởi tạo ComboBox Khuyến mãi ---
@@ -171,8 +184,28 @@ public class DatBan_Controller implements Initializable {
                 Button btnBan = new Button(ban.getMaBan() + "\n(" + soLuongHienThi + " chỗ)");
                 btnBan.setPrefSize(120, 100);
                 btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-                btnBan.setOnAction(e -> handleChonBan(ban, btnBan));
+                //btnBan.setOnAction(e -> handleChonBan(ban, btnBan));
+                btnBan.setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        // Double click: nếu bàn đã được đặt thì mở giao diện DatMon
+                        if ("Đã được đặt".equals(ban.getTrangThai())) {
+                            if (dsDon != null && !dsDon.isEmpty()) {
+                                DonDatBan donGanNhat = dsDon.get(dsDon.size() - 1);
+                                KhachHang khachHang = donGanNhat.getKhachHang();
+                                
+                                // Gán dữ liệu sang MenuNV_Controller để dùng ở giao diện DatMon
+                                MenuNV_Controller.banDangChon = ban;
+                                MenuNV_Controller.khachHangDangChon = khachHang;
+                            }
+                            MenuNV_Controller.instance.readyUI("MonAn/DatMon");
+                        }
+                    } else if (event.getClickCount() == 1) {
+                        // Single click: chỉ chọn bàn
+                        handleChonBan(ban, btnBan);
+                    }
+                });
 
+                
                 GridPane.setMargin(btnBan, new Insets(5.0));
                 gridPaneBan.add(btnBan, col, row);
 
@@ -189,7 +222,7 @@ public class DatBan_Controller implements Initializable {
         banDangChon = ban;
         if ("Đã được đặt".equals(ban.getTrangThai()) || "Đang phục vụ".equals(ban.getTrangThai())) {
             btnDatBan.setDisable(true);
-            showAlert(Alert.AlertType.INFORMATION, "Bàn này đã được đặt hoặc đang phục vụ, không thể đặt lại!");
+            //showAlert(Alert.AlertType.INFORMATION, "Bàn này đã được đặt hoặc đang phục vụ, không thể đặt lại!");
         } else {
             btnDatBan.setDisable(false);
         }
@@ -250,35 +283,8 @@ public class DatBan_Controller implements Initializable {
         if (thanhCong) {
             banDAO.sua(banDangChon);
             showAlert(Alert.AlertType.INFORMATION, "Đặt bàn thành công!");
-
-            loadDanhSachBan();
-
-            // 👉 MỞ GIAO DIỆN ĐẶT MÓN
-            try {
-                URL fxml = getClass().getResource("/view/fxml/MonAn/DatMon.fxml");
-                if (fxml == null) {
-                    System.out.println("❌ Không tìm thấy file DatMon.fxml");
-                    return;
-                }
-
-                FXMLLoader loader = new FXMLLoader(fxml);
-                Parent root = loader.load();
-
-                // Gửi bàn đang chọn sang DatMon_Controller
-                DatMon_Controller controller = loader.getController();
-                controller.setBanDangChon(banDangChon); // <--- truyền bàn sang
-                controller.setDonDatBanHienTai(don);
-                
-                Stage stage = new Stage();
-                stage.setTitle("Đặt Món");
-                stage.setScene(new Scene(root));
-                stage.show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else {
+            loadDanhSachBan();          
+        	} else {
             showAlert(Alert.AlertType.ERROR, "Lỗi khi thêm đơn đặt bàn!");
         }
     }

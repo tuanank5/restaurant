@@ -8,6 +8,8 @@ import java.util.Optional;
 import config.RestaurantApplication;
 import controller.Dashboard.DashboardNV_Controller;
 import dao.TaiKhoan_DAO;
+import entity.Ban;
+import entity.KhachHang;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,9 +27,11 @@ import javafx.stage.Stage;
 public class MenuNV_Controller {
 	
 	public static MenuNV_Controller instance;
+	public static Ban banDangChon;
+	public static KhachHang khachHangDangChon;
 	
 	private TaiKhoan taiKhoan;
-	
+
 	@FXML
     private BorderPane borderPane;
 

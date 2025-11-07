@@ -28,6 +28,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import controller.Menu.MenuNV_Controller;
 import dao.MonAn_DAO;
 import dao.impl.MonAn_DAOImpl;
 import entity.MonAn;
@@ -102,19 +104,35 @@ public class DatMon_Controller implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadMonAnToGrid();
+    	loadMonAnToGrid();
         dpNgayDatBan.setValue(LocalDate.now());
-
         // Setup TableView
-        colSTT.setCellValueFactory(col -> 
-            new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
+//        colSTT.setCellValueFactory(col ->
+//            new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
+        colSTT.setCellValueFactory(col -> {
+            int index = tblDS.getItems().indexOf(col.getValue());
+            return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
+        });
         colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
         colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-        colSoLuong.setCellValueFactory(col -> 
-        new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue())));
+//        colSoLuong.setCellValueFactory(col ->
+//            new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue())));
+        colSoLuong.setCellValueFactory(col -> {
+            Integer soLuong = dsMonAnDat.get(col.getValue());
+            return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
+        });
         tblDS.setItems(FXCollections.observableArrayList());
-        
         khoiTaoComboBoxKhuyenMai();
+        // --- Nhận dữ liệu bàn và KH từ MenuNV_Controller ---
+        if (MenuNV_Controller.banDangChon != null) {
+            this.banDangChon = MenuNV_Controller.banDangChon;
+            txtMaBan.setText(banDangChon.getMaBan());
+        }
+
+        if (MenuNV_Controller.khachHangDangChon != null) {
+            txtMaKH.setText(MenuNV_Controller.khachHangDangChon.getMaKH());
+        }
+
         loadThongTinKhachHang();
     }
 
@@ -204,6 +222,7 @@ public class DatMon_Controller implements Initializable {
             }
             dpNgayDatBan.setValue(donDatBanHienTai.getNgayGioLapDon().toLocalDate());
         } else if (banDangChon != null) {
+        	txtMaBan.setText(banDangChon.getMaBan()); // Tránh việc chỉ hiển thị mã bàn không thấy mã KH
             // fallback lấy bàn nếu chưa set donDatBanHienTai
             DonDatBan donDat = donDatBanDAO.layDonDatTheoBan(banDangChon.getMaBan());
             if (donDat != null && donDat.getKhachHang() != null) {
