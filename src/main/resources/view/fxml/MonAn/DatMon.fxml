@@ -128,8 +128,7 @@
                            <center>
                               <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBox fx:id="conBoxTrangThai" layoutX="12.0" prefWidth="150.0" promptText="Trạng Thái" />
-                                    <ComboBox fx:id="comBoxPhanLoai" layoutX="184.0" prefWidth="150.0" promptText="Phân Loại" />
+                                    <ComboBox fx:id="comBoxPhanLoai" layoutX="19.0" prefWidth="150.0" promptText="Phân Loại" />
                                  </children>
                               </Pane>
                            </center>

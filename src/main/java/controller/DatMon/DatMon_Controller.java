@@ -61,6 +61,8 @@ public class DatMon_Controller implements Initializable {
     private TableColumn<MonAn, Integer> colSoLuong;
 
     @FXML
+    private ComboBox<String> comBoxPhanLoai;
+    @FXML
     private DatePicker dpNgayDatBan;
 
     @FXML
@@ -112,9 +114,32 @@ public class DatMon_Controller implements Initializable {
         new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue())));
         tblDS.setItems(FXCollections.observableArrayList());
         
+        khoiTaoComboBoxKhuyenMai();
         loadThongTinKhachHang();
     }
 
+    // --- Khởi tạo ComboBox Khuyến mãi ---
+    private void khoiTaoComboBoxKhuyenMai() {
+        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
+        if (danhSachKM != null && !danhSachKM.isEmpty()) {
+            cmbKM.getItems().setAll(danhSachKM);
+            // Hiển thị tên KM + %
+            cmbKM.setCellFactory(lv -> new ListCell<KhuyenMai>() {
+                @Override
+                protected void updateItem(KhuyenMai item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+                }
+            });
+            cmbKM.setButtonCell(new ListCell<KhuyenMai>() {
+                @Override
+                protected void updateItem(KhuyenMai item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
+                }
+            });
+        }
+    }
     
     private void loadMonAnToGrid() {
         dsMonAn = monAnDAO.getDanhSachMonAn();
