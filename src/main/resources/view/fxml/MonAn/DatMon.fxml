@@ -58,36 +58,40 @@
                         </Pane>
                      </top>
                      <bottom>
-                        <Pane prefHeight="80.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                           <children>
-                              <Button fx:id="btnThanhToan" layoutX="205.0" layoutY="27.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: red;" text="Thanh toán" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="11.0" />
-                                 </font>
-                              </Button>
-                              <Label layoutX="5.0" layoutY="5.0" text="Mã giảm giá : " />
-                              <ComboBox fx:id="cmbKM" layoutX="85.0" layoutY="5.0" prefWidth="100.0" />
-                              <Label layoutX="5.0" layoutY="35.0" text="VAT : " />
-                              <Label layoutX="90.0" layoutY="35.0" text="0" />
-                              <Label layoutX="170.0" layoutY="35.0" text="VND" />
-                              <Label layoutX="5.0" layoutY="55.0" text="Tổng tiền : " />
-                              <Label layoutX="90.0" layoutY="55.0" text="0" textFill="RED">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="170.0" layoutY="55.0" text="VND" />
-                           </children>
-                           <padding>
-                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                           </padding>
-                           <BorderPane.margin>
-                              <Insets bottom="4.0" left="4.0" right="4.0" />
-                           </BorderPane.margin>
-                        </Pane>
+                       <Pane prefHeight="110.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+						    <children>
+						        <!-- Mã giảm giá -->
+						        <Label layoutX="5.0" layoutY="5.0" text="Mã giảm giá:" />
+						        <ComboBox fx:id="cmbKM" layoutX="100.0" layoutY="5.0" prefWidth="120.0" />					
+						        <!-- VAT -->
+						        <Label layoutX="5.0" layoutY="35.0" text="VAT (10%):" />
+						        <Label fx:id="lblVat" layoutX="100.0" layoutY="35.0" text="0" />
+						        <Label layoutX="180.0" layoutY="35.0" text="VND" />					
+						        <!-- Tổng tiền trước VAT -->
+						        <Label layoutX="5.0" layoutY="55.0" text="Tổng tiền:" />
+						        <Label fx:id="lblTongTien" layoutX="100.0" layoutY="55.0" text="0" />
+						        <Label layoutX="180.0" layoutY="55.0" text="VND" />					
+						        <!-- Tổng tiền sau VAT -->
+						        <Label layoutX="5.0" layoutY="80.0" text="Tổng cộng (VAT):" />
+						        <Label fx:id="lblTongTienVAT" layoutX="100.0" layoutY="80.0" text="0" />
+						        <Label layoutX="180.0" layoutY="80.0" text="VND" />						
+						        <!-- Nút thanh toán -->
+						        <Button fx:id="btnThanhToan" layoutX="210.0" layoutY="55.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: red;" text="Thanh toán" textFill="WHITE">
+						            <font>
+						                <Font name="System Bold" size="11.0" />
+						            </font>
+						        </Button>
+						    </children>					
+						    <padding>
+						        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+						    </padding>
+						    <BorderPane.margin>
+						        <Insets bottom="4.0" left="4.0" right="4.0" />
+						    </BorderPane.margin>
+						</Pane>
                      </bottom>
                      <center>
-                        <Pane prefHeight="220.0" prefWidth="300.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+                        <Pane prefHeight="163.0" prefWidth="292.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
                               <Insets bottom="4.0" left="4.0" right="4.0" />
                            </BorderPane.margin>

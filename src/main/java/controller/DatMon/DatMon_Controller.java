@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
@@ -38,6 +39,8 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 
 public class DatMon_Controller implements Initializable {
@@ -76,6 +79,16 @@ public class DatMon_Controller implements Initializable {
     @FXML
     private TextField txtMaKH;
     
+    @FXML
+    private Label lblTongTien;
+
+    @FXML
+    private Label lblVat;
+    
+    @FXML
+    private Label lblTongTienVAT;
+    
+    private double Vat_Rate = 0.1;
     
     //-----Bàn---------
     private Ban banDangChon;
@@ -115,6 +128,17 @@ public class DatMon_Controller implements Initializable {
         });
         colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
         colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
+        colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(dinhDangTien(item));
+                }
+            }
+        });
 //        colSoLuong.setCellValueFactory(col ->
 //            new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue())));
         colSoLuong.setCellValueFactory(col -> {
@@ -188,7 +212,8 @@ public class DatMon_Controller implements Initializable {
             Label lblTen = new Label(mon.getTenMon());
             lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
-            Label lblGia = new Label(mon.getDonGia() + " VND");
+            //Label lblGia = new Label(mon.getDonGia() + " VND");
+            Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
 
             Button btnChon = new Button("Chọn");
             btnChon.setOnAction(e -> chonMon(mon));
@@ -233,26 +258,76 @@ public class DatMon_Controller implements Initializable {
         }
     }
 
+//    private void chonMon(MonAn mon) {
+//        if (dsMonAnDat.containsKey(mon)) {
+//            // Nếu đã chọn món, tăng số lượng
+//            dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+//        } else {
+//            // Thêm món mới với số lượng = 1
+//            dsMonAnDat.put(mon, 1);
+//        }
+//
+//        // Cập nhật TableView
+//        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+//        tblDS.refresh();
+//
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Chọn món");
+//        alert.setHeaderText(null);
+//        alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
+//        alert.showAndWait();
+//    }
     private void chonMon(MonAn mon) {
         if (dsMonAnDat.containsKey(mon)) {
-            // Nếu đã chọn món, tăng số lượng
-            dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+            // Nếu đã có món này -> hỏi người dùng
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Món đã chọn");
+            alert.setHeaderText("Món '" + mon.getTenMon() + "' đã có trong danh sách.");
+            alert.setContentText("Bạn muốn làm gì?");
+            ButtonType btnTang = new ButtonType("➕ Tăng số lượng");
+            ButtonType btnGiam = new ButtonType("➖ Giảm số lượng");
+            ButtonType btnXoa = new ButtonType("❌ Xóa món");
+            ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == btnTang) {
+                    dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+                } else if (result.get() == btnGiam) {
+                    int soLuong = dsMonAnDat.get(mon) - 1;
+                    if (soLuong <= 0) dsMonAnDat.remove(mon);
+                    else dsMonAnDat.put(mon, soLuong);
+                } else if (result.get() == btnXoa) {
+                    dsMonAnDat.remove(mon);
+                }
+            }
         } else {
-            // Thêm món mới với số lượng = 1
+            // Thêm món mới
             dsMonAnDat.put(mon, 1);
         }
-
-        // Cập nhật TableView
+        // Cập nhật bảng
         tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
         tblDS.refresh();
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Chọn món");
-        alert.setHeaderText(null);
-        alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
-        alert.showAndWait();
+        capNhatTongTien();
     }
+    
+    private void capNhatTongTien() {
+        double tongTruocVAT = dsMonAnDat.entrySet().stream()
+            .mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
+            .sum();
 
+        double tienVAT = tongTruocVAT * Vat_Rate;
+        double tongSauVAT = tongTruocVAT + tienVAT;
 
+        lblVat.setText(dinhDangTien(tienVAT));
+        lblTongTien.setText(dinhDangTien(tongTruocVAT));
+        lblTongTienVAT.setText(dinhDangTien(tongSauVAT));
+    }
+    
+    private String dinhDangTien(double soTien) {
+        NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return nf.format(soTien);
+    }
     
 }
