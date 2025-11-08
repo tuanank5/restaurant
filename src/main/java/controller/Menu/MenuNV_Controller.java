@@ -8,10 +8,13 @@ import java.util.Optional;
 
 import config.RestaurantApplication;
 import controller.Dashboard.DashboardNV_Controller;
+import dao.Ban_DAO;
 import dao.TaiKhoan_DAO;
 import entity.Ban;
 import entity.KhachHang;
 import entity.TaiKhoan;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +35,7 @@ public class MenuNV_Controller {
 	public static String tongTienSauVAT;
 	public static Ban banDangChon;
 	public static KhachHang khachHangDangChon;
+	public static ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
 	
 	public static TaiKhoan taiKhoan;
 
@@ -44,10 +48,12 @@ public class MenuNV_Controller {
     @FXML
     private void initialize() {
         instance = this; // Gán instance khi FXML được load
+       
     }
     public static MenuNV_Controller getInstance() {
         return instance;
     }
+
     
 	public FXMLLoader readyUI(String ui) {
         Parent root = null;
@@ -123,7 +129,18 @@ public class MenuNV_Controller {
 		//		dashBoardController.setThongTin(taiKhoan);
 		DashboardNV_Controller dashboardNVController = readyUI("Dashboard/DashboardNV").getController();
 	}
-	
+	public void refreshBanUI() {
+		if (banDangChon != null) {
+	        for (Ban b : danhSachBan) {
+	            if (b.getMaBan().equals(banDangChon.getMaBan())) {
+	                b.setTrangThai("Trống");
+	                break;
+	            }
+	        }
+	    }
+	    // Nếu DatBan đang hiển thị, reload UI để cập nhật trạng thái bàn
+	    readyUI("DatBan/DatBan-test");
+	}
 	@FXML
     void btnDashboard(ActionEvent event) {
 		

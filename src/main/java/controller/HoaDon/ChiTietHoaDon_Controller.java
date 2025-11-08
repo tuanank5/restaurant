@@ -202,14 +202,17 @@ public class ChiTietHoaDon_Controller {
              document.add(thanks);
 
              document.close();
-
+             
              // ======= THÔNG BÁO =======
              Alert alert = new Alert(Alert.AlertType.INFORMATION);
              alert.setTitle("Xuất hóa đơn");
              alert.setHeaderText("Thành công!");
              alert.setContentText("Hóa đơn đã được lưu tại:\n" + file.getAbsolutePath());
              alert.showAndWait();
-
+             
+//             // ======= QUAY LẠI GIAO DIỆN DatBan =======
+           MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
+             
          } catch (Exception e) {
              e.printStackTrace();
              Alert alert = new Alert(Alert.AlertType.ERROR);
