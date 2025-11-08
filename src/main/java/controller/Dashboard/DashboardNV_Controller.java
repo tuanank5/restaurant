@@ -16,8 +16,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 
+import controller.Menu.MenuNV_Controller;
 import dao.impl.HoaDon_DAOImpl;
 import entity.HoaDon;
+import entity.NhanVien;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
@@ -75,6 +77,7 @@ public class DashboardNV_Controller {
     private DatePicker txtDateStart;
     
     private final HoaDon_DAOImpl hoaDon_DAO;
+    private NhanVien nhanVien = MenuNV_Controller.instance.taiKhoan.getNhanVien();
     
     public DashboardNV_Controller() {
     	this.hoaDon_DAO = new HoaDon_DAOImpl();
@@ -173,8 +176,9 @@ public class DashboardNV_Controller {
 
         Integer thang = cmbThang.getValue();
 //        ============ UpDate Ô TOP ==============
-        List<HoaDon> dsHD = hoaDon_DAO.getAllHoaDonTheoThang(thang, nam);
-        Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuTheoThang(thang, nam);
+        List<HoaDon> dsHD = hoaDon_DAO.getAllHoaDonNVTheoThang(thang, nam, nhanVien.getMaNV());
+        Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuNVTheoThang(thang, nam, nhanVien.getMaNV());
+        
         String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
         lblDoanhThu.setText(formattedDoanhThu);
         updateHDInfo(dsHD);
@@ -188,10 +192,11 @@ public class DashboardNV_Controller {
         barChart_DoanhThuNam.setVisible(true);
         areaChart_DoanhThu.setVisible(false);
 
-        Map<String, Double> doanhThuTungThang = hoaDon_DAO.getDoanhThuTheoNam(nam);
+        Map<String, Double> doanhThuTungThang = hoaDon_DAO.getDoanhThuNVTheoNam(nam, nhanVien.getMaNV());
 //        ============ UpDate Ô TOP ==============
-        List<HoaDon> dsHD = hoaDon_DAO.getHoaDonTheoNam(nam);
-        Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuTheoNam(nam);
+        List<HoaDon> dsHD = hoaDon_DAO.getHoaDonNVTheoNam(nam, nhanVien.getMaNV());
+        Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuNVTheoNam(nam, nhanVien.getMaNV());
+        
         String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
         lblDoanhThu.setText(formattedDoanhThu);
         updateHDInfo(dsHD);
@@ -207,8 +212,9 @@ public class DashboardNV_Controller {
         LocalDate dateStart = txtDateStart.getValue();
         LocalDate dateEnd = txtDateEnd.getValue();
 //        ============ UpDate Ô TOP ==============
-        List<HoaDon> dsHD = hoaDon_DAO.getHoaDonTheoNgayCuThe(dateStart, dateEnd);
-        Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuTheoNgayCuThe(dateStart, dateEnd);
+        List<HoaDon> dsHD = hoaDon_DAO.getHoaDonNVTheoNgayCuThe(dateStart, dateEnd, nhanVien.getMaNV());
+        Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuNVTheoNgayCuThe(dateStart, dateEnd, nhanVien.getMaNV());
+        
         String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
         lblDoanhThu.setText(formattedDoanhThu);
         updateHDInfo(dsHD);

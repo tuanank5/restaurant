@@ -23,7 +23,21 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 
     Double getTongDoanhThuTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
 
+    //
     Double getTongDoanhThuTheoNgayVaNhanVien(Date ngayLap, String maNV);
 
     Long countHoaDonTheoNgayVaNhanVien(Date ngayLap, String maNV);
+    //
+    
+    List<HoaDon> getAllHoaDonNVTheoThang(int thang, int nam, String maNV);
+
+    List<HoaDon> getHoaDonNVTheoNam(int nam, String maNV);
+
+    Double getTongDoanhThuNVTheoThang(int thang, int nam, String maNV);
+
+    Double getTongDoanhThuNVTheoNam(int nam, String maNV);
+
+    List<HoaDon> getHoaDonNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
+
+    Double getTongDoanhThuNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
 }
