@@ -323,6 +323,8 @@ public class ChiTietHoaDon_Controller {
 		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 	    nf.setGroupingUsed(true);
 	    //nf.setMaximumFractionDigits(0); // không hiển thị phần thập phân
+	    nf.setMinimumFractionDigits(3); // hiển thị ít nhất 3 số sau dấu thập phân
+	    nf.setMaximumFractionDigits(3);
 	    return nf.format(tien) + " VND";
 	}
 	
