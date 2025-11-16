@@ -5,9 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import Service.EmailService;
 import config.RestaurantApplication;
+import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
+import dao.impl.KhachHang_DAOlmpl;
+import entity.KhachHang;
 import entity.KhuyenMai;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,7 +55,13 @@ public class KhuyenMai_Controller {
     private final KhuyenMai_DAO khuyenMaiDAO = RestaurantApplication.getInstance()
             .getDatabaseContext()
             .newEntity_DAO(KhuyenMai_DAO.class);
-
+    
+    private final KhachHang_DAO khachHangDAO = RestaurantApplication.getInstance()
+    		.getDatabaseContext()
+    		.newEntity_DAO(KhachHang_DAO.class);
+    
+    //private final SmsService smsService = new SmsService();
+    
     @FXML
     private void initialize() {
         setValueTable();
@@ -108,7 +119,7 @@ public class KhuyenMai_Controller {
 
     private void them() {
         try {
-        	// ✅ Tự tạo Mã KM
+        	//Tự tạo Mã KM
             String max = khuyenMaiDAO.getMaxMaKM();
             String maMoi = (max == null) ? "KM001" :
                     "KM" + String.format("%03d", Integer.parseInt(max.substring(2)) + 1);
@@ -126,14 +137,52 @@ public class KhuyenMai_Controller {
             if (khuyenMaiDAO.them(km)) {
                 loadData();
                 showAlert("Thành công", "Thêm khuyến mãi thành công!", Alert.AlertType.INFORMATION);
-                clearForm(); // ✅ Clear form sau khi thêm
+                guiEmailThongBaoKM(km);
+                clearForm(); //Clear form sau khi thêm
             }
 
         } catch (Exception e) {
             showAlert("Lỗi", "Vui lòng nhập đầy đủ và đúng thông tin!", Alert.AlertType.ERROR);
         }
     }
+    
+    private void guiEmailThongBaoKM(KhuyenMai km) {
+        List<KhachHang> dsKH = khachHangDAO.getDanhSach(KhachHang.class, new HashMap<>());
+        String subject = "🎉 Khuyến mãi mới: " + km.getTenKM();
 
+        String contentTemplate = "🎁 THÔNG BÁO KHUYẾN MÃI MỚI\n\n"
+                + "Tên khuyến mãi: " + km.getTenKM() + "\n"
+                + "Loại KM: " + km.getLoaiKM() + "\n"
+                + "Áp dụng cho sản phẩm: " + km.getSanPhamKM() + "\n"
+                + "Thời gian: " + km.getNgayBatDau() + " → " + km.getNgayKetThuc() + "\n"
+                + "Mức giảm giá: " + km.getPhanTramGiamGia() + "%\n\n"
+                + "👉 Hãy đến nhà hàng để nhận ưu đãi nhé!\n";
+        // Tạo thread pool với 10 luồng (có thể thay đổi số luồng)
+        ExecutorService executor = Executors.newFixedThreadPool(15);
+        
+        for (KhachHang kh : dsKH) {
+            if (kh.getEmail() == null || kh.getEmail().trim().isEmpty()) {
+                System.out.println("❌ Bỏ qua KH không có email: " + kh.getTenKH());
+                continue;
+            }
+            String emailContent = "Xin chào " + kh.getTenKH() + ",\n\n" + contentTemplate;
+            // Submit task gửi email vào thread pool
+            executor.submit(() -> {
+                try {
+                    EmailService.sendEmail(kh.getEmail(), subject, emailContent);
+                    System.out.println("Đã gửi email đến: " + kh.getEmail());
+                } catch (Exception e) {
+                    System.err.println("Gửi email thất bại: " + kh.getEmail());
+                    e.printStackTrace();
+                }
+            });
+        }
+        // Đóng executor sau khi submit xong
+        executor.shutdown();
+        System.out.println("Tất cả email đã được submit để gửi.");
+    }
+
+    
     private void sua() {
         KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
         if (km == null) return;

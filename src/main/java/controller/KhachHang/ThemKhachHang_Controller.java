@@ -321,7 +321,7 @@ public class ThemKhachHang_Controller {
 				}
     		}
     	}
-    	return String.format("KH%03d", max + 1);
+    	return String.format("KH%04d", max + 1);
     }
     
     private void showAlert(String title, String content, Alert.AlertType alertType) {
