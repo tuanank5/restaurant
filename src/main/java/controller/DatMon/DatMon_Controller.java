@@ -328,7 +328,7 @@ public class DatMon_Controller implements Initializable {
             // Nếu đã có món này hỏi người dùng
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Món đã chọn");
-            alert.setHeaderText("Món '" + mon.getTenMon() + "đã có trong danh sách.");
+            alert.setHeaderText("Món '" + mon.getTenMon() + "' đã có trong danh sách.");
             alert.setContentText("Bạn muốn làm gì?");
             ButtonType btnTang = new ButtonType("➕ Tăng số lượng");
             ButtonType btnGiam = new ButtonType("➖ Giảm số lượng");
