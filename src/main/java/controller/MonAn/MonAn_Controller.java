@@ -93,7 +93,9 @@ public class MonAn_Controller implements Initializable{
 	                }
 	            }
 	        });
-	        colLoaiMon.setCellValueFactory(new PropertyValueFactory<>("loaiMon"));
+	        colLoaiMon.setCellValueFactory(cellData -> 
+	        new javafx.beans.property.SimpleStringProperty(cellData.getValue().getLoaiMon())
+	    );
 	        cmbLoaiMon.getItems().addAll("Món chính", "Tráng miệng", "Nước uống");
 
 	        tblMon.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -154,8 +156,6 @@ public class MonAn_Controller implements Initializable{
 	            e.printStackTrace();
 	        }
 	    }
-
-
 	    @FXML
 	    private void handleSuaMon() {
 	        try {
@@ -199,7 +199,8 @@ public class MonAn_Controller implements Initializable{
 	            monChon.setDonGia(donGia);
 	            monChon.setKhuyenMai(km);
 	            monChon.setDuongDanAnh(duongDanAnh); // ảnh có thể thay đổi
-
+	            monChon.setLoaiMon(cmbLoaiMon.getValue());
+	            
 	            boolean suaThanhCong = monDAO.capNhat(monChon); // Gọi phương thức update trong DAO
 	            if (suaThanhCong) {
 	                Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -228,7 +229,7 @@ public class MonAn_Controller implements Initializable{
 	    
 	    private void khoiTaoComboBoxKhuyenMai() {
 	        // Lấy danh sách Khuyến Mãi từ DB
-	        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
+	    	List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
 
 	        if (danhSachKM != null && !danhSachKM.isEmpty()) {
 	            // Đưa danh sách vào ComboBox
@@ -365,11 +366,18 @@ public class MonAn_Controller implements Initializable{
 	        	cmbKM.getSelectionModel().clearSelection();
 	        }
 
+	        // Hiển thị Loại Món
+	        if (mon.getLoaiMon() != null && !mon.getLoaiMon().isEmpty()) {
+	            cmbLoaiMon.getSelectionModel().select(mon.getLoaiMon());
+	        } else {
+	            cmbLoaiMon.getSelectionModel().clearSelection();
+	        }
+	        
 	        // Hiển thị ảnh và lưu đường dẫn vào biến
 	        if (mon.getDuongDanAnh() != null && !mon.getDuongDanAnh().isEmpty()) {
 	            File file = new File(mon.getDuongDanAnh());
 	            if (file.exists()) {
-	                img.setImage(new Image(file.toURI().toString()));
+	            	img.setImage(new Image(file.toURI().toString()));
 	                duongDanAnh = mon.getDuongDanAnh(); // <-- giữ đường dẫn
 	            } else {
 	                img.setImage(null);
@@ -380,9 +388,5 @@ public class MonAn_Controller implements Initializable{
 	            duongDanAnh = null;
 	        }
 	    }
-
-	    
-
 	}
-	        
-	        
+	            
