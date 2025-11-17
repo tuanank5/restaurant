@@ -32,9 +32,10 @@ public class MonAn_Controller implements Initializable{
 	    
 	    @FXML private Button btnSua, btnThem, btnThemAnh, btnXoa;
 	    @FXML private ComboBox<KhuyenMai> cmbKM;
+	    @FXML private ComboBox<String> cmbLoaiMon;
 	    @FXML private ImageView img;
 	    @FXML private TableView<MonAn> tblMon;
-	    @FXML private TableColumn<MonAn, String> colMa, colTen;
+	    @FXML private TableColumn<MonAn, String> colMa, colTen, colLoaiMon;
 	    @FXML private TableColumn<MonAn, Double> colDonGia;
 	    @FXML private TableColumn<MonAn, KhuyenMai> colKM;
 	    @FXML private TextField txtMaMon, txtTenMon, txtDonGia;
@@ -78,7 +79,7 @@ public class MonAn_Controller implements Initializable{
 	        colMa.setCellValueFactory(new PropertyValueFactory<>("maMon"));
 	        colTen.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
 	        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-
+	        
 	        // Cột Khuyến mãi hiển thị tên KM + %
 	        colKM.setCellValueFactory(new PropertyValueFactory<>("khuyenMai"));
 	        colKM.setCellFactory(column -> new TableCell<MonAn, KhuyenMai>() {
@@ -92,6 +93,8 @@ public class MonAn_Controller implements Initializable{
 	                }
 	            }
 	        });
+	        colLoaiMon.setCellValueFactory(new PropertyValueFactory<>("loaiMon"));
+	        cmbLoaiMon.getItems().addAll("Món chính", "Tráng miệng", "Nước uống");
 
 	        tblMon.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 	            if (newSelection != null) {
@@ -295,7 +298,9 @@ public class MonAn_Controller implements Initializable{
 	            }
 
 	            // --- Tạo đối tượng MonAn ---
-	            MonAn mon = new MonAn(maMon, tenMon, donGia, km, duongDanAnh);
+	            String loaiMon = cmbLoaiMon.getValue();
+
+	            MonAn mon = new MonAn(maMon, tenMon, donGia, km, duongDanAnh, loaiMon);
 
 	            // --- Thêm vào DB ---
 	            boolean themThanhCong = monDAO.them(mon);

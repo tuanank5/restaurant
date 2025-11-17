@@ -28,17 +28,22 @@ public class MonAn {
     @Column(name = "duongDanAnh", length = 255) // Thêm cột lưu đường dẫn ảnh
     private String duongDanAnh;
 
+    @Column(name = "loaiMon", length = 100)
+    private String loaiMon;
+ 
     public MonAn() {
         // constructor rỗng cho JPA
     }
 
-    public MonAn(String maMon, String tenMon, double donGia, KhuyenMai khuyenMai, String duongDanAnh) {
-        this.maMon = maMon;
-        this.tenMon = tenMon;
-        this.donGia = donGia;
-        this.khuyenMai = khuyenMai;
-        this.duongDanAnh = duongDanAnh;
-    }
+    public MonAn(String maMon, String tenMon, double donGia,
+            KhuyenMai khuyenMai, String duongDanAnh, String loaiMon) {
+   this.maMon = maMon;
+   this.tenMon = tenMon;
+   this.donGia = donGia;
+   this.khuyenMai = khuyenMai;
+   this.duongDanAnh = duongDanAnh;
+   this.loaiMon = loaiMon;
+}
 
     public String getMaMon() {
         return maMon;
@@ -79,6 +84,15 @@ public class MonAn {
     public void setDuongDanAnh(String duongDanAnh) {
         this.duongDanAnh = duongDanAnh;
     }
+    
+    public String getLoaiMon() {
+        return loaiMon;
+    }
+
+    public void setLoaiMon(String loaiMon) {
+        this.loaiMon = loaiMon;
+    }
+
 
     @Override
     public int hashCode() {
@@ -95,7 +109,12 @@ public class MonAn {
 
     @Override
     public String toString() {
-        return "MonAn [maMon=" + maMon + ", tenMon=" + tenMon + ", donGia=" + donGia +
-                ", khuyenMai=" + khuyenMai + ", duongDanAnh=" + duongDanAnh + "]";
+        return "MonAn [maMon=" + maMon +
+                ", tenMon=" + tenMon +
+                ", donGia=" + donGia +
+                ", khuyenMai=" + khuyenMai +
+                ", duongDanAnh=" + duongDanAnh +
+                ", loaiMon=" + loaiMon + "]";
     }
+
 }
