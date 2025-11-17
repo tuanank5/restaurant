@@ -18,7 +18,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import dao.impl.DonDatBan_DAOImpl;
 import java.net.URL;
@@ -68,6 +72,9 @@ public class DatMon_Controller implements Initializable {
     @FXML
     private DatePicker dpNgayDatBan;
 
+    @FXML
+    private ScrollPane scrollPaneMon;
+    
     @FXML
     private GridPane gridPaneMon;
 
@@ -199,11 +206,34 @@ public class DatMon_Controller implements Initializable {
     private void loadMonAnToGrid() {
         dsMonAn = monAnDAO.getDanhSachMonAn();
         gridPaneMon.getChildren().clear();
-        gridPaneMon.setHgap(10);
-        gridPaneMon.setVgap(10);
-        gridPaneMon.setPadding(new Insets(10));
+        gridPaneMon.getColumnConstraints().clear();
+        gridPaneMon.getRowConstraints().clear();
+        
+        gridPaneMon.setHgap(15);
+        gridPaneMon.setVgap(30);
+        gridPaneMon.setPadding(new Insets(15));
+        
+        scrollPaneMon.setFitToWidth(true);
+        gridPaneMon.prefWidthProperty().bind(scrollPaneMon.widthProperty());
 
-        int columns = 5;
+        int columns = 4;
+
+        // ColumnConstraints chia đều cột
+        for (int i = 0; i < columns; i++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setPercentWidth(100.0 / columns);
+            gridPaneMon.getColumnConstraints().add(cc);
+        }
+
+        // RowConstraints để tránh chồng hàng
+        int totalRows = (int) Math.ceil(dsMonAn.size() / (double) columns);
+        for (int i = 0; i < totalRows; i++) {
+            RowConstraints rc = new RowConstraints();
+            rc.setPrefHeight(220); // phù hợp với kích thước VBox + khoảng cách
+            rc.setVgrow(Priority.NEVER);
+            gridPaneMon.getRowConstraints().add(rc);
+        }
+
         int col = 0;
         int row = 0;
 
@@ -212,20 +242,18 @@ public class DatMon_Controller implements Initializable {
             String path = mon.getDuongDanAnh();
             if (path != null && !path.isEmpty()) {
                 try {
-                    Image image = new Image("file:" + path);
-                    img.setImage(image);
+                    img.setImage(new Image("file:" + path));
                 } catch (Exception e) {
                     System.out.println("Không load được ảnh: " + path);
                 }
             }
-            img.setFitWidth(90);
-            img.setFitHeight(90);
+            img.setFitWidth(120);
+            img.setFitHeight(120);
             img.setPreserveRatio(true);
 
             Label lblTen = new Label(mon.getTenMon());
             lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
-            //Label lblGia = new Label(mon.getDonGia() + " VND");
             Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
 
             Button btnChon = new Button("Chọn");
@@ -234,8 +262,9 @@ public class DatMon_Controller implements Initializable {
             VBox box = new VBox(img, lblTen, lblGia, btnChon);
             box.setSpacing(6);
             box.setPadding(new Insets(8));
-            box.setPrefSize(130, 160);
-            box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; -fx-alignment:center; -fx-border-radius:8; -fx-background-radius:8;");
+            box.setPrefWidth(150);
+            box.setMaxHeight(Region.USE_COMPUTED_SIZE);
+            box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; -fx-alignment:center; -fx-border-radius:10; -fx-background-radius:10;");
 
             gridPaneMon.add(box, col, row);
 
@@ -245,7 +274,11 @@ public class DatMon_Controller implements Initializable {
                 row++;
             }
         }
+
+        gridPaneMon.requestLayout();
     }
+
+
 
     // -------------------- LOAD THÔNG TIN KHÁCH HÀNG --------------------
     private void loadThongTinKhachHang() {
