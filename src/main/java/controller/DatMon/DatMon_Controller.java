@@ -18,11 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import dao.impl.DonDatBan_DAOImpl;
 import java.net.URL;
@@ -73,9 +69,6 @@ public class DatMon_Controller implements Initializable {
     private DatePicker dpNgayDatBan;
 
     @FXML
-    private ScrollPane scrollPaneMon;
-    
-    @FXML
     private GridPane gridPaneMon;
 
     @FXML
@@ -83,6 +76,9 @@ public class DatMon_Controller implements Initializable {
 
     @FXML
     private TextField txtMaKH;
+    
+    @FXML
+    private Label lblTienGiam;
     
     @FXML
     private Label lblTongTien;
@@ -125,8 +121,6 @@ public class DatMon_Controller implements Initializable {
     	loadMonAnToGrid();
         dpNgayDatBan.setValue(LocalDate.now());
         // Setup TableView
-//        colSTT.setCellValueFactory(col ->
-//            new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
         colSTT.setCellValueFactory(col -> {
             int index = tblDS.getItems().indexOf(col.getValue());
             return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
@@ -144,8 +138,6 @@ public class DatMon_Controller implements Initializable {
                 }
             }
         });
-//        colSoLuong.setCellValueFactory(col ->
-//            new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue())));
         colSoLuong.setCellValueFactory(col -> {
             Integer soLuong = dsMonAnDat.get(col.getValue());
             return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
@@ -163,6 +155,8 @@ public class DatMon_Controller implements Initializable {
         }
 
         loadThongTinKhachHang();
+        cmbKM.setOnAction(e -> capNhatTongTien());
+        tblDS.setOnMouseClicked(e -> capNhatTongTien());
     }
     
     @FXML
@@ -206,34 +200,11 @@ public class DatMon_Controller implements Initializable {
     private void loadMonAnToGrid() {
         dsMonAn = monAnDAO.getDanhSachMonAn();
         gridPaneMon.getChildren().clear();
-        gridPaneMon.getColumnConstraints().clear();
-        gridPaneMon.getRowConstraints().clear();
-        
-        gridPaneMon.setHgap(15);
-        gridPaneMon.setVgap(30);
-        gridPaneMon.setPadding(new Insets(15));
-        
-        scrollPaneMon.setFitToWidth(true);
-        gridPaneMon.prefWidthProperty().bind(scrollPaneMon.widthProperty());
+        gridPaneMon.setHgap(10);
+        gridPaneMon.setVgap(10);
+        gridPaneMon.setPadding(new Insets(10));
 
-        int columns = 4;
-
-        // ColumnConstraints chia đều cột
-        for (int i = 0; i < columns; i++) {
-            ColumnConstraints cc = new ColumnConstraints();
-            cc.setPercentWidth(100.0 / columns);
-            gridPaneMon.getColumnConstraints().add(cc);
-        }
-
-        // RowConstraints để tránh chồng hàng
-        int totalRows = (int) Math.ceil(dsMonAn.size() / (double) columns);
-        for (int i = 0; i < totalRows; i++) {
-            RowConstraints rc = new RowConstraints();
-            rc.setPrefHeight(220); // phù hợp với kích thước VBox + khoảng cách
-            rc.setVgrow(Priority.NEVER);
-            gridPaneMon.getRowConstraints().add(rc);
-        }
-
+        int columns = 5;
         int col = 0;
         int row = 0;
 
@@ -242,18 +213,20 @@ public class DatMon_Controller implements Initializable {
             String path = mon.getDuongDanAnh();
             if (path != null && !path.isEmpty()) {
                 try {
-                    img.setImage(new Image("file:" + path));
+                    Image image = new Image("file:" + path);
+                    img.setImage(image);
                 } catch (Exception e) {
                     System.out.println("Không load được ảnh: " + path);
                 }
             }
-            img.setFitWidth(120);
-            img.setFitHeight(120);
+            img.setFitWidth(90);
+            img.setFitHeight(90);
             img.setPreserveRatio(true);
 
             Label lblTen = new Label(mon.getTenMon());
             lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
+            //Label lblGia = new Label(mon.getDonGia() + " VND");
             Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
 
             Button btnChon = new Button("Chọn");
@@ -262,9 +235,8 @@ public class DatMon_Controller implements Initializable {
             VBox box = new VBox(img, lblTen, lblGia, btnChon);
             box.setSpacing(6);
             box.setPadding(new Insets(8));
-            box.setPrefWidth(150);
-            box.setMaxHeight(Region.USE_COMPUTED_SIZE);
-            box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; -fx-alignment:center; -fx-border-radius:10; -fx-background-radius:10;");
+            box.setPrefSize(130, 160);
+            box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; -fx-alignment:center; -fx-border-radius:8; -fx-background-radius:8;");
 
             gridPaneMon.add(box, col, row);
 
@@ -274,11 +246,7 @@ public class DatMon_Controller implements Initializable {
                 row++;
             }
         }
-
-        gridPaneMon.requestLayout();
     }
-
-
 
     // -------------------- LOAD THÔNG TIN KHÁCH HÀNG --------------------
     private void loadThongTinKhachHang() {
@@ -303,32 +271,13 @@ public class DatMon_Controller implements Initializable {
             }
         }
     }
-
-//    private void chonMon(MonAn mon) {
-//        if (dsMonAnDat.containsKey(mon)) {
-//            // Nếu đã chọn món, tăng số lượng
-//            dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
-//        } else {
-//            // Thêm món mới với số lượng = 1
-//            dsMonAnDat.put(mon, 1);
-//        }
-//
-//        // Cập nhật TableView
-//        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-//        tblDS.refresh();
-//
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Chọn món");
-//        alert.setHeaderText(null);
-//        alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
-//        alert.showAndWait();
-//    }
+    
     private void chonMon(MonAn mon) {
         if (dsMonAnDat.containsKey(mon)) {
             // Nếu đã có món này hỏi người dùng
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Món đã chọn");
-            alert.setHeaderText("Món '" + mon.getTenMon() + "' đã có trong danh sách.");
+            alert.setHeaderText("Món '" + mon.getTenMon() + "đã có trong danh sách.");
             alert.setContentText("Bạn muốn làm gì?");
             ButtonType btnTang = new ButtonType("➕ Tăng số lượng");
             ButtonType btnGiam = new ButtonType("➖ Giảm số lượng");
@@ -362,13 +311,54 @@ public class DatMon_Controller implements Initializable {
         double tongTruocVAT = dsMonAnDat.entrySet().stream()
             .mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
             .sum();
+        double tienGiam = 0;
+        KhuyenMai km = cmbKM.getValue();
+        
+        if (km != null) {
+            switch (km.getLoaiKM()) {
 
+                case "Khuyến mãi trên tổng hóa đơn":
+                    tienGiam = tongTruocVAT * km.getPhanTramGiamGia() / 100.0;
+                    break;
+
+                case "Khuyến mãi món ăn":
+                    tienGiam = tinhGiamGiaTheoMon(km);
+                    break;
+
+                case "Ưu đãi cho khách hàng Kim Cương":
+                    KhachHang kh = khachHangDAO.timTheoMa(txtMaKH.getText());
+                    if (kh != null && kh.getHangKhachHang() != null &&
+                            kh.getHangKhachHang().getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
+                        tienGiam = tongTruocVAT * km.getPhanTramGiamGia() / 100.0;
+                    }
+                    break;
+            }
+        }
+
+        double tongSauGiam = tongTruocVAT - tienGiam;
+        if (tongSauGiam < 0) tongSauGiam = 0;
+        
         double tienVAT = tongTruocVAT * Vat_Rate;
-        double tongSauVAT = tongTruocVAT + tienVAT;
+        double tongSauVAT = tongSauGiam + tienVAT;
 
         lblVat.setText(dinhDangTien(tienVAT));
         lblTongTien.setText(dinhDangTien(tongTruocVAT));
+        lblTienGiam.setText(dinhDangTien(tienGiam));
         lblTongTienVAT.setText(dinhDangTien(tongSauVAT));
+    }
+    
+    private double tinhGiamGiaTheoMon(KhuyenMai km) {
+        double giam = 0;
+        for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
+            MonAn mon = entry.getKey();
+            int soLuong = entry.getValue();
+
+            // nếu tên sản phẩm của món ăn phải trùng với tên món ăn --> khuyến mãi mới áp dụng
+            if (mon.getTenMon().equalsIgnoreCase(km.getSanPhamKM())) {
+                giam += mon.getDonGia() * soLuong * km.getPhanTramGiamGia() / 100.0;
+            }
+        }
+        return giam;
     }
     
     private String dinhDangTien(double soTien) {

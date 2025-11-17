@@ -36,7 +36,29 @@ public class KhachHang_DAOlmpl extends Entity_DAOImpl<KhachHang> implements Khac
             em.close();
         }
     }
+    
+    @Override
+    public KhachHang timTheoMa(String maKH) {
+        EntityManager em = getEntityManager();
+        try {
+            List<KhachHang> ds = em.createQuery(
+                    "SELECT k FROM KhachHang k WHERE k.maKH = :maKH", KhachHang.class)
+                    .setParameter("maKH", maKH)
+                    .getResultList();
 
+            if (!ds.isEmpty()) {
+                return ds.get(0);
+            }
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
 	@Override
 	public List<KhachHang> getAll() {
 		EntityManager em = getEntityManager();

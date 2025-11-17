@@ -83,11 +83,11 @@ public class KhuyenMai_Controller {
 
     private void setComboBoxValue() {
         comBoxLoaiKM.setItems(FXCollections.observableArrayList(
-        		"Ưu đãi cho khách hàng VIP",
+        		"Ưu đãi cho khách hàng Kim Cương",
                 "Khuyến mãi món ăn",
                 "Khuyến mãi trên tổng hóa đơn"
                 ));
-        comBoxPhanTram.setItems(FXCollections.observableArrayList(5,10,15,20,25,30,40,50));
+        comBoxPhanTram.setItems(FXCollections.observableArrayList(5,10,15,20,25,30,35,40,45,50));
     }
 
     @FXML
@@ -290,4 +290,3 @@ public class KhuyenMai_Controller {
         dpNgayKetThuc.setValue(null);
     }
 }
-       
