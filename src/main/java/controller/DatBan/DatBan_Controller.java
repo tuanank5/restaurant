@@ -106,7 +106,7 @@ public class DatBan_Controller implements Initializable {
         }
     }
     
-    // --- Khởi tạo ComboBox Khuyến mãi ---
+//    // --- Khởi tạo ComboBox Khuyến mãi ---
 //    private void khoiTaoComboBoxKhuyenMai() {
 //        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
 //        if (danhSachKM != null && !danhSachKM.isEmpty()) {
@@ -219,29 +219,41 @@ public class DatBan_Controller implements Initializable {
     }
 
     private void handleChonBan(Ban ban, Button btnBan) {
-        banDangChon = ban;
+        Ban banCu = this.banDangChon;
+        Button btnCu = this.buttonBanDangChonUI;
+        
+        // Cập nhật bàn đang chọn mới
+        this.banDangChon = ban;
+        // Xử lý nút Đặt bàn
         if ("Đã được đặt".equals(ban.getTrangThai()) || "Đang phục vụ".equals(ban.getTrangThai())) {
             btnDatBan.setDisable(true);
-            //showAlert(Alert.AlertType.INFORMATION, "Bàn này đã được đặt hoặc đang phục vụ, không thể đặt lại!");
         } else {
             btnDatBan.setDisable(false);
         }
-
+        // Gán thông tin bàn
         txtTrangThai.setText(ban.getTrangThai());
         txtViTri.setText(ban.getViTri());
         txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
-
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-        int soLuongHienThi = (dsDon != null && !dsDon.isEmpty()) ? dsDon.get(dsDon.size() - 1).getSoLuong() : ban.getLoaiBan().getSoLuong();
+        int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
+                ? dsDon.get(dsDon.size() - 1).getSoLuong()
+                : ban.getLoaiBan().getSoLuong();
         txtSoLuong.setText(String.valueOf(soLuongHienThi));
         txtSoLuongKH.setText(String.valueOf(soLuongHienThi));
-
-        if (buttonBanDangChonUI != null)
-            buttonBanDangChonUI.setStyle(getStyleByStatusAndType(
-                banDangChon.getTrangThai(), banDangChon.getLoaiBan().getMaLoaiBan()
+        // Hoàn nguyên style cho bàn CU
+        if (btnCu != null && banCu != null) {
+            btnCu.setStyle(getStyleByStatusAndType(
+                    banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()
             ));
-        btnBan.setStyle("-fx-background-color:yellow; -fx-text-fill:black; -fx-font-weight:bold;");
-        buttonBanDangChonUI = btnBan;
+        }
+        // Đặt style nổi bật cho bàn mới
+        btnBan.setStyle(
+            "-fx-background-color: yellow;" +
+            "-fx-text-fill: black;" +
+            "-fx-font-weight: bold;"
+        );
+        // Lưu lại tham chiếu UI của bàn mới
+        this.buttonBanDangChonUI = btnBan;
     }
 
     private void handleDatBan(ActionEvent event) {

@@ -3,10 +3,12 @@ package controller.KhachHang;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import config.DatabaseContext;
 import config.RestaurantApplication;
@@ -350,6 +352,7 @@ public class ThemKhachHang_Controller {
         txtDiemTichLuy.setText("");
         comBoxHangKH.setValue(null);
     }
+    
     private void loadData() {
         Map<String,Object> filter = new HashMap<>();
         danhSachHangKhachHangDB = RestaurantApplication.getInstance()
@@ -357,12 +360,32 @@ public class ThemKhachHang_Controller {
                 .newEntity_DAO(HangKhachHang_DAO.class)
                 .getDanhSach(HangKhachHang.class, filter);
         comBoxHangKH.getItems().clear();
-        comBoxHangKH.getItems().add("Tất cả");
+        //comBoxHangKH.getItems().add("Tất cả");
         for(HangKhachHang hang : danhSachHangKhachHangDB) {
             comBoxHangKH.getItems().add(hang.getTenHang());
         }
         comBoxHangKH.getSelectionModel().selectFirst();
     }
+    
+//    private void loadData() {
+//        Map<String,Object> filter = new HashMap<>();
+//        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
+//                .getDatabaseContext()
+//                .newEntity_DAO(HangKhachHang_DAO.class)
+//                .getDanhSach(HangKhachHang.class, filter);
+//        comBoxHangKH.getItems().clear();
+//        // Dùng Set để loại trùng tên hạng
+//        Set<String> tenHangSet = new HashSet<>();
+//        for (HangKhachHang hang : danhSachHangKhachHangDB) {
+//            tenHangSet.add(hang.getTenHang());
+//        }
+//        ObservableList<String> listTen = FXCollections.observableArrayList(tenHangSet);
+//        // Load lên ComboBox
+//        comBoxHangKH.setItems(listTen);
+//        if (!listTen.isEmpty()) {
+//            comBoxHangKH.getSelectionModel().selectFirst();
+//        }
+//    }
 
     // Dùng để lấy ra sau đó setText lại cho đường dẫn
     public void setUrl(String nameUrl, String currentPage) {

@@ -2,8 +2,10 @@ package controller.KhachHang;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
@@ -11,6 +13,8 @@ import dao.HangKhachHang_DAO;
 import entity.HangKhachHang;
 import entity.KhachHang;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -122,6 +126,7 @@ public class ThongTinKhachHang_Controller {
         this.khachHang = khachHang;
         hienThiThongTin(khachHang);
     }
+    
     private void loadData() {
         Map<String,Object> filter = new HashMap<>();
         danhSachHangKhachHangDB = RestaurantApplication.getInstance()
@@ -129,12 +134,33 @@ public class ThongTinKhachHang_Controller {
                 .newEntity_DAO(HangKhachHang_DAO.class)
                 .getDanhSach(HangKhachHang.class, filter);
         comBoxHangKH.getItems().clear();
-        comBoxHangKH.getItems().add("Tất cả");
+        //comBoxHangKH.getItems().add("Tất cả");
         for(HangKhachHang hang : danhSachHangKhachHangDB) {
             comBoxHangKH.getItems().add(hang.getTenHang());
         }
         comBoxHangKH.getSelectionModel().selectFirst();
     }
+    
+//    private void loadData() {
+//        Map<String,Object> filter = new HashMap<>();
+//        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
+//                .getDatabaseContext()
+//                .newEntity_DAO(HangKhachHang_DAO.class)
+//                .getDanhSach(HangKhachHang.class, filter);
+//        comBoxHangKH.getItems().clear();
+//        // Dùng Set để loại trùng tên hạng
+//        Set<String> tenHangSet = new HashSet<>();
+//        for (HangKhachHang hang : danhSachHangKhachHangDB) {
+//            tenHangSet.add(hang.getTenHang());
+//        }
+//        ObservableList<String> listTen = FXCollections.observableArrayList(tenHangSet);
+//        // Load lên ComboBox
+//        comBoxHangKH.setItems(listTen);
+//        if (!listTen.isEmpty()) {
+//            comBoxHangKH.getSelectionModel().selectFirst();
+//        }
+//    }
+
     public void troLai() {
     	MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
     }
