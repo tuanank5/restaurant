@@ -356,10 +356,10 @@ INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tie
     
     --Thêm MonAn
 INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh) VALUES
-('SP004', N'Cơm Tấm Sườn', 45000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen4.jpg'),
-('SP005', N'Bún Thịt Nướng', 38000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen5.jpg'),
-('SP006', N'Lẩu Thái Chua Cay', 150000, 'KM002', 'C:\\Users\\MYPC\\Pictures\\nen6.jpg'),
-('SP007', N'Chả Giò', 28000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen7.jpg'),
-('SP008', N'Gà Rán Giòn', 52000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen8.jpg'),
-('SP009', N'Hamburger Bò', 49000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen9.jpg'),
-('SP010', N'Sushi Cá Hồi', 89000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen10.jpg');
+('SP001', N'Cơm Tấm Sườn', 45000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen4.jpg'),
+('SP002', N'Bún Thịt Nướng', 38000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen5.jpg'),
+('SP003', N'Lẩu Thái Chua Cay', 150000, 'KM002', 'C:\\Users\\MYPC\\Pictures\\nen6.jpg'),
+('SP004', N'Chả Giò', 28000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen7.jpg'),
+('SP005', N'Gà Rán Giòn', 52000, 'KM003', 'C:\\Users\\MYPC\\Pictures\\nen8.jpg'),
+('SP006', N'Hamburger Bò', 49000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen9.jpg'),
+('SP007', N'Sushi Cá Hồi', 89000, 'KM004', 'C:\\Users\\MYPC\\Pictures\\nen10.jpg');

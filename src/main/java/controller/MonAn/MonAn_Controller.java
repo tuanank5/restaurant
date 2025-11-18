@@ -2,6 +2,7 @@ package controller.MonAn;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -332,19 +333,38 @@ public class MonAn_Controller implements Initializable{
 	    }
 
 	    //Sinh mã tự động
-        private String sinhMaMon() {
-            List<MonAn> listMon = monDAO.getDanhSachMonAn();
-            int max = 0;
-            for (MonAn m : listMon) {
-                try {
-                    int so = Integer.parseInt(m.getMaMon().substring(1));
-                    if (so > max) max = so;
-                } catch (Exception e) {
-                    // bỏ qua nếu format khác
-                }
-            }
-            return String.format("M%02d", max + 1); // Ví dụ: M01, M02,...
-        }
+//        private String sinhMaMon() {
+//            List<MonAn> listMon = monDAO.getDanhSachMonAn();
+//            int max = 0;
+//            for (MonAn m : listMon) {
+//                try {
+//                    int so = Integer.parseInt(m.getMaMon().substring(1));
+//                    if (so > max) max = so;
+//                } catch (Exception e) {
+//                    // bỏ qua nếu format khác
+//                }
+//            }
+//            return String.format("M%02d", max + 1); // Ví dụ: M01, M02,...
+//        }
+	    private String sinhMaMon() {
+	        List<MonAn> listMon = monDAO.getDanhSachMonAn();
+
+	        if (listMon == null) {
+	            listMon = new ArrayList<>();   // NGĂN NullPointerException
+	        }
+
+	        int max = 0;
+	        for (MonAn m : listMon) {
+	            try {
+	                int so = Integer.parseInt(m.getMaMon().substring(1));
+	                if (so > max) max = so;
+	            } catch (Exception e) {
+	                // bỏ qua format sai
+	            }
+	        }
+	        return String.format("M%02d", max + 1);
+	    }
+
 
 	    private void resetForm() {
 	        txtMaMon.setText(sinhMaMon()); // tự sinh mã mới
