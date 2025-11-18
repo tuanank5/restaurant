@@ -459,7 +459,6 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         lblTienGiam.setText(dinhDangTien(tienGiam));
         lblTongTienVAT.setText(dinhDangTien(tongSauVAT));
     }
-
     
     private double tinhGiamGiaTheoMon(KhuyenMai km) {
         double giam = 0;
@@ -474,7 +473,6 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         }
         return giam;
     }
-
     
     private String dinhDangTien(double soTien) {
     	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
