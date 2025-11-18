@@ -86,6 +86,9 @@ public class DatMon_Controller implements Initializable {
     private TextField txtMaKH;
     
     @FXML
+    private Label lblTienGiam;
+    
+    @FXML
     private Label lblTongTien;
 
     @FXML
@@ -170,8 +173,11 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         if (MenuNV_Controller.khachHangDangChon != null) {
             txtMaKH.setText(MenuNV_Controller.khachHangDangChon.getMaKH());
         }
-
+        
         loadThongTinKhachHang();
+        cmbKM.setOnAction(e -> capNhatTongTien());
+        tblDS.setOnMouseClicked(e -> capNhatTongTien());
+
     }
     
     private void khoiTaoComboBoxPhanLoai() {
@@ -367,6 +373,7 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
 //        alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
 //        alert.showAndWait();
 //    }
+    
     private void chonMon(MonAn mon) {
         if (dsMonAnDat.containsKey(mon)) {
             // Nếu đã có món này hỏi người dùng
@@ -402,18 +409,72 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         capNhatTongTien();
     }
     
+//    private void capNhatTongTien() {
+//        double tongTruocVAT = dsMonAnDat.entrySet().stream()
+//            .mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
+//            .sum();
+//
+//        double tienVAT = tongTruocVAT * Vat_Rate;
+//        double tongSauVAT = tongTruocVAT + tienVAT;
+//
+//        lblVat.setText(dinhDangTien(tienVAT));
+//        lblTongTien.setText(dinhDangTien(tongTruocVAT));
+//        lblTongTienVAT.setText(dinhDangTien(tongSauVAT));
+//    }
     private void capNhatTongTien() {
         double tongTruocVAT = dsMonAnDat.entrySet().stream()
             .mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
             .sum();
+        double tienGiam = 0;
+        KhuyenMai km = cmbKM.getValue();
+        
+        if (km != null) {
+            switch (km.getLoaiKM()) {
 
+                case "Khuyến mãi trên tổng hóa đơn":
+                    tienGiam = tongTruocVAT * km.getPhanTramGiamGia() / 100.0;
+                    break;
+
+                case "Khuyến mãi món ăn":
+                    tienGiam = tinhGiamGiaTheoMon(km);
+                    break;
+
+                case "Ưu đãi cho khách hàng Kim Cương":
+                    KhachHang kh = khachHangDAO.timTheoMa(txtMaKH.getText());
+                    if (kh != null && kh.getHangKhachHang() != null &&
+                            kh.getHangKhachHang().getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
+                        tienGiam = tongTruocVAT * km.getPhanTramGiamGia() / 100.0;
+                    }
+                    break;
+            }
+        }
+        double tongSauGiam = tongTruocVAT - tienGiam;
+        if (tongSauGiam < 0) tongSauGiam = 0;
+        
         double tienVAT = tongTruocVAT * Vat_Rate;
-        double tongSauVAT = tongTruocVAT + tienVAT;
+        double tongSauVAT = tongSauGiam + tienVAT;
 
         lblVat.setText(dinhDangTien(tienVAT));
         lblTongTien.setText(dinhDangTien(tongTruocVAT));
+        lblTienGiam.setText(dinhDangTien(tienGiam));
         lblTongTienVAT.setText(dinhDangTien(tongSauVAT));
     }
+
+    
+    private double tinhGiamGiaTheoMon(KhuyenMai km) {
+        double giam = 0;
+        for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
+            MonAn mon = entry.getKey();
+            int soLuong = entry.getValue();
+
+            // nếu tên sản phẩm của món ăn phải trùng với tên món ăn --> khuyến mãi mới áp dụng
+            if (mon.getTenMon().equalsIgnoreCase(km.getSanPhamKM())) {
+                giam += mon.getDonGia() * soLuong * km.getPhanTramGiamGia() / 100.0;
+            }
+        }
+        return giam;
+    }
+
     
     private String dinhDangTien(double soTien) {
     	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));

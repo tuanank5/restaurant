@@ -59,11 +59,11 @@
                         </Pane>
                      </top>
                      <bottom>
-                       <Pane prefHeight="110.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+                       <Pane prefHeight="123.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
 						    <children>
 						        <!-- Mã giảm giá -->
 						        <Label layoutX="5.0" layoutY="5.0" text="Mã giảm giá:" />
-						        <ComboBox fx:id="cmbKM" layoutX="100.0" layoutY="5.0" prefWidth="120.0" />					
+						        <ComboBox fx:id="cmbKM" layoutX="100.0" layoutY="5.0" prefWidth="180.0" />					
 						        <!-- VAT -->
 						        <Label layoutX="5.0" layoutY="35.0" text="VAT (10%):" />
 						        <Label fx:id="lblVat" layoutX="100.0" layoutY="35.0" text="0" />
@@ -73,15 +73,18 @@
 						        <Label fx:id="lblTongTien" layoutX="100.0" layoutY="55.0" text="0" />
 						        <Label layoutX="180.0" layoutY="55.0" text="VND" />					
 						        <!-- Tổng tiền sau VAT -->
-						        <Label layoutX="5.0" layoutY="80.0" text="Tổng cộng (VAT):" />
-						        <Label fx:id="lblTongTienVAT" layoutX="100.0" layoutY="80.0" text="0" />
-						        <Label layoutX="180.0" layoutY="80.0" text="VND" />						
+						        <Label layoutX="5.0" layoutY="95.0" text="Tổng cộng (VAT):" />
+						        <Label fx:id="lblTongTienVAT" layoutX="100.0" layoutY="95.0" text="0" />
+						        <Label layoutX="180.0" layoutY="95.0" text="VND" />						
 						        <!-- Nút thanh toán -->
 						        <Button layoutX="210.0" layoutY="55.0" mnemonicParsing="false" onAction="#hanhleThanhToan" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: red;" text="Thanh toán" textFill="WHITE">
 						            <font>
 						                <Font name="System Bold" size="11.0" />
 						            </font>
 						        </Button>
+                              <Label layoutX="5.0" layoutY="75.0" text="Tiền Giảm:" />
+                              <Label fx:id="lblTienGiam" layoutX="100.0" layoutY="75.0" text="0" />
+                              <Label layoutX="180.0" layoutY="75.0" text="VND" />
 						    </children>					
 						    <padding>
 						        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -92,7 +95,7 @@
 						</Pane>
                      </bottom>
                      <center>
-                        <Pane prefHeight="163.0" prefWidth="292.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+                        <Pane prefHeight="150.0" prefWidth="292.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
                               <Insets bottom="4.0" left="4.0" right="4.0" />
                            </BorderPane.margin>
