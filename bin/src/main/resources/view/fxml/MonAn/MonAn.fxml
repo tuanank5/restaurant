@@ -33,10 +33,10 @@
                      <left>
                         <BorderPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                            <top>
-                              <ImageView fx:id="img" fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;" BorderPane.alignment="CENTER" />
+                              <ImageView fx:id="img" fitHeight="250.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;" BorderPane.alignment="CENTER" />
                            </top>
                            <bottom>
-                              <Button fx:id="btnThemAnh" mnemonicParsing="false" onAction="#handleThemAnh" text="Thêm ảnh món ăn" BorderPane.alignment="CENTER" />
+                              <Button fx:id="btnThemAnh" mnemonicParsing="false" onAction="#handleThemAnh" style="-fx-background-color: transparent; -fx-border-color: #0077CC; -fx-border-radius: 12; -fx-border-width: 2px; -fx-text-fill: #0077CC; -fx-font-size: 15px; -fx-font-weight: bold;" text="Thêm ảnh món ăn" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
                      </left>
@@ -49,17 +49,17 @@
                               <TextField fx:id="txtDonGia" layoutX="120.0" layoutY="120.0" prefHeight="25.0" prefWidth="320.0" />
                               <Label layoutX="30.0" layoutY="120.0" text="Đơn giá :" />
                               <Label layoutX="30.0" layoutY="170.0" text="Khuyến mãi :" />
-                              <Button fx:id="btnSua" layoutX="416.0" layoutY="279.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #e07b00;" text="Sửa" textFill="WHITE">
+                              <Button fx:id="btnSua" layoutX="415.0" layoutY="275.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #e07b00;" text="Sửa" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnXoa" layoutX="220.0" layoutY="279.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #19692c;" text="Xóa" textFill="WHITE">
+                              <Button fx:id="btnXoa" layoutX="230.0" layoutY="275.0" mnemonicParsing="false" prefWidth="120.0" style="-fx-background-color: #19692c;" text="Xóa" textFill="WHITE">
                                  <font>
                                  <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnThem" layoutX="39.0" layoutY="279.0" mnemonicParsing="false" onAction="#handleThemMon" prefWidth="120.0" style="-fx-background-color: #0056b3;" text="Thêm mới" textFill="WHITE">
+                              <Button fx:id="btnThem" layoutX="50.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleThemMon" prefWidth="120.0" style="-fx-background-color: #0056b3;" text="Thêm mới" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -79,7 +79,7 @@
                <center>
                   <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <top>
-                        <BorderPane prefHeight="30.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                        <BorderPane prefHeight="55.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                            <center>
                               <Label text="Danh sách món ăn" BorderPane.alignment="CENTER">
                                  <font>
@@ -92,7 +92,7 @@
                      <center>
                         <BorderPane prefHeight="317.0" prefWidth="942.0" BorderPane.alignment="CENTER">
                            <top>
-                              <TableView fx:id="tblMon" prefHeight="300.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tblMon" prefHeight="304.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                                  <columns>
                                     <TableColumn fx:id="colMa" prefWidth="75.0" text="Mã món ăn" />
                                     <TableColumn fx:id="colTen" prefWidth="75.0" text="Tên món ăn" />

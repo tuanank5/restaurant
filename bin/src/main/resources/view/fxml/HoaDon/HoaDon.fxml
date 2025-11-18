@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -32,46 +31,19 @@
                      <left>
                         <Pane prefHeight="187.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label layoutX="30.0" layoutY="20.0" text="Mã hoá đơn:" />
-                              <Label layoutX="30.0" layoutY="70.0" text="Ngày lập:" />
-                              <TextField fx:id="txtMaHoaDon" layoutX="120.0" layoutY="15.0" prefHeight="25.0" prefWidth="320.0" />
-                              <DatePicker fx:id="txtDate" layoutX="120.0" layoutY="70.0" prefHeight="25.0" prefWidth="320.0" />
-                              <Label layoutX="30.0" layoutY="120.0" text="Hình thức thanh toán:" />
-                              <ComboBox fx:id="comboTT" layoutX="160.0" layoutY="120.0" prefHeight="25.0" prefWidth="280.0" />
-                              <Label layoutX="25.0" layoutY="230.0" text="Trạng thái:" />
-                              <ComboBox fx:id="comboTrangThai" layoutX="120.0" layoutY="225.0" prefHeight="25.0" prefWidth="316.0" />
-                              <Label layoutX="30.0" layoutY="170.0" text="Bàn:" />
-                              <TextField fx:id="txtBan" layoutX="120.0" layoutY="170.0" prefHeight="25.0" prefWidth="320.0" />
+                              <Label layoutX="30.0" layoutY="145.0" text="Từ ngày: " />
+                              <TextField fx:id="txtTimKiem" layoutX="120.0" layoutY="20.0" prefHeight="25.0" prefWidth="320.0" />
+                              <DatePicker fx:id="dpTuNgay" layoutX="120.0" layoutY="140.0" prefHeight="25.0" prefWidth="320.0" />
+                              <Label layoutX="30.0" layoutY="85.0" text="Lọc: " />
+                              <ComboBox fx:id="cmbLoc" layoutX="120.0" layoutY="80.0" prefHeight="25.0" prefWidth="316.0" />
+                              <DatePicker fx:id="dpDenNgay" layoutX="120.0" layoutY="200.0" prefHeight="25.0" prefWidth="320.0" />
+                              <Label layoutX="30.0" layoutY="205.0" text="Đến ngày: " />
+                              <Label layoutX="30.0" layoutY="25.0" text="Tìm kiếm:" />
                            </children>
                         </Pane>
                      </left>
                      <right>
                         <Pane prefHeight="262.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label layoutX="30.0" layoutY="20.0" text="Nhân viên:" />
-                              <TextField fx:id="txtNhanVien" layoutX="120.0" layoutY="15.0" prefHeight="25.0" prefWidth="320.0" />
-                              <Label layoutX="30.0" layoutY="70.0" text="Khuyến mãi:" />
-                              <ComboBox fx:id="comboKhuyenMai" layoutX="120.0" layoutY="70.0" prefHeight="25.0" prefWidth="320.0" promptText="--Chọn khuyến mãi--" />
-                              <TextField fx:id="txtKhachHang" layoutX="120.0" layoutY="120.0" prefHeight="25.0" prefWidth="320.0" />
-                              <Label layoutX="30.0" layoutY="120.0" text="Khách hàng:" />
-                              <Label layoutX="30.0" layoutY="170.0" text="Tiền cọc:" />
-                              <TextField fx:id="txtTienCoc" layoutX="120.0" layoutY="170.0" prefHeight="25.0" prefWidth="320.0" />
-                              <Button fx:id="btnXemChiTiet" layoutX="306.0" layoutY="224.0" mnemonicParsing="false" onAction="#controller" prefWidth="120.0" style="-fx-background-color: #e07b00;" text="Xem chi tiết" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="btnLamMoi" layoutX="163.0" layoutY="224.0" mnemonicParsing="false" onAction="#controller" prefWidth="120.0" style="-fx-background-color: #19692c;" text="Làm mới" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="btnTimKiem" layoutX="16.0" layoutY="224.0" mnemonicParsing="false" onAction="#controller" prefWidth="120.0" style="-fx-background-color: #0056b3;" text="Tìm kiếm" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Button>
-                           </children>
                            <BorderPane.margin>
                               <Insets right="40.0" />
                            </BorderPane.margin>
@@ -82,7 +54,7 @@
                <center>
                   <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <top>
-                        <BorderPane prefHeight="65.0" prefWidth="942.0" BorderPane.alignment="CENTER">
+                        <BorderPane prefHeight="65.0" prefWidth="1240.0" BorderPane.alignment="CENTER">
                            <center>
                               <Label text="Danh sách hoá đơn" BorderPane.alignment="CENTER">
                                  <font>
@@ -95,15 +67,15 @@
                      <center>
                         <BorderPane prefHeight="317.0" prefWidth="942.0" BorderPane.alignment="CENTER">
                            <center>
-                              <TableView fx:id="tableView" onSort="#controller" prefHeight="128.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tableView" onSort="#controller" prefHeight="231.0" prefWidth="1240.0" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn minWidth="-1.0" prefWidth="-1.0" text="Mã hoá đơn" />
-                                  <TableColumn minWidth="-1.0" prefWidth="-1.0" text="Ngày lập" />
-                                    <TableColumn minWidth="-1.0" prefWidth="-1.0" text="Khách hàng" />
-                                    <TableColumn minWidth="-1.0" prefWidth="-1.0" text="Nhân viên" />
-                                    <TableColumn minWidth="-1.0" prefWidth="-1.0" text="Khuyến mãi" />
-                                    <TableColumn minWidth="-1.0" prefWidth="-1.0" text="Trạng thái" />
-                                    <TableColumn minWidth="-1.0" prefWidth="-1.0" text="Kiểu thanh toán" />
+                                  <TableColumn fx:id="colMaHD" minWidth="-1.0" prefWidth="-1.0" text="Mã hoá đơn" />
+                                  <TableColumn fx:id="colNgayLap" minWidth="-1.0" prefWidth="-1.0" text="Ngày lập" />
+                                    <TableColumn fx:id="colKH" minWidth="-1.0" prefWidth="-1.0" text="Khách hàng" />
+                                    <TableColumn fx:id="colNV" minWidth="-1.0" prefWidth="-1.0" text="Nhân viên" />
+                                    <TableColumn fx:id="colKM" minWidth="-1.0" prefWidth="-1.0" text="Khuyến mãi" />
+                                    <TableColumn fx:id="colTrangThai" minWidth="-1.0" prefWidth="-1.0" text="Trạng thái" />
+                                    <TableColumn fx:id="colKieuThanhToan" minWidth="-1.0" prefWidth="-1.0" text="Kiểu thanh toán" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -111,44 +83,7 @@
                               </TableView>
                            </center>
                            <bottom>
-                              <BorderPane prefHeight="180.0" prefWidth="1205.0" BorderPane.alignment="CENTER">
-                                 <bottom>
-                                    <Pane prefHeight="180.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <Label layoutX="27.0" layoutY="14.0" prefHeight="27.0" prefWidth="132.0" text="Tổng Hóa Đơn">
-                                             <font>
-                                                <Font name="System Bold Italic" size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="65.0" layoutY="60.0" text="Tiền nhận:" />
-                                          <Label layoutX="65.0" layoutY="100.0" text="Tiền thừa:" />
-                                          <Label layoutX="65.0" layoutY="140.0" text="Tổng tiền: " />
-                                          <Label layoutX="407.0" layoutY="60.0" text="VAT:" />
-                                          <Label layoutX="407.0" layoutY="91.0" text="Tổng cộng: " />
-                                          <TextField fx:id="txtTienNhan" layoutX="140.0" layoutY="55.0" prefHeight="25.0" prefWidth="240.0" />
-                                          <TextField fx:id="tienThua" layoutX="140.0" layoutY="92.0" prefWidth="240.0" />
-                                          <TextField fx:id="txtTongTien" layoutX="140.0" layoutY="132.0" prefWidth="240.0" />
-                                          <TextField fx:id="txtVAT" layoutX="489.0" layoutY="48.0" prefWidth="240.0" />
-                                          <TextField fx:id="txtTongCong" layoutX="489.0" layoutY="87.0" prefWidth="240.0" />
-                                          <Button fx:id="btnXuatExcel" layoutX="715.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" prefWidth="80.0" style="-fx-background-color: blue;" text="Xuất Excel" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Button>
-                                          <Button fx:id="btnHuy" layoutX="595.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" prefWidth="80.0" style="-fx-background-color: #800000;" text="Huỷ" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Button>
-                                          <Button fx:id="btnXacNhan" layoutX="480.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" prefWidth="80.0" style="-fx-background-color: green;" text="Xác nhận" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </Pane>
-                                 </bottom>
-                              </BorderPane>
+                              <BorderPane prefHeight="44.0" prefWidth="1240.0" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
                      </center>

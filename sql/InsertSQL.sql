@@ -172,7 +172,7 @@ VALUES
 ('H1', 10, 10, N'Không giảm giá', N'Hạng Đồng'),
 ('H2', 100, 5, N'Giảm 5%', N'Hạng Bạc'),
 ('H3', 300, 10, N'Giảm 10%', N'Hạng Vàng'),
-('H4', 600, 15, N'Giảm 15%', N'Hạng Vàng');
+('H4', 600, 15, N'Giảm 15%', N'Hạng Kim Cương');
 -- Chèn dữ liệu vào bảng HangKhachHang
 -- Chèn dữ liệu vào bảng KhachHang (200 bản ghi) với maKH là KHxxxx
 
@@ -189,8 +189,8 @@ VALUES
 
 INSERT INTO KhachHang (maKH, tenKH, sdt, email, diaChi, diemTichLuy, maHang)
 VALUES
-('KH0001', N'Nguyễn Văn A', '0901000001', 'kh0001@email.com', N'123 Lê Lợi, Quận 1, TP.HCM', 1250, 'H4'),
-('KH0002', N'Trần Thị B', '0901000002', 'kh0002@email.com', N'45 Nguyễn Huệ, Quận 1, TP.HCM', 980, 'H4'),
+('KH0001', N'Lâm Thành Đạt', '0901000001', 'thanhdatfptshop123@email.com', N'123 Lê Lợi, Quận 1, TP.HCM', 1250, 'H4'),
+('KH0002', N'Nguyễn Thị Thu Thảo', '0901000002', 'kh0002@email.com', N'45 Nguyễn Huệ, Quận 1, TP.HCM', 980, 'H4'),
 ('KH0003', N'Lê Văn C', '0901000003', 'kh0003@email.com', N'67 Lý Thường Kiệt, Quận 10, TP.HCM', 320, 'H3'),
 ('KH0004', N'Phạm Thị D', '0901000004', 'kh0004@email.com', N'89 Pasteur, Quận 3, TP.HCM', 150, 'H2'),
 ('KH0005', N'Võ Văn E', '0901000005', 'kh0005@email.com', N'12 Hai Bà Trưng, Quận 1, TP.HCM', 50, 'H1'),
@@ -289,84 +289,7 @@ VALUES
 ('KH0098', N'Nguyễn Thị CT', '0901000098', 'kh0098@email.com', N'45 Lê Văn Việt, TP.Thủ Đức, TP.HCM', 1320, 'H4'),
 ('KH0099', N'Trần Văn CU', '0901000099', 'kh0099@email.com', N'78 Võ Thị Sáu, Quận 3, TP.HCM', 480, 'H3'),
 ('KH0100', N'Lê Thị CV', '0901000100', 'kh0100@email.com', N'56 Nguyễn Tri Phương, Quận 10, TP.HCM', 1550, 'H4'),
-('KH0101', N'Phạm Văn CW', '0901000101', 'kh0101@email.com', N'32 Lạc Long Quân, Quận 11, TP.HCM', 650, 'H4'),
-('KH0102', N'Đỗ Thị CX', '0901000102', 'kh0102@email.com', N'44 Hoàng Văn Thụ, Quận Phú Nhuận, TP.HCM', 310, 'H3'),
-('KH0103', N'Nguyễn Văn CY', '0901000103', 'kh0103@email.com', N'12 Bùi Viện, Quận 1, TP.HCM', 10, 'H1'),
-('KH0104', N'Trần Thị CZ', '0901000104', 'kh0104@email.com', N'77 Nguyễn Đình Chiểu, Quận 3, TP.HCM', 500, 'H3'),
-('KH0105', N'Lê Văn DA', '0901000105', 'kh0105@email.com', N'88 Huỳnh Tấn Phát, Quận 7, TP.HCM', 1240, 'H4'),
-('KH0106', N'Phạm Thị DB', '0901000106', 'kh0106@email.com', N'33 Nguyễn Kiệm, Quận Gò Vấp, TP.HCM', 350, 'H3'),
-('KH0107', N'Võ Văn DC', '0901000107', 'kh0107@email.com', N'22 Âu Cơ, Quận Tân Bình, TP.HCM', 1750, 'H4'),
-('KH0108', N'Nguyễn Thị DD', '0901000108', 'kh0108@email.com', N'11 Nguyễn Hữu Cảnh, Quận Bình Thạnh, TP.HCM', 430, 'H3'),
-('KH0109', N'Trần Văn DE', '0901000109', 'kh0109@email.com', N'09 Phan Xích Long, Quận Phú Nhuận, TP.HCM', 900, 'H4'),
-('KH0110', N'Lê Thị DF', '0901000110', 'kh0110@email.com', N'45 Nguyễn Văn Linh, Quận 7, TP.HCM', 600, 'H4'),
-('KH0111', N'Phạm Văn DG', '0901000111', 'kh0111@email.com', N'12 Nguyễn Ảnh Thủ, Quận 12, TP.HCM', 115, 'H2'),
-('KH0112', N'Đỗ Thị DH', '0901000112', 'kh0112@email.com', N'98 Quang Trung, Quận Gò Vấp, TP.HCM', 370, 'H3'),
-('KH0113', N'Nguyễn Văn DI', '0901000113', 'kh0113@email.com', N'05 Nguyễn Văn Cừ, Quận 5, TP.HCM', 740, 'H4'),
-('KH0114', N'Trần Thị DJ', '0901000114', 'kh0114@email.com', N'89 Tôn Đức Thắng, Quận 1, TP.HCM', 1800, 'H4'),
-('KH0115', N'Lê Văn DK', '0901000115', 'kh0115@email.com', N'65 Nguyễn Văn Lượng, Quận Gò Vấp, TP.HCM', 560, 'H3'),
-('KH0116', N'Phạm Thị DL', '0901000116', 'kh0116@email.com', N'77 Nguyễn Ảnh Thủ, Quận 12, TP.HCM', 990, 'H4'),
-('KH0117', N'Võ Văn DM', '0901000117', 'kh0117@email.com', N'21 Nguyễn Thị Thập, Quận 7, TP.HCM', 1500, 'H4'),
-('KH0118', N'Nguyễn Thị DN', '0901000118', 'kh0118@email.com', N'88 Lê Văn Sỹ, Quận 3, TP.HCM', 40, 'H1'),
-('KH0119', N'Trần Văn DO', '0901000119', 'kh0119@email.com', N'92 Nguyễn Trãi, Quận 5, TP.HCM', 620, 'H4'),
-('KH0120', N'Lê Thị DP', '0901000120', 'kh0120@email.com', N'48 Nguyễn Oanh, Quận Gò Vấp, TP.HCM', 1340, 'H4'),
-('KH0121', N'Phạm Văn DQ', '0901000121', 'kh0121@email.com', N'12 Phạm Văn Đồng, Quận Bình Thạnh, TP.HCM', 85, 'H1'),
-('KH0122', N'Đỗ Thị DR', '0901000122', 'kh0122@email.com', N'33 Nguyễn Kiệm, Quận Gò Vấp, TP.HCM', 250, 'H2'),
-('KH0123', N'Nguyễn Văn DS', '0901000123', 'kh0123@email.com', N'45 Nguyễn Văn Bứa, Hóc Môn, TP.HCM', 420, 'H3'),
-('KH0124', N'Trần Thị DT', '0901000124', 'kh0124@email.com', N'56 Trần Hưng Đạo, Quận 1, TP.HCM', 1200, 'H4'),
-('KH0125', N'Lê Văn DU', '0901000125', 'kh0125@email.com', N'90 Nguyễn Đình Chiểu, Quận 3, TP.HCM', 160, 'H2'),
-('KH0126', N'Phạm Thị DV', '0901000126', 'kh0126@email.com', N'12 Lê Hồng Phong, Quận 5, TP.HCM', 0, 'H1'),
-('KH0127', N'Võ Văn DW', '0901000127', 'kh0127@email.com', N'34 Nguyễn Thị Thập, Quận 7, TP.HCM', 500, 'H3'),
-('KH0128', N'Nguyễn Thị DX', '0901000128', 'kh0128@email.com', N'23 Nguyễn Văn Linh, Quận 7, TP.HCM', 760, 'H4'),
-('KH0129', N'Trần Văn DY', '0901000129', 'kh0129@email.com', N'88 Phan Xích Long, Quận Phú Nhuận, TP.HCM', 420, 'H3'),
-('KH0130', N'Lê Thị DZ', '0901000130', 'kh0130@email.com', N'99 Điện Biên Phủ, Quận 3, TP.HCM', 1320, 'H4'),
-('KH0131', N'Phạm Văn EA', '0901000131', 'kh0131@email.com', N'100 Lê Văn Việt, TP.Thủ Đức, TP.HCM', 190, 'H2'),
-('KH0132', N'Đỗ Thị EB', '0901000132', 'kh0132@email.com', N'120 Võ Văn Ngân, TP.Thủ Đức, TP.HCM', 980, 'H4'),
-('KH0133', N'Nguyễn Văn EC', '0901000133', 'kh0133@email.com', N'55 Nguyễn Thị Minh Khai, Quận 1, TP.HCM', 400, 'H3'),
-('KH0134', N'Trần Thị ED', '0901000134', 'kh0134@email.com', N'23 Cống Quỳnh, Quận 1, TP.HCM', 80, 'H1'),
-('KH0135', N'Lê Văn EE', '0901000135', 'kh0135@email.com', N'67 Lý Thường Kiệt, Quận 10, TP.HCM', 1120, 'H4'),
-('KH0136', N'Phạm Thị EF', '0901000136', 'kh0136@email.com', N'34 Nguyễn Văn Cừ, Quận 5, TP.HCM', 640, 'H4'),
-('KH0137', N'Võ Văn EG', '0901000137', 'kh0137@email.com', N'89 Pasteur, Quận 3, TP.HCM', 320, 'H3'),
-('KH0138', N'Nguyễn Thị EH', '0901000138', 'kh0138@email.com', N'12 Hai Bà Trưng, Quận 1, TP.HCM', 150, 'H2'),
-('KH0139', N'Trần Văn EI', '0901000139', 'kh0139@email.com', N'56 Cách Mạng Tháng 8, Quận 10, TP.HCM', 950, 'H4'),
-('KH0140', N'Lê Thị EJ', '0901000140', 'kh0140@email.com', N'23 Võ Văn Ngân, TP.Thủ Đức, TP.HCM', 1700, 'H4'),
-('KH0141', N'Phạm Văn EK', '0901000141', 'kh0141@email.com', N'78 Lê Văn Sỹ, Quận 3, TP.HCM', 275, 'H2'),
-('KH0142', N'Đỗ Thị EL', '0901000142', 'kh0142@email.com', N'90 Tô Hiến Thành, Quận 10, TP.HCM', 640, 'H4'),
-('KH0143', N'Nguyễn Văn EM', '0901000143', 'kh0143@email.com', N'22 Nguyễn Oanh, Quận Gò Vấp, TP.HCM', 1100, 'H4'),
-('KH0144', N'Trần Thị EN', '0901000144', 'kh0144@email.com', N'10 Lũy Bán Bích, Quận Tân Phú, TP.HCM', 300, 'H3'),
-('KH0145', N'Lê Văn EO', '0901000145', 'kh0145@email.com', N'11 Nguyễn Thị Minh Khai, Quận 1, TP.HCM', 200, 'H2'),
-('KH0146', N'Phạm Thị EP', '0901000146', 'kh0146@email.com', N'13 Đinh Tiên Hoàng, Quận Bình Thạnh, TP.HCM', 50, 'H1'),
-('KH0147', N'Võ Văn EQ', '0901000147', 'kh0147@email.com', N'100 Nguyễn Văn Cừ, Quận 5, TP.HCM', 700, 'H4'),
-('KH0148', N'Nguyễn Thị ER', '0901000148', 'kh0148@email.com', N'45 Lê Văn Việt, TP.Thủ Đức, TP.HCM', 1320, 'H4'),
-('KH0149', N'Trần Văn ES', '0901000149', 'kh0149@email.com', N'78 Võ Thị Sáu, Quận 3, TP.HCM', 480, 'H3'),
-('KH0150', N'Lê Thị ET', '0901000150', 'kh0150@email.com', N'56 Nguyễn Tri Phương, Quận 10, TP.HCM', 1550, 'H4'),
-('KH0151', N'Phạm Văn EU', '0901000151', 'kh0151@email.com', N'23 Lê Lợi, Quận 1, TP.HCM', 340, 'H3'),
-('KH0152', N'Đỗ Thị EV', '0901000152', 'kh0152@email.com', N'90 Nguyễn Huệ, Quận 1, TP.HCM', 80, 'H1'),
-('KH0153', N'Nguyễn Văn EW', '0901000153', 'kh0153@email.com', N'77 Lý Thường Kiệt, Quận 10, TP.HCM', 640, 'H4'),
-('KH0154', N'Trần Thị EX', '0901000154', 'kh0154@email.com', N'56 Võ Văn Ngân, TP.Thủ Đức, TP.HCM', 190, 'H2'),
-('KH0155', N'Lê Văn EY', '0901000155', 'kh0155@email.com', N'78 Nguyễn Văn Linh, Quận 7, TP.HCM', 870, 'H4'),
-('KH0156', N'Phạm Thị EZ', '0901000156', 'kh0156@email.com', N'45 Nguyễn Ảnh Thủ, Quận 12, TP.HCM', 320, 'H3'),
-('KH0157', N'Võ Văn FA', '0901000157', 'kh0157@email.com', N'11 Nguyễn Thị Thập, Quận 7, TP.HCM', 1450, 'H4'),
-('KH0158', N'Nguyễn Thị FB', '0901000158', 'kh0158@email.com', N'34 Nguyễn Kiệm, Quận Gò Vấp, TP.HCM', 220, 'H2'),
-('KH0159', N'Trần Văn FC', '0901000159', 'kh0159@email.com', N'09 Trường Sa, Quận 3, TP.HCM', 50, 'H1'),
-('KH0160', N'Lê Thị FD', '0901000160', 'kh0160@email.com', N'78 Nguyễn Đình Chiểu, Quận 3, TP.HCM', 1100, 'H4'),
-('KH0161', N'Phạm Văn FE', '0901000161', 'kh0161@email.com', N'12 Hoàng Sa, Quận 3, TP.HCM', 350, 'H3'),
-('KH0162', N'Đỗ Thị FF', '0901000162', 'kh0162@email.com', N'33 Nguyễn Hữu Cảnh, Quận Bình Thạnh, TP.HCM', 700, 'H4'),
-('KH0163', N'Nguyễn Văn FG', '0901000163', 'kh0163@email.com', N'44 Nguyễn Trãi, Quận 5, TP.HCM', 80, 'H1'),
-('KH0164', N'Trần Thị FH', '0901000164', 'kh0164@email.com', N'55 Cống Quỳnh, Quận 1, TP.HCM', 240, 'H2'),
-('KH0165', N'Lê Văn FI', '0901000165', 'kh0165@email.com', N'66 Nguyễn Văn Linh, Quận 7, TP.HCM', 600, 'H4'),
-('KH0166', N'Phạm Thị FJ', '0901000166', 'kh0166@email.com', N'77 Võ Văn Ngân, TP.Thủ Đức, TP.HCM', 110, 'H2'),
-('KH0167', N'Võ Văn FK', '0901000167', 'kh0167@email.com', N'88 Lê Văn Việt, TP.Thủ Đức, TP.HCM', 450, 'H3'),
-('KH0168', N'Nguyễn Thị FL', '0901000168', 'kh0168@email.com', N'23 Nguyễn Huệ, Quận 1, TP.HCM', 990, 'H4'),
-('KH0169', N'Trần Văn FM', '0901000169', 'kh0169@email.com', N'90 Nguyễn Văn Bứa, Hóc Môn, TP.HCM', 180, 'H2'),
-('KH0170', N'Lê Thị FN', '0901000170', 'kh0170@email.com', N'100 Võ Thị Sáu, Quận 3, TP.HCM', 1300, 'H4'),
-('KH0171', N'Phạm Văn FO', '0901000171', 'kh0171@email.com', N'45 Nguyễn Văn Lượng, Quận Gò Vấp, TP.HCM', 50, 'H1'),
-('KH0172', N'Đỗ Thị FP', '0901000172', 'kh0172@email.com', N'22 Nguyễn Oanh, Quận Gò Vấp, TP.HCM', 320, 'H3'),
-('KH0173', N'Nguyễn Văn FQ', '0901000173', 'kh0173@email.com', N'78 Nguyễn Thị Minh Khai, Quận 1, TP.HCM', 1550, 'H4'),
-('KH0174', N'Trần Thị FR', '0901000174', 'kh0174@email.com', N'33 Nguyễn Văn Linh, Quận 7, TP.HCM', 270, 'H2'),
-('KH0175', N'Lê Văn FS', '0901000175', 'kh0175@email.com', N'88 Lý Thường Kiệt, Quận 10, TP.HCM', 700, 'H4'),
-('KH0176', N'Phạm Thị FT', '0901000176', 'kh0176@email.com', N'34 Tôn Đức Thắng, Quận 1, TP.HCM', 150, 'H2'),
-('KH0177', N'Võ Văn FU', '0901000177', 'kh0177@email.com', N'45 Nguyễn Văn Cừ, Quận 5, TP.HCM', 640, 'H4'),
-('KH0178', N'Nguyễn Thị FV', '0901000178', 'kh0178@email.com', N'23 Nguyễn Thị Thập, Quận 7, TP.HCM', 480, 'H3');
+
 
 --Chèn dữ liệu cho loaiBan
 INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
@@ -377,15 +300,15 @@ INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
 -- Thêm dữ liệu cho Ban
 	INSERT INTO [dbo].[Ban] (maBan, viTri, trangThai, maLoaiBan) VALUES
 	('B01', N'Khu A', N'Trống', 'LB01'),
-	('B02', N'Khu A', N'Đã được đặt', 'LB01'),
+	('B02', N'Khu A', N'Trống', 'LB01'),
 	('B03', N'Khu B', N'Trống', 'LB02'),
-	('B04', N'Khu B', N'Đang phục vụ', 'LB02'),
+	('B04', N'Khu B', N'Trống', 'LB02'),
 	('B05', N'Khu C', N'Trống', 'LB03'),
-	('B06', N'Khu C', N'Đã được đặt', 'LB03'),
+	('B06', N'Khu C', N'Trống', 'LB03'),
 	('B07', N'Khu B', N'Trống', 'LB02'),
 	('B08', N'Khu A', N'Trống', 'LB01'),
-	('B09', N'Khu C', N'Đang phục vụ', 'LB03'),
-	('B10', N'Khu B', N'Đã được đặt', 'LB02');
+	('B09', N'Khu C', N'Trống', 'LB03'),
+	('B10', N'Khu B', N'Trống', 'LB02');
 
 -- Thêm dữ liệu cho KhuyenMai
 INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, phanTramGiamGia)
@@ -432,7 +355,7 @@ INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tie
     ('HD0010', '2025-10-04', 1600000, 160000, 'Đã thanh toán', 'Tiền mặt', 1800000, 200000, 'KH0010', 'KM010', 'NV010', 'B10', 'C010');
     
     --Thêm MonAn
-   INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh) VALUES
+INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh) VALUES
 ('SP004', N'Cơm Tấm Sườn', 45000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen4.jpg'),
 ('SP005', N'Bún Thịt Nướng', 38000, 'KM001', 'C:\\Users\\MYPC\\Pictures\\nen5.jpg'),
 ('SP006', N'Lẩu Thái Chua Cay', 150000, 'KM002', 'C:\\Users\\MYPC\\Pictures\\nen6.jpg'),

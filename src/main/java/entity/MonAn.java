@@ -22,7 +22,7 @@ public class MonAn {
     private double donGia;
 
     @ManyToOne
-    @JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = false)
+    @JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = true)
     private KhuyenMai khuyenMai;
 
     @Column(name = "duongDanAnh", length = 255) // Thêm cột lưu đường dẫn ảnh
