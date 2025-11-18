@@ -23,7 +23,8 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
             );
             return query.getResultList();
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            return List.of(); // trả về list rỗng an toàn
         } finally {
             em.close();
         }

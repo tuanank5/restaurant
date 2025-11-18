@@ -260,6 +260,7 @@ public class MonAn_Controller implements Initializable{
 	    // ------------------- Load dữ liệu từ DB lên TableView -------------------
 	    private void loadTable() {
 	        List<MonAn> danhSachMon = monDAO.getDanhSachMonAn(); // dùng phương thức DAO chuẩn
+//	        System.out.println("Số món trong DB: " + danhSachMon.size());
 	        if (danhSachMon != null && !danhSachMon.isEmpty()) {
 	            tblMon.setItems(FXCollections.observableArrayList(danhSachMon));
 	        } else {
@@ -333,37 +334,36 @@ public class MonAn_Controller implements Initializable{
 	    }
 
 	    //Sinh mã tự động
-//        private String sinhMaMon() {
-//            List<MonAn> listMon = monDAO.getDanhSachMonAn();
-//            int max = 0;
-//            for (MonAn m : listMon) {
-//                try {
-//                    int so = Integer.parseInt(m.getMaMon().substring(1));
-//                    if (so > max) max = so;
-//                } catch (Exception e) {
-//                    // bỏ qua nếu format khác
-//                }
-//            }
-//            return String.format("M%02d", max + 1); // Ví dụ: M01, M02,...
-//        }
-	    private String sinhMaMon() {
-	        List<MonAn> listMon = monDAO.getDanhSachMonAn();
-
-	        if (listMon == null) {
-	            listMon = new ArrayList<>();   // NGĂN NullPointerException
-	        }
-
-	        int max = 0;
-	        for (MonAn m : listMon) {
-	            try {
-	                int so = Integer.parseInt(m.getMaMon().substring(1));
-	                if (so > max) max = so;
-	            } catch (Exception e) {
-	                // bỏ qua format sai
-	            }
-	        }
-	        return String.format("M%02d", max + 1);
-	    }
+        private String sinhMaMon() {
+            List<MonAn> listMon = monDAO.getDanhSachMonAn();
+            int max = 0;
+            for (MonAn m : listMon) {
+                try {
+                    int so = Integer.parseInt(m.getMaMon().substring(1));
+                    if (so > max) max = so;
+                } catch (Exception e) {
+                    // bỏ qua nếu format khác
+                }
+            }
+            return String.format("M%03d", max + 1); // Ví dụ: M01, M02,...
+        }
+//	    private String sinhMaMon() {
+//	        List<MonAn> listMon = monDAO.getDanhSachMonAn();
+//	        int max = 0;
+//
+//	        if (listMon != null) {
+//	            for (MonAn m : listMon) {
+//	                String ma = m.getMaMon();
+//	                if (ma != null && ma.startsWith("M")) {
+//	                    try {
+//	                        int so = Integer.parseInt(ma.substring(1));
+//	                        if (so > max) max = so;
+//	                    } catch (Exception ignored) {}
+//	                }
+//	            }
+//	        }
+//	        return "M" + String.format("%03d", max + 1); // M001, M002, ...
+//	    }
 
 
 	    private void resetForm() {

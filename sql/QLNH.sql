@@ -74,7 +74,7 @@ CREATE TABLE KhuyenMai
 	maKM VARCHAR(20) PRIMARY KEY,
 	tenKM NVARCHAR(100),
 	loaiKM NVARCHAR(50),
-	sanPhamKM VARCHAR(50),
+	sanPhamKM NVARCHAR(50),
 	ngayBatDau DATE,
 	ngayKetThuc DATE,
 	phanTramGiamGia INT CHECK (phanTramGiamGia BETWEEN 0 AND 100)
@@ -85,7 +85,9 @@ CREATE TABLE MonAn
 	maMon VARCHAR(20) PRIMARY KEY,
 	tenMon NVARCHAR(100),
 	donGia DECIMAL(10,2) CHECK (donGia >= 0),
-	maKM VARCHAR(20) NULL REFERENCES KhuyenMai(maKM)
+	maKM VARCHAR(20) NULL REFERENCES KhuyenMai(maKM),
+	duongDanAnh NVARCHAR(255) NULL,
+	loaiMon NVARCHAR(100) NULL
 );
 
 CREATE TABLE NhanVien
