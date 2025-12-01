@@ -230,6 +230,11 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         }
     }
     
+    @FXML
+    void hanhleXacNhan(ActionEvent event) {
+
+    }
+    
     // --- Khởi tạo ComboBox Khuyến mãi ---
     private void khoiTaoComboBoxKhuyenMai() {
         List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
