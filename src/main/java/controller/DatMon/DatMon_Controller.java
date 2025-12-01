@@ -115,6 +115,7 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
     public void setBanDangChon(Ban ban) {
         this.banDangChon = ban;
         loadThongTinKhachHang();
+        loadMonCuaBan();
     }
     
     private DonDatBan donDatBanHienTai;
@@ -168,6 +169,7 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         if (MenuNV_Controller.banDangChon != null) {
             this.banDangChon = MenuNV_Controller.banDangChon;
             txtMaBan.setText(banDangChon.getMaBan());
+            loadMonCuaBan();
         }
 
         if (MenuNV_Controller.khachHangDangChon != null) {
@@ -215,24 +217,64 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
     }
 
     
+//    @FXML
+//    void hanhleThanhToan(ActionEvent event) {
+//    	try {
+//            // Gán dữ liệu cần thiết vào MenuNV_Controller (giống cách bạn truyền ở DatMon)
+//            MenuNV_Controller.banDangChon = banDangChon;
+//            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat; // bạn cần tạo biến này trong MenuNV_Controller
+//            MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
+//            
+//            // Mở giao diện Chi tiết hóa đơn trong BorderPane chính
+//            MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
+//            if (banDangChon != null) {
+//                MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     @FXML
     void hanhleThanhToan(ActionEvent event) {
-    	try {
-            // Gán dữ liệu cần thiết vào MenuNV_Controller (giống cách bạn truyền ở DatMon)
+        try {
+        	// Gán dữ liệu cho hóa đơn như bạn đang làm
             MenuNV_Controller.banDangChon = banDangChon;
-            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat; // bạn cần tạo biến này trong MenuNV_Controller
+            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat;
             MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
-
-            // Mở giao diện Chi tiết hóa đơn trong BorderPane chính
+            
+            //Cập nhật trạng thái bàn về TRỐNG trong database
+            Ban_DAO banDAO = new Ban_DAOImpl();
+            banDangChon.setTrangThai("Trống");
+            banDAO.capNhat(banDangChon);
+            //Xóa món ăn đã lưu tạm cho bàn này
+            MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
+            //Cập nhật giao diện danh sách bàn trong MenuNV
+            MenuNV_Controller.instance.refreshBanUI();
+            //Mở UI hóa đơn
             MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     
     @FXML
     void hanhleXacNhan(ActionEvent event) {
+    	if (banDangChon == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Chưa chọn bàn!");
+            alert.showAndWait();
+            return;
+        }
 
+        // Lưu danh sách món theo bàn
+        MenuNV_Controller.dsMonTheoBan.put(banDangChon.getMaBan(), new LinkedHashMap<>(dsMonAnDat));
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Xác nhận");
+        alert.setHeaderText(null);
+        alert.setContentText("Đã lưu món tạm cho bàn " + banDangChon.getMaBan());
+        alert.showAndWait();
     }
     
     // --- Khởi tạo ComboBox Khuyến mãi ---
@@ -332,9 +374,22 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
 
         gridPaneMon.requestLayout();
     }
+    
+    private void loadMonCuaBan() {
+        if (banDangChon == null) return;
 
+        // Nếu bàn đã từng đặt món → lấy lại
+        if (MenuNV_Controller.dsMonTheoBan.containsKey(banDangChon.getMaBan())) {
+            dsMonAnDat = MenuNV_Controller.dsMonTheoBan.get(banDangChon.getMaBan());
+        }
 
+        // Cập nhật bảng
+        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+        tblDS.refresh();
+        capNhatTongTien();
+    }
 
+    
     // -------------------- LOAD THÔNG TIN KHÁCH HÀNG --------------------
     private void loadThongTinKhachHang() {
         if (donDatBanHienTai != null) {

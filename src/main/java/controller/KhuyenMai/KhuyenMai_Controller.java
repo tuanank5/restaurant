@@ -157,7 +157,7 @@ public class KhuyenMai_Controller {
                 + "Thời gian: " + km.getNgayBatDau() + " → " + km.getNgayKetThuc() + "\n"
                 + "Mức giảm giá: " + km.getPhanTramGiamGia() + "%\n\n"
                 + "👉 Hãy đến nhà hàng để nhận ưu đãi nhé!\n";
-        // Tạo thread pool với 10 luồng (có thể thay đổi số luồng)
+        // Tạo thread pool với 15 luồng (có thể thay đổi số luồng)
         ExecutorService executor = Executors.newFixedThreadPool(15);
         
         for (KhachHang kh : dsKH) {
