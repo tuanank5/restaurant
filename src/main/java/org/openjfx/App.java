@@ -14,7 +14,7 @@ import javafx.stage.StageStyle;
 public class App extends Application {
 
 	private double x = 0;
-	private double y = 0;
+//	private double y = 0;
 	
 	@Override
 	public void start(Stage stage) throws Exception {
