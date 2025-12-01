@@ -102,6 +102,16 @@ public class DatMon_Controller implements Initializable {
     //-----Bàn---------
     private Ban banDangChon;
 
+    
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
+    private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
+    private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
+    
+    private List<MonAn> dsMonAn;
+
+    private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+    
     public void setBanDangChon(Ban ban) {
         this.banDangChon = ban;
         loadThongTinKhachHang();
@@ -113,16 +123,6 @@ public class DatMon_Controller implements Initializable {
         this.donDatBanHienTai = don;
         loadThongTinKhachHang(); // load ngay khi nhận được
     }
-
-    
-    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-    private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-    private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
-    
-    private List<MonAn> dsMonAn;
-
-    private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
