@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhanVien.NhanVien_Controller">
    <center>
@@ -18,11 +17,7 @@
                <top>
                   <BorderPane prefHeight="50.0" prefWidth="900.0" BorderPane.alignment="CENTER">
                      <center>
-                        <Label text="Danh Sách Nhân viên" BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="Times New Roman Bold" size="24.0" />
-                           </font>
-                        </Label>
+                        <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Nhân Viên" BorderPane.alignment="CENTER" />
                      </center>
                   </BorderPane>
                </top>
@@ -31,17 +26,17 @@
                      <left>
                         <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" text="Thêm nhân viên" />
-                              <Button fx:id="btnUpdateNV" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0" text="Cập nhật nhân viên" />
-                              <Button fx:id="btnXuatPDF" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="90.0" text="Xuất PDF" />
+                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Nhân Viên" />
+                              <Button fx:id="btnUpdateNV" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Cập nhật nhân viên" />
+                              <Button fx:id="btnXuatPDF" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="90.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất PDF" />
                            </children>
                         </AnchorPane>
                      </left>
                      <right>
                         <AnchorPane prefHeight="75.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="30.0" layoutY="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Tìm kiếm" />
-                              <TextField fx:id="txtTimKiem" layoutX="128.0" layoutY="25.0" onAction="#controller" onMouseClicked="#mouseClicked" prefHeight="30.0" prefWidth="250.0" />
+                              <Button layoutX="30.0" layoutY="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
+                              <TextField fx:id="txtTimKiem" layoutX="128.0" layoutY="25.0" onAction="#controller" onMouseClicked="#mouseClicked" prefHeight="30.0" prefWidth="250.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                            </children>
                         </AnchorPane>
                      </right>
@@ -52,16 +47,16 @@
                      <left>
                         <AnchorPane prefHeight="75.0" prefWidth="750.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnTatCa" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" text="Tất cả" />
-                              <Button fx:id="btnDangLamViec" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="125.0" text="Đang làm việc" />
-                              <Button fx:id="btnDaNghi" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="90.0" text="Đã nghĩ" />
+                              <Button fx:id="btnTatCa" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
+                              <Button fx:id="btnDangLamViec" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="125.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đang làm việc" />
+                              <Button fx:id="btnDaNghi" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="90.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đã nghĩ" />
                            </children>
                         </AnchorPane>
                      </left>
                      <right>
                         <AnchorPane prefHeight="75.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnXoa" layoutX="50.0" layoutY="23.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="50.0" text="Xóa" />
+                              <Button fx:id="btnXoa" layoutX="50.0" layoutY="23.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
                            </children>
                         </AnchorPane>
                      </right>
@@ -72,7 +67,7 @@
          <center>
             <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <center>
-                  <TableView fx:id="tblNV" onMouseClicked="#mouseClicked" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <TableView fx:id="tblNV" onMouseClicked="#mouseClicked" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" BorderPane.alignment="CENTER">
                     <columns>
                       <TableColumn fx:id="tblMaNV" prefWidth="75.0" text="Mã NV" />
                       <TableColumn fx:id="tblTenNV" prefWidth="75.0" text="Tên NV" />

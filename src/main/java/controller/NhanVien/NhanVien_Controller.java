@@ -119,6 +119,8 @@ public class NhanVien_Controller {
             xuatExcel();
         } else if (source == btnXoa) {
             xoa();
+        } else if (source == btnUpdateNV) {
+        	updateNV();
         } else {
             int soLuongBanGhi = 0;
             if (source == btnTatCa) {
@@ -137,7 +139,11 @@ public class NhanVien_Controller {
 
     }
     
-    @FXML
+    private void updateNV() {
+    	MenuNVQL_Controller.instance.readyUI("NhanVien/CapNhatNhanVien");
+	}
+
+	@FXML
     void mouseClicked(MouseEvent event) throws IOException {
         Object source = event.getSource();
         if (source == txtTimKiem) {
