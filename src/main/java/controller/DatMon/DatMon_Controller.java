@@ -217,23 +217,47 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
     }
 
     
+//    @FXML
+//    void hanhleThanhToan(ActionEvent event) {
+//    	try {
+//            // Gán dữ liệu cần thiết vào MenuNV_Controller (giống cách bạn truyền ở DatMon)
+//            MenuNV_Controller.banDangChon = banDangChon;
+//            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat; // bạn cần tạo biến này trong MenuNV_Controller
+//            MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
+//            
+//            // Mở giao diện Chi tiết hóa đơn trong BorderPane chính
+//            MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
+//            if (banDangChon != null) {
+//                MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     @FXML
     void hanhleThanhToan(ActionEvent event) {
-    	try {
-            // Gán dữ liệu cần thiết vào MenuNV_Controller (giống cách bạn truyền ở DatMon)
+        try {
+        	// Gán dữ liệu cho hóa đơn như bạn đang làm
             MenuNV_Controller.banDangChon = banDangChon;
-            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat; // bạn cần tạo biến này trong MenuNV_Controller
+            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat;
             MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
             
-            // Mở giao diện Chi tiết hóa đơn trong BorderPane chính
+            //Cập nhật trạng thái bàn về TRỐNG trong database
+            Ban_DAO banDAO = new Ban_DAOImpl();
+            banDangChon.setTrangThai("Trống");
+            banDAO.capNhat(banDangChon);
+            //Xóa món ăn đã lưu tạm cho bàn này
+            MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
+            //Cập nhật giao diện danh sách bàn trong MenuNV
+            MenuNV_Controller.instance.refreshBanUI();
+            //Mở UI hóa đơn
             MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
-            if (banDangChon != null) {
-                MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     
     @FXML
     void hanhleXacNhan(ActionEvent event) {
