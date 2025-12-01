@@ -3,6 +3,7 @@ package controller.Menu;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import dao.Ban_DAO;
 import dao.TaiKhoan_DAO;
 import entity.Ban;
 import entity.KhachHang;
+import entity.MonAn;
 import entity.TaiKhoan;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +39,9 @@ public class MenuNV_Controller {
 	public static KhachHang khachHangDangChon;
 	public static ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
 	
+	// Lưu món ăn tạm theo từng bàn
+	public static Map<String, Map<MonAn, Integer>> dsMonTheoBan = new HashMap<>();
+
 	public static TaiKhoan taiKhoan;
 
 	@FXML

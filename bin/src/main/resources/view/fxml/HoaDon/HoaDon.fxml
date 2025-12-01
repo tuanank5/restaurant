@@ -67,7 +67,7 @@
                      <center>
                         <BorderPane prefHeight="317.0" prefWidth="942.0" BorderPane.alignment="CENTER">
                            <center>
-                              <TableView fx:id="tableView" onSort="#controller" prefHeight="231.0" prefWidth="1240.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tableView" prefHeight="231.0" prefWidth="1240.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="colMaHD" minWidth="-1.0" prefWidth="-1.0" text="Mã hoá đơn" />
                                   <TableColumn fx:id="colNgayLap" minWidth="-1.0" prefWidth="-1.0" text="Ngày lập" />

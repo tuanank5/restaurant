@@ -6,6 +6,7 @@ import java.util.List;
 
 import dao.Ban_DAO;
 import entity.Ban;
+import entity.DonDatBan;
 import entity.LoaiBan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -62,5 +63,4 @@ public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
             em.close();
         }
     }
-       
 }
