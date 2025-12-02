@@ -17,7 +17,7 @@
                <top>
                   <BorderPane BorderPane.alignment="CENTER">
                      <center>
-                        <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Khách Hàng" />
+                        <Label prefHeight="75.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Khách Hàng" />
                      </center>
                   </BorderPane>
                </top>
@@ -47,7 +47,7 @@
          <center>
             <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <center>
-                  <TableView fx:id="tableView" onMouseClicked="#mouseClicked" prefHeight="450.0" prefWidth="1200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
+                  <TableView fx:id="tableView" onMouseClicked="#mouseClicked" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
                      <columns>
                         <TableColumn fx:id="tblKhachHang" prefWidth="150" text="Mã khách hàng" />
                         <TableColumn fx:id="tblTenKH" prefWidth="160" text="Tên khách hàng" />

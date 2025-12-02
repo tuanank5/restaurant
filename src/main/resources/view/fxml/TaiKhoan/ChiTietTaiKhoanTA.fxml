@@ -1,28 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
-            <AnchorPane prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label layoutX="425.0" layoutY="15.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Thông Tin Chi Tiết Tài Khoản" />
-               </children>
-            </AnchorPane>
+            <BorderPane prefHeight="75.0">
+               <center>
+                  <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Thông Tin Chi Tiết Tài Khoản" />
+               </center>
+            </BorderPane>
          </top>
          <center>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <BorderPane prefHeight="200.0" prefWidth="600.0">
+            <BorderPane BorderPane.alignment="CENTER">
+               <right>
+                  <BorderPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                     <top>
+                        <AnchorPane prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label layoutX="100.0" layoutY="23.0" style="-fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Thông Tin Nhân Viên" />
+                           </children>
+                        </AnchorPane>
+                     </top>
+                     <center>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label layoutX="150.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã Nhân Viên:" />
+                              <TextField editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <Label layoutX="150.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Họ Tên Nhân Viên" />
+                              <TextField editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <Label layoutX="150.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số Điện Thoại" />
+                              <Label layoutX="150.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chức Vụ" />
+                              <TextField editable="false" layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tạo Lại Mật Khẩu" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" />
+                              <TextField editable="false" layoutX="287.0" layoutY="169.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                           </children>
+                        </AnchorPane>
+                     </center>
+                  </BorderPane>
+               </right>
+               <left>
+                  <BorderPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                      <top>
                         <AnchorPane prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
@@ -38,41 +61,17 @@
                               <Label layoutX="150.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Đăng Nhập:" />
                               <Label layoutX="150.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Đăng Xuất:" />
                               <Label layoutX="150.0" layoutY="225.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Sửa Đổi:" />
-                              <TextField layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <DatePicker layoutX="287.0" layoutY="119.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <DatePicker layoutX="287.0" layoutY="169.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <DatePicker layoutX="287.0" layoutY="219.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField editable="false" layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField editable="false" layoutX="287.0" layoutY="169.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField editable="false" layoutX="287.0" layoutY="219.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                            </children>
                         </AnchorPane>
                      </center>
                   </BorderPane>
-                  <BorderPane prefHeight="200.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
-                     <top>
-                        <AnchorPane prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label layoutX="100.0" layoutY="23.0" style="-fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Thông Tin Nhân Viên" />
-                           </children>
-                        </AnchorPane>
-                     </top>
-                     <center>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label layoutX="150.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã Nhân Viên:" />
-                              <TextField layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <Label layoutX="150.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Họ Tên Nhân Viên" />
-                              <TextField layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <Label layoutX="150.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số Điện Thoại" />
-                              <Label layoutX="150.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chức Vụ" />
-                              <TextField layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <ComboBox layoutX="287.0" layoutY="169.0" prefHeight="30.0" prefWidth="234.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                              <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tạo Lại Mật Khẩu" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" />
-                           </children>
-                        </AnchorPane>
-                     </center>
-                  </BorderPane>
-               </children>
-            </HBox>
+               </left>
+            </BorderPane>
          </center>
       </BorderPane>
    </center>

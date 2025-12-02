@@ -12,11 +12,11 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <AnchorPane prefHeight="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label layoutX="400.0" layoutY="25.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Tài Khoản" />
-         </children>
-      </AnchorPane>
+      <BorderPane prefHeight="75.0">
+         <center>
+            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Tài Khoản" />
+         </center>
+      </BorderPane>
    </top>
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -34,13 +34,13 @@
                   <CheckBox layoutX="765.0" layoutY="30.0" mnemonicParsing="false" />
                   <Button layoutX="50.0" layoutY="90.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Lọc" />
                   <Button layoutX="125.0" layoutY="90.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất Cả" />
-                  <Label layoutX="890.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" />
-                  <TextField layoutX="970.0" layoutY="24.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm:" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="30.0" />
+                  <TextField styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
                </children>
             </AnchorPane>
          </top>
          <center>
-            <TableView prefHeight="355.0" prefWidth="900.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
+            <TableView prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
                <columns>
                   <TableColumn prefWidth="75.0" text="Mã tài khoản" />
                   <TableColumn prefWidth="75.0" text="Tên tài khoản" />

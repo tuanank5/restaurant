@@ -21,7 +21,7 @@
                </children></AnchorPane>
          </top>
          <center>
-            <TableView fx:id="tblMon" prefHeight="304.0" prefWidth="1200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
+            <TableView fx:id="tblMon" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
                <columns>
                   <TableColumn fx:id="colMa" prefWidth="75.0" text="Mã món ăn" />
                   <TableColumn fx:id="colTen" prefWidth="75.0" text="Tên món ăn" />
@@ -39,11 +39,11 @@
    <top>
       <BorderPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
-            <AnchorPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label layoutX="475.0" layoutY="20.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Quản Lý Món Ăn" />
-               </children>
-            </AnchorPane>
+            <BorderPane>
+               <center>
+                  <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Quản Lý Món Ăn" />
+               </center>
+            </BorderPane>
          </top>
          <center>
             <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
