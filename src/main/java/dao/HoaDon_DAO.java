@@ -40,4 +40,5 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
     List<HoaDon> getHoaDonNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
 
     Double getTongDoanhThuNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
+    String getMaxMaHoaDon();
 }

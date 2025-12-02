@@ -35,4 +35,5 @@ public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
     public Map<LoaiBan, Integer> countLoaiBanTheoNam(int year);
     
     public Map<LoaiBan, Integer> countLoaiBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
+    String getMaxMaDatBan();
 }

@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import util.AutoIDUitl;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -106,30 +107,6 @@ public class DatBan_Controller implements Initializable {
         }
     }
     
-//    // --- Khởi tạo ComboBox Khuyến mãi ---
-//    private void khoiTaoComboBoxKhuyenMai() {
-//        List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
-//        if (danhSachKM != null && !danhSachKM.isEmpty()) {
-//            cmbKM.getItems().setAll(danhSachKM);
-//            // Hiển thị tên KM + %
-//            cmbKM.setCellFactory(lv -> new ListCell<KhuyenMai>() {
-//                @Override
-//                protected void updateItem(KhuyenMai item, boolean empty) {
-//                    super.updateItem(item, empty);
-//                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
-//                }
-//            });
-//            cmbKM.setButtonCell(new ListCell<KhuyenMai>() {
-//                @Override
-//                protected void updateItem(KhuyenMai item, boolean empty) {
-//                    super.updateItem(item, empty);
-//                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
-//                }
-//            });
-//        }
-//    }
-
-
     private void khoiTaoComboBoxes() {
         cmbTrangThai.getItems().clear();
         cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
@@ -281,7 +258,7 @@ public class DatBan_Controller implements Initializable {
         }
 
         DonDatBan don = new DonDatBan();
-        don.setMaDatBan("DDB" + System.currentTimeMillis());
+        don.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
         don.setKhachHang(kh);
         don.setBan(banDangChon);
         don.setNgayGioLapDon(java.sql.Date.valueOf(ngayChon));

@@ -20,7 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import util.MaTuDongUtil;
+import util.AutoIDUitl;
 
 
 public class QuanLyBan_Controller {
@@ -175,7 +175,7 @@ public class QuanLyBan_Controller {
         // Đưa dữ liệu vào ObservableList và hiển thị lên TableView
         danhSachBan.setAll(listBan);
         tblBan.setItems(danhSachBan);
-        txtMaBan.setText(MaTuDongUtil.sinhMaBan());
+        txtMaBan.setText(AutoIDUitl.sinhMaBan());
 
         
     }
@@ -304,7 +304,7 @@ public class QuanLyBan_Controller {
 
     private void resetForm() {
         // Tự sinh mã bàn mới
-    	txtMaBan.setText(MaTuDongUtil.sinhMaBan());
+    	txtMaBan.setText(AutoIDUitl.sinhMaBan());
         
         // Xóa textField vị trí
         txtViTri.clear();

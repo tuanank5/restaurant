@@ -36,14 +36,15 @@ public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
         EntityManager em = emf.createEntityManager();
         try {
             return em.createQuery(
-                    "SELECT MAX(b.maBan) FROM Ban b", String.class)
-                    .getSingleResult();
+                "SELECT MAX(b.maBan) FROM Ban b", String.class
+            ).getSingleResult();
         } catch (Exception e) {
             return null;
         } finally {
             em.close();
         }
     }
+
     
     @Override
     public boolean sua(Ban ban) {

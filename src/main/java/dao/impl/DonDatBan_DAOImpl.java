@@ -104,7 +104,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
             em.close();
         }
     }
-
+    
+    
 	@Override
 	public List<DonDatBan> getAllDonDatBan() {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -344,4 +345,18 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         }
         return demLoaiBan;
     }
+	
+	@Override
+	public String getMaxMaDatBan() {
+	    EntityManager em = getEntityManager();
+	    try {
+	        return em.createQuery(
+	            "SELECT MAX(d.maDatBan) FROM DonDatBan d", String.class
+	        ).getSingleResult();
+	    } catch (Exception e) {
+	        return null;
+	    } finally {
+	        em.close();
+	    }
+	}
 }

@@ -38,6 +38,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import util.AutoIDUitl;
 
 public class ThemKhachHang_Controller {
 	@FXML
@@ -288,7 +289,7 @@ public class ThemKhachHang_Controller {
             return null;
         }
         KhachHang kh = new KhachHang();
-        kh.setMaKH(phatSinhMaKH()); // quan trọng
+        kh.setMaKH(AutoIDUitl.phatSinhMaKH()); // quan trọng
         kh.setTenKH(tenKH);
         kh.setSdt(sdt);
         kh.setEmail(email);
@@ -302,28 +303,6 @@ public class ThemKhachHang_Controller {
         kh.setHangKhachHang(hang);
 
         return kh;
-    }
-
-    private String phatSinhMaKH(){
-    	KhachHang_DAO dao = RestaurantApplication.getInstance()
-    			.getDatabaseContext()
-    			.newEntity_DAO(KhachHang_DAO.class);
-    	//Lấy danh sách khách hàng hiện có
-    	List<KhachHang> dsKH = dao.getDanhSach(KhachHang.class, new HashMap<>());
-    	//Tìm mã KH > nhất hiện tại
-    	int max = 0;
-    	for(KhachHang kh : dsKH) {
-    		String ma = kh.getMaKH();
-    		if(ma != null && ma.startsWith("KH")) {
-    			try {
-    				int num = Integer.parseInt(ma.substring(2));
-    				if(num > max) max = num;
-    			}catch (NumberFormatException e) {
-					// TODO: handle exception
-				}
-    		}
-    	}
-    	return String.format("KH%04d", max + 1);
     }
     
     private void showAlert(String title, String content, Alert.AlertType alertType) {
@@ -367,25 +346,6 @@ public class ThemKhachHang_Controller {
         comBoxHangKH.getSelectionModel().selectFirst();
     }
     
-//    private void loadData() {
-//        Map<String,Object> filter = new HashMap<>();
-//        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
-//                .getDatabaseContext()
-//                .newEntity_DAO(HangKhachHang_DAO.class)
-//                .getDanhSach(HangKhachHang.class, filter);
-//        comBoxHangKH.getItems().clear();
-//        // Dùng Set để loại trùng tên hạng
-//        Set<String> tenHangSet = new HashSet<>();
-//        for (HangKhachHang hang : danhSachHangKhachHangDB) {
-//            tenHangSet.add(hang.getTenHang());
-//        }
-//        ObservableList<String> listTen = FXCollections.observableArrayList(tenHangSet);
-//        // Load lên ComboBox
-//        comBoxHangKH.setItems(listTen);
-//        if (!listTen.isEmpty()) {
-//            comBoxHangKH.getSelectionModel().selectFirst();
-//        }
-//    }
 
     // Dùng để lấy ra sau đó setText lại cho đường dẫn
     public void setUrl(String nameUrl, String currentPage) {

@@ -44,10 +44,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import util.AutoIDUitl;
 
-public class ChiTietHoaDon_Controller {
-	private static int soHoaDonCuoi = 0;
-	
+public class ChiTietHoaDon_Controller {	
 	@FXML
     private Button btnTroLai;
 
@@ -137,7 +136,7 @@ public class ChiTietHoaDon_Controller {
              Font fontHeader = new Font(bf, 12, Font.BOLD);
              Font fontNormal = new Font(bf, 12, Font.NORMAL);
 
-             // ======= TIÊU ĐỀ =======
+             //TIÊU ĐỀ 
              Paragraph title = new Paragraph("HÓA ĐƠN THANH TOÁN", fontTitle);
              title.setAlignment(Element.ALIGN_CENTER);
              document.add(title);
@@ -145,13 +144,13 @@ public class ChiTietHoaDon_Controller {
              document.add(new Paragraph("Mã hóa đơn: " + txtMaHoaDon.getText(), fontNormal));
              document.add(Chunk.NEWLINE);
 
-             // ======= THÔNG TIN KHÁCH HÀNG =======
+             //THÔNG TIN KHÁCH HÀNG
              document.add(new Paragraph("Khách hàng: " + txtTenKH.getText(), fontNormal));
              document.add(new Paragraph("SĐT: " + txtSDT.getText(), fontNormal));
              document.add(new Paragraph("Nhân viên: " + txtNV.getText(), fontNormal));
              document.add(Chunk.NEWLINE);
 
-             // ======= BẢNG MÓN ĂN =======
+             // BẢNG MÓN ĂN
              PdfPTable table = new PdfPTable(5);
              table.setWidthPercentage(100);
              table.setWidths(new float[]{2f, 5f, 2f, 3f, 3f});
@@ -191,7 +190,7 @@ public class ChiTietHoaDon_Controller {
 
              document.add(table);
 
-             // ======= TỔNG KẾT =======
+             // TỔNG KẾT 
              document.add(new Paragraph("Tổng thanh toán: " + lblTongThanhToan.getText(), fontNormal));
              document.add(new Paragraph("Tiền khách đưa: " + txtTien.getText() + " VND", fontNormal));
              document.add(new Paragraph("Tiền thừa: " + lblTienTra.getText(), fontNormal));
@@ -203,14 +202,14 @@ public class ChiTietHoaDon_Controller {
 
              document.close();
              
-             // ======= THÔNG BÁO =======
+             // THÔNG BÁO 
              Alert alert = new Alert(Alert.AlertType.INFORMATION);
              alert.setTitle("Xuất hóa đơn");
              alert.setHeaderText("Thành công!");
              alert.setContentText("Hóa đơn đã được lưu tại:\n" + file.getAbsolutePath());
              alert.showAndWait();
              
-//             // ======= QUAY LẠI GIAO DIỆN DatBan =======
+            // QUAY LẠI GIAO DIỆN DatBan 
            MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
              
          } catch (Exception e) {
@@ -332,7 +331,6 @@ public class ChiTietHoaDon_Controller {
 	}
 	
 	private String taoMaHoaDon() {
-	    soHoaDonCuoi++; // tăng số hóa đơn
-	    return String.format("HD%04d", soHoaDonCuoi);
+		return AutoIDUitl.sinhMaHoaDon();
 	}
 }

@@ -9,11 +9,19 @@ import java.util.Map;
 import dao.HoaDon_DAO;
 import entity.HoaDon;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
 public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO {
-
+	
+	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+	
+	private EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+	
     @Override
     public long tongSoHoaDon() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -398,4 +406,17 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 
         return doanhThuTheoThang;
     }
+	@Override
+	public String getMaxMaHoaDon() {
+	    EntityManager em = getEntityManager();
+	    try {
+	        return em.createQuery(
+	            "SELECT MAX(d.maDatBan) FROM DonDatBan d", String.class
+	        ).getSingleResult();
+	    } catch (Exception e) {
+	        return null;
+	    } finally {
+	        em.close();
+	    }
+	}
 }

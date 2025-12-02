@@ -25,6 +25,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import util.AutoIDUitl;
 
 public class KhuyenMai_Controller {
 
@@ -121,8 +122,8 @@ public class KhuyenMai_Controller {
         try {
         	//Tự tạo Mã KM
             String max = khuyenMaiDAO.getMaxMaKM();
-            String maMoi = (max == null) ? "KM001" :
-                    "KM" + String.format("%03d", Integer.parseInt(max.substring(2)) + 1);
+            String maMoi = AutoIDUitl.sinhMaKhuyenMai();
+
 
             KhuyenMai km = new KhuyenMai(
                     maMoi,

@@ -21,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import util.AutoIDUitl;
 
 
 public class MonAn_Controller implements Initializable{
@@ -75,7 +76,7 @@ public class MonAn_Controller implements Initializable{
 	    @Override
 	    public void initialize(URL url, ResourceBundle rb) {
 	    	khoiTaoComboBoxKhuyenMai();
-	    	 txtMaMon.setText(sinhMaMon());
+	    	 txtMaMon.setText(AutoIDUitl.sinhMaMon());
 	        // --- Cấu hình cột TableView ---
 	        colMa.setCellValueFactory(new PropertyValueFactory<>("maMon"));
 	        colTen.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
@@ -334,40 +335,23 @@ public class MonAn_Controller implements Initializable{
 	    }
 
 	    //Sinh mã tự động
-        private String sinhMaMon() {
-            List<MonAn> listMon = monDAO.getDanhSachMonAn();
-            int max = 0;
-            for (MonAn m : listMon) {
-                try {
-                    int so = Integer.parseInt(m.getMaMon().substring(1));
-                    if (so > max) max = so;
-                } catch (Exception e) {
-                    // bỏ qua nếu format khác
-                }
-            }
-            return String.format("M%03d", max + 1); // Ví dụ: M01, M02,...
-        }
-//	    private String sinhMaMon() {
-//	        List<MonAn> listMon = monDAO.getDanhSachMonAn();
-//	        int max = 0;
-//
-//	        if (listMon != null) {
-//	            for (MonAn m : listMon) {
-//	                String ma = m.getMaMon();
-//	                if (ma != null && ma.startsWith("M")) {
-//	                    try {
-//	                        int so = Integer.parseInt(ma.substring(1));
-//	                        if (so > max) max = so;
-//	                    } catch (Exception ignored) {}
-//	                }
-//	            }
-//	        }
-//	        return "M" + String.format("%03d", max + 1); // M001, M002, ...
-//	    }
+//        private String sinhMaMon() {
+//            List<MonAn> listMon = monDAO.getDanhSachMonAn();
+//            int max = 0;
+//            for (MonAn m : listMon) {
+//                try {
+//                    int so = Integer.parseInt(m.getMaMon().substring(1));
+//                    if (so > max) max = so;
+//                } catch (Exception e) {
+//                    // bỏ qua nếu format khác
+//                }
+//            }
+//            return String.format("M%03d", max + 1); // Ví dụ: M01, M02,...
+//        }
 
 
 	    private void resetForm() {
-	        txtMaMon.setText(sinhMaMon()); // tự sinh mã mới
+	        txtMaMon.setText(AutoIDUitl.sinhMaMon()); // tự sinh mã mới
 	        txtTenMon.clear();
 	        txtDonGia.clear();
 	        cmbKM.getSelectionModel().clearSelection();
