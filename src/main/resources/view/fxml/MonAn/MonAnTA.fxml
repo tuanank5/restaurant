@@ -15,10 +15,11 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
-            <AnchorPane prefHeight="35.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label layoutX="515.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Món Ăn" />
-               </children></AnchorPane>
+            <BorderPane>
+               <center>
+                  <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Món Ăn" />
+               </center>
+            </BorderPane>
          </top>
          <center>
             <TableView fx:id="tblMon" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
