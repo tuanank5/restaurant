@@ -5,9 +5,9 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
    <center>
@@ -24,21 +24,21 @@
                <center>
                   <BorderPane BorderPane.alignment="CENTER">
                      <left>
-                        <Pane prefWidth="500.0" BorderPane.alignment="CENTER">
+                        <AnchorPane prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="50.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnThemKhachHang" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Khách Hàng" />
-                              <Button layoutX="225.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnXuatExcel" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất Excel" />
-                              <Button layoutX="382.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnTatCa" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất Cả" />
+                              <Button layoutX="50.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnThemKhachHang" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Khách Hàng" />
+                              <Button layoutX="245.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnXuatExcel" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất Excel" />
+                              <Button layoutX="385.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnTatCa" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất Cả" />
                            </children>
-                        </Pane>
+                        </AnchorPane>
                      </left>
                      <right>
-                        <Pane prefWidth="500.0" BorderPane.alignment="CENTER">
+                        <AnchorPane prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label layoutX="90.0" layoutY="73.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm :" />
-                              <TextField fx:id="txtTimKiem" layoutX="187.0" layoutY="70.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <Label layoutX="150.0" layoutY="55.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm:" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="55.0" />
+                              <TextField fx:id="txtTimKiem" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
                            </children>
-                        </Pane>
+                        </AnchorPane>
                      </right>
                   </BorderPane>
                </center>
