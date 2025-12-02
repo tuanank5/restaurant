@@ -20,7 +20,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="300.0" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: .4px .4px .4px 0px;">
+      <AnchorPane layoutX="300.0" prefHeight="400.0" prefWidth="300.0" style="-fx-border-color: #000000; -fx-border-width: .4px .4px .4px 0px;">
          <children>
             <TextField fx:id="txtUserName" layoutX="130.0" layoutY="149.5" prefHeight="31.0" prefWidth="130.0" promptText="Nhập mã nhân viên" style="-fx-background-radius: 0 4px 4px 0;">
                <font>
