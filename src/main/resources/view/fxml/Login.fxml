@@ -24,22 +24,22 @@
          <children>
             <TextField fx:id="txtUserName" layoutX="130.0" layoutY="149.5" prefHeight="31.0" prefWidth="130.0" promptText="Nhập mã nhân viên" style="-fx-background-radius: 0 4px 4px 0;">
                <font>
-                  <Font name="Times New Roman" size="13.0" />
+                  <Font name="Times New Roman" size="14.0" />
                </font>
             </TextField>
             <Label layoutX="40.0" layoutY="150.0" prefHeight="30.0" prefWidth="90.0" style="-fx-border-color: grey; -fx-border-width: .4px; -fx-border-radius: 4px 0 0 4px; -fx-padding: 0 0 0 8px;" text="Mã nhân viên">
                <font>
-                  <Font name="Times New Roman" size="13.0" />
+                  <Font name="Times New Roman" size="14.0" />
                </font>
             </Label>
             <Label layoutX="40.0" layoutY="200.0" prefHeight="30.0" prefWidth="90.0" style="-fx-border-color: grey; -fx-border-width: .4px; -fx-border-radius: 4px 0 0 4px; -fx-padding: 0 0 0 8px;" text="Mật khẩu">
                <font>
-                  <Font name="Times New Roman" size="13.0" />
+                  <Font name="Times New Roman" size="14.0" />
                </font>
             </Label>
             <PasswordField fx:id="txtPassword" layoutX="130.0" layoutY="200.0" prefHeight="30.0" prefWidth="130.0" promptText="Nhập mật khẩu" style="-fx-background-radius: 0 4px 4px 0;">
                <font>
-                  <Font name="Times New Roman" size="13.0" />
+                  <Font name="Times New Roman" size="14.0" />
                </font>
             </PasswordField>
             <Button fx:id="btnLogin" layoutX="40.0" layoutY="250.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="220.0" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="ĐĂNG NHẬP" />

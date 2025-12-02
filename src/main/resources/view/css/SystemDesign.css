@@ -8,25 +8,25 @@
 
 .h2 {
 	-fx-font-family: "Times New Roman";
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 24px;
 }
 
 .lbl {
     -fx-font-family: "Times New Roman";
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 16px;
 }
 
 .txt {
 	-fx-font-family: "Times New Roman";
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 16px;
 }
 
 .btn {
     -fx-font-family: "Times New Roman";
-    -fx-font-weight: regular;
+    -fx-font-weight: normal;
     -fx-font-size: 16px;
 }
 
@@ -37,6 +37,7 @@
 
 .cmb {
 	-fx-font-family: "Times New Roman";
+	-fx-font-weight: normal;
 	-fx-font-size: 14px;
 }
 
