@@ -6,84 +6,35 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Menu.MenuNV_Controller">
    <left>
       <Pane prefHeight="700.0" prefWidth="300.0" style="-fx-background-color: #2C3E50;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="5.0" layoutY="65.0" text="Main menu" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman Bold" size="18.0" />
-               </font>
-            </Label>
-            <Button layoutX="80.0" layoutY="150.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" text="Đặt/Tìm kiếm bàn">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <Button layoutX="80.0" layoutY="200.0" mnemonicParsing="false" onAction="#btnDoiHuyBan" prefHeight="30.0" prefWidth="160.0" text="Đổi/Hủy bàn">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <Label layoutX="70.0" layoutY="10.0" text="Nhà hàng Út Bi" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman Bold" size="25.0" />
-               </font>
-            </Label>
-            <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="33.0" size="30" />
-            <Button layoutX="80.0" layoutY="400.0" mnemonicParsing="false" onAction="#btnKhachHang" prefHeight="30.0" prefWidth="160.0" text="Quản lý khách hàng">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <Button layoutX="80.0" layoutY="350.0" mnemonicParsing="false" onAction="#btnHoaDon" prefHeight="30.0" prefWidth="160.0" text="Tra cứu hóa đơn">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <Button layoutX="80.0" layoutY="300.0" mnemonicParsing="false" onAction="#btnMonAn" prefHeight="30.0" prefWidth="160.0" text="Quản lý món ăn">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <FontAwesomeIconView fill="#f9c410" glyphName="SEARCH" layoutX="20.0" layoutY="175.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="ARROWS_H" layoutX="20.0" layoutY="225.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="GEAR" layoutX="20.0" layoutY="325.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="375.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="425.0" size="25" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="275.0" size="25" />
-            <Button layoutX="80.0" layoutY="250.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" text="Ca làm việc">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <Label layoutX="5.0" layoutY="500.0" text="Settings" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman Bold" size="18.0" />
-               </font>
-            </Label>
+            <Label layoutX="5.0" layoutY="75.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Main menu" />
+            <Button layoutX="80.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt/Tìm kiếm bàn" />
+            <Button layoutX="80.0" layoutY="225.0" mnemonicParsing="false" onAction="#btnDoiHuyBan" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi/Hủy bàn" />
+            <Label layoutX="50.0" layoutY="25.0" style="-fx-text-fill: #ffffff;" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Nhà hàng Út Bi" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="54.0" size="30" />
+            <Button layoutX="80.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnKhachHang" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý khách hàng" />
+            <Button layoutX="80.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnHoaDon" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tra cứu hóa đơn" />
+            <Button layoutX="80.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnMonAn" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý món ăn" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="SEARCH" layoutX="20.0" layoutY="200.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="ARROWS_H" layoutX="20.0" layoutY="250.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="GEAR" layoutX="20.0" layoutY="350.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="400.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="450.0" size="25" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="300.0" size="25" />
+            <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Ca làm việc" />
+            <Label layoutX="5.0" layoutY="500.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Settings" />
             <FontAwesomeIconView fill="#f9c410" glyphName="LOCK" layoutX="20.0" layoutY="575.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="SIGN_OUT" layoutX="20.0" layoutY="625.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USER" layoutX="20.0" layoutY="675.0" size="25" />
-            <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnDoiMatKhau" prefHeight="30.0" prefWidth="160.0" text="Đổi mật khẩu">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnDangXuat" prefHeight="30.0" prefWidth="160.0" text="Đăng xuất">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="160.0" />
-            <Button layoutX="80.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="30.0" prefWidth="160.0" text="Dashboard">
-               <font>
-                  <Font name="Calibri" size="15.0" />
-               </font>
-            </Button>
-            <FontAwesomeIconView fill="#f9c410" glyphName="DASHBOARD" layoutX="20.0" layoutY="125.0" size="25" />
+            <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnDoiMatKhau" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi mật khẩu" />
+            <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnDangXuat" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đăng xuất" />
+            <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="160.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+            <Button layoutX="80.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Dashboard" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="DASHBOARD" layoutX="20.0" layoutY="150.0" size="25" />
          </children>
       </Pane>
    </left>
