@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login_Controller">
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login_Controller">
    <children>
       <AnchorPane prefHeight="400.0" prefWidth="300.0">
          <children>
@@ -42,21 +42,9 @@
                   <Font name="Times New Roman" size="13.0" />
                </font>
             </PasswordField>
-            <Button fx:id="btnLogin" layoutX="40.0" layoutY="250.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="220.0" text="ĐĂNG NHẬP">
-               <font>
-                  <Font name="Times New Roman Bold" size="13.0" />
-               </font>
-            </Button>
-            <Label layoutX="100.0" layoutY="50.0" text="NHÀ HÀNG">
-               <font>
-                  <Font name="Times New Roman Bold" size="18.0" />
-               </font>
-            </Label>
-            <Button fx:id="btnQuenMatKhau" layoutX="40.0" layoutY="300.0" mnemonicParsing="false" prefHeight="30.0" text="Quên mật khẩu" AnchorPane.rightAnchor="40.0">
-               <font>
-                  <Font name="Times New Roman" size="12.0" />
-               </font>
-            </Button>
+            <Button fx:id="btnLogin" layoutX="40.0" layoutY="250.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="220.0" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="ĐĂNG NHẬP" />
+            <Label layoutX="100.0" layoutY="50.0" styleClass="h2" stylesheets="@../css/SystemDesign.css" text="NHÀ HÀNG" />
+            <Button fx:id="btnQuenMatKhau" layoutX="40.0" layoutY="300.0" mnemonicParsing="false" prefHeight="30.0" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Quên mật khẩu" AnchorPane.rightAnchor="40.0" />
          </children>
       </AnchorPane>
    </children>
