@@ -37,7 +37,7 @@
       </BorderPane>
    </center>
    <top>
-      <BorderPane prefHeight="355.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
             <AnchorPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
@@ -50,12 +50,12 @@
                <left>
                   <AnchorPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnThemAnh" layoutX="225.0" layoutY="255.0" mnemonicParsing="false" onAction="#handleThemAnh" style="-fx-background-color: transparent; -fx-border-color: #0077CC; -fx-border-radius: 12; -fx-border-width: 2px; -fx-text-fill: #0077CC; -fx-font-size: 15px; -fx-font-weight: bold;" text="Thêm ảnh món ăn" />
-                        <Pane layoutX="150.0" prefHeight="250.0" prefWidth="300.0" style="-fx-border-color: #000000;">
+                        <Pane layoutX="75.0" prefHeight="250.0" prefWidth="300.0" style="-fx-border-color: #000000;">
                            <children>
                               <ImageView fx:id="img" fitHeight="250.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </Pane>
+                        <Button fx:id="btnThemAnh" layoutX="425.0" layoutY="197.0" mnemonicParsing="false" onAction="#handleThemAnh" style="-fx-background-color: transparent; -fx-border-color: #0077CC; -fx-border-radius: 12; -fx-border-width: 2px; -fx-text-fill: #0077CC; -fx-font-size: 15px; -fx-font-weight: bold;" text="Thêm ảnh món ăn" />
                      </children>
                   </AnchorPane>
                </left>
@@ -64,17 +64,17 @@
                      <children>
                         <Label layoutX="25.0" layoutY="24.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã Món Ăn:" />
                         <Label layoutX="25.0" layoutY="74.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên Món Ăn:" />
-                        <Label layoutX="25.0" layoutY="124.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đơn Giá:" />
-                        <Label layoutX="25.0" layoutY="174.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khuyến Mãi:" />
-                        <Label layoutX="25.0" layoutY="224.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại Món:" />
-                        <TextField layoutX="160.0" layoutY="19.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField layoutX="160.0" layoutY="69.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField layoutX="160.0" layoutY="119.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <ComboBox layoutX="160.0" layoutY="169.0" prefHeight="30.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                        <ComboBox layoutX="160.0" layoutY="219.0" prefHeight="30.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                        <Button layoutX="25.0" layoutY="260.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Mới" />
-                        <Button layoutX="250.0" layoutY="260.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
-                        <Button layoutX="160.0" layoutY="260.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
+                        <Label layoutX="320.0" layoutY="74.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đơn Giá:" />
+                        <Label layoutX="25.0" layoutY="124.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khuyến Mãi:" />
+                        <Label layoutX="320.0" layoutY="124.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại Món:" />
+                        <TextField layoutX="120.0" layoutY="19.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField layoutX="120.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField layoutX="400.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <ComboBox layoutX="120.0" layoutY="119.0" prefHeight="30.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <ComboBox layoutX="400.0" layoutY="119.0" prefHeight="30.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <Button layoutX="25.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Mới" />
+                        <Button layoutX="250.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
+                        <Button layoutX="160.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
                      </children>
                   </AnchorPane>
                </center>
