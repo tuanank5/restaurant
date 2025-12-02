@@ -20,6 +20,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import util.MaTuDongUtil;
+
 
 public class QuanLyBan_Controller {
 
@@ -71,25 +73,25 @@ public class QuanLyBan_Controller {
 
     private ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
 
-    private String sinhMaBan() {
-        // Lấy danh sách bàn hiện có
-        List<Ban> listBan = RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(Ban_DAO.class)
-                .getDanhSach(Ban.class, null);
-
-        int max = 0;
-        for (Ban b : listBan) {
-            try {
-                // Giả sử mã bàn có dạng "B01", "B02", ...
-                int so = Integer.parseInt(b.getMaBan().substring(1));
-                if (so > max) max = so;
-            } catch (Exception e) {
-                // bỏ qua nếu format khác
-            }
-        }
-        return String.format("B%02d", max + 1); // Tạo mã mới
-    }
+//    private String sinhMaBan() {
+//        // Lấy danh sách bàn hiện có
+//        List<Ban> listBan = RestaurantApplication.getInstance()
+//                .getDatabaseContext()
+//                .newEntity_DAO(Ban_DAO.class)
+//                .getDanhSach(Ban.class, null);
+//
+//        int max = 0;
+//        for (Ban b : listBan) {
+//            try {
+//                // Giả sử mã bàn có dạng "B01", "B02", ...
+//                int so = Integer.parseInt(b.getMaBan().substring(1));
+//                if (so > max) max = so;
+//            } catch (Exception e) {
+//                // bỏ qua nếu format khác
+//            }
+//        }
+//        return String.format("B%02d", max + 1); // Tạo mã mới
+//    }
 
 
     @FXML
@@ -109,7 +111,7 @@ public class QuanLyBan_Controller {
             return new SimpleStringProperty(tenLoai);
         });
 
-     // ✅ Khởi tạo dữ liệu cho ComboBox trạng thái
+     //Khởi tạo dữ liệu cho ComboBox trạng thái
         comBoxTrangThai.setItems(FXCollections.observableArrayList(
                 "Trống",
                 "Đang sử dụng",
@@ -173,7 +175,8 @@ public class QuanLyBan_Controller {
         // Đưa dữ liệu vào ObservableList và hiển thị lên TableView
         danhSachBan.setAll(listBan);
         tblBan.setItems(danhSachBan);
-        txtMaBan.setText(sinhMaBan());
+        txtMaBan.setText(MaTuDongUtil.sinhMaBan());
+
         
     }
     
@@ -301,7 +304,7 @@ public class QuanLyBan_Controller {
 
     private void resetForm() {
         // Tự sinh mã bàn mới
-        txtMaBan.setText(sinhMaBan());
+    	txtMaBan.setText(MaTuDongUtil.sinhMaBan());
         
         // Xóa textField vị trí
         txtViTri.clear();

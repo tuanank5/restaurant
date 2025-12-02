@@ -15,11 +15,11 @@
 
     <!-- Top Header -->
     <top>
-        <BorderPane prefHeight="60.0" style="-fx-background-color: white;">
+        <BorderPane prefHeight="60.0" prefWidth="1200.0" style="-fx-background-color: white;">
             <center>
                 <Label alignment="CENTER" prefHeight="45.0" prefWidth="357.0" text="Danh sách khách hàng">
                     <font>
-                        <Font name="System Bold Italic" size="30.0" />
+                        <Font name="System Bold Italic" size="24.0" />
                     </font>
                 </Label>
             </center>
@@ -28,7 +28,7 @@
 
     <!-- Center: TableView và Button thao tác -->
     <center>
-        <VBox prefHeight="600" prefWidth="900" spacing="10" style="-fx-background-color: white;">
+        <VBox prefHeight="600" spacing="10" style="-fx-background-color: white;">
             <!-- Action Buttons & Search -->
             <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="15">
                 <Button onAction="#btnThemKhachHang" style="-fx-background-color: green; -fx-text-fill: white;" text="(+) Thêm khách hàng" />

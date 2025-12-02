@@ -216,24 +216,6 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         loadMonAnToGrid(dsLoc);
     }
 
-    
-//    @FXML
-//    void hanhleThanhToan(ActionEvent event) {
-//    	try {
-//            // Gán dữ liệu cần thiết vào MenuNV_Controller (giống cách bạn truyền ở DatMon)
-//            MenuNV_Controller.banDangChon = banDangChon;
-//            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat; // bạn cần tạo biến này trong MenuNV_Controller
-//            MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
-//            
-//            // Mở giao diện Chi tiết hóa đơn trong BorderPane chính
-//            MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
-//            if (banDangChon != null) {
-//                MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
     @FXML
     void hanhleThanhToan(ActionEvent event) {
         try {
@@ -413,26 +395,6 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
             }
         }
     }
-
-//    private void chonMon(MonAn mon) {
-//        if (dsMonAnDat.containsKey(mon)) {
-//            // Nếu đã chọn món, tăng số lượng
-//            dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
-//        } else {
-//            // Thêm món mới với số lượng = 1
-//            dsMonAnDat.put(mon, 1);
-//        }
-//
-//        // Cập nhật TableView
-//        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-//        tblDS.refresh();
-//
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Chọn món");
-//        alert.setHeaderText(null);
-//        alert.setContentText("Bạn đã chọn món: " + mon.getTenMon());
-//        alert.showAndWait();
-//    }
     
     private void chonMon(MonAn mon) {
         if (dsMonAnDat.containsKey(mon)) {
@@ -469,18 +431,6 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         capNhatTongTien();
     }
     
-//    private void capNhatTongTien() {
-//        double tongTruocVAT = dsMonAnDat.entrySet().stream()
-//            .mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
-//            .sum();
-//
-//        double tienVAT = tongTruocVAT * Vat_Rate;
-//        double tongSauVAT = tongTruocVAT + tienVAT;
-//
-//        lblVat.setText(dinhDangTien(tienVAT));
-//        lblTongTien.setText(dinhDangTien(tongTruocVAT));
-//        lblTongTienVAT.setText(dinhDangTien(tongSauVAT));
-//    }
     private void capNhatTongTien() {
         double tongTruocVAT = dsMonAnDat.entrySet().stream()
             .mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
