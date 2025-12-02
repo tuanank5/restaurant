@@ -49,9 +49,13 @@ public class Login_Controller implements Initializable{
             String pass = txtPassword.getText();
             if (user.isEmpty() || pass.isEmpty()) {
                 showAlert("Cảnh báo", "Vui lòng nhập đầy đủ tài khoản và mật khẩu", Alert.AlertType.WARNING);
-            } else if (!user.matches("^[a-zA-Z0-9]+$") || !pass.matches("^[a-zA-Z0-9]+$")) {
-            	showAlert("Cảnh báo", "Tài khoản và mật khẩu chỉ được nhập ký tự hoặc số", Alert.AlertType.WARNING);
-            } else {
+            } if (!user.matches("^(QL|NV)\\d{4}$")) {
+                showAlert("Cảnh báo", "Tài khoản phải bắt đầu bằng 'QL' hoặc 'NV' theo sau là 4 chữ số.", Alert.AlertType.WARNING);
+                return;
+            } if(pass.length() < 6) {
+            	showAlert("Cảnh báo", "Độ dài mật khẩu không phù hợp", Alert.AlertType.WARNING);
+            }
+            else {
                 Map<String, Object> filter = new HashMap<>();
                 filter.put("tenTaiKhoan", user);
                 List<TaiKhoan> taiKhoans = RestaurantApplication.getInstance()
@@ -129,7 +133,7 @@ public class Login_Controller implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		
+		btnLogin.setDefaultButton(true);
 	}
 
 }
