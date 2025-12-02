@@ -106,7 +106,7 @@ public class ThemKhachHang_Controller {
     			//xacNhanLuu("DatBan/DatBan");
     			MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
     		}else {
-    			MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
+    			MenuNV_Controller.instance.readyUI("KhachHang/KhachHangNew");
     		}
     	}else if(src ==  btnLuu) {
     		luuLai();
