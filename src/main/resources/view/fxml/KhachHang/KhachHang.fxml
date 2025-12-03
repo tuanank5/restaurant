@@ -31,7 +31,7 @@
         <VBox prefHeight="600" spacing="10" style="-fx-background-color: white;">
             <!-- Action Buttons & Search -->
             <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="15">
-                <Button onAction="#btnThemKhachHang" style="-fx-background-color: green; -fx-text-fill: white;" text="(+) Thêm khách hàng" />
+                <Button onAction="#btnThemKhachHang" style="-fx-background-color: green; -fx-text-fill: white;" text="Thêm khách hàng" />
                 <Button onAction="#btnXuatExcel" style="-fx-background-color: blue; -fx-text-fill: white;" text="Xuất Excel" />
                 <Button onAction="#btnTatCa" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả" />
                 <Region HBox.hgrow="ALWAYS" />
