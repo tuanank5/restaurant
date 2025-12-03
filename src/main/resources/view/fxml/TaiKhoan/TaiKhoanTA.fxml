@@ -26,16 +26,16 @@
                   <Label layoutX="50.0" layoutY="29.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày:" />
                   <Label layoutX="300.0" layoutY="29.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tháng:" />
                   <Label layoutX="560.0" layoutY="29.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Năm:" />
-                  <ComboBox layoutX="100.0" layoutY="26.0" prefWidth="150.0" promptText="Chọn ngày" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="355.0" layoutY="26.0" prefWidth="150.0" promptText="Chọn tháng" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="610.0" layoutY="26.0" prefWidth="150.0" promptText="Chọn năm" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                  <CheckBox layoutX="255.0" layoutY="30.0" mnemonicParsing="false" />
-                  <CheckBox layoutX="510.0" layoutY="30.0" mnemonicParsing="false" />
-                  <CheckBox layoutX="765.0" layoutY="30.0" mnemonicParsing="false" />
+                  <ComboBox layoutX="100.0" layoutY="24.0" prefWidth="150.0" promptText="Chọn ngày" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox layoutX="355.0" layoutY="24.0" prefWidth="150.0" promptText="Chọn tháng" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox layoutX="610.0" layoutY="24.0" prefWidth="150.0" promptText="Chọn năm" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <CheckBox layoutX="255.0" layoutY="28.0" mnemonicParsing="false" styleClass="chk" stylesheets="@../../css/SystemDesign.css" />
+                  <CheckBox layoutX="510.0" layoutY="28.0" mnemonicParsing="false" styleClass="chk" stylesheets="@../../css/SystemDesign.css" />
+                  <CheckBox layoutX="765.0" layoutY="28.0" mnemonicParsing="false" styleClass="chk" stylesheets="@../../css/SystemDesign.css" />
                   <Button layoutX="50.0" layoutY="90.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Lọc" />
                   <Button layoutX="125.0" layoutY="90.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất Cả" />
-                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm:" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="30.0" />
-                  <TextField styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
+                  <TextField style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
+                  <Button disable="true" layoutX="877.0" layoutY="75.0" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="24.0" />
                </children>
             </AnchorPane>
          </top>

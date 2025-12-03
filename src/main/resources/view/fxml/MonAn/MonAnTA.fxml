@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -15,10 +16,21 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
-            <BorderPane>
+            <BorderPane prefHeight="35.0">
                <center>
-                  <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Món Ăn" />
+                  <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Món Ăn">
+                     <BorderPane.margin>
+                        <Insets left="300.0" />
+                     </BorderPane.margin></Label>
                </center>
+               <right>
+                  <AnchorPane prefWidth="300.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button disable="true" layoutX="13.0" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" />
+                        <TextField layoutX="100.0" prefWidth="175.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                     </children>
+                  </AnchorPane>
+               </right>
             </BorderPane>
          </top>
          <center>
@@ -68,11 +80,11 @@
                         <Label layoutX="320.0" layoutY="74.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đơn Giá:" />
                         <Label layoutX="25.0" layoutY="124.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khuyến Mãi:" />
                         <Label layoutX="320.0" layoutY="124.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại Món:" />
-                        <TextField layoutX="120.0" layoutY="19.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField editable="false" layoutX="120.0" layoutY="19.0" prefWidth="175.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                         <TextField layoutX="120.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                         <TextField layoutX="400.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <ComboBox layoutX="120.0" layoutY="119.0" prefHeight="30.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                        <ComboBox layoutX="400.0" layoutY="119.0" prefHeight="30.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <ComboBox layoutX="120.0" layoutY="119.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <ComboBox layoutX="400.0" layoutY="119.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                         <Button layoutX="25.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Mới" />
                         <Button layoutX="250.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
                         <Button layoutX="160.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />

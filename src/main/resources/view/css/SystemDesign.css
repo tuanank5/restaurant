@@ -38,6 +38,12 @@
 .cmb {
 	-fx-font-family: "Times New Roman";
 	-fx-font-weight: normal;
-	-fx-font-size: 14px;
+	-fx-font-size: 16px;
+}
+
+.chk {
+	-fx-font-family: "Times New Roman";
+	-fx-font-weight: normal;
+	-fx-font-size: 16px;
 }
 

@@ -35,8 +35,8 @@
                      <right>
                         <AnchorPane prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label layoutX="150.0" layoutY="55.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm:" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="55.0" />
-                              <TextField fx:id="txtTimKiem" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
+                              <TextField fx:id="txtTimKiem" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
+                              <Button disable="true" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="50.0" />
                            </children>
                         </AnchorPane>
                      </right>
