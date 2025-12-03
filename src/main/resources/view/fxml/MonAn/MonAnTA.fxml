@@ -27,7 +27,7 @@
                   <AnchorPane prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
                         <Button disable="true" layoutX="16.0" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
-                        <TextField layoutX="100.0" prefWidth="175.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField layoutX="100.0" prefWidth="175.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                      </children>
                   </AnchorPane>
                </right>
