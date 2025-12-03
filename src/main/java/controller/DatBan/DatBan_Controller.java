@@ -472,7 +472,28 @@ public class DatBan_Controller implements Initializable {
             backgroundColor, borderColor
         );
     }
-
-
+    
+    @FXML
+    void btnNhanBan(ActionEvent event) {
+    	if (banDangChon == null) {
+            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn trước!");
+            return;
+        }
+        String trangThai = banDangChon.getTrangThai();
+        if (!"Đã được đặt".equals(trangThai)) {
+            showAlert(Alert.AlertType.WARNING, "Chỉ những bàn đã được đặt mới nhận phục vụ!");
+            return;
+        }
+        // Cập nhật trạng thái bàn
+        banDangChon.setTrangThai("Đang phục vụ");
+        boolean capNhat = banDAO.sua(banDangChon);
+        if (capNhat) {
+            showAlert(Alert.AlertType.INFORMATION, "Bàn đã được nhận, trạng thái: Đang phục vụ");
+            loadDanhSachBan(); // Load lại UI để cập nhật màu sắc, trạng thái
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Cập nhật trạng thái thất bại!");
+        }
+    }
+    
 }
 

@@ -81,11 +81,16 @@
 <bottom>
 <Pane prefHeight="80.0" prefWidth="250.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
 <children>
-<Button fx:id="btnDatBan" layoutX="36.0" layoutY="10.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="220.0" style=" -fx-background-color: linear-gradient(#4CAF50, #388E3C); -fx-background-radius: 8; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.2, 2, 2);" text="Đặt bàn" textFill="WHITE">
+<Button fx:id="btnDatBan" layoutX="148.0" layoutY="10.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="130.0" style=" -fx-background-color: linear-gradient(#4CAF50, #388E3C); -fx-background-radius: 8; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.2, 2, 2);" text="Đặt bàn" textFill="WHITE">
 <font>
 <Font name="System Bold" size="12.0" />
 </font>
 </Button>
+                        <Button layoutX="8.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnNhanBan" prefHeight="60.0" prefWidth="130.0" style="-fx-background-color: red; -fx-background-radius: 8; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.2, 2, 2);" text="Nhận Bàn" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
 </children>
 <padding>
 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
