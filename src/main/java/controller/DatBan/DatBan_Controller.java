@@ -27,6 +27,8 @@ import util.AutoIDUitl;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -91,7 +93,7 @@ public class DatBan_Controller implements Initializable {
         cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
         cmbGioBatDau.setOnAction(e -> loadDanhSachBan());
         cmbGioKetThuc.setOnAction(e -> loadDanhSachBan());
-
+        
         btnDatBan.setOnAction(this::handleDatBan);
         btnDatBan.setDisable(true);
 
@@ -123,18 +125,29 @@ public class DatBan_Controller implements Initializable {
         }
         cmbLoaiBan.getSelectionModel().select("Tất cả");
     }
-
     private void khoiTaoGio() {
         cmbGioBatDau.getItems().clear();
         cmbGioKetThuc.getItems().clear();
+        // Lấy giờ - phút hiện tại
+        LocalTime now = LocalTime.now();
+        String gioPhutHienTai = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+        // Tạo danh sách giờ/phút theo từng phút
         for (int h = 0; h < 24; h++) {
-            String gio = String.format("%02d:00", h);
-            cmbGioBatDau.getItems().add(gio);
-            cmbGioKetThuc.getItems().add(gio);
+            for (int m = 0; m < 60; m++) {
+                String gio = String.format("%02d:%02d", h, m);
+                cmbGioBatDau.getItems().add(gio);
+                cmbGioKetThuc.getItems().add(gio);
+            }
         }
-        cmbGioBatDau.getSelectionModel().select("08:00");
-        cmbGioKetThuc.getSelectionModel().select("22:00");
+        // Chọn giờ bắt đầu = giờ phút hiện tại
+        cmbGioBatDau.getSelectionModel().select(gioPhutHienTai);
+
+        // Giờ kết thúc mặc định thêm 1 giờ
+        String gioKetThucMacDinh = now.plusHours(1)
+                .format(DateTimeFormatter.ofPattern("HH:mm"));
+        cmbGioKetThuc.getSelectionModel().select(gioKetThucMacDinh);
     }
+
 
     private void loadDanhSachBan() {
         gridPaneBan.getChildren().clear();
@@ -256,7 +269,7 @@ public class DatBan_Controller implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Vui lòng chọn ngày đặt bàn!");
             return;
         }
-
+        
         DonDatBan don = new DonDatBan();
         don.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
         don.setKhachHang(kh);
@@ -265,7 +278,6 @@ public class DatBan_Controller implements Initializable {
         don.setSoLuong(Integer.parseInt(txtSoLuongKH.getText().trim()));
         don.setGioBatDau(java.time.LocalTime.parse(cmbGioBatDau.getValue()));
         don.setGioKetThuc(java.time.LocalTime.parse(cmbGioKetThuc.getValue()));
-
         banDangChon.setTrangThai("Đã được đặt");
 
         boolean thanhCong = donDatBanDAO.them(don);
