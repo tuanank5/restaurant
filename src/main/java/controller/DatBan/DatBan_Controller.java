@@ -186,6 +186,13 @@ public class DatBan_Controller implements Initializable {
                             MenuNV_Controller.instance.readyUI("MonAn/DatMon");
                             return;
                         }
+                        
+                        if("Đang phục vụ".equals(ban.getTrangThai())) {
+                        	MenuNV_Controller.banDangChon = ban;
+                            MenuNV_Controller.khachHangDangChon = null;
+                            MenuNV_Controller.instance.readyUI("MonAn/DatMon");
+                            return;
+                        }
                         // Double click: nếu bàn đã được đặt thì mở giao diện DatMon
                         if ("Đã được đặt".equals(ban.getTrangThai())) {
                             if (dsDon != null && !dsDon.isEmpty()) {

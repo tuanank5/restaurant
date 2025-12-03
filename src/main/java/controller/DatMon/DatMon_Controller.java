@@ -223,7 +223,8 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
             MenuNV_Controller.banDangChon = banDangChon;
             MenuNV_Controller.dsMonAnDangChon = dsMonAnDat;
             MenuNV_Controller.tongTienSauVAT = lblTongTienVAT.getText();
-            
+            MenuNV_Controller.khachHangDangChon =
+                    khachHangDAO.timTheoMa(txtMaKH.getText());
             //Cập nhật trạng thái bàn về TRỐNG trong database
             Ban_DAO banDAO = new Ban_DAOImpl();
             banDangChon.setTrangThai("Trống");
