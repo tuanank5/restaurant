@@ -64,6 +64,9 @@ public class CapNhatKhachHang_Controller {
 
     @FXML
     private TextField txtMaKH;
+    
+    @FXML
+    private TextField txtLoaiKhachHang;
 
     @FXML
     private TextField txtSDT;
@@ -218,6 +221,7 @@ public class CapNhatKhachHang_Controller {
             txtEmail.setText(khachHang.getEmail());
             txtDiaChi.setText(khachHang.getDiaChi());
             txtDiemTichLuy.setText(String.valueOf(khachHang.getDiemTichLuy()));
+            txtLoaiKhachHang.setText(khachHang.getLoaiKhachHang());
             HangKhachHang hang = khachHang.getHangKhachHang();
         	if(hang != null) {
         		comBoxHangKH.setValue(hang.getTenHang());
@@ -238,6 +242,7 @@ public class CapNhatKhachHang_Controller {
         String diaChi = txtDiaChi.getText().trim();
         String diemStr = txtDiemTichLuy.getText().trim();
         String hangKH = comBoxHangKH.getValue();
+        String loaiKhachHang = txtLoaiKhachHang.getText().trim();
 
         //Kiểm tra các trường bắt buộc
         if (tenKH.isEmpty()) {
@@ -277,6 +282,12 @@ public class CapNhatKhachHang_Controller {
             return null;
         }
         
+        if (loaiKhachHang.isEmpty()) {
+            showAlert("Cảnh báo", "Vui lòng nhập loại khách hàng!", Alert.AlertType.WARNING);
+            txtLoaiKhachHang.requestFocus();
+            return null;
+        }
+        
         int diemTichLuy = 0;
         if (!diemStr.isEmpty()) {
             try {
@@ -304,12 +315,12 @@ public class CapNhatKhachHang_Controller {
         kh.setEmail(email);
         kh.setDiaChi(diaChi);
         kh.setDiemTichLuy(diemTichLuy);
+        kh.setLoaiKhachHang(loaiKhachHang); 
         HangKhachHang hang = danhSachHangKhachHangDB.stream()
                 .filter(h -> h.getTenHang().equals(hangKH))
                 .findFirst()
                 .orElse(null);
-        kh.setHangKhachHang(hang);
-            
+        kh.setHangKhachHang(hang);   
         return kh;
     }
     

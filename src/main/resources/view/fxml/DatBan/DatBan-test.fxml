@@ -73,7 +73,7 @@
 <Label layoutX="15.0" layoutY="120.0" text="Số điện thoại :" />
 <TextField fx:id="txtSDT" layoutX="110.0" layoutY="116.0" />
 <TextField fx:id="txtDiemTichLuy" editable="false" layoutX="110.0" layoutY="76.0" style="-fx-background-color: e3e3e3;" />
-<TextField fx:id="txtTenKH" editable="false" layoutX="110.0" layoutY="35.0" style="-fx-background-color: e3e3e3;" />
+<TextField fx:id="txtTenKH" layoutX="110.0" layoutY="35.0" />
 <Button fx:id="btnTimKiem" layoutX="195.0" layoutY="160.0" mnemonicParsing="false" onAction="#timKiemKhachHang" text="Tìm kiếm" />
 </children>
 </Pane>

@@ -208,43 +208,43 @@ public class DatBan_Controller implements Initializable {
         }
     }
 
-    private void handleChonBan(Ban ban, Button btnBan) {
-        Ban banCu = this.banDangChon;
-        Button btnCu = this.buttonBanDangChonUI;
-        
-        // Cập nhật bàn đang chọn mới
-        this.banDangChon = ban;
-        // Xử lý nút Đặt bàn
-        if ("Đã được đặt".equals(ban.getTrangThai()) || "Đang phục vụ".equals(ban.getTrangThai())) {
-            btnDatBan.setDisable(true);
-        } else {
-            btnDatBan.setDisable(false);
-        }
-        // Gán thông tin bàn
-        txtTrangThai.setText(ban.getTrangThai());
-        txtViTri.setText(ban.getViTri());
-        txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
-        List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-        int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
-                ? dsDon.get(dsDon.size() - 1).getSoLuong()
-                : ban.getLoaiBan().getSoLuong();
-        txtSoLuong.setText(String.valueOf(soLuongHienThi));
-        txtSoLuongKH.setText(String.valueOf(soLuongHienThi));
-        // Hoàn nguyên style cho bàn CU
-        if (btnCu != null && banCu != null) {
-            btnCu.setStyle(getStyleByStatusAndType(
-                    banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()
-            ));
-        }
-        // Đặt style nổi bật cho bàn mới
-        btnBan.setStyle(
-            "-fx-background-color: yellow;" +
-            "-fx-text-fill: black;" +
-            "-fx-font-weight: bold;"
-        );
-        // Lưu lại tham chiếu UI của bàn mới
-        this.buttonBanDangChonUI = btnBan;
-    }
+//    private void handleChonBan(Ban ban, Button btnBan) {
+//        Ban banCu = this.banDangChon;
+//        Button btnCu = this.buttonBanDangChonUI;
+//        
+//        // Cập nhật bàn đang chọn mới
+//        this.banDangChon = ban;
+//        // Xử lý nút Đặt bàn
+//        if ("Đã được đặt".equals(ban.getTrangThai()) || "Đang phục vụ".equals(ban.getTrangThai())) {
+//            btnDatBan.setDisable(true);
+//        } else {
+//            btnDatBan.setDisable(false);
+//        }
+//        // Gán thông tin bàn
+//        txtTrangThai.setText(ban.getTrangThai());
+//        txtViTri.setText(ban.getViTri());
+//        txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
+//        List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+//        int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
+//                ? dsDon.get(dsDon.size() - 1).getSoLuong()
+//                : ban.getLoaiBan().getSoLuong();
+//        txtSoLuong.setText(String.valueOf(soLuongHienThi));
+//        txtSoLuongKH.setText(String.valueOf(soLuongHienThi));
+//        // Hoàn nguyên style cho bàn CU
+//        if (btnCu != null && banCu != null) {
+//            btnCu.setStyle(getStyleByStatusAndType(
+//                    banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()
+//            ));
+//        }
+//        // Đặt style nổi bật cho bàn mới
+//        btnBan.setStyle(
+//            "-fx-background-color: yellow;" +
+//            "-fx-text-fill: black;" +
+//            "-fx-font-weight: bold;"
+//        );
+//        // Lưu lại tham chiếu UI của bàn mới
+//        this.buttonBanDangChonUI = btnBan;
+//    }
 
     private void handleDatBan(ActionEvent event) {
         if (banDangChon == null) {
@@ -257,13 +257,29 @@ public class DatBan_Controller implements Initializable {
         }
 
         String sdt = txtSDT.getText().trim();
+        String tenKhach = txtTenKH.getText().trim();
         KhachHang kh = khachHangDAO.timTheoSDT(sdt);
 
         if (kh == null) {
             showAlert(Alert.AlertType.WARNING, "Vui lòng nhập số điện thoại khách hàng hợp lệ trước khi đặt bàn!");
             return;
         }
-
+        
+        if (kh == null) {
+            // tạo khách hàng tạm
+            kh = new KhachHang();
+            kh.setMaKH(AutoIDUitl.phatSinhMaKH());
+            kh.setTenKH(tenKhach);
+            kh.setSdt(sdt);
+            kh.setDiemTichLuy(0);
+            kh.setLoaiKhachHang("Tạm");
+            boolean taoKH = khachHangDAO.them(kh);
+            if (!taoKH) {
+                showAlert(Alert.AlertType.ERROR, "Không thể tạo khách hàng tạm!");
+                return;
+            }
+        }
+        
         LocalDate ngayChon = dpNgayDatBan.getValue();
         if (ngayChon == null) {
             showAlert(Alert.AlertType.WARNING, "Vui lòng chọn ngày đặt bàn!");

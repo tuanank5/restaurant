@@ -178,7 +178,7 @@ public class MenuNV_Controller {
 
     @FXML
     void btnKhachHang(ActionEvent event) {
-    	readyUI("KhachHang/KhachHangNew");
+    	readyUI("KhachHang/KhachHang");
     }
 
     @FXML

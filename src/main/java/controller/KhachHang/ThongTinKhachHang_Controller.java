@@ -55,7 +55,10 @@ public class ThongTinKhachHang_Controller {
 
     @FXML
     private TextField txtEmail;
-
+    
+    @FXML
+    private TextField txtLoaiKhachHang;
+    
     @FXML
     private TextField txtMaKH;
 
@@ -115,6 +118,7 @@ public class ThongTinKhachHang_Controller {
         	txtEmail.setText(khachHang.getEmail());
         	txtDiaChi.setText(khachHang.getDiaChi());
         	txtDiemTichLuy.setText(String.valueOf(khachHang.getDiemTichLuy()));
+        	txtLoaiKhachHang.setText(khachHang.getLoaiKhachHang());
         	HangKhachHang hang = khachHang.getHangKhachHang();
         	if(hang != null) {
         		comBoxHangKH.setValue(hang.getTenHang());
@@ -139,27 +143,7 @@ public class ThongTinKhachHang_Controller {
             comBoxHangKH.getItems().add(hang.getTenHang());
         }
         comBoxHangKH.getSelectionModel().selectFirst();
-    }
-    
-//    private void loadData() {
-//        Map<String,Object> filter = new HashMap<>();
-//        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
-//                .getDatabaseContext()
-//                .newEntity_DAO(HangKhachHang_DAO.class)
-//                .getDanhSach(HangKhachHang.class, filter);
-//        comBoxHangKH.getItems().clear();
-//        // Dùng Set để loại trùng tên hạng
-//        Set<String> tenHangSet = new HashSet<>();
-//        for (HangKhachHang hang : danhSachHangKhachHangDB) {
-//            tenHangSet.add(hang.getTenHang());
-//        }
-//        ObservableList<String> listTen = FXCollections.observableArrayList(tenHangSet);
-//        // Load lên ComboBox
-//        comBoxHangKH.setItems(listTen);
-//        if (!listTen.isEmpty()) {
-//            comBoxHangKH.getSelectionModel().selectFirst();
-//        }
-//    }
+    }    
 
     public void troLai() {
     	MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");

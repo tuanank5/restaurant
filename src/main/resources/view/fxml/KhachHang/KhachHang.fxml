@@ -48,7 +48,8 @@
                     <TableColumn fx:id="tblEmail" prefWidth="150" text="Email" />
                     <TableColumn fx:id="tblHangKH" prefWidth="140" text="Hạng khách hàng" />
                     <TableColumn fx:id="tblDiemTichLuy" prefWidth="150" text="Điểm tích lũy" />
-                    <TableColumn fx:id="tblDiaChi" prefWidth="180" text="Địa chỉ" />
+                    <TableColumn fx:id="tblDiaChi" prefWidth="158.0" text="Địa chỉ" />
+               <TableColumn fx:id="tblLoaiKhachHang" prefWidth="108.0" text="Loại Khách Hàng" />
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

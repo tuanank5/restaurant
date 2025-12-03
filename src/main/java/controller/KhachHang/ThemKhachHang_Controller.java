@@ -70,6 +70,9 @@ public class ThemKhachHang_Controller {
 
     @FXML
     private TextField txtKhachHang;
+    
+    @FXML
+    private TextField txtLoaiKhachHang;
 
     @FXML
     private TextField txtSDT;
@@ -106,7 +109,7 @@ public class ThemKhachHang_Controller {
     			//xacNhanLuu("DatBan/DatBan");
     			MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
     		}else {
-    			MenuNV_Controller.instance.readyUI("KhachHang/KhachHangNew");
+    			MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
     		}
     	}else if(src ==  btnLuu) {
     		luuLai();
@@ -218,7 +221,7 @@ public class ThemKhachHang_Controller {
         String diaChi = txtDiaChi.getText().trim();
         String diemStr = txtDiemTichLuy.getText().trim();
         String hangKH = comBoxHangKH.getValue();
-
+        String loaiKhachHang = txtLoaiKhachHang.getText().trim();
         DatabaseContext databaseContext = RestaurantApplication
                 .getInstance()
                 .getDatabaseContext();
@@ -288,6 +291,13 @@ public class ThemKhachHang_Controller {
             comBoxHangKH.requestFocus();
             return null;
         }
+     // Kiểm tra loại khách hàng
+        if (loaiKhachHang.isEmpty()) {
+            showAlert("Cảnh Báo", "Vui lòng nhập loại khách hàng!", Alert.AlertType.WARNING);
+            txtLoaiKhachHang.requestFocus();
+            return null;
+        }
+
         KhachHang kh = new KhachHang();
         kh.setMaKH(AutoIDUitl.phatSinhMaKH()); // quan trọng
         kh.setTenKH(tenKH);
@@ -301,6 +311,7 @@ public class ThemKhachHang_Controller {
             .findFirst()
             .orElse(null);
         kh.setHangKhachHang(hang);
+        kh.setLoaiKhachHang(loaiKhachHang);
 
         return kh;
     }

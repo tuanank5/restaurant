@@ -65,7 +65,10 @@ public class KhachHang_Controller {
 
     @FXML
     private TableColumn<KhachHang,String> tblKhachHang;
-
+    
+    @FXML
+    private TableColumn<KhachHang, String> tblLoaiKhachHang;
+    
     @FXML
     private TableColumn<KhachHang,String> tblSoDienThoai;
 
@@ -149,6 +152,7 @@ public class KhachHang_Controller {
                 if (kh.getDiemTichLuy() != 0 && String.valueOf(kh.getDiemTichLuy()).contains(lowerCaseFilter)) return true;
                 HangKhachHang hang = kh.getHangKhachHang();
                 if (hang != null && hang.getTenHang().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (kh.getLoaiKhachHang() != null && kh.getLoaiKhachHang().toLowerCase().contains(lowerCaseFilter)) return true;
                 return false;
             });
             hBoxPage.setVisible(true);
@@ -229,11 +233,13 @@ public class KhachHang_Controller {
         tblEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tblDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
         tblDiemTichLuy.setCellValueFactory(new PropertyValueFactory<>("diemTichLuy"));
+        tblLoaiKhachHang.setCellValueFactory(new PropertyValueFactory<>("loaiKhachHang"));
         tblHangKH.setCellValueFactory(cellData -> {
             HangKhachHang hang = cellData.getValue().getHangKhachHang();
             return new SimpleStringProperty(hang != null ? hang.getTenHang() : "");
         });
     }
+
 
     private void huyChonDong() {
         tableView.getSelectionModel().clearSelection();

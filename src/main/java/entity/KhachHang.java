@@ -23,166 +23,123 @@ import jakarta.persistence.OneToMany;
     )
 })
 public class KhachHang {
-	@Id
-	@Column(name = "maKH", nullable = false, length = 20)
-	private String maKH;
 
-	@Column(name = "tenKH", nullable = false, length = 100)
-	private String tenKH;
+    @Id
+    @Column(name = "maKH", nullable = false, length = 20)
+    private String maKH;
 
-	@Column(name = "sdt", nullable = false, length = 20)
-	private String sdt;
+    @Column(name = "tenKH", nullable = false, length = 100)
+    private String tenKH;
 
-	@Column(name = "email", length = 100)
-	private String email;
+    @Column(name = "sdt", nullable = false, length = 20)
+    private String sdt;
 
-	@Column(name = "diaChi", length = 200)
-	private String diaChi;
-	
-	@Column(name = "diemTichLuy")
-	private int diemTichLuy;
-	
-	@ManyToOne
-    @JoinColumn(name = "maHang", referencedColumnName = "maHang", nullable = false)
+    @Column(name = "email", length = 100)
+    private String email;
+
+    @Column(name = "diaChi", length = 200)
+    private String diaChi;
+
+    @Column(name = "diemTichLuy")
+    private int diemTichLuy;
+
+    @Column(name = "LoaiKhachHang", length = 50)
+    private String loaiKhachHang;
+
+    @ManyToOne
+    @JoinColumn(name = "maHang", referencedColumnName = "maHang", nullable = true)
     private HangKhachHang hangKhachHang;
-	//
-	@OneToMany(mappedBy = "khachHang")
-	private List<DonDatBan> danhSachDon;
-	
-	public KhachHang() {
-		
-	}
 
-	public KhachHang(String maKH, String tenKH, String sdt, String email, String diaChi,
-			int diemTichLuy, HangKhachHang hangKhachHang) {
-		this.maKH = maKH;
-		this.tenKH = tenKH;
-		this.sdt = sdt;
-		this.email = email;
-		this.diaChi = diaChi;
-		this.diemTichLuy = diemTichLuy;
-		this.hangKhachHang = hangKhachHang;
-	}
+    @OneToMany(mappedBy = "khachHang")
+    private List<DonDatBan> danhSachDon;
 
-	public String getMaKH() {
-		return maKH;
-	}
 
-	public void setMaKH(String maKH) {
-		this.maKH = maKH;
-	}
+    public KhachHang() {
+    }
 
-	public String getTenKH() {
-		return tenKH;
-	}
+    public KhachHang(String maKH, String tenKH, String sdt, String email, String diaChi,
+                     int diemTichLuy, String loaiKhachHang, HangKhachHang hangKhachHang) {
+        this.maKH = maKH;
+        this.tenKH = tenKH;
+        this.sdt = sdt;
+        this.email = email;
+        this.diaChi = diaChi;
+        this.diemTichLuy = diemTichLuy;
+        this.loaiKhachHang = loaiKhachHang;
+        this.hangKhachHang = hangKhachHang;
+    }
 
-	public void setTenKH(String tenKH) {
-		this.tenKH = tenKH;
-	}
+    // ===== Getter Setter =====
 
-	public String getSdt() {
-		return sdt;
-	}
+    public String getMaKH() {
+        return maKH;
+    }
 
-	public void setSdt(String sdt) {
-		this.sdt = sdt;
-	}
+    public void setMaKH(String maKH) {
+        this.maKH = maKH;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getTenKH() {
+        return tenKH;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setTenKH(String tenKH) {
+        this.tenKH = tenKH;
+    }
 
-	public String getDiaChi() {
-		return diaChi;
-	}
+    public String getSdt() {
+        return sdt;
+    }
 
-	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
-	}
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
 
-	public int getDiemTichLuy() {
-		return diemTichLuy;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setDiemTichLuy(int diemTichLuy) {
-		this.diemTichLuy = diemTichLuy;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public HangKhachHang getHangKhachHang() {
-		return hangKhachHang;
-	}
+    public String getDiaChi() {
+        return diaChi;
+    }
 
-	public void setHangKhachHang(HangKhachHang hangKhachHang) {
-		this.hangKhachHang = hangKhachHang;
-	}
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((diaChi == null) ? 0 : diaChi.hashCode());
-		result = prime * result + diemTichLuy;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((hangKhachHang == null) ? 0 : hangKhachHang.hashCode());
-		result = prime * result + ((maKH == null) ? 0 : maKH.hashCode());
-		result = prime * result + ((sdt == null) ? 0 : sdt.hashCode());
-		result = prime * result + ((tenKH == null) ? 0 : tenKH.hashCode());
-		return result;
-	}
+    public int getDiemTichLuy() {
+        return diemTichLuy;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KhachHang other = (KhachHang) obj;
-		if (diaChi == null) {
-			if (other.diaChi != null)
-				return false;
-		} else if (!diaChi.equals(other.diaChi))
-			return false;
-		if (diemTichLuy != other.diemTichLuy)
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (hangKhachHang == null) {
-			if (other.hangKhachHang != null)
-				return false;
-		} else if (!hangKhachHang.equals(other.hangKhachHang))
-			return false;
-		if (maKH == null) {
-			if (other.maKH != null)
-				return false;
-		} else if (!maKH.equals(other.maKH))
-			return false;
-		if (sdt == null) {
-			if (other.sdt != null)
-				return false;
-		} else if (!sdt.equals(other.sdt))
-			return false;
-		if (tenKH == null) {
-			if (other.tenKH != null)
-				return false;
-		} else if (!tenKH.equals(other.tenKH))
-			return false;
-		return true;
-	}
+    public void setDiemTichLuy(int diemTichLuy) {
+        this.diemTichLuy = diemTichLuy;
+    }
+
+    public String getLoaiKhachHang() {
+        return loaiKhachHang;
+    }
+
+    public void setLoaiKhachHang(String loaiKhachHang) {
+        this.loaiKhachHang = loaiKhachHang;
+    }
+
+    public HangKhachHang getHangKhachHang() {
+        return hangKhachHang;
+    }
+
+    public void setHangKhachHang(HangKhachHang hangKhachHang) {
+        this.hangKhachHang = hangKhachHang;
+    }
 
 	@Override
 	public String toString() {
 		return "KhachHang [maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt + ", email=" + email + ", diaChi="
-				+ diaChi + ", diemTichLuy=" + diemTichLuy + ", hangKhachHang=" + hangKhachHang + "]";
+				+ diaChi + ", diemTichLuy=" + diemTichLuy + ", loaiKhachHang=" + loaiKhachHang + ", hangKhachHang="
+				+ hangKhachHang + ", danhSachDon=" + danhSachDon + "]";
 	}
-
 	
 }
