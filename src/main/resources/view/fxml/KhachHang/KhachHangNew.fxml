@@ -26,9 +26,9 @@
                      <left>
                         <AnchorPane prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="50.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnThemKhachHang" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Khách Hàng" />
+                              <Button layoutX="50.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnThemKhachHang" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm khách hàng" />
                               <Button layoutX="245.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnXuatExcel" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất Excel" />
-                              <Button layoutX="385.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnTatCa" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất Cả" />
+                              <Button layoutX="385.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnTatCa" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
                            </children>
                         </AnchorPane>
                      </left>
@@ -36,7 +36,7 @@
                         <AnchorPane prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
                               <TextField fx:id="txtTimKiem" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
-                              <Button disable="true" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="50.0" />
+                              <Button disable="true" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="50.0" />
                            </children>
                         </AnchorPane>
                      </right>

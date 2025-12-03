@@ -26,7 +26,7 @@
                      <left>
                         <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Nhân Viên" />
+                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm nhân viên" />
                               <Button fx:id="btnUpdateNV" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Cập nhật nhân viên" />
                               <Button fx:id="btnXuatPDF" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất PDF" />
                            </children>
@@ -47,7 +47,7 @@
                      <left>
                         <AnchorPane prefHeight="75.0" prefWidth="750.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnTatCa" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="130.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
+                              <Button fx:id="btnTatCa" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="125.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
                               <Button fx:id="btnDangLamViec" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="145.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đang làm việc" />
                               <Button fx:id="btnDaNghi" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đã nghĩ" />
                            </children>

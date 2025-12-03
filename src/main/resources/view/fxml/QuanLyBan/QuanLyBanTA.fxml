@@ -23,17 +23,17 @@
          <top>
             <AnchorPane prefHeight="180.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label layoutX="90.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã Bàn: " />
-                  <Label layoutX="90.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Vị Trí:" />
-                  <Label layoutX="450.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại Bàn:" />
-                  <Label layoutX="450.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng Thái:" />
+                  <Label layoutX="90.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã bàn: " />
+                  <Label layoutX="90.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng thái:" />
+                  <Label layoutX="450.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Vị trí:" />
+                  <Label layoutX="450.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn:" />
                   <Button layoutX="90.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm" />
                   <Button layoutX="240.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
-                  <Button layoutX="360.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
-                  <TextField editable="false" layoutX="160.0" layoutY="24.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                  <TextField layoutX="540.0" layoutY="24.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="160.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="540.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <Button layoutX="370.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
+                  <TextField editable="false" layoutX="170.0" layoutY="24.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField layoutX="520.0" layoutY="24.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox layoutX="170.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox layoutX="520.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </AnchorPane>
          </top>
@@ -43,7 +43,7 @@
                   <TableColumn fx:id="colMaBan" prefWidth="75.0" text="Mã bàn" />
                   <TableColumn fx:id="colViTri" prefWidth="75.0" text="Vị trí" />
                   <TableColumn fx:id="colTrangThai" prefWidth="75.0" text="Trạng thái" />
-                  <TableColumn fx:id="colMaLoaiBan" prefWidth="75.0" text="Mã loại bàn" />
+                  <TableColumn fx:id="colMaLoaiBan" prefWidth="75.0" text="Loại bàn" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -59,7 +59,7 @@
          <right>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button disable="true" mnemonicParsing="false" prefWidth="90.0" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" AnchorPane.rightAnchor="220.0" />
+                  <Button disable="true" mnemonicParsing="false" prefWidth="90.0" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" AnchorPane.rightAnchor="220.0" />
                   <TextField fx:id="txtTimKiem" layoutX="50.0" onAction="#controller" onMouseClicked="#mouseClicked" prefWidth="200.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="20.0" />
                </children>
             </AnchorPane>

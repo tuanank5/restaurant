@@ -33,9 +33,9 @@
                   <CheckBox layoutX="510.0" layoutY="28.0" mnemonicParsing="false" styleClass="chk" stylesheets="@../../css/SystemDesign.css" />
                   <CheckBox layoutX="765.0" layoutY="28.0" mnemonicParsing="false" styleClass="chk" stylesheets="@../../css/SystemDesign.css" />
                   <Button layoutX="50.0" layoutY="90.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Lọc" />
-                  <Button layoutX="125.0" layoutY="90.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất Cả" />
+                  <Button layoutX="125.0" layoutY="90.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
                   <TextField style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
-                  <Button disable="true" layoutX="877.0" layoutY="75.0" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="24.0" />
+                  <Button disable="true" layoutX="877.0" layoutY="75.0" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="24.0" />
                </children>
             </AnchorPane>
          </top>

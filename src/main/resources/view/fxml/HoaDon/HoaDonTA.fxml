@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoaDon.HoaDon_Controller">
+   <center>
+      <BorderPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+         <top>
+            <BorderPane prefHeight="66.0" prefWidth="901.0" BorderPane.alignment="CENTER">
+               <center>
+                  <Label text="Tra cứu hoá đơn" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="System Bold Italic" size="30.0" />
+                     </font></Label>
+               </center>
+            </BorderPane>
+         </top>
+         <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <top>
+                  <BorderPane prefHeight="261.0" prefWidth="942.0" BorderPane.alignment="CENTER">
+                     <left>
+                        <Pane prefHeight="187.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label layoutX="30.0" layoutY="145.0" text="Từ ngày: " />
+                              <TextField fx:id="txtTimKiem" layoutX="120.0" layoutY="20.0" prefHeight="25.0" prefWidth="320.0" />
+                              <DatePicker fx:id="dpTuNgay" layoutX="120.0" layoutY="140.0" prefHeight="25.0" prefWidth="320.0" />
+                              <Label layoutX="30.0" layoutY="85.0" text="Lọc: " />
+                              <ComboBox fx:id="cmbLoc" layoutX="120.0" layoutY="80.0" prefHeight="25.0" prefWidth="316.0" />
+                              <DatePicker fx:id="dpDenNgay" layoutX="120.0" layoutY="200.0" prefHeight="25.0" prefWidth="320.0" />
+                              <Label layoutX="30.0" layoutY="205.0" text="Đến ngày: " />
+                              <Label layoutX="30.0" layoutY="25.0" text="Tìm kiếm:" />
+                           </children>
+                        </Pane>
+                     </left>
+                     <right>
+                        <Pane prefHeight="262.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets right="40.0" />
+                           </BorderPane.margin>
+                        </Pane>
+                     </right>
+                  </BorderPane>
+               </top>
+               <center>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <top>
+                        <BorderPane prefHeight="65.0" prefWidth="1240.0" BorderPane.alignment="CENTER">
+                           <center>
+                              <Label text="Danh sách hoá đơn" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                        </BorderPane>
+                     </top>
+                     <center>
+                        <BorderPane prefHeight="317.0" prefWidth="942.0" BorderPane.alignment="CENTER">
+                           <center>
+                              <TableView fx:id="tableView" prefHeight="231.0" prefWidth="1240.0" BorderPane.alignment="CENTER">
+                                <columns>
+                                  <TableColumn fx:id="colMaHD" minWidth="-1.0" prefWidth="-1.0" text="Mã hoá đơn" />
+                                  <TableColumn fx:id="colNgayLap" minWidth="-1.0" prefWidth="-1.0" text="Ngày lập" />
+                                    <TableColumn fx:id="colKH" minWidth="-1.0" prefWidth="-1.0" text="Khách hàng" />
+                                    <TableColumn fx:id="colNV" minWidth="-1.0" prefWidth="-1.0" text="Nhân viên" />
+                                    <TableColumn fx:id="colKM" minWidth="-1.0" prefWidth="-1.0" text="Khuyến mãi" />
+                                    <TableColumn fx:id="colTrangThai" minWidth="-1.0" prefWidth="-1.0" text="Trạng thái" />
+                                    <TableColumn fx:id="colKieuThanhToan" minWidth="-1.0" prefWidth="-1.0" text="Kiểu thanh toán" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </center>
+                           <bottom>
+                              <BorderPane prefHeight="44.0" prefWidth="1240.0" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                     </center>
+                  </BorderPane>
+               </center>
+            </BorderPane>
+         </center></BorderPane>
+   </center>
+</BorderPane>

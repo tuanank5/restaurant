@@ -30,14 +30,14 @@
                      <center>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label layoutX="150.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã Nhân Viên:" />
+                              <Label layoutX="160.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã nhân viên:" />
                               <TextField editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <Label layoutX="150.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Họ Tên Nhân Viên:" />
+                              <Label layoutX="160.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Họ tên nhân viên:" />
                               <TextField editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <Label layoutX="150.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số Điện Thoại:" />
-                              <Label layoutX="150.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chức Vụ:" />
+                              <Label layoutX="160.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số điện thoại:" />
+                              <Label layoutX="160.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chức vụ:" />
                               <TextField editable="false" layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tạo Lại Mật Khẩu" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" />
+                              <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tạo lại mật khẩu" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" />
                               <TextField editable="false" layoutX="287.0" layoutY="169.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                            </children>
                         </AnchorPane>
@@ -56,11 +56,11 @@
                      <center>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label layoutX="150.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã Tài Khoản:" />
-                              <Label layoutX="150.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên Tài Khoản:" />
-                              <Label layoutX="150.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Đăng Nhập:" />
-                              <Label layoutX="150.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Đăng Xuất:" />
-                              <Label layoutX="150.0" layoutY="225.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Sửa Đổi:" />
+                              <Label layoutX="160.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã tài khoản:" />
+                              <Label layoutX="160.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên tài khoản:" />
+                              <Label layoutX="160.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đăng nhập:" />
+                              <Label layoutX="160.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đăng xuất:" />
+                              <Label layoutX="160.0" layoutY="225.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày sửa đổi:" />
                               <TextField editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                               <TextField editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                               <TextField editable="false" layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
@@ -80,7 +80,7 @@
          <children>
             <Label layoutX="25.0" layoutY="25.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Tài Khoản  &lt;" />
             <Label layoutX="275.0" layoutY="25.0" style="-fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Chi Tiết Tài Khoản" />
-            <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở Lại (ESC)" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
+            <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại (ESC)" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
          </children>
       </AnchorPane>
    </top>

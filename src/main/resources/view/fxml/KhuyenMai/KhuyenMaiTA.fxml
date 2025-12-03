@@ -40,40 +40,40 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã Khuyến Mãi:">
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã KM:">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên Khuyến Mãi:" GridPane.rowIndex="1">
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên KM:" GridPane.rowIndex="1">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại Khuyến Mãi:" GridPane.rowIndex="2">
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại KM:" GridPane.rowIndex="2">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Sản Phẩm Khuyến Mãi:" GridPane.rowIndex="3">
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Sản phẩm KM:" GridPane.rowIndex="3">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Label>
                         <TextField fx:id="txtMaKM" editable="false" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" />
                         <TextField fx:id="txtTenKM" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <ComboBox fx:id="comBoxSanPhamKM" prefWidth="300.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Button fx:id="btnThemKM" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Khuyến Mãi" GridPane.rowIndex="4">
+                        <Button fx:id="btnThemKM" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm KM" GridPane.rowIndex="4">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="btnSuaKM" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa Khuyến Mãi" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <Button fx:id="btnSuaKM" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa KM" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <GridPane.margin>
-                              <Insets left="145.0" />
+                              <Insets left="199.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="btnXoaKM" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa Khuyến Mãi" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Button fx:id="btnXoaKM" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa KM" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <ComboBox fx:id="comBoxLoaiKM" prefWidth="300.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
@@ -90,28 +90,28 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Bắt Đầu:">
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày bắt đầu:">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Kết Thúc:" GridPane.rowIndex="1">
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày kết thúc:" GridPane.rowIndex="1">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Phần Trăm Khuyến Mãi:" GridPane.rowIndex="2">
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Phần trăm giảm giá:" GridPane.rowIndex="2">
                            <GridPane.margin>
-                              <Insets left="100.0" />
+                              <Insets left="110.0" />
                            </GridPane.margin>
                         </Label>
                         <ComboBox fx:id="comBoxPhanTram" prefWidth="300.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtTimKiem" onAction="#controller" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <DatePicker fx:id="dpNgayBatDau" prefWidth="300.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" />
                         <DatePicker fx:id="dpNgayBatDau" prefWidth="300.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button disable="true" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" GridPane.rowIndex="4">
+                        <Button disable="true" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" GridPane.rowIndex="4">
                            <GridPane.margin>
-                              <Insets left="188.0" />
+                              <Insets left="191.0" />
                            </GridPane.margin>
                         </Button>
                      </children>

@@ -25,17 +25,17 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label styleClass="lbl" stylesheets="@../css/SystemDesign.css" text="Mật Khẩu Cũ:" />
-                  <Label styleClass="lbl" stylesheets="@../css/SystemDesign.css" text="Mật Khẩu Mới:" GridPane.rowIndex="1" />
-                  <Label styleClass="lbl" stylesheets="@../css/SystemDesign.css" text="Nhập Lại Mật Khẩu Mới:" GridPane.rowIndex="2" />
+                  <Label styleClass="lbl" stylesheets="@../css/SystemDesign.css" text="Mật khẩu cũ:" />
+                  <Label styleClass="lbl" stylesheets="@../css/SystemDesign.css" text="Mật khẩu mới:" GridPane.rowIndex="1" />
+                  <Label styleClass="lbl" stylesheets="@../css/SystemDesign.css" text="Nhập lại mật khẩu mới:" GridPane.rowIndex="2" />
                   <PasswordField fx:id="mkCuTextField" styleClass="txt" stylesheets="@../css/SystemDesign.css" GridPane.columnIndex="1" />
                   <PasswordField fx:id="mkMoiTextField" styleClass="txt" stylesheets="@../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <PasswordField fx:id="mkNhapLaiTextField" styleClass="txt" stylesheets="@../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
-            <Button layoutX="25.0" layoutY="150.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Quay Lại" />
-            <Button layoutX="175.0" layoutY="150.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Làm Mới" />
-            <Button fx:id="btnLuuLai" layoutX="275.0" layoutY="150.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Xác Nhận Lưu" />
+            <Button layoutX="25.0" layoutY="150.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Quay lại" />
+            <Button layoutX="170.0" layoutY="150.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Làm mới" />
+            <Button fx:id="btnLuuLai" layoutX="285.0" layoutY="150.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Xác nhận lưu" />
          </children>
       </AnchorPane>
    </center>
