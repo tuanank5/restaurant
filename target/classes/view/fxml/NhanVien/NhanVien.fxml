@@ -28,15 +28,15 @@
                            <children>
                               <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm Nhân Viên" />
                               <Button fx:id="btnUpdateNV" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Cập nhật nhân viên" />
-                              <Button fx:id="btnXuatPDF" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="90.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất PDF" />
+                              <Button fx:id="btnXuatPDF" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất PDF" />
                            </children>
                         </AnchorPane>
                      </left>
                      <right>
                         <AnchorPane prefHeight="75.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button disable="true" layoutX="38.0" layoutY="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
-                              <TextField fx:id="txtTimKiem" layoutX="128.0" layoutY="25.0" onAction="#controller" onMouseClicked="#mouseClicked" prefHeight="30.0" prefWidth="250.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <Button disable="true" layoutX="38.0" layoutY="25.0" mnemonicParsing="false" prefWidth="90.0" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
+                              <TextField fx:id="txtTimKiem" layoutX="128.0" layoutY="25.0" onAction="#controller" onMouseClicked="#mouseClicked" prefWidth="250.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                            </children>
                         </AnchorPane>
                      </right>
@@ -47,16 +47,16 @@
                      <left>
                         <AnchorPane prefHeight="75.0" prefWidth="750.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnTatCa" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
-                              <Button fx:id="btnDangLamViec" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="125.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đang làm việc" />
-                              <Button fx:id="btnDaNghi" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="90.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đã nghĩ" />
+                              <Button fx:id="btnTatCa" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="130.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
+                              <Button fx:id="btnDangLamViec" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="145.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đang làm việc" />
+                              <Button fx:id="btnDaNghi" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đã nghĩ" />
                            </children>
                         </AnchorPane>
                      </left>
                      <right>
                         <AnchorPane prefHeight="75.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnXoa" layoutX="80.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
+                              <Button fx:id="btnXoa" layoutX="80.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
                            </children>
                         </AnchorPane>
                      </right>

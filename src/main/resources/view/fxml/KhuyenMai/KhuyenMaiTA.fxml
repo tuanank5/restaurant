@@ -128,7 +128,7 @@
                   <TableColumn fx:id="colMaKM" prefWidth="75.0" text="Mã KM" />
                   <TableColumn fx:id="colTenKM" prefWidth="75.0" text="Tên KM" />
                   <TableColumn fx:id="colloaiKM" prefWidth="75.0" text="Loại KM" />
-                  <TableColumn fx:id="colSanPhamKM" prefWidth="75.0" text="Sản Phẩm KM" />
+                  <TableColumn fx:id="colSanPhamKM" prefWidth="75.0" text="Sản phẩm KM" />
                   <TableColumn fx:id="colNgayBatDau" prefWidth="75.0" text="Ngày bắt đầu" />
                   <TableColumn fx:id="colNgayKetThuc" prefWidth="75.0" text="Ngày kết thúc" />
                   <TableColumn fx:id="colPhanTramGiamGia" prefWidth="75.0" text="Phần trăm giảm giá" />

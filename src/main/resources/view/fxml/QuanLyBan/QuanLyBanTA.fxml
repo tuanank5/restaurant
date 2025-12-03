@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -29,10 +30,10 @@
                   <Button layoutX="90.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm" />
                   <Button layoutX="240.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
                   <Button layoutX="360.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
-                  <TextField layoutX="160.0" layoutY="24.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField editable="false" layoutX="160.0" layoutY="24.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                   <TextField layoutX="540.0" layoutY="24.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="160.0" layoutY="86.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="540.0" layoutY="86.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox layoutX="160.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox layoutX="540.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </AnchorPane>
          </top>
@@ -50,8 +51,19 @@
             </TableView>
          </bottom>
          <center>
-            <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh sách bàn" BorderPane.alignment="CENTER" />
+            <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Bàn" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="310.0" />
+               </BorderPane.margin></Label>
          </center>
+         <right>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button disable="true" mnemonicParsing="false" prefWidth="90.0" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm Kiếm" AnchorPane.rightAnchor="220.0" />
+                  <TextField fx:id="txtTimKiem" layoutX="50.0" onAction="#controller" onMouseClicked="#mouseClicked" prefWidth="200.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" AnchorPane.rightAnchor="20.0" />
+               </children>
+            </AnchorPane>
+         </right>
       </BorderPane>
    </center>
 </BorderPane>

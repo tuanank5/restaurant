@@ -40,7 +40,7 @@
       </AnchorPane>
    </center>
    <top>
-      <BorderPane prefHeight="275.0" prefWidth="1200.0">
+      <BorderPane prefHeight="250.0" prefWidth="1200.0">
          <left>
             <Label styleClass="h1" stylesheets="@../css/SystemDesign.css" text="Đổi Mật Khẩu" BorderPane.alignment="BOTTOM_CENTER">
                <BorderPane.margin>
