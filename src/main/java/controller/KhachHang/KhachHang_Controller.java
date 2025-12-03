@@ -133,38 +133,43 @@ public class KhachHang_Controller {
             huyChonDong();
         }
     }
-
+    
     private void timKiem() {
+        // Tạo một danh sách mới để tránh ảnh hưởng danh sách gốc
         ObservableList<KhachHang> newDanhSachKhachHang = FXCollections.observableArrayList();
         newDanhSachKhachHang.addAll(danhSachKhachHangDB);
         hBoxPage.setVisible(false);
         FilteredList<KhachHang> filteredData = new FilteredList<>(newDanhSachKhachHang, p -> true);
-
         txtTimKiem.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(kh -> {
+                // Nếu ô tìm kiếm rỗng thì hiển thị tất cả
                 if (newValue == null || newValue.isEmpty()) return true;
                 String lowerCaseFilter = newValue.toLowerCase();
-                if (kh.getMaKH().toLowerCase().contains(lowerCaseFilter)) return true;
-                if (kh.getTenKH().toLowerCase().contains(lowerCaseFilter)) return true;
-                if (kh.getSdt().contains(lowerCaseFilter)) return true;
-                if (kh.getEmail().toLowerCase().contains(lowerCaseFilter)) return true;
-                if (kh.getDiaChi().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (kh.getMaKH() != null && kh.getMaKH().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (kh.getTenKH() != null && kh.getTenKH().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (kh.getSdt() != null && kh.getSdt().contains(lowerCaseFilter)) return true;
+                if (kh.getEmail() != null && kh.getEmail().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (kh.getDiaChi() != null && kh.getDiaChi().toLowerCase().contains(lowerCaseFilter)) return true;
                 if (kh.getDiemTichLuy() != 0 && String.valueOf(kh.getDiemTichLuy()).contains(lowerCaseFilter)) return true;
+
                 HangKhachHang hang = kh.getHangKhachHang();
-                if (hang != null && hang.getTenHang().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (hang != null && hang.getTenHang() != null && hang.getTenHang().toLowerCase().contains(lowerCaseFilter)) return true;
+
                 if (kh.getLoaiKhachHang() != null && kh.getLoaiKhachHang().toLowerCase().contains(lowerCaseFilter)) return true;
+
                 return false;
             });
+            // Hiển thị phân trang
             hBoxPage.setVisible(true);
             phanTrang(filteredData);
             if (!hBoxPage.getChildren().isEmpty() && hBoxPage.getChildren().get(0) instanceof Button) {
                 ((Button) hBoxPage.getChildren().get(0)).fire();
             }
         });
-
         tableView.setItems(filteredData);
     }
 
+    
     private void phanTrang(int soLuongBanGhi) {
         hBoxPage.getChildren().clear();
         loadCountPage(soLuongBanGhi);
