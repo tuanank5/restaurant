@@ -257,6 +257,11 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
         alert.setHeaderText(null);
         alert.setContentText("Đã lưu món tạm cho bàn " + banDangChon.getMaBan());
         alert.showAndWait();
+        try {
+            MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     // --- Khởi tạo ComboBox Khuyến mãi ---

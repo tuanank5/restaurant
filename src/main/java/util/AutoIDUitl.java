@@ -109,7 +109,7 @@ public class AutoIDUitl {
 
 	    try {
 	        int so = Integer.parseInt(max.substring(3)); // "DDB012" -> 12
-	        return "DDB" + String.format("%04d", so + 1);
+	        return "DDB" + String.format("%03d", so + 1);
 	    } catch (Exception e) {
 	        return "DDB001";
 	    }

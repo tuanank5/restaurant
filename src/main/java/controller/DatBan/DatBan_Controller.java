@@ -78,6 +78,8 @@ public class DatBan_Controller implements Initializable {
     
     private String maBanDangChon;
     private String maKHDangChon;
+    private boolean isFromSearch = false;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -177,6 +179,13 @@ public class DatBan_Controller implements Initializable {
                 //btnBan.setOnAction(e -> handleChonBan(ban, btnBan));
                 btnBan.setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2) {
+                    	// BÀN TRỐNG mở DatMon để đặt món trước
+                        if ("Trống".equals(ban.getTrangThai())) {
+                            MenuNV_Controller.banDangChon = ban;
+                            MenuNV_Controller.khachHangDangChon = null;
+                            MenuNV_Controller.instance.readyUI("MonAn/DatMon");
+                            return;
+                        }
                         // Double click: nếu bàn đã được đặt thì mở giao diện DatMon
                         if ("Đã được đặt".equals(ban.getTrangThai())) {
                             if (dsDon != null && !dsDon.isEmpty()) {
@@ -245,7 +254,51 @@ public class DatBan_Controller implements Initializable {
 //        // Lưu lại tham chiếu UI của bàn mới
 //        this.buttonBanDangChonUI = btnBan;
 //    }
+    
+    private void handleChonBan(Ban ban, Button btnBan) {
+        Ban banCu = this.banDangChon;
+        Button btnCu = this.buttonBanDangChonUI;
+        this.banDangChon = ban;
 
+        // Gán thông tin bàn lên UI
+        txtTrangThai.setText(ban.getTrangThai());
+        txtViTri.setText(ban.getViTri());
+        txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
+        txtSoLuong.setText(String.valueOf(ban.getLoaiBan().getSoLuong()));
+        txtSoLuongKH.setText(String.valueOf(ban.getLoaiBan().getSoLuong()));
+        
+        if ("Trống".equals(ban.getTrangThai())) {
+            btnDatBan.setDisable(false);
+        } else {
+            btnDatBan.setDisable(true);
+        }
+        
+        // --- Nếu đã được đặt → vẫn mở DatMon để xem hoặc sửa ---
+        if ("Đã được đặt".equals(ban.getTrangThai()) && !isFromSearch) {
+            List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+            if (dsDon != null && !dsDon.isEmpty()) {
+                DonDatBan donGan = dsDon.get(dsDon.size() - 1);
+                MenuNV_Controller.banDangChon = ban;
+                MenuNV_Controller.khachHangDangChon = donGan.getKhachHang();
+            }
+            //MenuNV_Controller.instance.readyUI("MonAn/DatMon");
+            return;
+        }
+
+        // --- Nếu đang phục vụ → không cho chỉnh, chỉ hiển thị ---
+        if ("Đang phục vụ".equals(ban.getTrangThai())) {
+            btnDatBan.setDisable(true);
+        }
+
+        //Style chọn bàn
+        if (btnCu != null) {
+            btnCu.setStyle(getStyleByStatusAndType(banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()));
+        }
+        btnBan.setStyle("-fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold;");
+        this.buttonBanDangChonUI = btnBan;
+    }
+
+    
     private void handleDatBan(ActionEvent event) {
         if (banDangChon == null) {
             showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn!");
@@ -261,21 +314,21 @@ public class DatBan_Controller implements Initializable {
         KhachHang kh = khachHangDAO.timTheoSDT(sdt);
 
         if (kh == null) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng nhập số điện thoại khách hàng hợp lệ trước khi đặt bàn!");
-            return;
-        }
-        
-        if (kh == null) {
-            // tạo khách hàng tạm
+            if (tenKhach.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Vui lòng nhập tên khách hàng và số điện thoại để tạo mới!");
+                return;
+            }
+
             kh = new KhachHang();
             kh.setMaKH(AutoIDUitl.phatSinhMaKH());
             kh.setTenKH(tenKhach);
             kh.setSdt(sdt);
             kh.setDiemTichLuy(0);
             kh.setLoaiKhachHang("Tạm");
+
             boolean taoKH = khachHangDAO.them(kh);
             if (!taoKH) {
-                showAlert(Alert.AlertType.ERROR, "Không thể tạo khách hàng tạm!");
+                showAlert(Alert.AlertType.ERROR, "Không thể tạo khách hàng mới!");
                 return;
             }
         }
@@ -353,7 +406,9 @@ public class DatBan_Controller implements Initializable {
                 if (node instanceof Button) {
                     Button btn = (Button) node; // Ép kiểu thủ công
                     if (btn.getText().contains(ban.getMaBan())) {
-                        handleChonBan(ban, btn);
+                    	isFromSearch = true;
+                    	handleChonBan(ban, btn);
+                    	isFromSearch = false;
                         break;
                     }
                 }
