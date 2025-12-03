@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MonAn.MonAn_Controller">
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
@@ -80,14 +80,14 @@
                         <Label layoutX="320.0" layoutY="74.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đơn giá:" />
                         <Label layoutX="25.0" layoutY="124.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khuyến mãi:" />
                         <Label layoutX="320.0" layoutY="124.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại món:" />
-                        <TextField editable="false" layoutX="120.0" layoutY="19.0" prefWidth="175.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField layoutX="120.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField layoutX="400.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <ComboBox layoutX="120.0" layoutY="119.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                        <ComboBox layoutX="400.0" layoutY="119.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                        <Button layoutX="25.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm mới" />
-                        <Button layoutX="250.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
-                        <Button layoutX="160.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
+                        <TextField fx:id="txtMaMon" editable="false" layoutX="120.0" layoutY="19.0" prefWidth="175.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtTenMon" layoutX="120.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtDonGia" layoutX="400.0" layoutY="69.0" prefWidth="175.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <ComboBox fx:id="cmbKM" layoutX="120.0" layoutY="119.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <ComboBox fx:id="cmbLoaiMon" layoutX="400.0" layoutY="119.0" prefWidth="175.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <Button fx:id="btnThem" layoutX="25.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleThemMon" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm mới" />
+                        <Button fx:id="btnSua" layoutX="250.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
+                        <Button fx:id="btnXoa" layoutX="160.0" layoutY="200.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
                      </children>
                   </AnchorPane>
                </center>
