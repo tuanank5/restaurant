@@ -13,7 +13,7 @@
          <children>
             <Label layoutX="5.0" layoutY="75.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Main menu" />
             <Button layoutX="80.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt bàn mới" />
-            <Button layoutX="80.0" layoutY="225.0" mnemonicParsing="false" onAction="#btnDoiHuyBan" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Bàn đặt trước" />
+            <Button layoutX="80.0" layoutY="225.0" mnemonicParsing="false" onAction="#btnDatBanTruoc" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Bàn đặt trước" />
             <Label layoutX="50.0" layoutY="25.0" style="-fx-text-fill: #ffffff;" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Nhà hàng Út Bi" />
             <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="54.0" size="30" />
             <Button layoutX="80.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnKhachHang" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý khách hàng" />

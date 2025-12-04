@@ -162,8 +162,8 @@ public class MenuNV_Controller {
     }
 
     @FXML
-    void btnDoiHuyBan(ActionEvent event) {
-
+    void btnDatBanTruoc(ActionEvent event) {
+    	readyUI("DatBan/DatBan-Truoc");
     }
 
     @FXML
