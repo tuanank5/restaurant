@@ -605,7 +605,7 @@ public class a {
             for (DonDatBan don : dsDon){
 //                LocalDate ngayGioLapDon = don.getNgayGioLapDon().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 
-                Instant instant = don.getNgayGioLapDon().toLocalDate()
+                Instant instant = don.getngayGioLapDon().toLocalDate()
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant();
             	ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
@@ -733,7 +733,7 @@ public class a {
             for (DonDatBan don : dsDon) {
 //                LocalDate ngayLap = don.getNgayGioLapDon().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 
-                Instant instant = don.getNgayGioLapDon().toLocalDate()
+                Instant instant = don.getngayGioLapDon().toLocalDate()
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant();
             	ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
