@@ -61,11 +61,11 @@ public class DonDatBan {
         this.maDatBan = maDatBan;
     }
 
-    public LocalDateTime getngayGioLapDon() {
+    public LocalDateTime getNgayGioLapDon() {
         return ngayGioLapDon;
     }
 
-    public void setngayGioLapDon(LocalDateTime ngayGio) {
+    public void setNgayGioLapDon(LocalDateTime ngayGio) {
         this.ngayGioLapDon = ngayGio;
     }
 

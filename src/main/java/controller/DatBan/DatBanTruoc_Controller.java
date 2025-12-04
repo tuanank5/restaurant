@@ -173,8 +173,8 @@ public class DatBanTruoc_Controller implements Initializable {
         txtSoLuongKH.setText(String.valueOf(soLuong));
 
         // Hiển thị ngày đặt bàn nếu có
-        if (donGanNhat != null && donGanNhat.getngayGioLapDon() != null) {
-            dpNgayDatBan.setValue(donGanNhat.getngayGioLapDon().toLocalDate());
+        if (donGanNhat != null && donGanNhat.getNgayGioLapDon() != null) {
+            dpNgayDatBan.setValue(donGanNhat.getNgayGioLapDon().toLocalDate());
         }
 
         // Hiển thị loại bàn

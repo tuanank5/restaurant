@@ -336,7 +336,7 @@ public class DatBan_Controller implements Initializable {
         don.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
         don.setKhachHang(kh);
         don.setBan(banDangChon);
-        don.setngayGioLapDon(ngayChon.atTime(LocalTime.now()));
+        don.setNgayGioLapDon(ngayChon.atTime(LocalTime.now()));
         don.setSoLuong(Integer.parseInt(txtSoLuongKH.getText().trim()));
         don.setGioBatDau(java.time.LocalTime.parse(cmbGioBatDau.getValue()));
         banDangChon.setTrangThai("Đã được đặt");
@@ -390,7 +390,7 @@ public class DatBan_Controller implements Initializable {
             txtViTri.setText(ban.getViTri());
             txtTrangThai.setText(ban.getTrangThai());
             cmbLoaiBan.setValue(ban.getLoaiBan().getTenLoaiBan());
-            dpNgayDatBan.setValue(donGanNhat.getngayGioLapDon().toLocalDate());
+            dpNgayDatBan.setValue(donGanNhat.getNgayGioLapDon().toLocalDate());
             cmbGioBatDau.setValue(donGanNhat.getGioBatDau().toString());
 
             for (javafx.scene.Node node : gridPaneBan.getChildren()) {

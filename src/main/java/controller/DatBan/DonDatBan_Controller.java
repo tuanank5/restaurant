@@ -1,6 +1,9 @@
 package controller.DatBan;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +100,27 @@ public class DonDatBan_Controller implements Initializable{
 
     @FXML
     void btnTimKiem(ActionEvent event) {
+    	String sdt = txtSDT.getText() != null ? txtSDT.getText().trim() : "";
+        LocalDate ngayChon = dpNgayDatBan.getValue();
 
+        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+        filtered.setPredicate(don -> {
+            if (don == null) return false;
+            //Lọc theo số điện thoại
+            if (!sdt.isEmpty()) {
+                if (don.getKhachHang() == null || don.getKhachHang().getSdt() == null) return false;
+                if (!don.getKhachHang().getSdt().contains(sdt)) return false;
+            }
+            // Lọc theo ngày
+            if (ngayChon != null) {
+                LocalDateTime ngayGio = don.getNgayGioLapDon();
+                if (ngayGio == null) return false;
+                LocalDate ngayDon = ngayGio.toLocalDate();
+                if (!ngayDon.isEqual(ngayChon)) return false;
+            }
+            return true;
+        });
+        tblView.setItems(filtered);
     }
     
     private void khoiTaoComboBoxes() {
@@ -113,7 +136,6 @@ public class DonDatBan_Controller implements Initializable{
                 .getDatabaseContext()
                 .newEntity_DAO(DonDatBan_DAO.class)
                 .getDanhSach(DonDatBan.class, filter);
-
         danhSachDonDatBan.clear();
         danhSachDonDatBan.addAll(danhSachDonDatBanDB);
 
