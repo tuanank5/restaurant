@@ -21,7 +21,6 @@
                   <TableView fx:id="tblView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <columns>
                       <TableColumn fx:id="tblSoBan" prefWidth="75.0" text="Số Bàn" />
-                      <TableColumn fx:id="tblDatMon" prefWidth="75.0" text="Đặt Món" />
                         <TableColumn fx:id="tblGioDen" prefWidth="75.0" text="Giờ Đến" />
                         <TableColumn fx:id="tblKhachHang" prefWidth="75.0" text="Khách Hàng" />
                         <TableColumn fx:id="tblSoNguoi" prefWidth="75.0" text="Số Người" />
