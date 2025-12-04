@@ -22,8 +22,7 @@ public class App extends Application {
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
 		
-		Scene scene = new Scene(root);
-		
+		Scene scene = new Scene(root);		
 //		root.setOnMousePressed((MouseEvent event) ->{
 //			x = event.getSceneX();
 //			y = event.getSceneY();
@@ -37,8 +36,7 @@ public class App extends Application {
 //		
 //		root.setOnMouseReleased((MouseEvent event) ->{
 //			stage.setOpacity(1);
-//		});
-			
+//		});			
 //		stage.initStyle(StageStyle.TRANSPARENT);
 		
 		stage.setScene(scene);
