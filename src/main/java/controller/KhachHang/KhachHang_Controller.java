@@ -67,9 +67,6 @@ public class KhachHang_Controller {
     private TableColumn<KhachHang,String> tblKhachHang;
     
     @FXML
-    private TableColumn<KhachHang, String> tblLoaiKhachHang;
-    
-    @FXML
     private TableColumn<KhachHang,String> tblSoDienThoai;
 
     @FXML
@@ -151,12 +148,8 @@ public class KhachHang_Controller {
                 if (kh.getEmail() != null && kh.getEmail().toLowerCase().contains(lowerCaseFilter)) return true;
                 if (kh.getDiaChi() != null && kh.getDiaChi().toLowerCase().contains(lowerCaseFilter)) return true;
                 if (kh.getDiemTichLuy() != 0 && String.valueOf(kh.getDiemTichLuy()).contains(lowerCaseFilter)) return true;
-
                 HangKhachHang hang = kh.getHangKhachHang();
                 if (hang != null && hang.getTenHang() != null && hang.getTenHang().toLowerCase().contains(lowerCaseFilter)) return true;
-
-                if (kh.getLoaiKhachHang() != null && kh.getLoaiKhachHang().toLowerCase().contains(lowerCaseFilter)) return true;
-
                 return false;
             });
             // Hiển thị phân trang
@@ -238,7 +231,6 @@ public class KhachHang_Controller {
         tblEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tblDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
         tblDiemTichLuy.setCellValueFactory(new PropertyValueFactory<>("diemTichLuy"));
-        tblLoaiKhachHang.setCellValueFactory(new PropertyValueFactory<>("loaiKhachHang"));
         tblHangKH.setCellValueFactory(cellData -> {
             HangKhachHang hang = cellData.getValue().getHangKhachHang();
             return new SimpleStringProperty(hang != null ? hang.getTenHang() : "");

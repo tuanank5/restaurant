@@ -70,9 +70,6 @@ public class ThemKhachHang_Controller {
 
     @FXML
     private TextField txtKhachHang;
-    
-    @FXML
-    private TextField txtLoaiKhachHang;
 
     @FXML
     private TextField txtSDT;
@@ -221,7 +218,6 @@ public class ThemKhachHang_Controller {
         String diaChi = txtDiaChi.getText().trim();
         String diemStr = txtDiemTichLuy.getText().trim();
         String hangKH = comBoxHangKH.getValue();
-        String loaiKhachHang = txtLoaiKhachHang.getText().trim();
         DatabaseContext databaseContext = RestaurantApplication
                 .getInstance()
                 .getDatabaseContext();
@@ -291,12 +287,6 @@ public class ThemKhachHang_Controller {
             comBoxHangKH.requestFocus();
             return null;
         }
-     // Kiểm tra loại khách hàng
-        if (loaiKhachHang.isEmpty()) {
-            showAlert("Cảnh Báo", "Vui lòng nhập loại khách hàng!", Alert.AlertType.WARNING);
-            txtLoaiKhachHang.requestFocus();
-            return null;
-        }
 
         KhachHang kh = new KhachHang();
         kh.setMaKH(AutoIDUitl.phatSinhMaKH()); // quan trọng
@@ -311,7 +301,6 @@ public class ThemKhachHang_Controller {
             .findFirst()
             .orElse(null);
         kh.setHangKhachHang(hang);
-        kh.setLoaiKhachHang(loaiKhachHang);
 
         return kh;
     }

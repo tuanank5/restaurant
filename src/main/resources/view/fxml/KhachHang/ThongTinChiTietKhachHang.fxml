@@ -64,9 +64,8 @@
                <Label layoutX="165.0" layoutY="235.0" text="Email:" />
                <Label layoutX="151.0" layoutY="302.0" text="Địa chỉ:" />
                <Label layoutX="111.0" layoutY="358.0" text="Hạng khách hàng:" />
-               <Label layoutX="129.0" layoutY="410.0" text="Điểm tích luỹ:" />
+               <Label layoutX="129.0" layoutY="417.0" text="Điểm tích luỹ:" />
                   <Label layoutX="115.0" layoutY="40.0" text="Mã khách hàng: " />
-                  <Label layoutX="112.0" layoutY="464.0" text="Loại Khách Hàng:" />
             </children>
                <BorderPane.margin>
                   <Insets left="50.0" />
@@ -80,10 +79,9 @@
                <TextField fx:id="txtSDT" layoutX="15.0" layoutY="164.0" prefHeight="25.0" prefWidth="300.0" />
                <TextField fx:id="txtEmail" layoutX="15.0" layoutY="227.0" prefHeight="25.0" prefWidth="300.0" />
                <TextField fx:id="txtDiaChi" layoutX="15.0" layoutY="298.0" prefHeight="25.0" prefWidth="300.0" />
-               <TextField fx:id="txtDiemTichLuy" layoutX="15.0" layoutY="403.0" prefHeight="25.0" prefWidth="300.0" />
+               <TextField fx:id="txtDiemTichLuy" layoutX="15.0" layoutY="412.0" prefHeight="25.0" prefWidth="300.0" />
                <ComboBox fx:id="comBoxHangKH" layoutX="15.0" layoutY="354.0" prefWidth="300.0" />
                   <TextField fx:id="txtMaKH" layoutX="15.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" />
-                  <TextField fx:id="txtLoaiKhachHang" layoutX="15.0" layoutY="458.0" prefHeight="25.0" prefWidth="300.0" />
             </children>
                <BorderPane.margin>
                   <Insets right="50.0" />

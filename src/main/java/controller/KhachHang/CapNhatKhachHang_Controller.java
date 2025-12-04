@@ -64,9 +64,6 @@ public class CapNhatKhachHang_Controller {
 
     @FXML
     private TextField txtMaKH;
-    
-    @FXML
-    private TextField txtLoaiKhachHang;
 
     @FXML
     private TextField txtSDT;
@@ -221,7 +218,6 @@ public class CapNhatKhachHang_Controller {
             txtEmail.setText(khachHang.getEmail());
             txtDiaChi.setText(khachHang.getDiaChi());
             txtDiemTichLuy.setText(String.valueOf(khachHang.getDiemTichLuy()));
-            txtLoaiKhachHang.setText(khachHang.getLoaiKhachHang());
             HangKhachHang hang = khachHang.getHangKhachHang();
         	if(hang != null) {
         		comBoxHangKH.setValue(hang.getTenHang());
@@ -242,7 +238,6 @@ public class CapNhatKhachHang_Controller {
         String diaChi = txtDiaChi.getText().trim();
         String diemStr = txtDiemTichLuy.getText().trim();
         String hangKH = comBoxHangKH.getValue();
-        String loaiKhachHang = txtLoaiKhachHang.getText().trim();
 
         //Kiểm tra các trường bắt buộc
         if (tenKH.isEmpty()) {
@@ -282,12 +277,6 @@ public class CapNhatKhachHang_Controller {
             return null;
         }
         
-        if (loaiKhachHang.isEmpty()) {
-            showAlert("Cảnh báo", "Vui lòng nhập loại khách hàng!", Alert.AlertType.WARNING);
-            txtLoaiKhachHang.requestFocus();
-            return null;
-        }
-        
         int diemTichLuy = 0;
         if (!diemStr.isEmpty()) {
             try {
@@ -315,7 +304,6 @@ public class CapNhatKhachHang_Controller {
         kh.setEmail(email);
         kh.setDiaChi(diaChi);
         kh.setDiemTichLuy(diemTichLuy);
-        kh.setLoaiKhachHang(loaiKhachHang); 
         HangKhachHang hang = danhSachHangKhachHangDB.stream()
                 .filter(h -> h.getTenHang().equals(hangKH))
                 .findFirst()
@@ -337,26 +325,6 @@ public class CapNhatKhachHang_Controller {
         }
         comBoxHangKH.getSelectionModel().selectFirst();
     }
-    
-//    private void loadData() {
-//        Map<String,Object> filter = new HashMap<>();
-//        danhSachHangKhachHangDB = RestaurantApplication.getInstance()
-//                .getDatabaseContext()
-//                .newEntity_DAO(HangKhachHang_DAO.class)
-//                .getDanhSach(HangKhachHang.class, filter);
-//        comBoxHangKH.getItems().clear();
-//        // Dùng Set để loại trùng tên hạng
-//        Set<String> tenHangSet = new HashSet<>();
-//        for (HangKhachHang hang : danhSachHangKhachHangDB) {
-//            tenHangSet.add(hang.getTenHang());
-//        }
-//        ObservableList<String> listTen = FXCollections.observableArrayList(tenHangSet);
-//        // Load lên ComboBox
-//        comBoxHangKH.setItems(listTen);
-//        if (!listTen.isEmpty()) {
-//            comBoxHangKH.getSelectionModel().selectFirst();
-//        }
-//    }
    
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);

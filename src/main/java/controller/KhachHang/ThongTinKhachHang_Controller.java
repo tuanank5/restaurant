@@ -57,9 +57,6 @@ public class ThongTinKhachHang_Controller {
     private TextField txtEmail;
     
     @FXML
-    private TextField txtLoaiKhachHang;
-    
-    @FXML
     private TextField txtMaKH;
 
     @FXML
@@ -118,7 +115,6 @@ public class ThongTinKhachHang_Controller {
         	txtEmail.setText(khachHang.getEmail());
         	txtDiaChi.setText(khachHang.getDiaChi());
         	txtDiemTichLuy.setText(String.valueOf(khachHang.getDiemTichLuy()));
-        	txtLoaiKhachHang.setText(khachHang.getLoaiKhachHang());
         	HangKhachHang hang = khachHang.getHangKhachHang();
         	if(hang != null) {
         		comBoxHangKH.setValue(hang.getTenHang());

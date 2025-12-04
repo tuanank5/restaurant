@@ -317,25 +317,11 @@ public class DatBan_Controller implements Initializable {
         }
 
         String sdt = txtSDT.getText().trim();
-        String tenKhach = txtTenKH.getText().trim();
         KhachHang kh = khachHangDAO.timTheoSDT(sdt);
 
         if (kh == null) {
-            if (tenKhach.isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Vui lòng nhập tên khách hàng và số điện thoại để tạo mới!");
-                return;
-            }
-
-            kh = new KhachHang();
-            kh.setMaKH(AutoIDUitl.phatSinhMaKH());
-            kh.setTenKH(tenKhach);
-            kh.setSdt(sdt);
-            kh.setDiemTichLuy(0);
-            kh.setLoaiKhachHang("Tạm");
-
-            boolean taoKH = khachHangDAO.them(kh);
-            if (!taoKH) {
-                showAlert(Alert.AlertType.ERROR, "Không thể tạo khách hàng mới!");
+            if (sdt.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Vui lòng nhập số điện thoại của khách hàng!");
                 return;
             }
         }

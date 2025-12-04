@@ -43,9 +43,6 @@ public class KhachHang {
     @Column(name = "diemTichLuy")
     private int diemTichLuy;
 
-    @Column(name = "LoaiKhachHang", length = 50)
-    private String loaiKhachHang;
-
     @ManyToOne
     @JoinColumn(name = "maHang", referencedColumnName = "maHang", nullable = true)
     private HangKhachHang hangKhachHang;
@@ -58,14 +55,13 @@ public class KhachHang {
     }
 
     public KhachHang(String maKH, String tenKH, String sdt, String email, String diaChi,
-                     int diemTichLuy, String loaiKhachHang, HangKhachHang hangKhachHang) {
+                     int diemTichLuy, HangKhachHang hangKhachHang) {
         this.maKH = maKH;
         this.tenKH = tenKH;
         this.sdt = sdt;
         this.email = email;
         this.diaChi = diaChi;
         this.diemTichLuy = diemTichLuy;
-        this.loaiKhachHang = loaiKhachHang;
         this.hangKhachHang = hangKhachHang;
     }
 
@@ -119,14 +115,6 @@ public class KhachHang {
         this.diemTichLuy = diemTichLuy;
     }
 
-    public String getLoaiKhachHang() {
-        return loaiKhachHang;
-    }
-
-    public void setLoaiKhachHang(String loaiKhachHang) {
-        this.loaiKhachHang = loaiKhachHang;
-    }
-
     public HangKhachHang getHangKhachHang() {
         return hangKhachHang;
     }
@@ -138,7 +126,7 @@ public class KhachHang {
 	@Override
 	public String toString() {
 		return "KhachHang [maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt + ", email=" + email + ", diaChi="
-				+ diaChi + ", diemTichLuy=" + diemTichLuy + ", loaiKhachHang=" + loaiKhachHang + ", hangKhachHang="
+				+ diaChi + ", diemTichLuy=" + diemTichLuy + ", hangKhachHang="
 				+ hangKhachHang + ", danhSachDon=" + danhSachDon + "]";
 	}
 	
