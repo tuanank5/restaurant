@@ -163,7 +163,7 @@ public class MenuNV_Controller {
 
     @FXML
     void btnDatBanTruoc(ActionEvent event) {
-    	readyUI("DatBan/DatBan-Truoc");
+    	readyUI("DatBan/DonDatBan");
     }
 
     @FXML
