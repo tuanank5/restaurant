@@ -336,10 +336,9 @@ public class DatBan_Controller implements Initializable {
         don.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
         don.setKhachHang(kh);
         don.setBan(banDangChon);
-        don.setNgayGioLapDon(java.sql.Date.valueOf(ngayChon));
+        don.setngayGioLapDon(ngayChon.atTime(LocalTime.now()));
         don.setSoLuong(Integer.parseInt(txtSoLuongKH.getText().trim()));
         don.setGioBatDau(java.time.LocalTime.parse(cmbGioBatDau.getValue()));
-        don.setGioKetThuc(java.time.LocalTime.parse(cmbGioKetThuc.getValue()));
         banDangChon.setTrangThai("Đã được đặt");
 
         boolean thanhCong = donDatBanDAO.them(don);
@@ -391,9 +390,8 @@ public class DatBan_Controller implements Initializable {
             txtViTri.setText(ban.getViTri());
             txtTrangThai.setText(ban.getTrangThai());
             cmbLoaiBan.setValue(ban.getLoaiBan().getTenLoaiBan());
-            dpNgayDatBan.setValue(donGanNhat.getNgayGioLapDon().toLocalDate());
+            dpNgayDatBan.setValue(donGanNhat.getngayGioLapDon().toLocalDate());
             cmbGioBatDau.setValue(donGanNhat.getGioBatDau().toString());
-            cmbGioKetThuc.setValue(donGanNhat.getGioKetThuc().toString());
 
             for (javafx.scene.Node node : gridPaneBan.getChildren()) {
                 if (node instanceof Button) {

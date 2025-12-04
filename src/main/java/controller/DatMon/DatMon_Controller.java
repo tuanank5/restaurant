@@ -389,7 +389,7 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
             if (kh != null) {
                 txtMaKH.setText(kh.getMaKH());
             }
-            dpNgayDatBan.setValue(donDatBanHienTai.getNgayGioLapDon().toLocalDate());
+            dpNgayDatBan.setValue(donDatBanHienTai.getngayGioLapDon().toLocalDate());
         } else if (banDangChon != null) {
         	txtMaBan.setText(banDangChon.getMaBan()); // Tránh việc chỉ hiển thị mã bàn không thấy mã KH
             // fallback lấy bàn nếu chưa set donDatBanHienTai
@@ -397,7 +397,7 @@ private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
             if (donDat != null && donDat.getKhachHang() != null) {
                 KhachHang kh = donDat.getKhachHang();
                 txtMaKH.setText(kh.getMaKH());
-                dpNgayDatBan.setValue(donDat.getNgayGioLapDon().toLocalDate());
+                dpNgayDatBan.setValue(donDat.getngayGioLapDon().toLocalDate());
             }
         }
     }

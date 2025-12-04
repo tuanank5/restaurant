@@ -1,6 +1,6 @@
 package entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import jakarta.persistence.Column;
@@ -13,13 +13,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "DonDatBan")
 public class DonDatBan {
+
     @Id
     @Column(name = "maDatBan", nullable = false, length = 20)
     private String maDatBan;
 
-    // sao thêm chữ LapDon vậy
     @Column(name = "ngayGio", nullable = false)
-    private Date ngayGioLapDon;
+    private LocalDateTime ngayGioLapDon;   // đúng với SQL
 
     @Column(name = "soLuong", nullable = false)
     private int soLuong;
@@ -32,21 +32,25 @@ public class DonDatBan {
     @JoinColumn(name = "maBan", referencedColumnName = "maBan", nullable = false)
     private Ban ban;
 
-	@Column(name = "gioBatDau")
+    @Column(name = "gioBatDau")
     private LocalTime gioBatDau;
 
-    @Column(name = "gioKetThuc")
-    private LocalTime gioKetThuc;
+    // ❌ ĐÃ BỎ: gioKetThuc vì SQL đã xóa
+
+    @Column(name = "trangThai")
+    private String trangThai; // mới thêm trong SQL
 
     public DonDatBan() {
     }
 
-    public DonDatBan(String maDatBan, Date ngayGioLapDon, int soLuong, KhachHang khachHang, Ban ban) {
+    public DonDatBan(String maDatBan, LocalDateTime ngayGioLapDon, int soLuong, 
+                     KhachHang khachHang, Ban ban, String trangThai) {
         this.maDatBan = maDatBan;
         this.ngayGioLapDon = ngayGioLapDon;
         this.soLuong = soLuong;
         this.khachHang = khachHang;
         this.ban = ban;
+        this.trangThai = trangThai;
     }
 
     public String getMaDatBan() {
@@ -57,12 +61,12 @@ public class DonDatBan {
         this.maDatBan = maDatBan;
     }
 
-    public Date getNgayGioLapDon() {
+    public LocalDateTime getngayGioLapDon() {
         return ngayGioLapDon;
     }
 
-    public void setNgayGioLapDon(Date ngayGioLapDon) {
-        this.ngayGioLapDon = ngayGioLapDon;
+    public void setngayGioLapDon(LocalDateTime ngayGio) {
+        this.ngayGioLapDon = ngayGio;
     }
 
     public int getSoLuong() {
@@ -88,7 +92,7 @@ public class DonDatBan {
     public void setBan(Ban ban) {
         this.ban = ban;
     }
-    
+
     public LocalTime getGioBatDau() {
         return gioBatDau;
     }
@@ -97,78 +101,19 @@ public class DonDatBan {
         this.gioBatDau = gioBatDau;
     }
 
-    public LocalTime getGioKetThuc() {
-        return gioKetThuc;
+    public String getTrangThai() {
+        return trangThai;
     }
 
-    public void setGioKetThuc(LocalTime gioKetThuc) {
-        this.gioKetThuc = gioKetThuc;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
     }
 
-	@Override
-	public String toString() {
-		return "DonDatBan [maDatBan=" + maDatBan + ", ngayGioLapDon=" + ngayGioLapDon + ", soLuong=" + soLuong
-				+ ", khachHang=" + khachHang + ", ban=" + ban + ", gioBatDau=" + gioBatDau + ", gioKetThuc="
-				+ gioKetThuc + "]";
-	}
+    @Override
+    public String toString() {
+        return "DonDatBan [maDatBan=" + maDatBan + ", ngayGio=" + ngayGioLapDon + ", soLuong=" + soLuong
+                + ", khachHang=" + khachHang + ", ban=" + ban + ", gioBatDau="
+                + gioBatDau + ", trangThai=" + trangThai + "]";
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((ban == null) ? 0 : ban.hashCode());
-		result = prime * result + ((gioBatDau == null) ? 0 : gioBatDau.hashCode());
-		result = prime * result + ((gioKetThuc == null) ? 0 : gioKetThuc.hashCode());
-		result = prime * result + ((khachHang == null) ? 0 : khachHang.hashCode());
-		result = prime * result + ((maDatBan == null) ? 0 : maDatBan.hashCode());
-		result = prime * result + ((ngayGioLapDon == null) ? 0 : ngayGioLapDon.hashCode());
-		result = prime * result + soLuong;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DonDatBan other = (DonDatBan) obj;
-		if (ban == null) {
-			if (other.ban != null)
-				return false;
-		} else if (!ban.equals(other.ban))
-			return false;
-		if (gioBatDau == null) {
-			if (other.gioBatDau != null)
-				return false;
-		} else if (!gioBatDau.equals(other.gioBatDau))
-			return false;
-		if (gioKetThuc == null) {
-			if (other.gioKetThuc != null)
-				return false;
-		} else if (!gioKetThuc.equals(other.gioKetThuc))
-			return false;
-		if (khachHang == null) {
-			if (other.khachHang != null)
-				return false;
-		} else if (!khachHang.equals(other.khachHang))
-			return false;
-		if (maDatBan == null) {
-			if (other.maDatBan != null)
-				return false;
-		} else if (!maDatBan.equals(other.maDatBan))
-			return false;
-		if (ngayGioLapDon == null) {
-			if (other.ngayGioLapDon != null)
-				return false;
-		} else if (!ngayGioLapDon.equals(other.ngayGioLapDon))
-			return false;
-		if (soLuong != other.soLuong)
-			return false;
-		return true;
-	}
-
-    
 }

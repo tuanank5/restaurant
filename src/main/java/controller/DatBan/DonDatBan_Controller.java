@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
 import entity.Ban;
+import entity.DonDatBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,7 +45,7 @@ public class DonDatBan_Controller implements Initializable{
     private TableColumn<?, ?> tblTrangThai;
 
     @FXML
-    private TableView<?> tblView;
+    private TableView<DonDatBan> tblView;
 
     @FXML
     private TextField txtSDT;
