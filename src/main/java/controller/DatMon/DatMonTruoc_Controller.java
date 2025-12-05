@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import dao.impl.ChiTietHoaDon_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
 import controller.Menu.MenuNV_Controller;
 import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
@@ -24,6 +26,7 @@ import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
+import entity.NhanVien;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -327,7 +330,151 @@ public class DatMonTruoc_Controller implements Initializable{
 
     @FXML
     private void btnXacNhan(ActionEvent event) {
+        String tenKH = txtKH.getText() == null ? "" : txtKH.getText().trim();
+        String sdt = txtSdt.getText() == null ? "" : txtSdt.getText().trim();
+        if (tenKH.isEmpty() && sdt.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Vui lòng nhập tên hoặc số điện thoại khách hàng.");
+            return;
+        }
+        if (dsMonAnDat.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Danh sách món đặt trống.");
+            return;
+        }
+        if (danhSachBanChonStatic == null || danhSachBanChonStatic.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Chưa chọn bàn để đặt.");
+            return;
+        }
 
+        int soLuongKH = 1;
+        try {
+            soLuongKH = Integer.parseInt(txtSoLuongKH.getText().trim());
+            if (soLuongKH <= 0) soLuongKH = 1;
+        } catch (Exception e) {
+            soLuongKH = 1;
+        }
+        
+        HoaDon_DAOImpl hoaDonDAO = new HoaDon_DAOImpl();
+        ChiTietHoaDon_DAOImpl cthdDAO = new ChiTietHoaDon_DAOImpl();
+        try {
+            //Tìm hoặc tạo khách hàng
+            KhachHang kh = null;
+            try {
+                kh = khachHangDAO.timTheoSDT(sdt); 
+            } catch (NoSuchMethodError | NoClassDefFoundError ex) {
+                kh = null;
+            } catch (Exception ex) {
+                kh = null;
+            }
+
+            if (kh == null) {
+                kh = new KhachHang();
+                kh.setMaKH(util.AutoIDUitl.phatSinhMaKH());
+                kh.setTenKH(tenKH.isEmpty() ? "Khách lẻ" : tenKH);
+                kh.setSdt(sdt);
+                kh.setDiaChi("");
+                kh.setDiemTichLuy(0);
+                //kh.setMaHang(null);
+                boolean okKh = khachHangDAO.them(kh);
+                if (!okKh) {
+                    showAlert(Alert.AlertType.ERROR, "Không thể lưu thông tin khách hàng.");
+                    return;
+                }
+            }
+            //Tạo DonDatBan cho từng bàn được chọn
+            List<DonDatBan> danhSachDatBanDaTao = new ArrayList<>();
+            for (Ban ban : danhSachBanChonStatic) {
+                DonDatBan ddb = new DonDatBan();
+                ddb.setMaDatBan(util.AutoIDUitl.sinhMaDonDatBan());
+                try {
+                    ddb.setNgayGioLapDon(java.time.LocalDateTime.now());
+                } catch (NoSuchMethodError ignore) {
+                	
+                }
+                ddb.setSoLuong(soLuongKH);
+                try {
+                    ddb.setKhachHang(kh);
+                } catch (NoSuchMethodError ignore) {
+                	ddb.setKhachHang(kh); // nếu entity chỉ có setMaKH
+                }
+                try {
+                    ddb.setBan(ban);
+                } catch (NoSuchMethodError ignore) {
+                    ddb.setMaDatBan(ban.getMaBan());
+                }
+                try {
+                    ddb.setGioBatDau(LocalTime.now()); // nếu entity dùng java.time
+                } catch (Exception ignore) {
+                    try { 
+                    	ddb.setGioBatDau(LocalTime.now());
+                    } catch (Exception e) {
+                    	
+                    }
+                }
+                ddb.setTrangThai("Chưa Nhận Bàn");
+                boolean okDDB = donDatBanDAO.them(ddb);
+                if (!okDDB) {
+                    showAlert(Alert.AlertType.ERROR, "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan());
+                    return;
+                }
+                danhSachDatBanDaTao.add(ddb);
+            }
+            //Tạo HOÁ ĐƠN (một hóa đơn tổng cho toàn bộ đơn đặt)
+            double tongTien = 0.0;
+            for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
+                tongTien += e.getKey().getDonGia() * e.getValue();
+            }
+            
+            NhanVien nv = new NhanVien();
+            HoaDon hd = new HoaDon();
+            hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
+            hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
+            hd.setTongTien(tongTien);
+            hd.setThue(0.0);
+            hd.setTrangThai("Chưa Thanh Toán");
+            hd.setKieuThanhToan("");
+            hd.setTienNhan(0.0);
+            hd.setTienThua(0.0);
+            hd.setKhachHang(kh);
+            hd.setKhuyenMai(null);
+            hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+            hd.setBan(danhSachBanChonStatic.get(0)); 
+            boolean okHD = hoaDonDAO.them(hd);
+            if (!okHD) {
+                showAlert(Alert.AlertType.ERROR, "Không thể lưu hóa đơn.");
+                return;
+            }         
+            //ChiTietHoaDon cho từng món
+            for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
+                MonAn m = e.getKey();
+                int sl = e.getValue();
+                ChiTietHoaDon cthd = new ChiTietHoaDon();
+                cthd.setHoaDon(hd);
+                cthd.setMonAn(m);
+                cthd.setSoLuong(sl);
+                cthd.setThanhTien(m.getDonGia() * sl);
+                boolean okCT = cthdDAO.themChiTiet(cthd);
+                if (!okCT) {
+                    showAlert(Alert.AlertType.ERROR,
+                            "Lỗi khi lưu chi tiết hoá đơn cho món " + m.getTenMon());
+                    return;
+                }
+            }
+            //Thành công thông báo và reset UI
+            showAlert(Alert.AlertType.INFORMATION, "Đặt món thành công. Hóa đơn được lưu ở trạng thái 'Chưa Thanh Toán'.");
+            // reset
+            dsMonAnDat.clear();
+            tblDS.setItems(FXCollections.observableArrayList());
+            tblDS.refresh();
+            txtKH.clear();
+            txtSdt.clear();
+            txtSoLuongKH.setText("1");
+            // nếu bạn muốn chuyển UI sang màn hình quản lý đơn đặt, gọi:
+            // MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Đã có lỗi: " + ex.getMessage());
+        }
     }
     
     private void showAlert(Alert.AlertType type, String msg) {

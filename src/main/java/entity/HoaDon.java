@@ -59,7 +59,7 @@ public class HoaDon {
     private KhachHang khachHang;
 
     @ManyToOne
-    @JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = false)
+    @JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = true)
     private KhuyenMai khuyenMai;
     
     @ManyToOne
@@ -71,7 +71,7 @@ public class HoaDon {
     private Ban ban;
     
     @ManyToOne
-    @JoinColumn(name = "maCoc", referencedColumnName = "maCoc", nullable = false)
+    @JoinColumn(name = "maCoc", referencedColumnName = "maCoc", nullable = true)
     private Coc coc;
     
     public HoaDon() {

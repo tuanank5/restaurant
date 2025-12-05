@@ -15,6 +15,22 @@ import entity.KhachHang;
 import entity.MonAn;
 
 public class AutoIDUitl {
+	private static int extractNumber(String id) {
+        if (id == null) return 0;
+
+        String number = id.replaceAll("\\D+", "");  // giữ lại số
+        if (number.isEmpty()) return 0;
+
+        try {
+            return Integer.parseInt(number);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+	
+	private static String formatID(String prefix, int number, int digits) {
+        return prefix + String.format("%0" + digits + "d", number);
+    }
 	
 	public static String sinhMaBan() {
 	    Ban_DAO banDAO = RestaurantApplication.getInstance()
@@ -116,22 +132,14 @@ public class AutoIDUitl {
 	}	
 
 	public static String sinhMaHoaDon() {
-		HoaDon_DAO hdDAO = RestaurantApplication.getInstance()
-	            .getDatabaseContext()
-	            .newEntity_DAO(HoaDon_DAO.class);
+        HoaDon_DAO hdDAO = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(HoaDon_DAO.class);
 
-	    String max = hdDAO.getMaxMaHoaDon(); // ví dụ: HD0042
+        String max = hdDAO.getMaxMaHoaDon();
+        int next = extractNumber(max) + 1;
 
-	    if (max == null) {
-	        return "HD0001";
-	    }
-
-	    try {
-	        int so = Integer.parseInt(max.substring(2)); // HD0042 -> 42
-	        return "HD" + String.format("%04d", so + 1);
-	    } catch (Exception e) {
-	        return "HD0001";
-	    }
-	}
+        return formatID("HD", next, 4);
+    }
 
 }
