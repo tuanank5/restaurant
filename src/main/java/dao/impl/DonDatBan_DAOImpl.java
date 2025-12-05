@@ -359,4 +359,5 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	        em.close();
 	    }
 	}
+	
 }

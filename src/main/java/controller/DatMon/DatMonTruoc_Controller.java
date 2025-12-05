@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
+import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
 import dao.MonAn_DAO;
@@ -18,7 +19,9 @@ import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.DonDatBan;
+import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -79,9 +82,8 @@ public class DatMonTruoc_Controller implements Initializable{
     
     @FXML
     private GridPane gridPaneMon;
-    
     public static Ban banChonStatic;
-    public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
+   public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
@@ -90,7 +92,15 @@ public class DatMonTruoc_Controller implements Initializable{
     private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
     
     @Override
-    public void initialize(URL location, ResourceBundle resources) {   	 
+    public void initialize(URL location, ResourceBundle resources) { 
+    	if (danhSachBanChonStatic != null && !danhSachBanChonStatic.isEmpty()) {
+            System.out.println("Số bàn được chọn: " + danhSachBanChonStatic.size());
+            
+            // Ví dụ hiển thị lên UI
+            for (Ban b : danhSachBanChonStatic) {
+                System.out.println("Bàn: " + b.getMaBan());
+            }
+        }
     	 //Lấy danh sách món ăn từ database
         dsMonAn = monAnDAO.getDanhSachMonAn();
         //Khởi tạo ComboBox phân loại dựa trên dsMonAn
@@ -104,9 +114,9 @@ public class DatMonTruoc_Controller implements Initializable{
         });
         colSTT.setCellValueFactory(col -> 
         new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
-    colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
-    colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-    colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
+        	colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
+	        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
+	        colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
         @Override
         protected void updateItem(Double item, boolean empty) {
             super.updateItem(item, empty);
@@ -317,7 +327,7 @@ public class DatMonTruoc_Controller implements Initializable{
 
     @FXML
     private void btnXacNhan(ActionEvent event) {
-    	
+
     }
     
     private void showAlert(Alert.AlertType type, String msg) {

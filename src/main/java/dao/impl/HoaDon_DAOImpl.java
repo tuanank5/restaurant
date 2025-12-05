@@ -10,6 +10,7 @@ import dao.HoaDon_DAO;
 import entity.HoaDon;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
@@ -22,6 +23,24 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
         return emf.createEntityManager();
     }
 	
+	@Override
+	public boolean themHoaDon(HoaDon hoaDon) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+			try {
+	            tx.begin();
+	            em.persist(hoaDon);
+	            tx.commit();
+	            return true;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            if (tx.isActive()) tx.rollback();
+	            return false;
+	        } finally {
+	            em.close();
+	        }
+	    }
+	 
     @Override
     public long tongSoHoaDon() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();

@@ -8,7 +8,7 @@ import entity.HoaDon;
 
 public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 	long tongSoHoaDon();
-
+	boolean themHoaDon(HoaDon hoaDon);
     List<HoaDon> getAllHoaDons();
 
     List<HoaDon> getAllHoaDonTheoThang(int thang, int nam);

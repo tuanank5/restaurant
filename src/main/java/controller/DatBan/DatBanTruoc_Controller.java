@@ -77,7 +77,6 @@ public class DatBanTruoc_Controller implements Initializable {
             alert.showAndWait();
             return;
         }
-
         //Kiểm tra đã chọn giờ chưa
         String gioDat = cmbGioBatDau.getValue(); // Lấy giá trị chọn từ ComboBox
         if (gioDat == null || gioDat.isEmpty()) {
@@ -172,26 +171,6 @@ public class DatBanTruoc_Controller implements Initializable {
         // Cập nhật tổng số bàn được chọn lên txtSoBan
         txtSoBan.setText(String.valueOf(danhSachBanDangChon.size()));
     }
-
-//    private void handleChonBan(Ban ban, Button btnBan) {
-//
-//        // Nếu bàn bận không cho chọn vào danh sách ghép
-//        if (!"Trống".equals(ban.getTrangThai())) {
-//            showAlert(Alert.AlertType.WARNING, "Bàn không trống! Không thể chọn ghép.");
-//            return;
-//        }
-//        // Nếu đã chọn bỏ chọn
-//        if (dsBanChon.contains(ban)) {
-//            dsBanChon.remove(ban);
-//            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-//        } else {
-//            dsBanChon.add(ban);
-//            btnBan.setStyle("-fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold;");
-//        }
-//        banDangChon = ban; // Gán bàn cuối cùng đang chọn
-//        buttonBanDangChonUI = btnBan;
-//        btnBan.setDisable(dsBanChon.isEmpty());
-//    }
 
     
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
