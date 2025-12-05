@@ -1,0 +1,17 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.button_Ban{
+	-fx-font-family: "Times New Roman";
+	-fx-font-size: 14px;
+	-fx-text-fill : white;
+	-fx-font-weight: BOLD ;
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);
+	-fx-background-radius: 15;
+}
+.ban-selected {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 20, 0.3, 0, 0);
+    -fx-scale-x: 1.07;
+    -fx-scale-y: 1.07;
+    -fx-font-weight: bold;
+}
+
