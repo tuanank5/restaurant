@@ -107,16 +107,10 @@
 </Pane>
 </center>
 <left>
-<Pane prefHeight="80.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+<Pane prefHeight="80.0" prefWidth="145.0" BorderPane.alignment="CENTER">
 <children>
-<Label layoutX="10.0" layoutY="15.0" text="SỐ LƯỢNG KHÁCH HÀNG">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Label>
-<TextField fx:id="txtSoLuongKH" layoutX="10.0" layoutY="40.0" />
-<ComboBox fx:id="cmbLoaiBan" layoutX="170.0" layoutY="40.0" prefWidth="120.0" />
-<Label layoutX="170.0" layoutY="15.0" text="LOẠI BÀN">
+<ComboBox fx:id="cmbLoaiBan" layoutX="14.0" layoutY="40.0" prefWidth="120.0" />
+<Label layoutX="14.0" layoutY="14.0" text="LOẠI BÀN">
 <font>
 <Font name="System Bold" size="12.0" />
 </font>

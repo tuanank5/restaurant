@@ -8,6 +8,7 @@ import entity.Ban;
 import entity.DonDatBan;
 import entity.KhachHang;
 import entity.LoaiBan;
+import entity.MonAn;
 
 public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
 	DonDatBan layDonDatTheoBan(String maBan);

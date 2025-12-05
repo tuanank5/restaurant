@@ -2,6 +2,7 @@ package controller.DatMon;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,9 +18,12 @@ import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
+import entity.DonDatBan;
+import entity.KhachHang;
 import entity.MonAn;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -43,13 +47,6 @@ import javafx.scene.layout.VBox;
  
 
 public class DatMonTruoc_Controller implements Initializable{
-
-    @FXML
-    private Button btnHuy;
-
-    @FXML
-    private Button btnXacNhan;
-
     @FXML
     private TextField txtTim;
     
@@ -84,37 +81,29 @@ public class DatMonTruoc_Controller implements Initializable{
     private GridPane gridPaneMon;
     
     public static Ban banChonStatic;
-    
-
+    public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-
     private List<MonAn> dsMonAn;
 
     private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
     
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    	 
-    	 // 1. Lấy danh sách món ăn từ database
+    public void initialize(URL location, ResourceBundle resources) {   	 
+    	 //Lấy danh sách món ăn từ database
         dsMonAn = monAnDAO.getDanhSachMonAn();
-
-        // 2. Khởi tạo ComboBox phân loại dựa trên dsMonAn
-        khoiTaoComboBoxPhanLoai();
-        
-        // 3 Hiển thị món ăn lên GridPane
+        //Khởi tạo ComboBox phân loại dựa trên dsMonAn
+        khoiTaoComboBoxPhanLoai();        
+        //Hiển thị món ăn lên GridPane
         if (dsMonAn != null && !dsMonAn.isEmpty()) {
             loadMonAnToGrid(dsMonAn);
         }
         txtTim.textProperty().addListener((observable, oldValue, newValue) -> {
             timMonTheoTen();
         });
-
-
         colSTT.setCellValueFactory(col -> 
         new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
-
     colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
     colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
     colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
@@ -128,13 +117,13 @@ public class DatMonTruoc_Controller implements Initializable{
             }
         }
     });
-
+    
     // Số lượng
     colSoLuong.setCellValueFactory(col -> {
         Integer soLuong = dsMonAnDat.get(col.getValue());
         return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
     });
-
+    
     // Khởi tạo TableView rỗng
     tblDS.setItems(FXCollections.observableArrayList());
     }
@@ -291,14 +280,51 @@ public class DatMonTruoc_Controller implements Initializable{
                 }
             }
         } else {
-            // Thêm món mới
+            //Thêm món mới
             dsMonAnDat.put(mon, 1);
         }
 
-        // **CẬP NHẬT TABLEVIEW**
+        //CẬP NHẬT TABLEVIEW
         tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
         tblDS.refresh();
     }
 
+    @FXML
+    void btnGiamKH(ActionEvent event) {
+    	try {
+	        int sl = Integer.parseInt(txtSoLuongKH.getText());
+	        if (sl > 1)
+	            txtSoLuongKH.setText(String.valueOf(sl - 1));
+	    } catch (Exception e) {
+	        txtSoLuongKH.setText("1");
+	    }
+    }
+
+    @FXML
+    void btnHuy(ActionEvent event) {
+    	MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
+    }
+
+    @FXML
+    void btnTangKH(ActionEvent event) {
+    	try {
+            int sl = Integer.parseInt(txtSoLuongKH.getText());
+            txtSoLuongKH.setText(String.valueOf(sl + 1));
+        } catch (Exception e) {
+            txtSoLuongKH.setText("1");
+        }
+    }
+
+    @FXML
+    private void btnXacNhan(ActionEvent event) {
+    	
+    }
     
+    private void showAlert(Alert.AlertType type, String msg) {
+        Alert alert = new Alert(type);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
 }
