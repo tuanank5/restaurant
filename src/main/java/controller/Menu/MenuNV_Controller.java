@@ -158,7 +158,7 @@ public class MenuNV_Controller {
 
     @FXML
     void btnDatBan(ActionEvent event) {
-    	readyUI("DatBan/DatBan-test");
+    	readyUI("DatBan/aBanHienTai");
     }
 
     @FXML
