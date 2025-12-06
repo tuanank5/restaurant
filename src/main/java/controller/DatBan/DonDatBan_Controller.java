@@ -24,6 +24,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -65,10 +66,18 @@ public class DonDatBan_Controller implements Initializable{
     @FXML
     private TextField txtTongDonDat;
     
+    private DonDatBan donDangChon;
+
+    
     private ObservableList<DonDatBan> danhSachDonDatBan = FXCollections.observableArrayList();
     private List<DonDatBan> danhSachDonDatBanDB;
     private final int LIMIT = 15;
     private String status = "all";
+    
+    private void capNhatTongDon() {
+        txtTongDonDat.setText(String.valueOf(tblView.getItems().size()));
+    }
+
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -76,6 +85,17 @@ public class DonDatBan_Controller implements Initializable{
 		khoiTaoComboBoxes();
 		setValueTable();
         loadData();
+        
+        tblView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            donDangChon = newVal;
+        });
+        
+        tblView.getItems().addListener((javafx.collections.ListChangeListener.Change<? extends DonDatBan> change) -> {
+            capNhatTongDon();
+        });
+
+        // cập nhật lần đầu
+        capNhatTongDon();
 	}
     
     @FXML
@@ -93,10 +113,26 @@ public class DonDatBan_Controller implements Initializable{
 
     }
 
+   
     @FXML
     void btnThayDoi(ActionEvent event) {
-    	MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
+        if (donDangChon == null) {
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Cảnh báo");
+            alert.setHeaderText(null);
+            alert.setContentText("Vui lòng chọn một đơn đặt bàn trước khi thay đổi!");
+            alert.showAndWait();
+
+            return;
+        }
+
+        // Lưu tạm dữ liệu chuyển màn hình
+        ThayDoiBanTruoc_Controller.donDatBanDuocChon = donDangChon;
+
+        MenuNV_Controller.instance.readyUI("DatBan/ThayDoiBanTruoc");
     }
+
 
     @FXML
     void btnTimKiem(ActionEvent event) {
@@ -121,6 +157,7 @@ public class DonDatBan_Controller implements Initializable{
             return true;
         });
         tblView.setItems(filtered);
+        
     }
     
     private void khoiTaoComboBoxes() {
@@ -140,6 +177,7 @@ public class DonDatBan_Controller implements Initializable{
         danhSachDonDatBan.addAll(danhSachDonDatBanDB);
 
         tblView.setItems(danhSachDonDatBan);
+        capNhatTongDon();
     }
 
     private void loadData(List<DonDatBan> list) {
@@ -170,5 +208,7 @@ public class DonDatBan_Controller implements Initializable{
         tblTrangThai.setCellValueFactory(cellData ->new SimpleStringProperty(cellData.getValue().getTrangThai() != 
         		null ?cellData.getValue().getTrangThai() : ""));
     }
+    
+    
 
 }
