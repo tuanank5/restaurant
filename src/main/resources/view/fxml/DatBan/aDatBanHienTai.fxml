@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -13,32 +13,38 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.DatBan_Controller">
    <top>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
             <AnchorPane prefHeight="100.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label layoutX="25.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số lượng khách hàng" />
-                  <Label layoutX="250.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn" />
-                  <TextField layoutX="25.0" layoutY="50.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="250.0" layoutY="50.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <Label layoutX="15.0" layoutY="22.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn" />
+                  <ComboBox fx:id="cmbLoaiBan" layoutX="15.0" layoutY="50.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox fx:id="cmbTrangThai" layoutX="190.0" layoutY="50.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <Label layoutX="190.0" layoutY="23.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng Thái" />
                </children>
             </AnchorPane>
          </left>
          <right>
             <AnchorPane prefHeight="100.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="75.0" layoutY="25.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="20.0" layoutX="75.0" layoutY="25.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                   <Label layoutX="100.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đã được đặt" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="235.0" layoutY="25.0" stroke="PURPLE" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GREEN" height="20.0" layoutX="235.0" layoutY="25.0" stroke="GREEN" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                   <Label layoutX="260.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trống" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="355.0" layoutY="26.0" stroke="#257925" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ec9407" height="20.0" layoutX="355.0" layoutY="26.0" stroke="#ec9407" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                   <Label layoutX="380.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đang phục vụ" />
                </children>
             </AnchorPane>
          </right>
+         <top>
+            <AnchorPane prefHeight="46.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" layoutX="520.0" layoutY="1.0" prefHeight="46.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Bàn" />
+               </children>
+            </AnchorPane>
+         </top>
       </BorderPane>
    </top>
    <center>
@@ -54,7 +60,10 @@
                         <RowConstraints />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="btnBan" prefHeight="80" prefWidth="120" style=" -fx-font-size: 14px; -fx-background-color: linear-gradient(#66ccff, #3399ff); -fx-background-radius: 10; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.3, 3, 3);" text="B01 (10 chỗ)" />
+                        <Button fx:id="btnBan" prefHeight="110.0" prefWidth="170.0" styleClass="button_Ban" stylesheets="@../../css/SystemDesign.css" text="B01 ">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="5.0" top="5.0" />
+                           </GridPane.margin></Button>
                      </children>
                   </GridPane>
                </content>
@@ -62,4 +71,15 @@
          </children>
       </VBox>
    </center>
+   <bottom>
+      <BorderPane BorderPane.alignment="CENTER">
+         <right>
+            <AnchorPane prefHeight="44.0" prefWidth="164.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="btnQuayLai" layoutX="100.0" layoutY="9.0" mnemonicParsing="false" text="Quay lại" />
+               </children>
+            </AnchorPane>
+         </right>
+      </BorderPane>
+   </bottom>
 </BorderPane>
