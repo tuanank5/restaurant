@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.DatBan_Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.ADatBan_Controller">
    <top>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
@@ -60,9 +60,9 @@
                         <RowConstraints />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="btnBan" prefHeight="110.0" prefWidth="170.0" styleClass="button_Ban" stylesheets="@../../css/SystemDesign.css" text="B01 ">
+                        <Button fx:id="btnBan" styleClass="button_Ban" stylesheets="@../../css/SystemDesign.css">
                            <GridPane.margin>
-                              <Insets bottom="10.0" left="10.0" right="5.0" top="5.0" />
+                              <Insets />
                            </GridPane.margin></Button>
                      </children>
                   </GridPane>
