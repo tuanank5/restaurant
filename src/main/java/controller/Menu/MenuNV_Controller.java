@@ -12,6 +12,7 @@ import controller.Dashboard.DashboardNV_Controller;
 import dao.Ban_DAO;
 import dao.TaiKhoan_DAO;
 import entity.Ban;
+import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
 import entity.TaiKhoan;
@@ -31,6 +32,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MenuNV_Controller {
+	
+	public static HoaDon aBanHienTai_HD; 
 	
 	public static MenuNV_Controller instance;
 	public static Map<entity.MonAn, Integer> dsMonAnDangChon;
