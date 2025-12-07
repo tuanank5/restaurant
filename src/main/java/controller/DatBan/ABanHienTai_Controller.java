@@ -30,13 +30,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import util.AutoIDUitl;
 
 public class ABanHienTai_Controller {
 
 	@FXML
+    private BorderPane borderPane;
+
+    @FXML
     private Button btnBan;
 
     @FXML
@@ -49,18 +54,41 @@ public class ABanHienTai_Controller {
     private Button btnGoiMon;
 
     @FXML
+    private Button btnKhac;
+
+    @FXML
+    private Button btnMonAn;
+
+    @FXML
+    private Button btnThanhToan;
+
+    @FXML
     private ComboBox<String> cmbLoaiBan;
 
     @FXML
-    private GridPane gridPaneBan;
+    private GridPane gridPaneHD;
 
+    @FXML
+    private BorderPane paneBan;
+
+    @FXML
+    private BorderPane paneEast;
+
+    @FXML
+    private BorderPane paneNorth;
+
+    @FXML
+    private BorderPane paneTien;
+
+    @FXML
+    private BorderPane paneWest;
     @FXML
     private TextField txtTimKiem;
 
     @FXML
     private TextField txtTongDatBan;
     
- // --- DAO ---
+    // --- DAO ---
     private Ban_DAO banDAO = new Ban_DAOImpl();
     private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
     private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
@@ -94,7 +122,7 @@ public class ABanHienTai_Controller {
     }
 
     private void loadDanhSachHoaDon() {
-        gridPaneBan.getChildren().clear();
+        gridPaneHD.getChildren().clear();
         hoaDonDangChon = null;
         buttonHoaDonDangChonUI = null;
 
@@ -110,50 +138,93 @@ public class ABanHienTai_Controller {
             boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getBan().getLoaiBan().getTenLoaiBan());
 
             if (matchType && hoaDon.getNgayLap().equals(dateNow)) {
-                // Lấy số lượng từ đơn đặt bàn gần nhất nếu có, hoặc lấy từ LoaiBan
+//            	BorderPane borderPane = new BorderPane();
+//            	BorderPane paneNorth = new BorderPane();
+//            	borderPane.setTop(paneNorth);
+//            	paneNorth.setCenter(new Label("Hóa đơn"));
+//            	
+//            	BorderPane paneWest = new BorderPane();
+//            	borderPane.setLeft(paneWest);
+//            	BorderPane paneBan = new BorderPane();
+//            	paneWest.setTop(paneBan);
+//            	paneBan.setCenter(new Label(hoaDon.getBan().getMaBan() +"\n"+ hoaDon.getBan().getLoaiBan().getTenLoaiBan()));
+//            	Button btnThanhToan = new Button("TT");
+//            	paneWest.setLeft(btnThanhToan);
+//            	Button btnBan = new Button("B");
+//            	paneWest.setRight(btnBan);
+//            	
+//            	BorderPane paneEast = new BorderPane();
+//            	borderPane.setRight(paneEast);
+//            	BorderPane paneTien = new BorderPane();
+//            	paneEast.setTop(paneTien);
+//            	paneTien.setCenter(new Label("0đ"));
+//            	Button btnMonAn = new Button("MA");
+//            	paneEast.setLeft(btnMonAn);
+//            	Button btnKhac = new Button("K");
+//            	paneEast.setRight(btnKhac);
+            	
+            	BorderPane borderPane = new BorderPane();
                 
-                Button btnBan = new Button(hoaDon.getBan().getMaBan() +"\n"+ hoaDon.getBan().getLoaiBan().getTenLoaiBan());
-                btnBan.setPrefSize(120, 100);
-                btnBan.setStyle(getStyleByStatusAndType());
-                //btnBan.setOnAction(e -> handleChonBan(ban, btnBan));
-                btnBan.setOnMouseClicked(event -> {
-                    if (event.getClickCount() == 1) {
-                    	
-                    	 // Hiện hộp thoại xác nhận
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Xác nhận chọn bàn");
-                        alert.setHeaderText("Bạn muốn chọn bàn này?");
-                        alert.setContentText(
-                            "Mã bàn: " + hoaDon.getBan().getMaBan() +
-                            "\n Loại bàn: " + hoaDon.getBan().getLoaiBan().getTenLoaiBan()
-                        );
+                // North
+                BorderPane paneNorth = new BorderPane();
+                borderPane.setTop(paneNorth);
+                paneNorth.setCenter(new Label("Hóa đơn"));
+                paneNorth.setStyle("-fx-padding: 10; -fx-background-color: lightblue; -fx-font-size: 20px; -fx-font-weight: bold;");
 
-                        Optional<ButtonType> result = alert.showAndWait();
+                // West
+                BorderPane paneWest = new BorderPane();
+                borderPane.setLeft(paneWest);
+                paneWest.setStyle(getBorderStyle()); // Thêm viền cho paneWest
 
-                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                BorderPane paneBan = new BorderPane();
+                paneWest.setTop(paneBan);
+                paneBan.setCenter(new Label(hoaDon.getBan().getMaBan() + "\n" + hoaDon.getBan().getLoaiBan().getTenLoaiBan()));
+                paneBan.setStyle(getBorderStyle()); // Thêm viền cho paneBan
 
-//                            // Gán bàn đã chọn sang MenuNV
-//                            MenuNV_Controller.banDangChon = ban;
-//                            MenuNV_Controller.khachHangDangChon = null;
-//
-//                            // Chuyển sang giao diện đặt món
-//                            MenuNV_Controller.instance.readyUI("MonAn/DatMon");
-
-                        } else {
-//                            // Người dùng bấm Cancel → reset style bàn
-//                            btnBan.setStyle(
-//                                getStyleByStatusAndType(
-//                                    ban.getTrangThai(),
-//                                    ban.getLoaiBan().getMaLoaiBan()
-//                                )
-//                            );
-                        }
-                    }
+                Button btnThanhToan = new Button("TT");
+                btnThanhToan.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                paneWest.setLeft(btnThanhToan);
+                btnThanhToan.setOnMouseClicked(event -> {
+                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
+                	MenuNV_Controller.instance.readyUI("DatBan/aThanhToan");
                 });
 
+                Button btnBan = new Button("B");
+                btnBan.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                paneWest.setRight(btnBan);
+                btnBan.setOnMouseClicked(event -> {
+                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
+                	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
+                });
 
-                GridPane.setMargin(btnBan, new Insets(5.0));
-                gridPaneBan.add(btnBan, col, row);
+                // East
+                BorderPane paneEast = new BorderPane();
+                borderPane.setRight(paneEast);
+                paneEast.setStyle(getBorderStyle()); // Thêm viền cho paneEast
+
+                BorderPane paneTien = new BorderPane();
+                paneEast.setTop(paneTien);
+                paneTien.setCenter(new Label("0đ"));
+                paneTien.setStyle(getBorderStyle()); // Thêm viền cho paneTien
+
+                Button btnMonAn = new Button("MA");
+                btnMonAn.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                paneEast.setLeft(btnMonAn);
+                btnMonAn.setOnMouseClicked(event -> {
+                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
+                	MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
+                });
+
+                Button btnKhac = new Button("K");
+                btnKhac.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                paneEast.setRight(btnKhac);
+                btnKhac.setOnMouseClicked(event -> {
+                	
+                });
+            	
+
+                GridPane.setMargin(borderPane, new Insets(5.0));
+                gridPaneHD.add(borderPane, col, row);
 
                 col++;
                 if (col >= MAX_COLS) {
@@ -276,6 +347,23 @@ public class ABanHienTai_Controller {
         	    backgroundColor
         	);
 
+    }
+    
+    private String getBorderStyle() {
+        return "-fx-border-color: gray; " +
+               "-fx-border-width: 2; " +
+               "-fx-background-color: white; " +
+               "-fx-border-radius: 10; " +
+               "-fx-padding: 10;";
+    }
+
+    private String getButtonStyle() {
+        return "-fx-background-color: lightgreen; " +
+               "-fx-background-radius: 5; " +
+               "-fx-padding: 10; " +
+               "-fx-font-size: 14px; " +
+               "-fx-font-weight: bold; " +
+               "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);";
     }
 
 //    @FXML

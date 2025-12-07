@@ -39,11 +39,11 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                   <ScrollPane>
                      <content>
-                        <GridPane fx:id="gridPaneBan">
+                        <GridPane fx:id="gridPaneHD">
                            <columnConstraints>
                               <ColumnConstraints />
                            </columnConstraints>
@@ -51,7 +51,37 @@
                               <RowConstraints />
                            </rowConstraints>
                            <children>
-                              <Button fx:id="btnBan" />
+                              <BorderPane fx:id="borderPane">
+                                 <left>
+                                    <BorderPane fx:id="paneWest" BorderPane.alignment="CENTER">
+                                       <top>
+                                          <BorderPane fx:id="paneBan" BorderPane.alignment="CENTER" />
+                                       </top>
+                                       <left>
+                                          <Button fx:id="btnThanhToan" mnemonicParsing="false" BorderPane.alignment="CENTER" />
+                                       </left>
+                                       <right>
+                                          <Button fx:id="btnBan" mnemonicParsing="false" BorderPane.alignment="CENTER" />
+                                       </right>
+                                    </BorderPane>
+                                 </left>
+                                 <right>
+                                    <BorderPane fx:id="paneEast" BorderPane.alignment="CENTER">
+                                       <right>
+                                          <Button fx:id="btnKhac" mnemonicParsing="false" BorderPane.alignment="CENTER" />
+                                       </right>
+                                       <left>
+                                          <Button fx:id="btnMonAn" mnemonicParsing="false" BorderPane.alignment="CENTER" />
+                                       </left>
+                                       <top>
+                                          <BorderPane fx:id="paneTien" BorderPane.alignment="CENTER" />
+                                       </top>
+                                    </BorderPane>
+                                 </right>
+                                 <top>
+                                    <BorderPane fx:id="paneNorth" BorderPane.alignment="CENTER" />
+                                 </top>
+                              </BorderPane>
                            </children>
                         </GridPane>
                      </content>
