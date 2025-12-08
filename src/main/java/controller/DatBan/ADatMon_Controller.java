@@ -7,6 +7,7 @@ import dao.impl.Ban_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.KhuyenMai_DAOImpl;
 import dao.DonDatBan_DAO;
+import dao.HoaDon_DAO;
 import dao.impl.DonDatBan_DAOImpl;
 import entity.Ban;
 import entity.KhachHang;
@@ -249,6 +250,25 @@ public class ADatMon_Controller implements Initializable {
     	hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
     	hd.setBan(MenuNV_Controller.banDangChon);
     	
+    	try {
+   	     if (hd != null) {
+   	        boolean check = RestaurantApplication.getInstance()
+   	                    .getDatabaseContext()
+   	                    .newEntity_DAO(HoaDon_DAO.class)
+   	                    .them(hd);
+   	            //Kiểm tra kết quả thêm
+   	            if (check) {
+   	                showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
+   	                themChiTietHoaDon(hd.getMaHoaDon(), null);
+   	            } else {
+   	                showAlert("Thông báo", "Lưu hóa đơn tạm thất bại!", Alert.AlertType.WARNING);
+   	            }
+   	        }
+   	    } catch (Exception e) {
+   	        e.printStackTrace();
+   	        showAlert("Lỗi", "ADatMon_Controller lỗi", Alert.AlertType.ERROR);
+   	    }
+    	
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Xác nhận");
@@ -262,7 +282,13 @@ public class ADatMon_Controller implements Initializable {
         }
     }
     
-    private void loadMonAnToGrid(List<MonAn> danhSach) {
+    private void themChiTietHoaDon(String maHD, List<MonAn> dsMonAn) {
+        for (int i = 0; i < dsMonAn.size(); i++) {
+            MonAn monAn = dsMonAn.get(i);
+        }
+	}
+
+	private void loadMonAnToGrid(List<MonAn> danhSach) {
         gridPaneMon.getChildren().clear();
         gridPaneMon.getColumnConstraints().clear();
         gridPaneMon.getRowConstraints().clear();
@@ -387,7 +413,6 @@ public class ADatMon_Controller implements Initializable {
     private void capNhatTongTien() {
         double tongTruocVAT = dsMonAnDat.entrySet().stream().mapToDouble(e -> e.getKey().getDonGia() * e.getValue()).sum();
         lblTongTien.setText(dinhDangTien(tongTruocVAT));
-;
     }
     
     
@@ -396,5 +421,11 @@ public class ADatMon_Controller implements Initializable {
         return nf.format(soTien);
     }
     
+    private void showAlert(String title, String content, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(content);
+        alert.show();
+    }
 }
    
