@@ -1,5 +1,6 @@
 package controller.DatBan;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -51,7 +52,7 @@ public class ABanHienTai_Controller {
     private Button btnDatTruoc;
 
     @FXML
-    private Button btnGoiMon;
+    private Button btnDatBan;
 
     @FXML
     private Button btnKhac;
@@ -100,6 +101,18 @@ public class ABanHienTai_Controller {
     private Button buttonHoaDonDangChonUI = null;
     private String maHoaDonDangChon;
     private boolean isFromSearch = false;
+    
+    @FXML
+    private void controller(ActionEvent event) throws IOException {
+        Object source = event.getSource();
+        if (source == btnDatBan) {
+            MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
+        } else if (source == btnChoThanhToan) {
+            
+        } else if (source == btnDatTruoc) {
+            
+        } 
+    }
 
     @FXML
     public void initialize() {
@@ -137,7 +150,7 @@ public class ABanHienTai_Controller {
         for (HoaDon hoaDon : dsHoaDon) {
             boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getBan().getLoaiBan().getTenLoaiBan());
 
-            if (matchType && hoaDon.getNgayLap().equals(dateNow)) {
+            if (matchType && hoaDon.getNgayLap().equals(dateNow) ) {
 //            	BorderPane borderPane = new BorderPane();
 //            	BorderPane paneNorth = new BorderPane();
 //            	borderPane.setTop(paneNorth);
@@ -194,7 +207,7 @@ public class ABanHienTai_Controller {
                 paneWest.setRight(btnBan);
                 btnBan.setOnMouseClicked(event -> {
                 	MenuNV_Controller.aBanHienTai_HD = hoaDon;
-                	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
+                	MenuNV_Controller.instance.readyUI("DatBan/aDoiBan");
                 });
 
                 // East

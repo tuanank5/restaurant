@@ -1,46 +1,31 @@
 package controller.DatBan;
 
-import dao.KhuyenMai_DAO;
-import dao.KhachHang_DAO;
-import dao.Ban_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.KhuyenMai_DAOImpl;
-import dao.DonDatBan_DAO;
-import dao.impl.DonDatBan_DAOImpl;
-import entity.Ban;
-import entity.KhachHang;
-import entity.KhuyenMai;
-import entity.DonDatBan;
-import entity.LoaiBan;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import util.AutoIDUitl;
-
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import controller.DatMon.DatMon_Controller;
 import controller.Menu.MenuNV_Controller;
+import dao.Ban_DAO;
+import dao.DonDatBan_DAO;
+import dao.impl.Ban_DAOImpl;
+import dao.impl.DonDatBan_DAOImpl;
+import entity.Ban;
+import entity.DonDatBan;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.GridPane;
+import util.AutoIDUitl;
 
-
-public class ADatBan_Controller implements Initializable {
-
-    // --- ComboBox lọc ---
+public class ADoiBan_Controller implements Initializable {
+	// --- ComboBox lọc ---
     @FXML private ComboBox<String> cmbTrangThai;
     @FXML private ComboBox<String> cmbLoaiBan;
     
@@ -119,26 +104,26 @@ public class ADatBan_Controller implements Initializable {
                     	    alert.showAndWait();
 
                     // Reset lại style cũ
-                    	     btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-                    	            return;
-                    	        }
+                    	    btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+                    	    return;
+                    	}
 
                     // Nếu bàn TRỐNG → hỏi người dùng
                     	int soLuongChoNgoi = ban.getLoaiBan().getSoLuong();
 
                     	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    	alert.setTitle("Xác nhận chọn bàn");
-                    	alert.setHeaderText("Bạn muốn chọn bàn này?");
+                    	alert.setTitle("Xác nhận đổi bàn");
+                    	alert.setHeaderText("Bạn muốn đổi bàn này?");
                     	alert.setContentText("Mã bàn: " + ban.getMaBan() +"\nLoại bàn: " + ban.getLoaiBan().getTenLoaiBan()+ "\nSố lượng khách tối đa : " + soLuongChoNgoi + " người");
                     	     
-                    	     Optional<ButtonType> result = alert.showAndWait();
-                    	        if (result.isPresent() && result.get() == ButtonType.OK) {
+                    	Optional<ButtonType> result = alert.showAndWait();
+                    	if (result.isPresent() && result.get() == ButtonType.OK) {
                     	            // Gán bàn sang MenuNV
                     	            MenuNV_Controller.banDangChon = ban;
                     	            MenuNV_Controller.khachHangDangChon = null;
                     	            // Chuyển UI
                     	            MenuNV_Controller.instance.readyUI("MonAn/aDatMon");
-                    	        } else {
+                    	} else {
                     	            btnBan.setStyle(
                     	                getStyleByStatusAndType(
                     	                    ban.getTrangThai(),
@@ -148,8 +133,7 @@ public class ADatBan_Controller implements Initializable {
                     	        }
                     	    }
                     	});
-
-
+                
                 GridPane.setMargin(btnBan, new Insets(5.0));
                 gridPaneBan.add(btnBan, col, row);
 
@@ -226,6 +210,7 @@ public class ADatBan_Controller implements Initializable {
 
     }
 
+
     private void handleDatBan(ActionEvent event) {
         if (banDangChon == null) {
             showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn!");
@@ -275,7 +260,7 @@ public class ADatBan_Controller implements Initializable {
                 	backgroundColor = "#f39c12";
             }
         }
-        
+
         return String.format(
             "-fx-background-color: %s;" +
             "-fx-background-radius: 15;" +
@@ -311,5 +296,4 @@ public class ADatBan_Controller implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Cập nhật trạng thái thất bại!");
         }
     }
-
 }

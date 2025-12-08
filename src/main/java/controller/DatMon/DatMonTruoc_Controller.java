@@ -266,7 +266,6 @@ public class DatMonTruoc_Controller implements Initializable{
         return String.format("%,.0f", soTien); // định dạng kiểu 1,000,000
     }
 
-
     private void chonMon(MonAn mon) {
         if (dsMonAnDat.containsKey(mon)) {
             // Nếu đã có món này hỏi người dùng
