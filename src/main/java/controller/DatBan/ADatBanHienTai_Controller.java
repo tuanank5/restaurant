@@ -58,6 +58,7 @@ public class ADatBanHienTai_Controller implements Initializable {
     private Button buttonBanDangChonUI = null;
     private boolean isFromSearch = false;
 
+    private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,55 +101,87 @@ public class ADatBanHienTai_Controller implements Initializable {
             boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(ban.getLoaiBan().getTenLoaiBan());
 
             if (matchStatus && matchType) {
-                // Lấy số lượng từ đơn đặt bàn gần nhất nếu có, hoặc lấy từ LoaiBan
-                Button btnBan = new Button(ban.getMaBan() +"\n"+ ban.getLoaiBan().getTenLoaiBan());
+
+                Button btnBan = new Button(ban.getMaBan() + "\n" + ban.getLoaiBan().getTenLoaiBan());
                 btnBan.setPrefSize(185, 110);
                 btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-                //btnBan.setOnAction(e -> handleChonBan(ban, btnBan));
+
                 btnBan.setOnMouseClicked(event -> {
                     if (event.getClickCount() == 1) {
-                    // Nếu bàn KHÔNG TRỐNG → không cho chọn
-                    	if (!"Trống".equals(ban.getTrangThai())) {
-                    	    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    	    alert.setTitle("Không thể chọn bàn");
+
+                        // ❌ Bàn không trống → cảnh báo
+                        if (!"Trống".equals(ban.getTrangThai())) {
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Không thể chọn bàn");
                             alert.setHeaderText("Bàn này không được phép chọn!");
-                    	    alert.setContentText(
-                    	                "Trạng thái hiện tại: " + ban.getTrangThai() +
-                    	                "\nChỉ có thể chọn những bàn đang TRỐNG."
-                    	            );
-                    	    alert.showAndWait();
+                            alert.setContentText(
+                                    "Trạng thái hiện tại: " + ban.getTrangThai()
+                                            + "\nChỉ có thể chọn những bàn đang trống!"
+                            );
+                            alert.showAndWait();
 
-                    // Reset lại style cũ
-                    	     btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-                    	            return;
-                    	        }
+                            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+                            return;
+                        }
 
-                    // Nếu bàn TRỐNG → hỏi người dùng
-                    	int soLuongChoNgoi = ban.getLoaiBan().getSoLuong();
+                        // ✔ Bàn trống → mở dialog nhập số lượng khách
+                        int soLuongChoNgoi = ban.getLoaiBan().getSoLuong();
 
-                    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    	alert.setTitle("Xác nhận chọn bàn");
-                    	alert.setHeaderText("Bạn muốn chọn bàn này?");
-                    	alert.setContentText("Mã bàn: " + ban.getMaBan() +"\nLoại bàn: " + ban.getLoaiBan().getTenLoaiBan()+ "\nSố lượng khách tối đa : " + soLuongChoNgoi + " người");
-                    	     
-                    	     Optional<ButtonType> result = alert.showAndWait();
-                    	        if (result.isPresent() && result.get() == ButtonType.OK) {
-                    	            // Gán bàn sang MenuNV
-                    	            MenuNV_Controller.banDangChon = ban;
-                    	            MenuNV_Controller.khachHangDangChon = null;
-                    	            // Chuyển UI
-                    	            MenuNV_Controller.instance.readyUI("MonAn/aDatMon");
-                    	        } else {
-                    	            btnBan.setStyle(
-                    	                getStyleByStatusAndType(
-                    	                    ban.getTrangThai(),
-                    	                    ban.getLoaiBan().getMaLoaiBan()
-                    	                )
-                    	            );
-                    	        }
-                    	    }
-                    	});
+                        Dialog<ButtonType> dialog = new Dialog<>();
+                        dialog.setTitle("Xác nhận chọn bàn");
+                        dialog.setHeaderText("Bạn muốn chọn bàn này?");
 
+                        GridPane grid = new GridPane();
+                        grid.setHgap(10);
+                        grid.setVgap(10);
+
+                        Label lblMaBan = new Label("Mã bàn: " + ban.getMaBan());
+                        Label lblLoaiBan = new Label("Loại bàn: " + ban.getLoaiBan().getTenLoaiBan());
+
+                        TextField txtSoLuong = new TextField();
+                        txtSoLuong.setPromptText("số lượng khách (tối đa " + soLuongChoNgoi + ")");
+
+                        grid.add(lblMaBan, 0, 0);
+                        grid.add(lblLoaiBan, 0, 1);
+                        grid.add(new Label("Số lượng khách:"), 0, 2);
+grid.add(txtSoLuong, 1, 2);
+
+                        dialog.getDialogPane().setContent(grid);
+                        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+                        Optional<ButtonType> result = dialog.showAndWait();
+
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            try {
+                                int soLuongNhap = Integer.parseInt(txtSoLuong.getText());
+
+                                if (soLuongNhap <= 0 || soLuongNhap > soLuongChoNgoi) {
+                                    Alert err = new Alert(Alert.AlertType.ERROR);
+                                    err.setHeaderText("Số lượng không hợp lệ!");
+                                    err.setContentText("Vui lòng nhập số lượng từ 1 đến " + soLuongChoNgoi);
+                                    err.show();
+                                    return;
+                                }
+
+                                MenuNV_Controller.banDangChon = ban;
+                                MenuNV_Controller.soLuongKhach = soLuongNhap;
+                                MenuNV_Controller.khachHangDangChon = null;
+
+                                MenuNV_Controller.instance.readyUI("MonAn/aDatMon");
+
+                            } catch (NumberFormatException ex) {
+                                Alert err = new Alert(Alert.AlertType.ERROR);
+                                err.setHeaderText("Dữ liệu không hợp lệ");
+                                err.setContentText("Vui lòng nhập số nguyên!");
+                                err.show();
+                            }
+
+                        } else {
+                            // Bấm Hủy
+                            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+                        }
+                    }
+                });
 
                 GridPane.setMargin(btnBan, new Insets(5.0));
                 gridPaneBan.add(btnBan, col, row);
@@ -159,8 +192,22 @@ public class ADatBanHienTai_Controller implements Initializable {
                     row++;
                 }
             }
-        }
+        } 
     }
+    
+    private boolean checkDonDatBan(Ban ban) {
+		dsDDB = donDatBanDAO.getDanhSach("DonDatBan.list", DonDatBan.class);
+		LocalTime now = LocalTime.now();
+    	
+		for (DonDatBan ddb : dsDDB) {
+			if (ddb.getBan().getMaBan().equals(ban.getMaBan())) {
+				if (now.isAfter(ddb.getGioBatDau().minusHours(1)) && now.isBefore(ddb.getGioBatDau().plusHours(1))) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 //    private void handleChonBan(Ban ban, Button btnBan) {
 //        Ban banCu = this.banDangChon;

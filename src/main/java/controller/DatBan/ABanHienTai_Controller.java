@@ -225,7 +225,7 @@ public class ABanHienTai_Controller {
                 paneEast.setLeft(btnMonAn);
                 btnMonAn.setOnMouseClicked(event -> {
                 	MenuNV_Controller.aBanHienTai_HD = hoaDon;
-                	MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
+//                	MenuNV_Controller.instance.readyUI("DatBan/aDoiMon");
                 });
 
                 Button btnKhac = new Button("K");

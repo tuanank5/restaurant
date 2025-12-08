@@ -12,6 +12,7 @@ import entity.Ban;
 import entity.KhachHang;
 import entity.KhuyenMai;
 import entity.DonDatBan;
+import entity.HoaDon;
 import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,8 +25,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import util.AutoIDUitl;
 import dao.impl.DonDatBan_DAOImpl;
 import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -236,7 +239,11 @@ public class ADatMon_Controller implements Initializable {
     @FXML
     void hanhleXacNhan(ActionEvent event) {
         // Lưu danh sách món theo bàn
-        MenuNV_Controller.dsMonTheoBan.put(banDangChon.getMaBan(), new LinkedHashMap<>(dsMonAnDat));
+    	HoaDon hd = new HoaDon();
+    	hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
+    	LocalDate localDate = LocalDate.now();
+        Date dateNow = Date.valueOf(localDate);
+    	hd.setNgayLap(dateNow);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Xác nhận");
@@ -244,7 +251,7 @@ public class ADatMon_Controller implements Initializable {
         alert.setContentText("Đã lưu món tạm cho bàn " + banDangChon.getMaBan());
         alert.showAndWait();
         try {
-            MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
+            MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
         } catch (Exception e) {
             e.printStackTrace();
         }

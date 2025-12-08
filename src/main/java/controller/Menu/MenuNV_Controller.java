@@ -33,7 +33,14 @@ import javafx.stage.Stage;
 
 public class MenuNV_Controller {
 	
-	public static HoaDon aBanHienTai_HD; 
+	public static HoaDon aBanHienTai_HD;
+	public static int getSoLuongKhach() {
+		return soLuongKhach;
+	}
+	public static void setSoLuongKhach(int soLuongKhach) {
+		MenuNV_Controller.soLuongKhach = soLuongKhach;
+	}
+	public static int soLuongKhach = 0;
 	
 	public static MenuNV_Controller instance;
 	public static Map<entity.MonAn, Integer> dsMonAnDangChon;
