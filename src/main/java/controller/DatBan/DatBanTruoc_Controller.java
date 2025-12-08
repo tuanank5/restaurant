@@ -87,7 +87,11 @@ public class DatBanTruoc_Controller implements Initializable {
         //Nếu tất cả hợp lệ, truyền bàn sang DatMonNew
         try {
             DatMonTruoc_Controller.danhSachBanChonStatic = new ArrayList<>(danhSachBanDangChon);
-
+            for (Ban ban : danhSachBanDangChon) {
+                ban.setTrangThai("Đã được đặt");
+                banDAO.capNhat(ban);
+            }
+            loadDanhSachBan();
             MenuNV_Controller.instance.readyUI("MonAn/DatMonTruoc");
 
         } catch (Exception e) {
@@ -152,27 +156,38 @@ public class DatBanTruoc_Controller implements Initializable {
     }
 
     private void handleChonBan(Ban ban, Button btnBan) {
+        //Không cho chọn bàn đã được đặt
+        if ("Đã được đặt".equals(ban.getTrangThai())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING,
+                    "Bàn này đã được đặt!\nVui lòng chọn bàn khác.");
+            alert.showAndWait();
+            return;
+        }
+        // Một khách hàng chỉ được đặt 1 bàn
+        if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING,
+                    "Một khách hàng chỉ được đặt 1 bàn!\nHãy bỏ chọn bàn đã chọn để chọn bàn khác.");
+            alert.showAndWait();
+            return;
+        }
+        // Nếu bàn đang được chọn → bỏ chọn
         if (danhSachBanDangChon.contains(ban)) {
-            // Nếu bàn đã được chọn, bỏ chọn
-            danhSachBanDangChon.remove(ban);
-            danhSachButtonDangChonUI.remove(btnBan);
-            // Loại bỏ dấu tick
+            danhSachBanDangChon.clear();
+            danhSachButtonDangChonUI.clear();
             btnBan.setText(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
             btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
         } else {
-            // Thêm bàn vào danh sách chọn
+            // Chọn bàn
+            danhSachBanDangChon.clear();
+            danhSachButtonDangChonUI.clear();
             danhSachBanDangChon.add(ban);
             danhSachButtonDangChonUI.add(btnBan);
-            // Thêm dấu tick vào text
             btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
             btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
         }
-
-        // Cập nhật tổng số bàn được chọn lên txtSoBan
         txtSoBan.setText(String.valueOf(danhSachBanDangChon.size()));
     }
-
-    
+   
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
         String backgroundColor = "white";
         String borderColor = "black";

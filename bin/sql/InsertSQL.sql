@@ -104,7 +104,7 @@ VALUES
 INSERT INTO [dbo].[TaiKhoan] (maTaiKhoan, tenTaiKhoan, matKhau, ngayDangNhap, ngayDangXuat, ngaySuaDoi, maNV)
 VALUES 
 -- 20 Tài khoản Quản lý (QLxxxx)
-('TK001', 'QL0001', '1', '2024-01-01', '2024-01-02', '2024-05-10', 'NV001'),
+('TK001', 'QL0001', '111111', '2024-01-01', '2024-01-02', '2024-05-10', 'NV001'),
 ('TK002', 'QL0002', 'ql_pass02', '2024-01-05', '2024-01-06', '2024-05-15', 'NV003'),
 ('TK003', 'QL0003', 'ql_pass03', '2024-01-10', '2024-01-11', '2024-05-20', 'NV005'),
 ('TK004', 'QL0004', 'ql_pass04', '2024-01-15', '2024-01-16', '2024-05-25', 'NV007'),
@@ -126,7 +126,7 @@ VALUES
 ('TK020', 'QL0020', 'ql_pass20', '2024-04-07', '2024-04-08', '2024-08-13', 'NV039'),
 
 -- 30 Tài khoản Nhân viên (NVxxxx)
-('TK021', 'NV0021', '1', '2023-10-01', '2023-10-02', '2024-05-05', 'NV002'),
+('TK021', 'NV0021', '111111', '2023-10-01', '2023-10-02', '2024-05-05', 'NV002'),
 ('TK022', 'NV0022', 'nv_pass22', '2023-10-05', '2023-10-06', '2024-05-10', 'NV004'),
 ('TK023', 'NV0023', 'nv_pass23', '2023-10-10', '2023-10-11', '2024-05-15', 'NV006'),
 ('TK024', 'NV0024', 'nv_pass24', '2023-10-15', '2023-10-16', '2024-05-20', 'NV008'),
@@ -159,17 +159,17 @@ VALUES
 
 INSERT INTO HangKhachHang (maHang, diemHang, giamGia, moTa, tenHang)
 VALUES
-('H1', 10, 10, N'Không giảm giá', N'Hạng Đồng'),
-('H2', 100, 5, N'Giảm 5%', N'Hạng Bạc'),
-('H3', 300, 10, N'Giảm 10%', N'Hạng Vàng'),
-('H4', 600, 15, N'Giảm 15%', N'Hạng Kim Cương');
+('H1', 10, 5, N'Giảm 5%', N'Hạng Đồng'),
+('H2', 100, 7, N'Giảm 7%', N'Hạng Bạc'),
+('H3', 300, 9, N'Giảm 9%', N'Hạng Vàng'),
+('H4', 600, 11, N'Giảm 11%', N'Hạng Kim Cương');
 
 INSERT INTO KhachHang (maKH, tenKH, sdt, email, diaChi, diemTichLuy, maHang)
 VALUES
 ('KH0001', N'Lâm Thành Đạt', '0901000001', 'thanhdatfptshop123@email.com', N'123 Lê Lợi, Quận 1, TP.HCM', 1250, 'H4'),
 ('KH0002', N'Nguyễn Thị Thu Thảo', '0901000002', 'tn364471@gmail.com', N'45 Nguyễn Huệ, Quận 1, TP.HCM', 980, 'H4'),
 ('KH0003', N'Nguyễn Gia An', '0901000003', 'nguyengiaan3787@gmail.com', N'67 Lý Thường Kiệt, Quận 10, TP.HCM', 320, 'H3'),
-('KH0004', N'Nguyễn Tuấn Anh ', '0901000004', 'gia65275@gmail.com', N'89 Pasteur, Quận 3, TP.HCM', 150, 'H2');
+('KH0004', N'Nguyễn Tuấn Anh ', '0901000004', 'nguyentuananh20052005@gmail.com', N'89 Pasteur, Quận 3, TP.HCM', 150, 'H2');
 
 --Chèn dữ liệu cho loaiBan
 INSERT INTO [dbo].[LoaiBan] (maLoaiBan, tenLoaiBan, soLuong) VALUES
@@ -210,13 +210,13 @@ VALUES
 ('KM007', N'Ưu đãi VIP cuối tháng', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-20', '2025-11-30', 25);
 
 INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tienNhan, tienThua, maKH, maKM, maNV, maBan, maCoc) VALUES
-('HD001', '2025-08-01', 1000000, 100000, 'Đã thanh toán', 'Tiền mặt', 1200000, 200000, 'KH0001', 'KM001', 'NV001', 'B01', 'C001'),
-('HD002', '2025-08-02', 1500000, 150000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0002', 'KM002', 'NV002', 'B02', 'C002'),
-('HD003', '2025-08-03', 2000000, 200000, 'Đã thanh toán', 'Chuyển khoản', 2200000, 200000, 'KH0003', 'KM003', 'NV003', 'B03', 'C003'),
-('HD004', '2025-09-01', 1200000, 120000, 'Đã thanh toán', 'Tiền mặt', 1300000, 80000, 'KH0004', 'KM004', 'NV004', 'B04', 'C004');
+('HD001', '2025-08-01', 1000000, 100000, 'Đã thanh toán', 'Tiền mặt', 1200000, 200000, 'KH0001', 'KM004', 'NV001', 'B01', 'C001'),
+('HD002', '2025-08-02', 1500000, 150000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0002', 'KM005', 'NV002', 'B02', 'C002'),
+('HD003', '2025-08-03', 2000000, 200000, 'Đã thanh toán', 'Chuyển khoản', 2200000, 200000, 'KH0003', 'KM006', 'NV003', 'B03', 'C003'),
+('HD004', '2025-09-01', 1200000, 120000, 'Đã thanh toán', 'Tiền mặt', 1300000, 80000, 'KH0004', 'KM007', 'NV004', 'B04', 'C004');
 
 INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh) VALUES
-('M001', N'Bún Quậy', 45000, 'KM001', 'D:\\img\\bunquay.jpg'),
-('M002', N'Cút Lộn', 38000, 'KM001', 'D:\\img\\cutlon.jpg'),
-('M003', N'Gỏi Cuốn', 150000, 'KM002', 'D:\\img\\goicuon.jpg'),
-('M004', N'Cút Lộn', 28000, 'KM003', 'D:\\img\\miquang.jpg');
+('M001', N'Bún Quậy', 45000, 'KM004', 'D:\\img\\bunquay.jpg'),
+('M002', N'Cút Lộn', 38000, 'KM005', 'D:\\img\\cutlon.jpg'),
+('M003', N'Gỏi Cuốn', 150000, 'KM006', 'D:\\img\\goicuon.jpg'),
+('M004', N'Mì Quảng', 28000, 'KM007', 'D:\\img\\miquang.jpg');
