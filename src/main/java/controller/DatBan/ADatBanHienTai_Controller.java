@@ -167,7 +167,7 @@ grid.add(txtSoLuong, 1, 2);
                                 MenuNV_Controller.soLuongKhach = soLuongNhap;
                                 MenuNV_Controller.khachHangDangChon = null;
 
-                                MenuNV_Controller.instance.readyUI("MonAn/aDatMon");
+                                MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
 
                             } catch (NumberFormatException ex) {
                                 Alert err = new Alert(Alert.AlertType.ERROR);

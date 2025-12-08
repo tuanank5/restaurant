@@ -244,6 +244,11 @@ public class ADatMon_Controller implements Initializable {
     	LocalDate localDate = LocalDate.now();
         Date dateNow = Date.valueOf(localDate);
     	hd.setNgayLap(dateNow);
+    	hd.setTrangThai("Chưa thanh toán");
+    	hd.setKieuThanhToan("kieuThanhToan");
+    	hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+    	hd.setBan(MenuNV_Controller.banDangChon);
+    	
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Xác nhận");
