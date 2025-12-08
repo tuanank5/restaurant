@@ -38,7 +38,7 @@ import controller.DatMon.DatMon_Controller;
 import controller.Menu.MenuNV_Controller;
 
 
-public class ADatBan_Controller implements Initializable {
+public class ADatBanHienTai_Controller implements Initializable {
 
     // --- ComboBox lọc ---
     @FXML private ComboBox<String> cmbTrangThai;
@@ -226,6 +226,7 @@ public class ADatBan_Controller implements Initializable {
 
     }
 
+
     private void handleDatBan(ActionEvent event) {
         if (banDangChon == null) {
             showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn!");
@@ -252,13 +253,17 @@ public class ADatBan_Controller implements Initializable {
         }
     }
 
+
+
+
+
+
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
     }
-    
 //    ("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
 
@@ -275,7 +280,23 @@ public class ADatBan_Controller implements Initializable {
                 	backgroundColor = "#f39c12";
             }
         }
-        
+
+
+//        switch (trangThai != null && !trangThai.is) {
+//            case "Trống":
+//                backgroundColor = "GREEN";  // Xanh lá
+//                break;
+//            case "Đã được đặt":
+//                backgroundColor = "red";  // Đỏ
+//                break;
+//            case "Đang phục vụ":
+//                backgroundColor = "#f39c12";  // Cam
+//                break;
+//            default:
+//                backgroundColor = "#bdc3c7";  // Xám – trạng thái lạ → dễ nhận biết
+//                break;
+//        }
+
         return String.format(
             "-fx-background-color: %s;" +
             "-fx-background-radius: 15;" +

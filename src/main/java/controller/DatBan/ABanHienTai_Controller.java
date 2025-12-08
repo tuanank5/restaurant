@@ -150,7 +150,7 @@ public class ABanHienTai_Controller {
         for (HoaDon hoaDon : dsHoaDon) {
             boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getBan().getLoaiBan().getTenLoaiBan());
 
-            if (matchType && hoaDon.getNgayLap().equals(dateNow) ) {
+            if (matchType && hoaDon.getNgayLap().equals(dateNow)) {
 //            	BorderPane borderPane = new BorderPane();
 //            	BorderPane paneNorth = new BorderPane();
 //            	borderPane.setTop(paneNorth);

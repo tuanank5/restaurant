@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.ADatBan_Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.ADatBanHienTai_Controller">
    <top>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
@@ -42,6 +42,7 @@
             <AnchorPane prefHeight="46.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
                   <Label alignment="CENTER" layoutX="520.0" layoutY="1.0" prefHeight="46.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Bàn" />
+                  <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" text="Quay lại" />
                </children>
             </AnchorPane>
          </top>
@@ -60,9 +61,9 @@
                         <RowConstraints />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="btnBan" styleClass="button_Ban" stylesheets="@../../css/SystemDesign.css">
+                        <Button fx:id="btnBan" prefHeight="110.0" prefWidth="170.0" styleClass="button_Ban" stylesheets="@../../css/SystemDesign.css" text="B01 ">
                            <GridPane.margin>
-                              <Insets />
+                              <Insets bottom="10.0" left="10.0" right="5.0" top="5.0" />
                            </GridPane.margin></Button>
                      </children>
                   </GridPane>
@@ -74,11 +75,7 @@
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <right>
-            <AnchorPane prefHeight="44.0" prefWidth="164.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button fx:id="btnQuayLai" layoutX="100.0" layoutY="9.0" mnemonicParsing="false" text="Quay lại" />
-               </children>
-            </AnchorPane>
+            <AnchorPane prefHeight="44.0" prefWidth="164.0" BorderPane.alignment="CENTER" />
          </right>
       </BorderPane>
    </bottom>
