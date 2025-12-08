@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
     ),
     @NamedQuery(
         name = "DonDatBan.count",
-        query = "SELECT COUNT(DDB.maHD) FROM DonDatBan DDB"
+        query = "SELECT COUNT(DDB.maDatBan) FROM DonDatBan DDB"
     )
 })
 public class DonDatBan {
