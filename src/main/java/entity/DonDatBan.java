@@ -8,10 +8,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "DonDatBan")
+@NamedQueries({
+    @NamedQuery(
+        name = "DonDatBan.list",
+        query = "SELECT DDB FROM DonDatBan DDB"
+    ),
+    @NamedQuery(
+        name = "DonDatBan.count",
+        query = "SELECT COUNT(DDB.maHD) FROM DonDatBan DDB"
+    )
+})
 public class DonDatBan {
 
     @Id
