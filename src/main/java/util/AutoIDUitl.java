@@ -138,7 +138,6 @@ public class AutoIDUitl {
 
         String max = hdDAO.getMaxMaHoaDon();
         int next = extractNumber(max) + 1;
-
         return formatID("HD", next, 4);
     }
 
