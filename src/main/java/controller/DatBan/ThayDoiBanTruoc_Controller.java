@@ -205,10 +205,8 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         gridPaneBan.getChildren().clear();
         banDangChon = null;
         buttonBanDangChonUI = null;
-
         // Lấy danh sách bàn từ DB
         danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
-
         int col = 0, row = 0;
         final int MAX_COLS = 5;
 
@@ -218,21 +216,17 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
                     ? dsDon.get(dsDon.size() - 1).getSoLuong()
                     : ban.getLoaiBan().getSoLuong();
-
             // Tạo nút đại diện cho bàn
-            Button btnBan = new Button(ban.getMaBan() + "\n(" + soLuongHienThi + " chỗ)");
-            btnBan.setPrefSize(120, 100);
+            Button btnBan = new Button(ban.getMaBan());
+            btnBan.setPrefSize(170, 110);
             btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-
             btnBan.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1) {
                     handleChonBan(ban, btnBan);
                 }
             });
-
             GridPane.setMargin(btnBan, new Insets(5.0));
             gridPaneBan.add(btnBan, col, row);
-
             col++;
             if (col >= MAX_COLS) {
                 col = 0;
