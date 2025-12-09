@@ -122,7 +122,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             don.setGioBatDau( java.time.LocalTime.of(hour,0) );
             don.setTrangThai("Chưa nhận bàn");
 
-            // ✅ chỉ dùng them() vì capNhat() không tồn tại hợp lệ
+            //chỉ dùng them() vì capNhat() không tồn tại hợp lệ
             donDAO.capNhat(don);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Thành công");

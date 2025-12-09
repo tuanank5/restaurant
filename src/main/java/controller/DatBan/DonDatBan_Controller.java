@@ -101,11 +101,15 @@ public class DonDatBan_Controller implements Initializable{
     }
 
     @FXML
-    void btnHuyBan(ActionEvent event) {
+    void btnHuyDon(ActionEvent event) {
 
     }
+    
+    @FXML
+    void btnNhanBan(ActionEvent event) {
 
-   
+    }
+    
     @FXML
     void btnThayDoi(ActionEvent event) {
         if (donDangChon == null) {
