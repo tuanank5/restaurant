@@ -95,7 +95,7 @@ public class DatMonTruoc_Controller implements Initializable{
     @FXML
     private GridPane gridPaneMon;
     public static Ban banChonStatic;
-   public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
+    public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
@@ -315,17 +315,16 @@ public class DatMonTruoc_Controller implements Initializable{
 
     @FXML
     void btnHuy(ActionEvent event) {
-    	if (danhSachBanChonStatic == null || danhSachBanChonStatic.isEmpty()) {
+        if (danhSachBanChonStatic == null || danhSachBanChonStatic.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Chưa chọn bàn.");
             return;
         }
-
         String sdt = txtSdt.getText().trim();
         if (sdt.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Vui lòng nhập số điện thoại khách hàng.");
             return;
         }
-        // Tìm khách
+        
         KhachHang kh = null;
         try {
             kh = khachHangDAO.timTheoSDT(sdt);
@@ -346,35 +345,50 @@ public class DatMonTruoc_Controller implements Initializable{
 
         DonDatBan_DAO ddbDAO = new DonDatBan_DAOImpl();
         HoaDon_DAOImpl hdDAO = new HoaDon_DAOImpl();
-        Ban_DAOImpl banDAO = new Ban_DAOImpl();
-
-        // Tạo đơn đặt bàn cho từng bàn
+        // Tạo danh sách chứa DonDatBan đã tạo
+        List<DonDatBan> danhSachDatBanDaTao = new ArrayList<>();
+        
         for (Ban ban : danhSachBanChonStatic) {
             DonDatBan ddb = new DonDatBan();
             ddb.setMaDatBan(util.AutoIDUitl.sinhMaDonDatBan());
-            
-            LocalDate date = DatBanTruoc_Controller.ngayDatBanStatic;
-            LocalTime time = LocalTime.parse(DatBanTruoc_Controller.gioBatDauStatic);       
-            ddb.setNgayGioLapDon(LocalDateTime.of(date, time));
-            
+            try {
+                LocalDate date = DatBanTruoc_Controller.ngayDatBanStatic;
+                LocalTime time = LocalTime.parse(DatBanTruoc_Controller.gioBatDauStatic);
+                ddb.setNgayGioLapDon(LocalDateTime.of(date, time));
+            } catch (Exception ignore) {}
             ddb.setSoLuong(soLuongKH);
             ddb.setKhachHang(kh);
             ddb.setBan(ban);
-            
-            String gio = DatBanTruoc_Controller.gioBatDauStatic;
-            LocalTime time2 = LocalTime.parse(gio);
-            ddb.setGioBatDau(time2);
-            
+            try {
+                String gio = DatBanTruoc_Controller.gioBatDauStatic;
+                LocalTime time2 = LocalTime.parse(gio);
+                ddb.setGioBatDau(time2);
+            } catch (Exception ignore) {}
             ddb.setTrangThai("Chưa Nhận Bàn");
-            ddbDAO.them(ddb);
+            boolean ok = false;
+            try {
+                ok = ddbDAO.them(ddb);
+            } catch (Exception ex) {
+                ok = false;
+            }
+            if (!ok) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan());
+                return;
+            } else {
+                danhSachDatBanDaTao.add(ddb);
+            }
         }
-        
+        // Cập nhật trạng thái bàn
         for (Ban ban : danhSachBanChonStatic) {
             ban.setTrangThai("Đã được đặt");
             new Ban_DAOImpl().capNhat(ban);
         }
-
-        // Tạo hóa đơn KHÔNG có món ăn
+        // Lấy đơn đặt bàn đầu tiên (để gán vào HoaDon)
+        if (danhSachDatBanDaTao.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Không tạo được đơn đặt bàn để liên kết hóa đơn.");
+            return;
+        }
+        DonDatBan donDau = danhSachDatBanDaTao.get(0);
         HoaDon hd = new HoaDon();
         hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
         hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
@@ -387,15 +401,22 @@ public class DatMonTruoc_Controller implements Initializable{
         hd.setKhachHang(kh);
         hd.setKhuyenMai(null);
         hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-        hd.setBan(danhSachBanChonStatic.get(0));
-
-        hdDAO.them(hd);
-
+        hd.setDonDatBan(donDau);
+        
+        boolean okHD = false;
+        try {
+            okHD = hdDAO.them(hd);
+        } catch (Exception ex) {
+            okHD = false;
+        }
+        if (!okHD) {
+            showAlert(Alert.AlertType.ERROR, "Không thể lưu hóa đơn.");
+            return;
+        }
         showAlert(Alert.AlertType.INFORMATION, "Đã lưu đặt bàn (không có món ăn).");
-
-        // quay lại UI đặt bàn
         MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
     }
+
 
     @FXML
     void btnTangKH(ActionEvent event) {
@@ -485,7 +506,7 @@ public class DatMonTruoc_Controller implements Initializable{
             for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
                 tongTien += e.getKey().getDonGia() * e.getValue();
             }
-
+            DonDatBan donDau = danhSachDatBanDaTao.get(0);
             HoaDon hd = new HoaDon();
             hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
             hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
@@ -498,7 +519,7 @@ public class DatMonTruoc_Controller implements Initializable{
             hd.setKhachHang(kh);
             hd.setKhuyenMai(null);
             hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-            hd.setBan(danhSachBanChonStatic.get(0));
+            hd.setDonDatBan(donDau);
             boolean okHD = hoaDonDAO.them(hd);
             if (!okHD) {
                 showAlert(Alert.AlertType.ERROR, "Không thể lưu hóa đơn.");
