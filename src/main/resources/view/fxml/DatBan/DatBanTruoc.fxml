@@ -23,20 +23,7 @@
 <center>
 <BorderPane prefHeight="630.0" prefWidth="801.0" BorderPane.alignment="CENTER">
 <bottom>
-<BorderPane prefHeight="42.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
-<left>
-<Pane prefHeight="40.0" prefWidth="450.0" BorderPane.alignment="CENTER">
-<children>
-<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="10.0" layoutY="10.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-<Label layoutX="45.0" layoutY="12.0" text="Đã được đặt" />
-<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="130.0" layoutY="10.0" stroke="PURPLE" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-<Label layoutX="165.0" layoutY="12.0" text="Trống" />
-<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3" height="20.0" layoutX="255.0" layoutY="10.0" stroke="#257925" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-<Label layoutX="290.0" layoutY="12.0" text="Đang phục vụ" />
-</children>
-</Pane>
-</left>
-</BorderPane>
+<BorderPane prefHeight="42.0" prefWidth="1100.0" BorderPane.alignment="CENTER" />
 </bottom>
 <center>
 <VBox BorderPane.alignment="CENTER">
@@ -44,7 +31,7 @@
 <ScrollPane>
 <content>
 <GridPane fx:id="gridPaneBan">
-<Button fx:id="btnBan" prefHeight="80" prefWidth="120" style=" -fx-font-size: 14px; -fx-background-color: linear-gradient(#66ccff, #3399ff); -fx-background-radius: 10; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.3, 3, 3);" text="B01 (10 chỗ)" />
+<Button fx:id="btnBan" prefHeight="110.0" prefWidth="170.0" style="-fx-font-size: 14px;" text="B01" />
 <columnConstraints>
 <ColumnConstraints />
 </columnConstraints>
@@ -70,7 +57,19 @@
                         </AnchorPane>
                      </right>
                      <left>
-                        <AnchorPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+                        <AnchorPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                           <children>
+<Pane layoutY="33.0" prefHeight="40.0" prefWidth="450.0">
+<children>
+<Label layoutX="45.0" layoutY="12.0" text="Đã được đặt" />
+<Label layoutX="180.0" layoutY="12.0" text="Trống" />
+<Label layoutX="290.0" layoutY="12.0" text="Đang phục vụ" />
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="20.0" layoutX="14.0" layoutY="11.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GREEN" height="20.0" layoutX="151.0" layoutY="11.0" stroke="GREEN" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ec9407" height="20.0" layoutX="263.0" layoutY="11.0" stroke="#ec9407" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+</children>
+</Pane>
+                           </children></AnchorPane>
                      </left>
                   </BorderPane>
                </bottom>

@@ -264,33 +264,31 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 
     
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
-        String backgroundColor = "white";
-        String borderColor = "black";
-
+        String backgroundColor = "white"; // default
         if (trangThai != null && !trangThai.isEmpty()) {
             switch (trangThai) {
-                case "Đã được đặt": borderColor = "red"; break;
-                case "Trống": borderColor = "purple"; break;
-                case "Đang phục vụ": borderColor = "#257925"; break;
+                case "Đã được đặt":
+                    backgroundColor = "#ff0000";
+                    break;
+                case "Trống":
+                    backgroundColor = "#00aa00"; 
+                    break;
+                case "Đang phục vụ":
+                    backgroundColor = "#ec9407";
+                    break;
             }
         }
-
-        switch (maLoaiBan) {
-            case "LB01": backgroundColor = "#66cccc"; break;
-            case "LB02": backgroundColor = "#FFEB3B"; break;
-            case "LB03": backgroundColor = "#FF6F61"; break;
-        }
-
         return String.format(
-            "-fx-background-color: %s;" +
-            "-fx-border-color: %s;" +
-            "-fx-border-width: 6;" +
-            "-fx-border-radius: 5;" +
-            "-fx-background-radius: 15;" +
-            "-fx-min-width: 60px;" +
-            "-fx-min-height: 40px;",
-            backgroundColor, borderColor
-        );
+        		"-fx-background-color: %s;" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-padding: 10;" +
+                        "-fx-font-size: 18px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-family: 'Times New Roman';" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);",
+                        backgroundColor
+                    );
     }
  
     private void loadThongTinBan(Ban ban, DonDatBan donGanNhat) {

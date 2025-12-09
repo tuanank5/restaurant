@@ -150,10 +150,8 @@ public class DatBanTruoc_Controller implements Initializable {
         gridPaneBan.getChildren().clear();
         banDangChon = null;
         buttonBanDangChonUI = null;
-
         // Lấy danh sách bàn từ DB
         danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
-
         int col = 0, row = 0;
         final int MAX_COLS = 5;
 
@@ -163,21 +161,17 @@ public class DatBanTruoc_Controller implements Initializable {
             int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
                     ? dsDon.get(dsDon.size() - 1).getSoLuong()
                     : ban.getLoaiBan().getSoLuong();
-
             // Tạo nút đại diện cho bàn
-            Button btnBan = new Button(ban.getMaBan() + "\n(" + soLuongHienThi + " chỗ)");
-            btnBan.setPrefSize(120, 100);
+            Button btnBan = new Button(ban.getMaBan());
+            btnBan.setPrefSize(170, 110);
             btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-
             btnBan.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1) {
                     handleChonBan(ban, btnBan);
                 }
             });
-
             GridPane.setMargin(btnBan, new Insets(5.0));
             gridPaneBan.add(btnBan, col, row);
-
             col++;
             if (col >= MAX_COLS) {
                 col = 0;
@@ -187,33 +181,32 @@ public class DatBanTruoc_Controller implements Initializable {
     }
 
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
-        String backgroundColor = "white";
-        String borderColor = "black";
+        String backgroundColor = "white"; // default
 
         if (trangThai != null && !trangThai.isEmpty()) {
             switch (trangThai) {
-                case "Đã được đặt": borderColor = "red"; break;
-                case "Trống": borderColor = "purple"; break;
-                case "Đang phục vụ": borderColor = "#257925"; break;
+                case "Đã được đặt":
+                    backgroundColor = "#ff0000"; // đỏ
+                    break;
+                case "Trống":
+                    backgroundColor = "#00aa00"; // xanh lá
+                    break;
+                case "Đang phục vụ":
+                    backgroundColor = "#ec9407"; // cam
+                    break;
             }
         }
-
-        switch (maLoaiBan) {
-            case "LB01": backgroundColor = "#66cccc"; break;
-            case "LB02": backgroundColor = "#FFEB3B"; break;
-            case "LB03": backgroundColor = "#FF6F61"; break;
-        }
-
         return String.format(
-            "-fx-background-color: %s;" +
-            "-fx-border-color: %s;" +
-            "-fx-border-width: 6;" +
-            "-fx-border-radius: 5;" +
-            "-fx-background-radius: 15;" +
-            "-fx-min-width: 60px;" +
-            "-fx-min-height: 40px;",
-            backgroundColor, borderColor
-        );
+        		"-fx-background-color: %s;" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-padding: 10;" +
+                        "-fx-font-size: 18px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-family: 'Times New Roman';" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);",
+                        backgroundColor
+                    );
     }
     
     private void handleChonBan(Ban ban, Button btnBan) {
