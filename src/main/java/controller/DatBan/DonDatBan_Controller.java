@@ -84,27 +84,19 @@ public class DonDatBan_Controller implements Initializable{
 		// TODO Auto-generated method stub
 		khoiTaoComboBoxes();
 		setValueTable();
-        loadData();
-        
+        loadData();        
         tblView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             donDangChon = newVal;
-        });
-        
+        });        
         tblView.getItems().addListener((javafx.collections.ListChangeListener.Change<? extends DonDatBan> change) -> {
             capNhatTongDon();
         });
-
         // cập nhật lần đầu
         capNhatTongDon();
 	}
     
     @FXML
     void btnDatBan(ActionEvent event) {
-    	MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
-    }
-
-    @FXML
-    void btnDoiBan(ActionEvent event) {
     	MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
     }
 
@@ -133,31 +125,26 @@ public class DonDatBan_Controller implements Initializable{
         MenuNV_Controller.instance.readyUI("DatBan/ThayDoiBanTruoc");
     }
 
-
     @FXML
     void btnTimKiem(ActionEvent event) {
-    	String sdt = txtSDT.getText() != null ? txtSDT.getText().trim() : "";
+        String sdt = txtSDT.getText() != null ? txtSDT.getText().trim() : "";
         LocalDate ngayChon = dpNgayDatBan.getValue();
-
         FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
         filtered.setPredicate(don -> {
             if (don == null) return false;
-            //Lọc theo số điện thoại
             if (!sdt.isEmpty()) {
                 if (don.getKhachHang() == null || don.getKhachHang().getSdt() == null) return false;
                 if (!don.getKhachHang().getSdt().contains(sdt)) return false;
             }
-            // Lọc theo ngày
-            if (ngayChon != null) {
-                LocalDateTime ngayGio = don.getNgayGioLapDon();
-                if (ngayGio == null) return false;
-                LocalDate ngayDon = ngayGio.toLocalDate();
-                if (!ngayDon.isEqual(ngayChon)) return false;
+            LocalDateTime ngayGio = don.getNgayGioLapDon();
+            if (ngayGio == null) return false;
+            LocalDate ngayDon = ngayGio.toLocalDate();
+            if (ngayChon == null) {
+                return ngayDon.isAfter(LocalDate.now());
             }
-            return true;
+            return !ngayDon.isBefore(ngayChon);
         });
         tblView.setItems(filtered);
-        
     }
     
     private void khoiTaoComboBoxes() {
