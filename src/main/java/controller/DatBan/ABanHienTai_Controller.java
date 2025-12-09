@@ -198,7 +198,7 @@ public class ABanHienTai_Controller {
         Date dateNow = Date.valueOf(localDate);
 
         for (HoaDon hoaDon : dsHoaDon) {
-            boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getBan().getLoaiBan().getTenLoaiBan());
+            boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan());
 
             if (matchType && hoaDon.getNgayLap().equals(dateNow)) {
 //            	BorderPane borderPane = new BorderPane();
@@ -241,7 +241,7 @@ public class ABanHienTai_Controller {
 
                 BorderPane paneBan = new BorderPane();
                 paneWest.setTop(paneBan);
-                paneBan.setCenter(new Label(hoaDon.getBan().getMaBan() + "\n" + hoaDon.getBan().getLoaiBan().getTenLoaiBan()));
+                paneBan.setCenter(new Label(hoaDon.getDonDatBan().getBan().getMaBan() + "\n" + hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan()));
                 paneBan.setStyle(getBorderStyle()); // Thêm viền cho paneBan
 
                 Button btnThanhToan = new Button("TT");
@@ -302,7 +302,7 @@ public class ABanHienTai_Controller {
     
     private void capNhatTrangThaiBanTheoHD(HoaDon hd) {
     	for (Ban ban : dsBan) {
-        	if (hd.getBan().equals(ban)) {
+        	if (hd.getDonDatBan().getBan().equals(ban)) {
         		ban.setTrangThai("Đang phục vụ");
         		RestaurantApplication.getInstance()
    	                    .getDatabaseContext()
