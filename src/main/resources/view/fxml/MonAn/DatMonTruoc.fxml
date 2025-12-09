@@ -38,7 +38,7 @@
                               <Label layoutX="10.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số lượng KH:" />
                               <Label layoutX="10.0" layoutY="50.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng:" />
                               <TextField fx:id="txtSdt" layoutX="110.0" layoutY="5.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField fx:id="txtKH" layoutX="110.0" layoutY="45.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtKH" editable="false" layoutX="110.0" layoutY="45.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
                               <TextField fx:id="txtSoLuongKH" layoutX="110.0" layoutY="85.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
                               <Button layoutX="185.0" layoutY="85.0" mnemonicParsing="false" onAction="#btnTangKH" prefWidth="50.0" style="-fx-font-weight: bold;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="+" />
                               <Button layoutX="260.0" layoutY="85.0" mnemonicParsing="false" onAction="#btnGiamKH" prefWidth="50.0" style="-fx-font-weight: bold;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="-" />

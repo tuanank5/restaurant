@@ -45,10 +45,7 @@ public class DatBanTruoc_Controller implements Initializable {
 
     @FXML
     private GridPane gridPaneBan;
-
-    @FXML
-    private TextField txtSoBan;
-    
+   
     // DAO
     private Ban_DAO banDAO = new Ban_DAOImpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
@@ -60,7 +57,8 @@ public class DatBanTruoc_Controller implements Initializable {
     private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
     private Ban banDangChon = null;
     private Button buttonBanDangChonUI = null;
-
+    public static LocalDate ngayDatBanStatic;
+    public static String gioBatDauStatic;
     @FXML
     void btnDatBan(ActionEvent event) {
         //Kiểm tra đã chọn bàn chưa
@@ -86,6 +84,8 @@ public class DatBanTruoc_Controller implements Initializable {
         }
         //Nếu tất cả hợp lệ, truyền bàn sang DatMonNew
         try {
+        	DatBanTruoc_Controller.ngayDatBanStatic = ngayDat;
+        	DatBanTruoc_Controller.gioBatDauStatic = gioDat;
             DatMonTruoc_Controller.danhSachBanChonStatic = new ArrayList<>(danhSachBanDangChon);
             for (Ban ban : danhSachBanDangChon) {
                 ban.setTrangThai("Đã được đặt");
@@ -185,7 +185,6 @@ public class DatBanTruoc_Controller implements Initializable {
             btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
             btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
         }
-        txtSoBan.setText(String.valueOf(danhSachBanDangChon.size()));
     }
    
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
@@ -220,8 +219,6 @@ public class DatBanTruoc_Controller implements Initializable {
  
     private void loadThongTinBan(Ban ban, DonDatBan donGanNhat) {
         if (ban == null) return;
-        // Hiển thị mã bàn
-        txtSoBan.setText(ban.getMaBan());
         // Hiển thị ngày đặt bàn nếu có
         if (donGanNhat != null && donGanNhat.getNgayGioLapDon() != null) {
             dpNgayDatBan.setValue(donGanNhat.getNgayGioLapDon().toLocalDate());

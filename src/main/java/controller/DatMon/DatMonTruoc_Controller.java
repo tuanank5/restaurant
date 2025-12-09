@@ -2,6 +2,7 @@ package controller.DatMon;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,8 +11,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import dao.impl.Ban_DAOImpl;
 import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
+import controller.DatBan.DatBanTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
@@ -348,16 +351,23 @@ public class DatMonTruoc_Controller implements Initializable{
 
         DonDatBan_DAO ddbDAO = new DonDatBan_DAOImpl();
         HoaDon_DAOImpl hdDAO = new HoaDon_DAOImpl();
+        Ban_DAOImpl banDAO = new Ban_DAOImpl();
 
         // Tạo đơn đặt bàn cho từng bàn
         for (Ban ban : danhSachBanChonStatic) {
             DonDatBan ddb = new DonDatBan();
             ddb.setMaDatBan(util.AutoIDUitl.sinhMaDonDatBan());
-            ddb.setNgayGioLapDon(java.time.LocalDateTime.now());
+            
+            LocalDate date = DatBanTruoc_Controller.ngayDatBanStatic;
+            LocalTime time = LocalTime.parse(DatBanTruoc_Controller.gioBatDauStatic);
+            LocalDateTime dateTime = LocalDateTime.of(date, time);        
+            ddb.setNgayGioLapDon(dateTime);
             ddb.setSoLuong(soLuongKH);
             ddb.setKhachHang(kh);
             ddb.setBan(ban);
-            ddb.setGioBatDau(java.time.LocalTime.now());
+            String gio = DatBanTruoc_Controller.gioBatDauStatic;
+            LocalTime time2 = LocalTime.parse(gio);
+            ddb.setGioBatDau(time2);
             ddb.setTrangThai("Chưa Nhận Bàn");
             ddbDAO.them(ddb);
         }
@@ -439,7 +449,9 @@ public class DatMonTruoc_Controller implements Initializable{
                 DonDatBan ddb = new DonDatBan();
                 ddb.setMaDatBan(util.AutoIDUitl.sinhMaDonDatBan());
                 try {
-                    ddb.setNgayGioLapDon(java.time.LocalDateTime.now());
+                	LocalDate date = DatBanTruoc_Controller.ngayDatBanStatic;
+                	LocalTime time = LocalTime.parse(DatBanTruoc_Controller.gioBatDauStatic);
+                	ddb.setNgayGioLapDon(LocalDateTime.of(date, time));
                 } catch (Exception ignore) {}
                 ddb.setSoLuong(soLuongKH);
                 ddb.setKhachHang(kh);
@@ -447,8 +459,12 @@ public class DatMonTruoc_Controller implements Initializable{
                     ddb.setBan(ban);
                 } catch (Exception ignore) {}
                 try {
-                    ddb.setGioBatDau(LocalTime.now());
-                } catch (Exception ignore) {}
+                    String gio = DatBanTruoc_Controller.gioBatDauStatic;
+                    LocalTime time = LocalTime.parse(gio);
+                    ddb.setGioBatDau(time);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 ddb.setTrangThai("Chưa Nhận Bàn");
                 boolean okDDB = donDatBanDAO.them(ddb);
                 if (!okDDB) {
