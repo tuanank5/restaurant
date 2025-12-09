@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
 import dao.ChiTietHoaDon_DAO;
@@ -94,9 +97,12 @@ public class ABanHienTai_Controller {
     private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
     private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+    private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
 
     // --- Danh sách và trạng thái ---
     private List<HoaDon> dsHoaDon = new ArrayList<>();
+    private List<Ban> dsBan = new ArrayList<Ban>();
+    private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
     private Ban hoaDonDangChon = null;
     private Button buttonHoaDonDangChonUI = null;
     private String maHoaDonDangChon;
@@ -116,16 +122,61 @@ public class ABanHienTai_Controller {
 
     @FXML
     public void initialize() {
+    	dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
+    	dsBan = banDAO.getDanhSach("Ban.list", Ban.class);
+    	dsDDB = donDatBanDao.getDanhSach("DonDatBan.list", DonDatBan.class);
+    	capNhatTrangThaiBanMacDinh();
+    	capNhatTrangThaiBanTheoDDB();
         khoiTaoComboBoxes();
         loadDanhSachHoaDon();
         cmbLoaiBan.setOnAction(e -> loadDanhSachHoaDon());
     }
 
-    private void khoiTaoComboBoxes() {
+    private void capNhatTrangThaiBanMacDinh() {
+		for (Ban ban : dsBan) {
+			if (!ban.getTrangThai().equals("Trống")) {
+				ban.setTrangThai("Trống");
+				RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(Ban_DAO.class)
+                .capNhat(ban);
+			}
+		}
+		
+	}
+
+	private void capNhatTrangThaiBanTheoDDB() {
+    	LocalDate nowDate = LocalDate.now();
+    	LocalTime nowHour = LocalTime.now();
+    	List<DonDatBan> dsDDBnow = new ArrayList<DonDatBan>();
+    	
+    	for (DonDatBan ddb : dsDDB) {
+    		LocalDate ngayGioLapDon = ddb.getNgayGioLapDon().toLocalDate();
+    		if (ngayGioLapDon.equals(nowDate)) {
+    			if (nowHour.isAfter(ddb.getGioBatDau().minusHours(1)) && nowHour.isBefore(ddb.getGioBatDau().plusHours(1))) {
+    				dsDDBnow.add(ddb);
+    			}
+    		}
+    	}
+    	
+    	for (DonDatBan ddb : dsDDBnow) {
+    		for (Ban ban : dsBan) {
+    			if (ban.getMaBan().equals(ddb.getBan().getMaBan())) {
+    				ban.setTrangThai("Đã được đặt");
+    				RestaurantApplication.getInstance()
+	                    .getDatabaseContext()
+	                    .newEntity_DAO(Ban_DAO.class)
+	                    .capNhat(ban);
+    			}
+    		}
+    	}
+		
+	}
+
+	private void khoiTaoComboBoxes() {
         cmbLoaiBan.getItems().clear();
         cmbLoaiBan.getItems().add("Tất cả");
-        List<Ban> danhSachBanTemp = banDAO.getDanhSach("Ban.list", Ban.class);
-        for (Ban ban : danhSachBanTemp) {
+        for (Ban ban : dsBan) {
             String tenLoai = ban.getLoaiBan().getTenLoaiBan();
             if (!cmbLoaiBan.getItems().contains(tenLoai)) {
                 cmbLoaiBan.getItems().add(tenLoai);
@@ -139,7 +190,6 @@ public class ABanHienTai_Controller {
         hoaDonDangChon = null;
         buttonHoaDonDangChonUI = null;
 
-        dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
         int col = 0, row = 0;
         final int MAX_COLS = 9;
 
@@ -239,6 +289,8 @@ public class ABanHienTai_Controller {
                 GridPane.setMargin(borderPane, new Insets(5.0));
                 gridPaneHD.add(borderPane, col, row);
 
+                capNhatTrangThaiBanTheoHD(hoaDon);
+                
                 col++;
                 if (col >= MAX_COLS) {
                     col = 0;
@@ -247,6 +299,18 @@ public class ABanHienTai_Controller {
             }
         }
     }
+    
+    private void capNhatTrangThaiBanTheoHD(HoaDon hd) {
+    	for (Ban ban : dsBan) {
+        	if (hd.getBan().equals(ban)) {
+        		ban.setTrangThai("Đang phục vụ");
+        		RestaurantApplication.getInstance()
+   	                    .getDatabaseContext()
+   	                    .newEntity_DAO(Ban_DAO.class)
+   	                    .capNhat(ban);
+        	}
+        }
+	}
 
 //    private void handleChonBan(Ban ban, Button btnBan) {
 //        Ban banCu = this.banDangChon;

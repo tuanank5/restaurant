@@ -244,16 +244,29 @@ public class ADatMon_Controller implements Initializable {
 
     @FXML
     void handleXacNhan(ActionEvent event) {
-        // Lưu danh sách món theo bàn
+    	if (dsMonAnDat.isEmpty()) {
+           	showAlert("Thông báo", "Vui lòng chọn món ăn", Alert.AlertType.INFORMATION);
+        } else {
+    		addHD();
+    	}
+    }
+    
+    private void addHD() {
     	HoaDon hd = new HoaDon();
     	hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
     	LocalDate localDate = LocalDate.now();
         Date dateNow = Date.valueOf(localDate);
     	hd.setNgayLap(dateNow);
+    	
     	hd.setTrangThai("Chưa thanh toán");
     	hd.setKieuThanhToan("kieuThanhToan");
+    	
+    	KhachHang kh = new KhachHang();
+    	kh.setMaKH("KH0001");
+    	hd.setKhachHang(kh);
     	hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
     	hd.setBan(MenuNV_Controller.banDangChon);
+    	
     	
     	try {
    	     if (hd != null) {
@@ -264,7 +277,10 @@ public class ADatMon_Controller implements Initializable {
    	            //Kiểm tra kết quả thêm
    	            if (check) {
    	                showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
-   	                themChiTietHoaDon(hd, dsMonAnDat);
+   	                if (!dsMonAnDat.isEmpty()) {
+   	   	                themChiTietHoaDon(hd, dsMonAnDat);
+   	   	                MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+   	                } 
    	            } else {
    	                showAlert("Thông báo", "Lưu hóa đơn tạm thất bại!", Alert.AlertType.WARNING);
    	            }
@@ -273,18 +289,6 @@ public class ADatMon_Controller implements Initializable {
    	        e.printStackTrace();
    	        showAlert("Lỗi", "ADatMon_Controller lỗi", Alert.AlertType.ERROR);
    	    }
-    	
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Xác nhận");
-        alert.setHeaderText(null);
-        alert.setContentText("Đã lưu món tạm cho bàn " + banDangChon.getMaBan());
-        alert.showAndWait();
-        try {
-            MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     
     private void themChiTietHoaDon(HoaDon hd, Map<MonAn, Integer> dsMonAn) {
