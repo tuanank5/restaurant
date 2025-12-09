@@ -359,15 +359,17 @@ public class DatMonTruoc_Controller implements Initializable{
             ddb.setMaDatBan(util.AutoIDUitl.sinhMaDonDatBan());
             
             LocalDate date = DatBanTruoc_Controller.ngayDatBanStatic;
-            LocalTime time = LocalTime.parse(DatBanTruoc_Controller.gioBatDauStatic);
-            LocalDateTime dateTime = LocalDateTime.of(date, time);        
-            ddb.setNgayGioLapDon(dateTime);
+            LocalTime time = LocalTime.parse(DatBanTruoc_Controller.gioBatDauStatic);       
+            ddb.setNgayGioLapDon(LocalDateTime.of(date, time));
+            
             ddb.setSoLuong(soLuongKH);
             ddb.setKhachHang(kh);
             ddb.setBan(ban);
+            
             String gio = DatBanTruoc_Controller.gioBatDauStatic;
             LocalTime time2 = LocalTime.parse(gio);
             ddb.setGioBatDau(time2);
+            
             ddb.setTrangThai("Chưa Nhận Bàn");
             ddbDAO.them(ddb);
         }
