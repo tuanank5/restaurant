@@ -5,7 +5,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -71,12 +70,7 @@
                         </AnchorPane>
                      </right>
                      <left>
-                        <AnchorPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <TextField fx:id="txtSoBan" layoutX="111.0" layoutY="26.0" prefWidth="50.0" styleClass="txt" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" />
-                              <Label layoutX="14.0" layoutY="31.0" styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Tổng đặt bàn:" />
-                           </children>
-                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
                      </left>
                   </BorderPane>
                </bottom>
@@ -97,12 +91,18 @@
 <Font name="System Bold" size="12.0" />
 </font>
 </Label>
-<Label layoutX="250.0" layoutY="15.0" text="GIỜ BẮT ĐẦU">
+<Label layoutX="441.0" layoutY="15.0" text="TRẠNG THÁI">
 <font>
 <Font name="System Bold" size="12.0" />
 </font>
 </Label>
 <ComboBox fx:id="cmbGioBatDau" layoutX="250.0" layoutY="40.0" prefWidth="150.0" />
+                        <Label layoutX="250.0" layoutY="15.0" text="GIỜ ĐẾN">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cmbTrangThai" layoutX="439.0" layoutY="40.0" prefWidth="150.0" />
 </children>
 </Pane>
 </center>

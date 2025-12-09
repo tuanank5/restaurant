@@ -427,14 +427,18 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
     }
 	@Override
 	public String getMaxMaHoaDon() {
-	    EntityManager em = getEntityManager();
+		EntityManager em = entityManagerFactory.createEntityManager();
 	    try {
-	        String sql = "SELECT TOP 1 maHD"
-	        		+ "FROM HoaDon"
-	        		+ "ORDER BY CAST(SUBSTRING(maHD, 3, LEN(maHD)) AS INT) DESC";
+	        String jpql = "SELECT hd.maHD FROM HoaDon hd "
+	                     + "ORDER BY CAST(SUBSTRING(hd.maHD, 3) AS int) DESC";
 
-	        return (String) em.createNativeQuery(sql).getSingleResult();
+	        return em.createQuery(jpql, String.class)
+	                 .setMaxResults(1)
+	                 .getSingleResult();
+	    } catch (NoResultException e) {
+	        return null;
 	    } catch (Exception e) {
+	        e.printStackTrace();
 	        return null;
 	    } finally {
 	        em.close();
