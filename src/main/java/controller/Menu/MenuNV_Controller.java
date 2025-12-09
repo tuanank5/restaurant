@@ -12,6 +12,7 @@ import controller.Dashboard.DashboardNV_Controller;
 import dao.Ban_DAO;
 import dao.TaiKhoan_DAO;
 import entity.Ban;
+import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
@@ -46,6 +47,7 @@ public class MenuNV_Controller {
 	public static Map<entity.MonAn, Integer> dsMonAnDangChon;
 	public static String tongTienSauVAT;
 	public static Ban banDangChon;
+	public static DonDatBan DonDatBan;
 	public static KhachHang khachHangDangChon;
 	public static ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
 	
