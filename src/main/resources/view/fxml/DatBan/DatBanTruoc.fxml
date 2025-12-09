@@ -91,12 +91,18 @@
 <Font name="System Bold" size="12.0" />
 </font>
 </Label>
-<Label layoutX="250.0" layoutY="15.0" text="GIỜ ĐẾN">
+<Label layoutX="441.0" layoutY="15.0" text="TRẠNG THÁI">
 <font>
 <Font name="System Bold" size="12.0" />
 </font>
 </Label>
 <ComboBox fx:id="cmbGioBatDau" layoutX="250.0" layoutY="40.0" prefWidth="150.0" />
+                        <Label layoutX="250.0" layoutY="15.0" text="GIỜ ĐẾN">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cmbTrangThai" layoutX="439.0" layoutY="40.0" prefWidth="150.0" />
 </children>
 </Pane>
 </center>

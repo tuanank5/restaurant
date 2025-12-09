@@ -39,6 +39,9 @@ public class DatBanTruoc_Controller implements Initializable {
 
     @FXML
     private ComboBox<String> cmbLoaiBan;
+    
+    @FXML
+    private ComboBox<String> cmbTrangThai;
 
     @FXML
     private DatePicker dpNgayDatBan;
