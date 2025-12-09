@@ -21,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -75,6 +76,16 @@ public class DatBanTruoc_Controller implements Initializable {
         );
         cmbTrangThai.setValue("Tất cả");
         cmbTrangThai.setOnAction(e -> filterBanTheoTrangThai());
+        dpNgayDatBan.setDayCellFactory(datePicker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(LocalDate.now())) { // KHÔNG cho chọn ngày < hôm nay
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;");
+                }
+            }
+        });
     }
        
     private void loadGioBatDau() {
@@ -102,6 +113,13 @@ public class DatBanTruoc_Controller implements Initializable {
             alert.showAndWait();
             return;
         }
+        
+        if (ngayDat.isBefore(LocalDate.now())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Ngày đặt bàn phải lớn hơn hoặc bằng ngày hiện tại!");
+            alert.showAndWait();
+            return;
+        }
+        
         //Kiểm tra đã chọn giờ chưa
         String gioDat = cmbGioBatDau.getValue(); // Lấy giá trị chọn từ ComboBox
         if (gioDat == null || gioDat.isEmpty()) {
