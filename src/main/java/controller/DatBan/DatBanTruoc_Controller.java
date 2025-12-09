@@ -1,6 +1,8 @@
 package controller.DatBan;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,9 @@ public class DatBanTruoc_Controller implements Initializable {
 
     @FXML
     private GridPane gridPaneBan;
+    
+    @FXML
+    private Button btnTroLai;
    
     // DAO
     private Ban_DAO banDAO = new Ban_DAOImpl();
@@ -86,6 +91,7 @@ public class DatBanTruoc_Controller implements Initializable {
                 }
             }
         });
+        btnTroLai.setOnAction(event -> onTroLai(event));
     }
        
     private void loadGioBatDau() {
@@ -132,11 +138,7 @@ public class DatBanTruoc_Controller implements Initializable {
         	DatBanTruoc_Controller.ngayDatBanStatic = ngayDat;
         	DatBanTruoc_Controller.gioBatDauStatic = gioDat;
             DatMonTruoc_Controller.danhSachBanChonStatic = new ArrayList<>(danhSachBanDangChon);
-            for (Ban ban : danhSachBanDangChon) {
-                ban.setTrangThai("Đã được đặt");
-                banDAO.capNhat(ban);
-            }
-            loadDanhSachBan();
+            
             MenuNV_Controller.instance.readyUI("MonAn/DatMonTruoc");
 
         } catch (Exception e) {
@@ -184,38 +186,6 @@ public class DatBanTruoc_Controller implements Initializable {
         }
     }
 
-    private void handleChonBan(Ban ban, Button btnBan) {
-        //Không cho chọn bàn đã được đặt
-        if ("Đã được đặt".equals(ban.getTrangThai())) {
-            Alert alert = new Alert(Alert.AlertType.WARNING,
-                    "Bàn này đã được đặt!\nVui lòng chọn bàn khác.");
-            alert.showAndWait();
-            return;
-        }
-        // Một khách hàng chỉ được đặt 1 bàn
-        if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING,
-                    "Một khách hàng chỉ được đặt 1 bàn!\nHãy bỏ chọn bàn đã chọn để chọn bàn khác.");
-            alert.showAndWait();
-            return;
-        }
-        // Nếu bàn đang được chọn → bỏ chọn
-        if (danhSachBanDangChon.contains(ban)) {
-            danhSachBanDangChon.clear();
-            danhSachButtonDangChonUI.clear();
-            btnBan.setText(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
-            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-        } else {
-            // Chọn bàn
-            danhSachBanDangChon.clear();
-            danhSachButtonDangChonUI.clear();
-            danhSachBanDangChon.add(ban);
-            danhSachButtonDangChonUI.add(btnBan);
-            btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
-            btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-        }
-    }
-   
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
         String backgroundColor = "white";
         String borderColor = "black";
@@ -245,7 +215,64 @@ public class DatBanTruoc_Controller implements Initializable {
             backgroundColor, borderColor
         );
     }
- 
+    
+    private void handleChonBan(Ban ban, Button btnBan) {
+        // Lấy đơn đặt gần nhất của bàn
+        List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+        if (dsDon != null && !dsDon.isEmpty()) {
+            DonDatBan donGanNhat = dsDon.get(dsDon.size() - 1);
+            // Ngày giờ bàn được đặt gần nhất
+            LocalDate dateDon = donGanNhat.getNgayGioLapDon().toLocalDate();
+            int gioDon = donGanNhat.getGioBatDau().getHour();
+            // Ghép ngày + giờ thành LocalDateTime
+            LocalDateTime thoiDiemGanNhat = LocalDateTime.of(dateDon, donGanNhat.getGioBatDau());
+            // Giờ đợi phải sau 2 tiếng
+            LocalDateTime duocDatLaiLuc = thoiDiemGanNhat.plusHours(2);
+            LocalDate ngayDat = dpNgayDatBan.getValue();
+            String gioBatDauStr = cmbGioBatDau.getValue();           
+            if (ngayDat != null && gioBatDauStr != null) {
+                int gioNguoiDat = Integer.parseInt(gioBatDauStr.substring(0, 2));
+                LocalDateTime thoiDiemNguoiMuonDat = LocalDateTime.of(ngayDat, LocalTime.of(gioNguoiDat, 0));
+                if (thoiDiemNguoiMuonDat.isBefore(duocDatLaiLuc)) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING,
+                            "Bàn này đã được đặt từ " + thoiDiemGanNhat +
+                            "\nChỉ được đặt lại sau: " + duocDatLaiLuc +
+                            "\nVui lòng chọn bàn khác.");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+        }
+        // Không cho chọn bàn đã được đặt
+        if ("Đã được đặt".equals(ban.getTrangThai())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING,
+                    "Bàn này đã được đặt!\nVui lòng chọn bàn khác.");
+            alert.showAndWait();
+            return;
+        }
+        // Một khách hàng chỉ chọn 1 bàn
+        if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING,
+                    "Bạn chỉ được chọn 1 bàn.\nHãy bỏ chọn bàn đã chọn để chọn bàn khác.");
+            alert.showAndWait();
+            return;
+        }
+        // Nếu đã chọn thì bỏ chọn
+        if (danhSachBanDangChon.contains(ban)) {
+            danhSachBanDangChon.clear();
+            danhSachButtonDangChonUI.clear();
+            btnBan.setText(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+        } else {
+            danhSachBanDangChon.clear();
+            danhSachButtonDangChonUI.clear();
+            danhSachBanDangChon.add(ban);
+            danhSachButtonDangChonUI.add(btnBan);
+            btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+        }
+    }
+    
     private void loadThongTinBan(Ban ban, DonDatBan donGanNhat) {
         if (ban == null) return;
         // Hiển thị ngày đặt bàn nếu có
@@ -299,7 +326,15 @@ public class DatBanTruoc_Controller implements Initializable {
             }
         }
     }
-
+    
+    @FXML
+    private void onTroLai(ActionEvent event) {
+        try {
+            MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
