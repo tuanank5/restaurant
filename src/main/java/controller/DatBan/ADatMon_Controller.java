@@ -265,7 +265,7 @@ public class ADatMon_Controller implements Initializable {
     	kh.setMaKH("KH0001");
     	hd.setKhachHang(kh);
     	hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-    	hd.setBan(MenuNV_Controller.banDangChon);
+    	hd.setDonDatBan(MenuNV_Controller.DonDatBan);
     	
     	
     	try {
