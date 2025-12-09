@@ -62,6 +62,30 @@ public class DatBanTruoc_Controller implements Initializable {
     private Button buttonBanDangChonUI = null;
     public static LocalDate ngayDatBanStatic;
     public static String gioBatDauStatic;
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        loadDanhSachBan();
+        loadGioBatDau(); // Khởi tạo ComboBox giờ bắt đầu
+        cmbTrangThai.getItems().addAll(
+                "Tất cả",
+                "Trống",
+                "Đã được đặt",
+                "Đang phục vụ"
+        );
+        cmbTrangThai.setValue("Tất cả");
+        cmbTrangThai.setOnAction(e -> filterBanTheoTrangThai());
+    }
+       
+    private void loadGioBatDau() {
+        cmbGioBatDau.getItems().clear();
+        for (int gio = 0; gio < 24; gio++) { // từ 00 đến 23
+            String gioStr = String.format("%02d:00", gio);
+            cmbGioBatDau.getItems().add(gioStr);
+        }
+        cmbGioBatDau.setValue("08:00"); // giá trị mặc định (có thể tùy chỉnh)
+    }
+    
     @FXML
     void btnDatBan(ActionEvent event) {
         //Kiểm tra đã chọn bàn chưa
@@ -101,22 +125,6 @@ public class DatBanTruoc_Controller implements Initializable {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        loadDanhSachBan();
-        loadGioBatDau(); // Khởi tạo ComboBox giờ bắt đầu
-    }
-
-    private void loadGioBatDau() {
-        cmbGioBatDau.getItems().clear();
-        for (int gio = 0; gio < 24; gio++) { // từ 00 đến 23
-            String gioStr = String.format("%02d:00", gio);
-            cmbGioBatDau.getItems().add(gioStr);
-        }
-        cmbGioBatDau.setValue("08:00"); // giá trị mặc định (có thể tùy chỉnh)
-    }
-
     
     private void loadDanhSachBan() {
         gridPaneBan.getChildren().clear();
@@ -237,6 +245,44 @@ public class DatBanTruoc_Controller implements Initializable {
         }
     }
 
+    private void filterBanTheoTrangThai() {
+        String trangThaiChon = cmbTrangThai.getValue();
+        gridPaneBan.getChildren().clear();
+        // Nếu chọn "Tất cả" → load bình thường
+        if (trangThaiChon.equals("Tất cả")) {
+            loadDanhSachBan();
+            return;
+        }
+        int col = 0, row = 0;
+        final int MAX_COLS = 5;
+        for (Ban ban : danhSachBan) {
+            if (!ban.getTrangThai().equals(trangThaiChon)) {
+                continue; // bỏ bàn không khớp trạng thái
+            }
+            // Lấy số lượng ghế từ loại bàn hoặc đơn đặt gần nhất
+            List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+            int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
+                    ? dsDon.get(dsDon.size() - 1).getSoLuong()
+                    : ban.getLoaiBan().getSoLuong();
+            Button btnBan = new Button(ban.getMaBan() + "\n(" + soLuongHienThi + " chỗ)");
+            btnBan.setPrefSize(120, 100);
+            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+            btnBan.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 1) {
+                    handleChonBan(ban, btnBan);
+                }
+            });
+            GridPane.setMargin(btnBan, new Insets(5.0));
+            gridPaneBan.add(btnBan, col, row);
+            col++;
+            if (col >= MAX_COLS) {
+                col = 0;
+                row++;
+            }
+        }
+    }
+
+    
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
