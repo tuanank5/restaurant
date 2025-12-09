@@ -3,6 +3,7 @@ package controller.DatBan;
 import dao.KhuyenMai_DAO;
 import dao.KhachHang_DAO;
 import dao.Ban_DAO;
+import dao.ChiTietHoaDon_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.KhuyenMai_DAOImpl;
@@ -10,6 +11,7 @@ import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
 import dao.impl.DonDatBan_DAOImpl;
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.KhachHang;
 import entity.KhuyenMai;
 import entity.DonDatBan;
@@ -28,6 +30,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import util.AutoIDUitl;
 import dao.impl.DonDatBan_DAOImpl;
+
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -175,12 +179,14 @@ public class ADatMon_Controller implements Initializable {
         tblDS.setOnMouseClicked(e -> capNhatTongTien());
 
     }
+    
     public void loadTenNhanVien() {
         if (MenuNV_Controller.taiKhoan != null) {
             String ten = MenuNV_Controller.taiKhoan.getNhanVien().getTenNV();
             txtNhanVien.setText(ten);
         }
     }
+    
     private void khoiTaoComboBoxPhanLoai() {
         // Lấy danh sách loại món duy nhất
         List<String> danhSachLoai = new ArrayList<>();
@@ -214,7 +220,7 @@ public class ADatMon_Controller implements Initializable {
     }
 
     @FXML
-    void hanhleThanhToan(ActionEvent event) {
+    void handleThanhToan(ActionEvent event) {
         try {
         	// Gán dữ liệu cho hóa đơn như bạn đang làm
             MenuNV_Controller.banDangChon = banDangChon;
@@ -228,7 +234,7 @@ public class ADatMon_Controller implements Initializable {
             //Cập nhật giao diện danh sách bàn trong MenuNV
             MenuNV_Controller.instance.refreshBanUI();
             //Mở UI hóa đơn
-//------------------Chuyển qua gdien tứng em ------------------------------
+//------------------Chuyển qua gdien ------------------------------
             MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
 
         } catch (Exception e) {
@@ -236,9 +242,8 @@ public class ADatMon_Controller implements Initializable {
         }
     }
 
-    
     @FXML
-    void hanhleXacNhan(ActionEvent event) {
+    void handleXacNhan(ActionEvent event) {
         // Lưu danh sách món theo bàn
     	HoaDon hd = new HoaDon();
     	hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
@@ -259,7 +264,7 @@ public class ADatMon_Controller implements Initializable {
    	            //Kiểm tra kết quả thêm
    	            if (check) {
    	                showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
-   	                themChiTietHoaDon(hd.getMaHoaDon(), null);
+   	                themChiTietHoaDon(hd, dsMonAnDat);
    	            } else {
    	                showAlert("Thông báo", "Lưu hóa đơn tạm thất bại!", Alert.AlertType.WARNING);
    	            }
@@ -282,9 +287,18 @@ public class ADatMon_Controller implements Initializable {
         }
     }
     
-    private void themChiTietHoaDon(String maHD, List<MonAn> dsMonAn) {
-        for (int i = 0; i < dsMonAn.size(); i++) {
-            MonAn monAn = dsMonAn.get(i);
+    private void themChiTietHoaDon(HoaDon hd, Map<MonAn, Integer> dsMonAn) {
+    	ChiTietHoaDon cthd = new ChiTietHoaDon();
+    	for (Map.Entry<MonAn, Integer> entry : dsMonAn.entrySet()) {
+            MonAn monAn = entry.getKey(); // Lấy món ăn
+            Integer soLuong = entry.getValue(); // Lấy số lượng tương ứng
+            cthd.setHoaDon(hd);
+            cthd.setMonAn(monAn);
+            cthd.setSoLuong(soLuong);
+            RestaurantApplication.getInstance()
+               .getDatabaseContext()
+               .newEntity_DAO(ChiTietHoaDon_DAO.class)
+               .them(cthd);
         }
 	}
 
