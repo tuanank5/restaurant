@@ -55,7 +55,7 @@ public class HoaDon {
     private double tienThua;
 
     @ManyToOne
-    @JoinColumn(name = "maKH", referencedColumnName = "maKH", nullable = false)
+    @JoinColumn(name = "maKH", referencedColumnName = "maKH", nullable = true)
     private KhachHang khachHang;
 
     @ManyToOne
