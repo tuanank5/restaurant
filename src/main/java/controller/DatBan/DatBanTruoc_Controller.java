@@ -244,24 +244,24 @@ public class DatBanTruoc_Controller implements Initializable {
             return;
         }
         // Một khách hàng chỉ chọn 1 bàn
-        if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING,
-                    "Bạn chỉ được chọn 1 bàn.\nHãy bỏ chọn bàn đã chọn để chọn bàn khác.");
-            alert.showAndWait();
-            return;
-        }
+//        if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
+//            Alert alert = new Alert(Alert.AlertType.WARNING,
+//                    "Bạn chỉ được chọn 1 bàn.\nHãy bỏ chọn bàn đã chọn để chọn bàn khác.");
+//            alert.showAndWait();
+//            return;
+//        }
         // Nếu đã chọn thì bỏ chọn
         if (danhSachBanDangChon.contains(ban)) {
             danhSachBanDangChon.clear();
             danhSachButtonDangChonUI.clear();
-            btnBan.setText(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            btnBan.setText(ban.getMaBan());
             btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
         } else {
             danhSachBanDangChon.clear();
             danhSachButtonDangChonUI.clear();
             danhSachBanDangChon.add(ban);
             danhSachButtonDangChonUI.add(btnBan);
-            btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            btnBan.setText("✔ " + ban.getMaBan());
             btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
         }
     }

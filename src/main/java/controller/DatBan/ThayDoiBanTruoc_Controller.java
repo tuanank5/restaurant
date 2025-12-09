@@ -90,7 +90,12 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             new Alert(Alert.AlertType.WARNING, "Vui lòng chọn ngày đổi bàn!").showAndWait();
             return;
         }
-
+        
+        if (!ngayDat.isAfter(LocalDate.now())) {
+            new Alert(Alert.AlertType.ERROR, "Ngày đổi bàn phải lớn hơn ngày hiện tại!").showAndWait();
+            return;
+        }
+        
         // 4) kiểm tra giờ
         String gioDat = cmbGioBatDau.getValue();
         if (gioDat == null || gioDat.isEmpty()) {
@@ -236,21 +241,21 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     }
 
     private void handleChonBan(Ban ban, Button btnBan) {
-        if (danhSachBanDangChon.contains(ban)) {
-            // Nếu bàn đã được chọn, bỏ chọn
-            danhSachBanDangChon.remove(ban);
-            danhSachButtonDangChonUI.remove(btnBan);
-            // Loại bỏ dấu tick
-            btnBan.setText(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
-            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-        } else {
-            // Thêm bàn vào danh sách chọn
-            danhSachBanDangChon.add(ban);
-            danhSachButtonDangChonUI.add(btnBan);
-            // Thêm dấu tick vào text
-            btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
-            btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+    	// Nếu đã chọn 1 bàn rồi → bỏ chọn bàn cũ
+        if (!danhSachBanDangChon.isEmpty()) {
+            Ban banCu = danhSachBanDangChon.get(0);
+            Button btnCu = danhSachButtonDangChonUI.get(0);
+            // Bỏ tick bàn cũ
+            btnCu.setText(banCu.getMaBan());
+            btnCu.setStyle(getStyleByStatusAndType(banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()));
+            danhSachBanDangChon.clear();
+            danhSachButtonDangChonUI.clear();
         }
+        // Chọn bàn mới
+        danhSachBanDangChon.add(ban);
+        danhSachButtonDangChonUI.add(btnBan);
+        btnBan.setText("✔ " + ban.getMaBan());
+        btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
 
         // Cập nhật tổng số bàn được chọn lên txtSoBan
         txtSoBan.setText(String.valueOf(danhSachBanDangChon.size()));
