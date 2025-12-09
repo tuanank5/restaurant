@@ -60,11 +60,17 @@ public class DatMonTruoc_Controller implements Initializable{
     private TextField txtTim;
     
     @FXML
+    private Button btnTroLai;
+    
+    @FXML
     private TableColumn<MonAn, Integer> colSTT;
+    
     @FXML
     private TableColumn<MonAn, String> colTenMon;
+    
     @FXML
     private TableColumn<MonAn, Double> colDonGia;
+    
     @FXML
     private TableColumn<MonAn, Integer> colSoLuong;
     
@@ -143,6 +149,7 @@ public class DatMonTruoc_Controller implements Initializable{
 	    txtSdt.textProperty().addListener((obs, oldValue, newValue) -> {
 	        autoFillTenKhachHang(newValue);
 	    });
+	    btnTroLai.setOnAction(event -> onTroLai(event));
     }
     
     private void timMonTheoTen() {
@@ -200,7 +207,6 @@ public class DatMonTruoc_Controller implements Initializable{
         gridPaneMon.getChildren().clear();
         gridPaneMon.getColumnConstraints().clear();
         gridPaneMon.getRowConstraints().clear();
-
         gridPaneMon.setHgap(15);
         gridPaneMon.setVgap(30);
 
@@ -214,13 +220,11 @@ public class DatMonTruoc_Controller implements Initializable{
             cc.setPercentWidth(100.0 / columns);
             gridPaneMon.getColumnConstraints().add(cc);
         }
-
         // Tính số row theo danh sách
         int totalRows = (int) Math.ceil(danhSach.size() / (double) columns);
         for (int i = 0; i < totalRows; i++) {
             gridPaneMon.getRowConstraints().add(new RowConstraints(220));
         }
-
         for (MonAn mon : danhSach) {
             // Ảnh
             ImageView img = new ImageView();
@@ -235,26 +239,20 @@ public class DatMonTruoc_Controller implements Initializable{
             img.setFitWidth(120);
             img.setFitHeight(120);
             img.setPreserveRatio(true);
-
             // Tên món
             Label lblTen = new Label(mon.getTenMon());
             lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-
             // Giá
             Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
-
             // Nút chọn
             Button btnChon = new Button("Chọn");
             btnChon.setOnAction(e -> chonMon(mon));
-
             VBox box = new VBox(img, lblTen, lblGia, btnChon);
             box.setSpacing(6);
             box.setPrefWidth(150);
             box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; "
                        + "-fx-alignment:center; -fx-border-radius:10; -fx-background-radius:10;");
-
             gridPaneMon.add(box, col, row);
-
             col++;
             if (col == columns) {
                 col = 0;
@@ -264,7 +262,6 @@ public class DatMonTruoc_Controller implements Initializable{
         gridPaneMon.requestLayout();
     }
     
-
     // Hàm định dạng tiền
     private String dinhDangTien(double soTien) {
         return String.format("%,.0f", soTien); // định dạng kiểu 1,000,000
@@ -328,7 +325,6 @@ public class DatMonTruoc_Controller implements Initializable{
             showAlert(Alert.AlertType.ERROR, "Vui lòng nhập số điện thoại khách hàng.");
             return;
         }
-
         // Tìm khách
         KhachHang kh = null;
         try {
@@ -336,12 +332,10 @@ public class DatMonTruoc_Controller implements Initializable{
         } catch (Exception ex) {
             kh = null;
         }
-
         if (kh == null) {
             showAlert(Alert.AlertType.ERROR, "Không tìm thấy khách hàng theo số điện thoại.");
             return;
         }
-
         int soLuongKH = 1;
         try {
             soLuongKH = Integer.parseInt(txtSoLuongKH.getText().trim());
@@ -373,6 +367,11 @@ public class DatMonTruoc_Controller implements Initializable{
             
             ddb.setTrangThai("Chưa Nhận Bàn");
             ddbDAO.them(ddb);
+        }
+        
+        for (Ban ban : danhSachBanChonStatic) {
+            ban.setTrangThai("Đã được đặt");
+            new Ban_DAOImpl().capNhat(ban);
         }
 
         // Tạo hóa đơn KHÔNG có món ăn
@@ -476,6 +475,12 @@ public class DatMonTruoc_Controller implements Initializable{
                 }
                 danhSachDatBanDaTao.add(ddb);
             }
+            
+            for (Ban ban : danhSachBanChonStatic) {
+                ban.setTrangThai("Đã được đặt");
+                new Ban_DAOImpl().capNhat(ban);
+            }
+            
             double tongTien = 0.0;
             for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
                 tongTien += e.getKey().getDonGia() * e.getValue();
@@ -545,7 +550,16 @@ public class DatMonTruoc_Controller implements Initializable{
             txtKH.setText("");
         }
     }
-  
+    
+    @FXML
+    private void onTroLai(ActionEvent event) {
+        try {
+            MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);

@@ -49,6 +49,9 @@ public class DatBanTruoc_Controller implements Initializable {
 
     @FXML
     private GridPane gridPaneBan;
+    
+    @FXML
+    private Button btnTroLai;
    
     // DAO
     private Ban_DAO banDAO = new Ban_DAOImpl();
@@ -86,6 +89,7 @@ public class DatBanTruoc_Controller implements Initializable {
                 }
             }
         });
+        btnTroLai.setOnAction(event -> onTroLai(event));
     }
        
     private void loadGioBatDau() {
@@ -132,11 +136,7 @@ public class DatBanTruoc_Controller implements Initializable {
         	DatBanTruoc_Controller.ngayDatBanStatic = ngayDat;
         	DatBanTruoc_Controller.gioBatDauStatic = gioDat;
             DatMonTruoc_Controller.danhSachBanChonStatic = new ArrayList<>(danhSachBanDangChon);
-            for (Ban ban : danhSachBanDangChon) {
-                ban.setTrangThai("Đã được đặt");
-                banDAO.capNhat(ban);
-            }
-            loadDanhSachBan();
+            
             MenuNV_Controller.instance.readyUI("MonAn/DatMonTruoc");
 
         } catch (Exception e) {
@@ -299,7 +299,15 @@ public class DatBanTruoc_Controller implements Initializable {
             }
         }
     }
-
+    
+    @FXML
+    private void onTroLai(ActionEvent event) {
+        try {
+            MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
