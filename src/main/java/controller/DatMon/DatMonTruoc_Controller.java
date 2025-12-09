@@ -132,16 +132,17 @@ public class DatMonTruoc_Controller implements Initializable{
                 setText(dinhDangTien(item));
             }
         }
-    });
-    
-    // Số lượng
-    colSoLuong.setCellValueFactory(col -> {
-        Integer soLuong = dsMonAnDat.get(col.getValue());
-        return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
-    });
-    
-    // Khởi tạo TableView rỗng
-    tblDS.setItems(FXCollections.observableArrayList());
+    });  
+	    // Số lượng
+	    colSoLuong.setCellValueFactory(col -> {
+	        Integer soLuong = dsMonAnDat.get(col.getValue());
+	        return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
+	    });
+	    // Khởi tạo TableView rỗng
+	    tblDS.setItems(FXCollections.observableArrayList());
+	    txtSdt.textProperty().addListener((obs, oldValue, newValue) -> {
+	        autoFillTenKhachHang(newValue);
+	    });
     }
     
     private void timMonTheoTen() {
@@ -528,7 +529,23 @@ public class DatMonTruoc_Controller implements Initializable{
         }
     }
 
-    
+    private void autoFillTenKhachHang(String sdt) {
+        if (sdt == null || sdt.trim().isEmpty()) {
+            txtKH.setText("");
+            return;
+        }
+        try {
+            KhachHang kh = khachHangDAO.timTheoSDT(sdt.trim());
+            if (kh != null) {
+                txtKH.setText(kh.getTenKH());
+            } else {
+                txtKH.setText("");
+            }
+        } catch (Exception e) {
+            txtKH.setText("");
+        }
+    }
+  
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
