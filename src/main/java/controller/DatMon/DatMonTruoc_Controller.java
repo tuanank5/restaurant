@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import dao.impl.Ban_DAOImpl;
 import dao.impl.ChiTietHoaDon_DAOImpl;
@@ -95,12 +96,16 @@ public class DatMonTruoc_Controller implements Initializable{
     @FXML
     private GridPane gridPaneMon;
     public static Ban banChonStatic;
+    public static KhachHang khachHangStatic;
+    public static int soLuongKHStatic;
     public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+    private KhachHang khachHangDuocChon;
+    private List<Ban> danhSachBan = new ArrayList<>();
+    private int soLuongKhach;
     private List<MonAn> dsMonAn;
-
     private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
     
     @Override
@@ -129,16 +134,16 @@ public class DatMonTruoc_Controller implements Initializable{
         	colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
 	        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
 	        colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
-        @Override
-        protected void updateItem(Double item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty || item == null) {
-                setText(null);
-            } else {
-                setText(dinhDangTien(item));
-            }
-        }
-    });  
+	        @Override
+	        protected void updateItem(Double item, boolean empty) {
+	            super.updateItem(item, empty);
+	            if (empty || item == null) {
+	                setText(null);
+	            } else {
+	                setText(dinhDangTien(item));
+	            }
+	        }
+		});  	        
 	    // Số lượng
 	    colSoLuong.setCellValueFactory(col -> {
 	        Integer soLuong = dsMonAnDat.get(col.getValue());
@@ -149,6 +154,15 @@ public class DatMonTruoc_Controller implements Initializable{
 	    txtSdt.textProperty().addListener((obs, oldValue, newValue) -> {
 	        autoFillTenKhachHang(newValue);
 	    });
+	    // --- NHẬN DỮ LIỆU TỪ DatBanTruoc ---
+	    if (khachHangStatic != null) {
+	        txtKH.setText(khachHangStatic.getTenKH());
+	        txtSdt.setText(khachHangStatic.getSdt());
+	    }
+
+	    if (soLuongKHStatic > 0) {
+	        txtSoLuongKH.setText(String.valueOf(soLuongKHStatic));
+	    }
 	    btnTroLai.setOnAction(event -> onTroLai(event));
     }
     
@@ -303,132 +317,6 @@ public class DatMonTruoc_Controller implements Initializable{
     }
 
     @FXML
-    void btnGiamKH(ActionEvent event) {
-    	try {
-	        int sl = Integer.parseInt(txtSoLuongKH.getText());
-	        if (sl > 1)
-	            txtSoLuongKH.setText(String.valueOf(sl - 1));
-	    } catch (Exception e) {
-	        txtSoLuongKH.setText("1");
-	    }
-    }
-
-    @FXML
-    void btnHuy(ActionEvent event) {
-        if (danhSachBanChonStatic == null || danhSachBanChonStatic.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Chưa chọn bàn.");
-            return;
-        }
-        String sdt = txtSdt.getText().trim();
-        if (sdt.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Vui lòng nhập số điện thoại khách hàng.");
-            return;
-        }
-        
-        KhachHang kh = null;
-        try {
-            kh = khachHangDAO.timTheoSDT(sdt);
-        } catch (Exception ex) {
-            kh = null;
-        }
-        if (kh == null) {
-            showAlert(Alert.AlertType.ERROR, "Không tìm thấy khách hàng theo số điện thoại.");
-            return;
-        }
-        int soLuongKH = 1;
-        try {
-            soLuongKH = Integer.parseInt(txtSoLuongKH.getText().trim());
-            if (soLuongKH <= 0) soLuongKH = 1;
-        } catch (Exception e) {
-            soLuongKH = 1;
-        }
-
-        DonDatBan_DAO ddbDAO = new DonDatBan_DAOImpl();
-        HoaDon_DAOImpl hdDAO = new HoaDon_DAOImpl();
-        // Tạo danh sách chứa DonDatBan đã tạo
-        List<DonDatBan> danhSachDatBanDaTao = new ArrayList<>();
-        
-        for (Ban ban : danhSachBanChonStatic) {
-            DonDatBan ddb = new DonDatBan();
-            ddb.setMaDatBan(util.AutoIDUitl.sinhMaDonDatBan());
-            try {
-                LocalDate date = DatBanTruoc_Controller.ngayDatBanStatic;
-                LocalTime time = LocalTime.parse(DatBanTruoc_Controller.gioBatDauStatic);
-                ddb.setNgayGioLapDon(LocalDateTime.of(date, time));
-            } catch (Exception ignore) {}
-            ddb.setSoLuong(soLuongKH);
-            ddb.setKhachHang(kh);
-            ddb.setBan(ban);
-            try {
-                String gio = DatBanTruoc_Controller.gioBatDauStatic;
-                LocalTime time2 = LocalTime.parse(gio);
-                ddb.setGioBatDau(time2);
-            } catch (Exception ignore) {}
-            ddb.setTrangThai("Chưa Nhận Bàn");
-            boolean ok = false;
-            try {
-                ok = ddbDAO.them(ddb);
-            } catch (Exception ex) {
-                ok = false;
-            }
-            if (!ok) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan());
-                return;
-            } else {
-                danhSachDatBanDaTao.add(ddb);
-            }
-        }
-        // Cập nhật trạng thái bàn
-        for (Ban ban : danhSachBanChonStatic) {
-            ban.setTrangThai("Đã được đặt");
-            new Ban_DAOImpl().capNhat(ban);
-        }
-        // Lấy đơn đặt bàn đầu tiên (để gán vào HoaDon)
-        if (danhSachDatBanDaTao.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Không tạo được đơn đặt bàn để liên kết hóa đơn.");
-            return;
-        }
-        DonDatBan donDau = danhSachDatBanDaTao.get(0);
-        HoaDon hd = new HoaDon();
-        hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
-        hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
-        hd.setTongTien(0.0);
-        hd.setThue(0.0);
-        hd.setTrangThai("Chưa Thanh Toán");
-        hd.setKieuThanhToan("");
-        hd.setTienNhan(0.0);
-        hd.setTienThua(0.0);
-        hd.setKhachHang(kh);
-        hd.setKhuyenMai(null);
-        hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-        hd.setDonDatBan(donDau);
-        
-        boolean okHD = false;
-        try {
-            okHD = hdDAO.them(hd);
-        } catch (Exception ex) {
-            okHD = false;
-        }
-        if (!okHD) {
-            showAlert(Alert.AlertType.ERROR, "Không thể lưu hóa đơn.");
-            return;
-        }
-        showAlert(Alert.AlertType.INFORMATION, "Đã lưu đặt bàn (không có món ăn).");
-        MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
-    }
-
-
-    @FXML
-    void btnTangKH(ActionEvent event) {
-    	try {
-            int sl = Integer.parseInt(txtSoLuongKH.getText());
-            txtSoLuongKH.setText(String.valueOf(sl + 1));
-        } catch (Exception e) {
-            txtSoLuongKH.setText("1");
-        }
-    }
-
-    @FXML
     private void btnXacNhan(ActionEvent event) {
         String tenKH = txtKH.getText() == null ? "" : txtKH.getText().trim();
         String sdt = txtSdt.getText() == null ? "" : txtSdt.getText().trim();
@@ -571,6 +459,17 @@ public class DatMonTruoc_Controller implements Initializable{
             txtKH.setText("");
         }
     }
+    
+    public void nhanThongTinDatTruoc(KhachHang kh, List<Ban> dsBan, int soLuong) {
+        this.khachHangDuocChon = kh;
+        this.danhSachBan = dsBan;
+        this.soLuongKhach = soLuong;
+        // Hiển thị lên UI
+        txtKH.setText(kh.getTenKH());
+        txtSdt.setText(kh.getSdt());
+        txtSoLuongKH.setText(String.valueOf(soLuong));
+    }
+
     
     @FXML
     private void onTroLai(ActionEvent event) {

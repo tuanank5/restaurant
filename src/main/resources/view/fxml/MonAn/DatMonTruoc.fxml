@@ -35,13 +35,11 @@
                         <AnchorPane prefHeight="130.0" prefWidth="200.0">
                            <children>
                               <Label layoutX="10.0" layoutY="10.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số điện thoại:" />
-                              <Label layoutX="10.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số lượng KH:" />
+                              <Label layoutX="10.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số lượng Khách Hàng:" />
                               <Label layoutX="10.0" layoutY="50.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng:" />
-                              <TextField fx:id="txtSdt" layoutX="110.0" layoutY="5.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField fx:id="txtKH" editable="false" layoutX="110.0" layoutY="45.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField fx:id="txtSoLuongKH" layoutX="110.0" layoutY="85.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                              <Button layoutX="185.0" layoutY="85.0" mnemonicParsing="false" onAction="#btnTangKH" prefWidth="50.0" style="-fx-font-weight: bold;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="+" />
-                              <Button layoutX="260.0" layoutY="85.0" mnemonicParsing="false" onAction="#btnGiamKH" prefWidth="50.0" style="-fx-font-weight: bold;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="-" />
+                              <TextField fx:id="txtSdt" editable="false" layoutX="170.0" layoutY="5.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtKH" editable="false" layoutX="170.0" layoutY="45.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtSoLuongKH" editable="false" layoutX="170.0" layoutY="85.0" prefHeight="29.0" prefWidth="60.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
                            </children>
                         </AnchorPane>
                      </center>
@@ -54,7 +52,6 @@
                   <AnchorPane prefHeight="100.0" prefWidth="200.0" style="-fx-border-width: 2px 1px 0 0; -fx-border-color: #dddddd;" BorderPane.alignment="CENTER">
                      <children>
                         <Button mnemonicParsing="false" onAction="#btnXacNhan" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-                        <Button layoutX="181.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnHuy" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Không đặt món" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="130.0" />
                      </children>
                   </AnchorPane>
                </bottom>
