@@ -111,6 +111,12 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
+                        <Label layoutX="459.0" layoutY="15.0" text="TRẠNG THÁI">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cmbTrangThai" layoutX="461.0" layoutY="40.0" prefWidth="150.0" />
 </children>
 </Pane>
 </center>

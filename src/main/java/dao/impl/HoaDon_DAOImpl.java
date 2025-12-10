@@ -425,6 +425,7 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 
         return doanhThuTheoThang;
     }
+	
 	@Override
 	public String getMaxMaHoaDon() {
 		EntityManager em = entityManagerFactory.createEntityManager();
@@ -444,4 +445,23 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public HoaDon getHoaDonTheoMaBan(String maBan) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        return em.createQuery(
+	                "SELECT h FROM HoaDon h WHERE h.maBan = :mb",
+	                HoaDon.class)
+	                .setParameter("mb", maBan)
+	                .getResultStream()
+	                .findFirst()
+	                .orElse(null);
+
+	    } finally {
+	        em.close();
+	    }
+	}
+
+
 }

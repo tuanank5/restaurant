@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
+import dao.HoaDon_DAO;
+import dao.impl.HoaDon_DAOImpl;
 import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
@@ -64,10 +65,6 @@ public class DoiMonTruoc_Controller implements Initializable {
     @FXML
     private ScrollPane scrollPaneMon;
 
-    // TABLE MÓN MỚI
-    @FXML private TableView<MonAn> tblDS;
-    @FXML private TableColumn<MonAn, Integer> colSoLuong;
-
     // TABLE MÓN CŨ
     @FXML private TableView<ChiTietHoaDon> tblMonCu;
     @FXML private TableColumn<ChiTietHoaDon, String> colTenMonCu;
@@ -83,6 +80,7 @@ public class DoiMonTruoc_Controller implements Initializable {
     public static Ban banChonStatic;
     public static DonDatBan donDatBanDuocChon;
 
+    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
@@ -93,6 +91,69 @@ public class DoiMonTruoc_Controller implements Initializable {
     // ==========================================================
     // INITIALIZE
     // ==========================================================
+    private ChiTietHoaDon_DAO chiTietHoaDonDAO = new ChiTietHoaDon_DAOImpl();
+
+    private void chonMon(MonAn mon) {
+
+        if (dsMonAnDat.containsKey(mon)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Món đã chọn");
+            alert.setHeaderText(mon.getTenMon());
+            alert.setContentText("Bạn muốn thao tác gì?");
+
+            ButtonType btnTang = new ButtonType("➕ Tăng");
+            ButtonType btnGiam = new ButtonType("➖ Giảm");
+            ButtonType btnXoa = new ButtonType("❌ Xoá");
+            ButtonType btnHuy =
+                    new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
+
+            Optional<ButtonType> kq = alert.showAndWait();
+
+            if (!kq.isPresent()) return;
+
+            if (kq.get() == btnTang) {
+                dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+
+            } else if (kq.get() == btnGiam) {
+                int sl = dsMonAnDat.get(mon) - 1;
+
+                if (sl <= 0) dsMonAnDat.remove(mon);
+                else dsMonAnDat.put(mon, sl);
+
+            } else if (kq.get() == btnXoa) {
+                dsMonAnDat.remove(mon);
+            }
+
+        } else {
+            dsMonAnDat.put(mon, 1);
+        }
+
+        // ✅ chỉ hiển thị món mới
+        hienThiMonMoi();
+    }
+
+
+    private void hienThiMonMoi() {
+
+        List<ChiTietHoaDon> temp = new ArrayList<>();
+
+        for (Map.Entry<MonAn,Integer> e : dsMonAnDat.entrySet()) {
+            ChiTietHoaDon ct = new ChiTietHoaDon();
+
+            ct.setMonAn(e.getKey());
+            ct.setSoLuong(e.getValue());
+            ct.setThanhTien(
+                 e.getKey().getDonGia() * e.getValue()
+            );
+
+            temp.add(ct);
+        }
+
+        tblMonCu.setItems(FXCollections.observableArrayList(temp));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -108,18 +169,23 @@ public class DoiMonTruoc_Controller implements Initializable {
         // =============== TABLE MÓN CŨ ====================
 
         colSTT.setCellValueFactory(col ->
-                new ReadOnlyObjectWrapper<>(tblMonCu.getItems().indexOf(col.getValue()) + 1)
-        );
+        new ReadOnlyObjectWrapper<>(
+                tblMonCu.getItems().indexOf(col.getValue()) + 1
+        )
+);
 
         colTenMonCu.setCellValueFactory(c ->
-                new ReadOnlyObjectWrapper<>(c.getValue().getMonAn().getTenMon())
-        );
+        new ReadOnlyObjectWrapper<>(c.getValue().getMonAn().getTenMon())
+);
 
-        colSoLuongCu.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
+colSoLuongCu.setCellValueFactory(c ->
+        new ReadOnlyObjectWrapper<>(c.getValue().getSoLuong())
+);
 
-        colDonGia.setCellValueFactory(c ->
-                new ReadOnlyObjectWrapper<>(c.getValue().getThanhTien())
-        );
+colDonGia.setCellValueFactory(c ->
+        new ReadOnlyObjectWrapper<>(c.getValue().getThanhTien())
+);
+
 
         colDonGia.setCellFactory(column -> new TableCell<ChiTietHoaDon, Double>() {
             @Override
@@ -131,13 +197,37 @@ public class DoiMonTruoc_Controller implements Initializable {
 
         tblMonCu.setItems(danhSachMon);
 
-        // =============== TABLE MÓN MỚI ====================
-        colSoLuong.setCellValueFactory(col ->
+     // =============== TABLE MÓN MỚI ====================
+        colSoLuongCu.setCellValueFactory(col ->
                 new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue()) != null
                         ? dsMonAnDat.get(col.getValue()) : 0)
         );
 
-        tblDS.setItems(FXCollections.observableArrayList());
+
+    }
+
+
+
+    private void loadMonCu() {
+
+        if (donDatBanDuocChon == null) return;
+
+        String maBan = donDatBanDuocChon.getMaDatBan();
+
+        HoaDon hd = hoaDonDAO.getHoaDonTheoMaBan(maBan);
+
+        if (hd == null) {
+            danhSachMon.clear();
+            tblMonCu.setItems(danhSachMon);
+            return;
+        }
+
+        List<ChiTietHoaDon> list =
+            chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHoaDon());
+
+        danhSachMon.setAll(list);
+
+        tblMonCu.setItems(danhSachMon);
     }
 
     // ==========================================================
@@ -243,42 +333,6 @@ public class DoiMonTruoc_Controller implements Initializable {
         }
     }
 
-    // ==========================================================
-    // CHỌN / TĂNG / GIẢM / XOÁ MÓN
-    // ==========================================================
-    private void chonMon(MonAn mon) {
-
-        if (dsMonAnDat.containsKey(mon)) {
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Món đã chọn");
-            alert.setHeaderText(mon.getTenMon());
-            alert.setContentText("Bạn muốn thao tác gì?");
-
-            ButtonType btnTang = new ButtonType("➕ Tăng");
-            ButtonType btnGiam = new ButtonType("➖ Giảm");
-            ButtonType btnXoa = new ButtonType("❌ Xoá");
-            ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-            alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
-
-            Optional<ButtonType> kq = alert.showAndWait();
-
-            if (kq.get() == btnTang) {
-                dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
-            } else if (kq.get() == btnGiam) {
-                int sl = dsMonAnDat.get(mon) - 1;
-                if (sl <= 0) dsMonAnDat.remove(mon);
-                else dsMonAnDat.put(mon, sl);
-            } else if (kq.get() == btnXoa) {
-                dsMonAnDat.remove(mon);
-            }
-
-        } else dsMonAnDat.put(mon, 1);
-
-        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-        tblDS.refresh();
-    }
 
     private String dinhDangTien(double soTien) {
         return String.format("%,.0f", soTien);
