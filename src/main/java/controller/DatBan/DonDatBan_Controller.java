@@ -119,6 +119,11 @@ public class DonDatBan_Controller implements Initializable{
     }
     
     @FXML
+    void btnDoiMon(ActionEvent event) {
+    	MenuNV_Controller.instance.readyUI("MonAn/DoiMon");
+    }
+
+    @FXML
     void btnThayDoi(ActionEvent event) {
         if (donDangChon == null) {
 
