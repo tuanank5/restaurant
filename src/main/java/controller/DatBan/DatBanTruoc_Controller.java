@@ -244,12 +244,12 @@ public class DatBanTruoc_Controller implements Initializable {
             return;
         }
         // Một khách hàng chỉ chọn 1 bàn
-//        if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
-//            Alert alert = new Alert(Alert.AlertType.WARNING,
-//                    "Bạn chỉ được chọn 1 bàn.\nHãy bỏ chọn bàn đã chọn để chọn bàn khác.");
-//            alert.showAndWait();
-//            return;
-//        }
+        if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING,
+                    "Bạn chỉ được chọn 1 bàn.\nHãy bỏ chọn bàn đã chọn để chọn bàn khác.");
+            alert.showAndWait();
+            return;
+        }
         // Nếu đã chọn thì bỏ chọn
         if (danhSachBanDangChon.contains(ban)) {
             danhSachBanDangChon.clear();
