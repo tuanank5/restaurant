@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -8,42 +11,57 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.AThanhToan_Controller">
    <left>
-      <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
-         <bottom>
-            <AnchorPane prefHeight="100.0" prefWidth="200.0" style="-fx-border-width: 2px 1px 0 0; -fx-border-color: #dddddd;" BorderPane.alignment="CENTER">
-               <children>
-                  <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-               </children>
-            </AnchorPane>
-         </bottom>
+      <BorderPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <top>
             <BorderPane prefHeight="175.0" BorderPane.alignment="CENTER">
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="10.0" layoutY="20.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số điện thoại:" />
-                        <Label layoutX="10.0" layoutY="100.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số lượng KH:" />
-                        <Label layoutX="10.0" layoutY="60.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng:" />
-                        <TextField layoutX="110.0" layoutY="15.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField layoutX="110.0" layoutY="55.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField layoutX="110.0" layoutY="95.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                        <Button layoutX="185.0" layoutY="95.0" mnemonicParsing="false" prefWidth="50.0" style="-fx-font-weight: bold;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="+" />
-                        <Button layoutX="260.0" layoutY="95.0" mnemonicParsing="false" prefWidth="50.0" style="-fx-font-weight: bold;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="-" />
+                        <Label layoutX="10.0" layoutY="50.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số điện thoại:" />
+                        <Label layoutX="10.0" layoutY="130.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số lượng KH:" />
+                        <Label layoutX="10.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng:" />
+                        <TextField fx:id="txtSDT" layoutX="110.0" layoutY="45.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtKH" layoutX="110.0" layoutY="85.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtSL" layoutX="110.0" layoutY="125.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <Label layoutX="10.0" layoutY="5.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Thông tin khách hàng" />
+                        <Label layoutX="180.0" layoutY="130.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Bàn:" />
+                        <TextField fx:id="txtBan" layoutX="230.0" layoutY="125.0" prefWidth="80.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <Button fx:id="btnEdit" layoutX="320.0" layoutY="45.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="PENCIL" />
+                           </graphic>
+                        </Button>
                      </children>
                   </AnchorPane>
                </center>
                <top>
-                  <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Thông tin khách hàng" BorderPane.alignment="CENTER" />
+                  <TableView fx:id="tblThongTin" prefHeight="250.0" prefWidth="495.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn fx:id="tblSTT" prefWidth="50.0" text="STT" />
+                        <TableColumn fx:id="tblKH" prefWidth="200.0" text="Khách hàng" />
+                        <TableColumn fx:id="tblBan" prefWidth="125.0" text="Thông tin bàn" />
+                        <TableColumn fx:id="tblKM" prefWidth="125.0" text="Khuyến mãi" />
+                    </columns>
+                     <BorderPane.margin>
+                        <Insets right="5.0" />
+                     </BorderPane.margin>
+                  </TableView>
                </top>
             </BorderPane>
          </top>
          <center>
             <BorderPane prefHeight="375.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <top>
-                  <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Khuyến mãi" BorderPane.alignment="CENTER" />
-               </top>
+               <center>
+                  <AnchorPane BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="10.0" layoutY="5.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Chương trình khuyến mãi" />
+                        <ComboBox fx:id="cmbKM" layoutX="10.0" layoutY="50.0" prefWidth="250.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <Button fx:id="btnDiemTichLuy" layoutX="10.0" layoutY="100.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sử dụng điểm tích lũy" />
+                     </children>
+                  </AnchorPane>
+               </center>
             </BorderPane>
          </center>
       </BorderPane>
@@ -53,14 +71,40 @@
          <center>
             <TableView fx:id="tblDS" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" BorderPane.alignment="CENTER">
                <columns>
-                  <TableColumn fx:id="colSTT" prefWidth="75.0" text="STT" />
+                  <TableColumn fx:id="colSTT" prefWidth="50.0" text="STT" />
                   <TableColumn fx:id="colTenMon" prefWidth="250.0" text="Tên món" />
-                  <TableColumn fx:id="colSoLuong" prefWidth="75.0" text="SL" />
-                  <TableColumn fx:id="colDonGia" prefWidth="200.0" text="Đơn giá" />
-                  <TableColumn fx:id="colDonGia1" prefWidth="200.0" text="Thành tiền" />
+                  <TableColumn fx:id="colSoLuong" prefWidth="50.0" text="SL" />
+                  <TableColumn fx:id="colDonGia" prefWidth="175.0" text="Đơn giá" />
+                  <TableColumn fx:id="colDonGia1" prefWidth="175.0" text="Thành tiền" />
                </columns>
             </TableView>
          </center>
+         <bottom>
+            <BorderPane BorderPane.alignment="CENTER">
+               <center>
+                  <AnchorPane prefHeight="125.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="90.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thành tiền:" />
+                        <Label layoutX="90.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thuế:" />
+                        <Label layoutX="340.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng thanh toán:" />
+                        <Label layoutX="340.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Còn phải thu:" />
+                        <Label fx:id="lblThanhTien" layoutX="190.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThanhTien" />
+                        <Label fx:id="lblThue" layoutX="190.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThue" />
+                        <Label fx:id="lblTongThanhToan" layoutX="490.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTongThanhToan" />
+                        <Label fx:id="lblConPhaiThu" layoutX="490.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblConPhaiThu" />
+                     </children>
+                  </AnchorPane>
+               </center>
+               <bottom>
+                  <AnchorPane prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #dddddd;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="btnTamTinh" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="In tạm tính" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="10.0" />
+                        <Button fx:id="btnThuTien" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thu tiền" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+               </bottom>
+            </BorderPane>
+         </bottom>
       </BorderPane>
    </center>
    <top>

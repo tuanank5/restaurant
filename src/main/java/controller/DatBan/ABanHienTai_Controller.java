@@ -114,19 +114,19 @@ public class ABanHienTai_Controller {
         if (source == btnDatBan) {
             MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
         } else if (source == btnChoThanhToan) {
-            
+        	loadDanhSachHoaDon();
         } else if (source == btnDatTruoc) {
-            
+        	
         } 
     }
 
-    @FXML
+	@FXML
     public void initialize() {
     	dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
     	dsBan = banDAO.getDanhSach("Ban.list", Ban.class);
     	dsDDB = donDatBanDao.getDanhSach("DonDatBan.list", DonDatBan.class);
     	capNhatTrangThaiBanMacDinh();
-    	capNhatTrangThaiBanTheoDDB();
+    	capNhatTrangThaiBanTheoDonDatTruoc();
         khoiTaoComboBoxes();
         loadDanhSachHoaDon();
         cmbLoaiBan.setOnAction(e -> loadDanhSachHoaDon());
@@ -145,7 +145,7 @@ public class ABanHienTai_Controller {
 		
 	}
 
-	private void capNhatTrangThaiBanTheoDDB() {
+	private void capNhatTrangThaiBanTheoDonDatTruoc() {
     	LocalDate nowDate = LocalDate.now();
     	LocalTime nowHour = LocalTime.now();
     	List<DonDatBan> dsDDBnow = new ArrayList<DonDatBan>();
@@ -200,7 +200,7 @@ public class ABanHienTai_Controller {
         for (HoaDon hoaDon : dsHoaDon) {
             boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan());
 
-            if (matchType && hoaDon.getNgayLap().equals(dateNow)) {
+            if (matchType && hoaDon.getNgayLap().equals(dateNow) && hoaDon.getTrangThai().equals("Chưa thanh toán")) {
 //            	BorderPane borderPane = new BorderPane();
 //            	BorderPane paneNorth = new BorderPane();
 //            	borderPane.setTop(paneNorth);
@@ -299,6 +299,10 @@ public class ABanHienTai_Controller {
             }
         }
     }
+    
+    private void loadDanhSachHoaDonDatTruoc() {
+		
+	}
     
     private void capNhatTrangThaiBanTheoHD(HoaDon hd) {
     	for (Ban ban : dsBan) {

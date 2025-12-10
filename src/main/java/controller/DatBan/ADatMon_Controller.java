@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -252,11 +254,37 @@ public class ADatMon_Controller implements Initializable {
     	if (dsMonAnDat.isEmpty()) {
            	showAlert("Thông báo", "Vui lòng chọn món ăn", Alert.AlertType.INFORMATION);
         } else {
-    		addHD();
+        	DonDatBan ddb = themDDB();
+        	themHD(ddb);
     	}
     }
     
-    private void addHD() {
+    private DonDatBan themDDB() {
+    	LocalDateTime nowDate = LocalDateTime.now();
+    	LocalTime nowHour = LocalTime.now();
+    	
+    	DonDatBan ddb = new DonDatBan();
+    	ddb.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
+    	ddb.setNgayGioLapDon(nowDate);
+    	ddb.setSoLuong(MenuNV_Controller.soLuongKhach);
+    	KhachHang kh = new KhachHang();
+    	kh.setMaKH("KH0001");
+    	ddb.setKhachHang(kh);
+    	ddb.setBan(MenuNV_Controller.banDangChon);
+    	ddb.setGioBatDau(nowHour);
+    	ddb.setTrangThai("Hiện tại");
+    	
+    	if (RestaurantApplication.getInstance()
+   	                    .getDatabaseContext()
+   	                    .newEntity_DAO(DonDatBan_DAO.class)
+   	                    .them(ddb)) {
+    		return ddb;
+    	}
+
+		return null;
+	}
+
+	private void themHD(DonDatBan ddb) {
     	HoaDon hd = new HoaDon();
     	hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
     	LocalDate localDate = LocalDate.now();
@@ -264,14 +292,15 @@ public class ADatMon_Controller implements Initializable {
     	hd.setNgayLap(dateNow);
     	
     	hd.setTrangThai("Chưa thanh toán");
-    	hd.setKieuThanhToan("kieuThanhToan");
+    	hd.setKieuThanhToan("Tiền mặt");
     	
     	KhachHang kh = new KhachHang();
     	kh.setMaKH("KH0001");
     	hd.setKhachHang(kh);
+    	hd.setKhuyenMai(null);
     	hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-    	hd.setDonDatBan(MenuNV_Controller.DonDatBan);
-    	
+    	hd.setDonDatBan(ddb);
+    	hd.setCoc(null);
     	
     	try {
    	     if (hd != null) {
