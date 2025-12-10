@@ -132,7 +132,7 @@ public class DatBanTruoc_Controller implements Initializable {
         }
     }
 
-    // KIỂM TRA BÀN CÓ BẬN TRONG NGÀY — GIỜ ĐẶT KHÔNG
+    // KIỂM TRA BÀN ĐÃ ĐƯỢC ĐẶT TRONG NGÀY — GIỜ ĐẶT KHÔNG
     private boolean isBanDangBan(Ban ban, LocalDate ngayChon, LocalTime gioChon) {
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
         if (dsDon == null) return false;
@@ -214,36 +214,6 @@ public class DatBanTruoc_Controller implements Initializable {
                 col = 0;
                 row++;
             }
-        }
-    }
-
-    @FXML
-    void btnDatBan(ActionEvent event) {
-        if (danhSachBanDangChon.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn trước!");
-            return;
-        }
-        LocalDate ngayDat = dpNgayDatBan.getValue();
-        if (ngayDat == null) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn ngày đặt!");
-            return;
-        }
-        String gioDat = cmbGioBatDau.getValue();
-        if (gioDat == null) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn giờ đặt!");
-            return;
-        }
-        try {
-            ngayDatBanStatic = ngayDat;
-            gioBatDauStatic = gioDat;
-
-            DatMonTruoc_Controller.danhSachBanChonStatic =
-                    new ArrayList<>(danhSachBanDangChon);
-
-            MenuNV_Controller.instance.readyUI("MonAn/DatMonTruoc");
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
     

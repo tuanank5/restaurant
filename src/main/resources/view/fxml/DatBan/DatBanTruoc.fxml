@@ -50,11 +50,7 @@
                <bottom>
                   <BorderPane prefHeight="80.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                      <right>
-                        <AnchorPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Button layoutX="376.0" layoutY="15.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="50.0" prefWidth="110.0" style="-fx-background-color: linear-gradient(#4CAF50, #388E3C);" text="Đặt Bàn" textFill="WHITE" />
-                           </children>
-                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER" />
                      </right>
                      <left>
                         <AnchorPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
