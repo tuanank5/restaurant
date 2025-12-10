@@ -11,13 +11,16 @@ import controller.Menu.MenuNV_Controller;
 import javafx.scene.control.ButtonBar;
 import dao.Ban_DAO;
 import dao.DonDatBan_DAO;
+import dao.LoaiBan_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
+import dao.impl.LoaiBan_DAOImpl;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
+import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -47,7 +50,8 @@ public class DatBanTruoc_Controller implements Initializable {
 
     private Ban_DAO banDAO = new Ban_DAOImpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-
+    private LoaiBan_DAO loaiBanDAO = new LoaiBan_DAOImpl();
+    private List<LoaiBan> dsLoaiBan;
     private List<Ban> danhSachBan = new ArrayList<>();
     private List<Ban> danhSachBanDangChon = new ArrayList<>();
     private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
@@ -60,6 +64,7 @@ public class DatBanTruoc_Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	dpNgayDatBan.setValue(LocalDate.now());
+    	loadLoaiBan();
         loadGioBatDau();
         loadDanhSachBan();
         cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
@@ -78,6 +83,14 @@ public class DatBanTruoc_Controller implements Initializable {
         btnTroLai.setOnAction(event -> onTroLai(event));
         dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> loadDanhSachBan());
         cmbGioBatDau.setOnAction(e -> loadDanhSachBan());
+    }
+    
+    private void loadLoaiBan() {
+        dsLoaiBan = loaiBanDAO.getAll();
+        cmbLoaiBan.getItems().clear();
+        for (LoaiBan lb : dsLoaiBan) {
+            cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
+        }
     }
     
     private void loadGioBatDau() {
