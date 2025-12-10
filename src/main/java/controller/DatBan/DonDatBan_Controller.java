@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import config.RestaurantApplication;
+import controller.DatMon.DoiMonTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
@@ -118,6 +119,20 @@ public class DonDatBan_Controller implements Initializable{
 
     }
     
+    @FXML
+    void btnDoiMon(ActionEvent event) {
+        if (donDangChon == null) {
+            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn một đơn đặt bàn!");
+            return;
+        }
+
+        DoiMonTruoc_Controller.donDatBanDuocChon = donDangChon;
+
+        MenuNV_Controller.instance.readyUI("MonAn/DoiMon");
+    }
+
+
+
     @FXML
     void btnThayDoi(ActionEvent event) {
         if (donDangChon == null) {
