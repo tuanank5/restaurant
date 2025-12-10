@@ -26,6 +26,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -224,68 +225,56 @@ public class DonDatBan_Controller implements Initializable{
     }
     
     private void hienThiDialogThongTin(DonDatBan don) {
-        Dialog<Void> dialog = new Dialog<>();
+    	Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Thông tin khách hàng");
         dialog.setHeaderText("Chi tiết đơn đặt bàn");
-        
-        // Nút Xác nhận & Hủy
-        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, ButtonType.CANCEL);
-        
-        KhachHang kh = don.getKhachHang();
-        TextField txtTen = new TextField(kh != null ? kh.getTenKH() : "");
-        TextField txtSDTDialog = new TextField(kh != null ? kh.getSdt() : "");
-        TextField txtSoLuong = new TextField(String.valueOf(don.getSoLuong()));
 
+        // Nút Xác nhận và Hủy
+        ButtonType btnXacNhan = new ButtonType("Cập nhật trạng thái", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, ButtonType.CANCEL);
+
+        KhachHang kh = don.getKhachHang();
+        // Các thông tin khác chỉ xem, không được chỉnh sửa
+        TextField txtTen = new TextField(kh != null ? kh.getTenKH() : "");
+        txtTen.setDisable(true);
+        TextField txtSDTDialog = new TextField(kh != null ? kh.getSdt() : "");
+        txtSDTDialog.setDisable(true);
+        TextField txtSoLuong = new TextField(String.valueOf(don.getSoLuong()));
+        txtSoLuong.setDisable(true);
+
+        // Chỉ cho phép thay đổi trạng thái
         ComboBox<String> cmbTrangThaiDialog = new ComboBox<>();
         cmbTrangThaiDialog.getItems().addAll("Đã Nhận Bàn", "Chưa Nhận Bàn");
         cmbTrangThaiDialog.setValue(
-                don.getTrangThai() != null ? don.getTrangThai() : "Chưa Nhận Bàn"
+            don.getTrangThai() != null ? don.getTrangThai() : "Chưa Nhận Bàn"
         );
 
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(15));
+        
         grid.addRow(0, new Label("Tên khách hàng:"), txtTen);
         grid.addRow(1, new Label("Số điện thoại:"), txtSDTDialog);
         grid.addRow(2, new Label("Số lượng:"), txtSoLuong);
         grid.addRow(3, new Label("Trạng thái:"), cmbTrangThaiDialog);
         dialog.getDialogPane().setContent(grid);
-        
         // Xử lý khi nhấn XÁC NHẬN
         dialog.setResultConverter(button -> {
             if (button == btnXacNhan) {
                 try {
-                    String tenMoi = txtTen.getText().trim();
-                    String sdtMoi = txtSDTDialog.getText().trim();
-                    if (tenMoi.isEmpty()) {
-                        showAlert(Alert.AlertType.WARNING, "Tên khách hàng không được trống!");
-                        return null;
-                    }
-                    if (!sdtMoi.matches("\\d{9,11}")) {
-                        showAlert(Alert.AlertType.WARNING, "Số điện thoại không hợp lệ (9-11 số)!");
-                        return null;
-                    }
-                    
-                    kh.setTenKH(tenMoi);
-                    kh.setSdt(sdtMoi);
-                    RestaurantApplication.getInstance()
-                            .getDatabaseContext()
-                            .newEntity_DAO(KhachHang_DAO.class)
-                            .capNhat(kh);
-
-                    int soLuongMoi = Integer.parseInt(txtSoLuong.getText());
-                    don.setSoLuong(soLuongMoi);
+                    // Chỉ cập nhật trạng thái
                     don.setTrangThai(cmbTrangThaiDialog.getValue());
+
                     RestaurantApplication.getInstance()
                             .getDatabaseContext()
                             .newEntity_DAO(DonDatBan_DAO.class)
                             .capNhat(don);
                     tblView.refresh();
-                    showAlert(Alert.AlertType.INFORMATION, "Cập nhật đơn đặt bàn thành công!");
+                    showAlert(Alert.AlertType.INFORMATION, "Cập nhật trạng thái thành công!");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Không thể lưu thay đổi!");
+                    showAlert(Alert.AlertType.ERROR, "Không thể cập nhật trạng thái!");
                 }
             }
             return null;
