@@ -65,7 +65,7 @@ public class HoaDon {
     private NhanVien nhanVien;
     
     @ManyToOne
-    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = true)
+    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
     private DonDatBan donDatBan;
 
     @ManyToOne
