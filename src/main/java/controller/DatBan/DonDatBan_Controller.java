@@ -212,16 +212,16 @@ public class DonDatBan_Controller implements Initializable{
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Thông tin khách hàng");
         dialog.setHeaderText("Chi tiết đơn đặt bàn");
-
+        
         // Nút Xác nhận & Hủy
         ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, ButtonType.CANCEL);
-
-        TextField txtTen = new TextField(don.getKhachHang() != null ? don.getKhachHang().getTenKH() : "");
-        txtTen.setEditable(false);
-        TextField txtSDTDialog = new TextField(don.getKhachHang() != null ? don.getKhachHang().getSdt() : "");
-        txtSDTDialog.setEditable(false);
+        
+        KhachHang kh = don.getKhachHang();
+        TextField txtTen = new TextField(kh != null ? kh.getTenKH() : "");
+        TextField txtSDTDialog = new TextField(kh != null ? kh.getSdt() : "");
         TextField txtSoLuong = new TextField(String.valueOf(don.getSoLuong()));
+
         ComboBox<String> cmbTrangThaiDialog = new ComboBox<>();
         cmbTrangThaiDialog.getItems().addAll("Đã Nhận Bàn", "Chưa Nhận Bàn");
         cmbTrangThaiDialog.setValue(
@@ -241,6 +241,24 @@ public class DonDatBan_Controller implements Initializable{
         dialog.setResultConverter(button -> {
             if (button == btnXacNhan) {
                 try {
+                    String tenMoi = txtTen.getText().trim();
+                    String sdtMoi = txtSDTDialog.getText().trim();
+                    if (tenMoi.isEmpty()) {
+                        showAlert(Alert.AlertType.WARNING, "Tên khách hàng không được trống!");
+                        return null;
+                    }
+                    if (!sdtMoi.matches("\\d{9,11}")) {
+                        showAlert(Alert.AlertType.WARNING, "Số điện thoại không hợp lệ (9-11 số)!");
+                        return null;
+                    }
+                    
+                    kh.setTenKH(tenMoi);
+                    kh.setSdt(sdtMoi);
+                    RestaurantApplication.getInstance()
+                            .getDatabaseContext()
+                            .newEntity_DAO(KhachHang_DAO.class)
+                            .capNhat(kh);
+
                     int soLuongMoi = Integer.parseInt(txtSoLuong.getText());
                     don.setSoLuong(soLuongMoi);
                     don.setTrangThai(cmbTrangThaiDialog.getValue());
@@ -248,26 +266,22 @@ public class DonDatBan_Controller implements Initializable{
                             .getDatabaseContext()
                             .newEntity_DAO(DonDatBan_DAO.class)
                             .capNhat(don);
-                    // refresh table
                     tblView.refresh();
-                    Alert a = new Alert(Alert.AlertType.INFORMATION);
-                    a.setTitle("Thành công");
-                    a.setHeaderText(null);
-                    a.setContentText("Cập nhật đơn đặt bàn thành công!");
-                    a.show();
+                    showAlert(Alert.AlertType.INFORMATION, "Cập nhật đơn đặt bàn thành công!");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("Lỗi");
-                    a.setHeaderText(null);
-                    a.setContentText("Không thể lưu thay đổi!");
-                    a.show();
+                    showAlert(Alert.AlertType.ERROR, "Không thể lưu thay đổi!");
                 }
             }
             return null;
         });
-
         dialog.showAndWait();
     }
-
+    
+    private void showAlert(Alert.AlertType type, String msg) {
+        Alert alert = new Alert(type);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }
