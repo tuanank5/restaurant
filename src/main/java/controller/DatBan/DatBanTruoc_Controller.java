@@ -348,8 +348,7 @@ public class DatBanTruoc_Controller implements Initializable {
 			}
 			this.khachHangDaChon = kh;
 			int soLuongKH = Integer.parseInt(soLuongInput.trim());
-			this.slKhach = soLuongKH;
-			
+			this.slKhach = soLuongKH;			
 			// Số lượng khách
 			int soLuongKH_final = 1;
 			try {
