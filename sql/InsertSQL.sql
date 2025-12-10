@@ -215,7 +215,7 @@ INSERT INTO DonDatBan (maDatBan, ngayGio, soLuong, maKH, maBan, gioBatDau, trang
 ('DB003', DEFAULT, 6, 'KH0003', 'B03', '20:00:00', 'Chưa thanh toán'),
 ('DB004', DEFAULT, 6, 'KH0004', 'B04', '21:00:00', 'Chưa thanh toán');
 
-INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tienNhan, tienThua, maKH, maKM, maNV, maBan, maCoc) VALUES
+INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tienNhan, tienThua, maKH, maKM, maNV, maDatBan, maCoc) VALUES
 ('HD001', '2025-08-01', 1000000, 100000, 'Đã thanh toán', 'Tiền mặt', 1200000, 200000, 'KH0001', 'KM004', 'NV001', 'DB001', 'C001'),
 ('HD002', '2025-08-02', 1500000, 150000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0002', 'KM005', 'NV002', 'DB002', 'C002'),
 ('HD003', '2025-08-03', 2000000, 200000, 'Đã thanh toán', 'Chuyển khoản', 2200000, 200000, 'KH0003', 'KM006', 'NV003', 'DB003', 'C003'),
