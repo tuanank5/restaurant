@@ -148,7 +148,7 @@ public class ADatBanHienTai_Controller implements Initializable {
                         grid.add(lblMaBan, 0, 0);
                         grid.add(lblLoaiBan, 0, 1);
                         grid.add(new Label("Số lượng khách:"), 0, 2);
-grid.add(txtSoLuong, 1, 2);
+                        grid.add(txtSoLuong, 1, 2);
 
                         dialog.getDialogPane().setContent(grid);
                         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
