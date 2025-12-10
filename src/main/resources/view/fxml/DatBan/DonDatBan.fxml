@@ -38,9 +38,8 @@
                         <AnchorPane prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">
                            <children>
                               <Button layoutX="27.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="50.0" prefWidth="75.0" text="Đặt Bàn" />
-                              <Button layoutX="131.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnThayDoi" prefHeight="50.0" prefWidth="75.0" text="Thay Đổi" />
+                              <Button layoutX="131.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnThayDoi" prefHeight="50.0" prefWidth="75.0" text="Đổi Bàn" />
                               <Button layoutX="236.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnHuyDon" prefHeight="50.0" prefWidth="90.0" text="Hủy Đơn" />
-                              <Button layoutX="350.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnNhanBan" prefHeight="50.0" prefWidth="90.0" text="Nhận Bàn" />
                            </children>
                         </AnchorPane>
                      </left>

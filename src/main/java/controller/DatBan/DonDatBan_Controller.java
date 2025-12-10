@@ -13,6 +13,7 @@ import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
+import javafx.scene.control.ButtonBar;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.HangKhachHang;
@@ -25,12 +26,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 
 public class DonDatBan_Controller implements Initializable{
 	@FXML
@@ -93,6 +98,14 @@ public class DonDatBan_Controller implements Initializable{
         });
         // cập nhật lần đầu
         capNhatTongDon();
+        tblView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                DonDatBan don = tblView.getSelectionModel().getSelectedItem();
+                if (don != null) {
+                    hienThiDialogThongTin(don);
+                }
+            }
+        });
 	}
     
     @FXML
@@ -102,11 +115,6 @@ public class DonDatBan_Controller implements Initializable{
 
     @FXML
     void btnHuyDon(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void btnNhanBan(ActionEvent event) {
 
     }
     
@@ -200,6 +208,66 @@ public class DonDatBan_Controller implements Initializable{
         		null ?cellData.getValue().getTrangThai() : ""));
     }
     
-    
+    private void hienThiDialogThongTin(DonDatBan don) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Thông tin khách hàng");
+        dialog.setHeaderText("Chi tiết đơn đặt bàn");
+
+        // Nút Xác nhận & Hủy
+        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, ButtonType.CANCEL);
+
+        TextField txtTen = new TextField(don.getKhachHang() != null ? don.getKhachHang().getTenKH() : "");
+        txtTen.setEditable(false);
+        TextField txtSDTDialog = new TextField(don.getKhachHang() != null ? don.getKhachHang().getSdt() : "");
+        txtSDTDialog.setEditable(false);
+        TextField txtSoLuong = new TextField(String.valueOf(don.getSoLuong()));
+        ComboBox<String> cmbTrangThaiDialog = new ComboBox<>();
+        cmbTrangThaiDialog.getItems().addAll("Đã Nhận Bàn", "Chưa Nhận Bàn");
+        cmbTrangThaiDialog.setValue(
+                don.getTrangThai() != null ? don.getTrangThai() : "Chưa Nhận Bàn"
+        );
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.addRow(0, new Label("Tên khách hàng:"), txtTen);
+        grid.addRow(1, new Label("Số điện thoại:"), txtSDTDialog);
+        grid.addRow(2, new Label("Số lượng:"), txtSoLuong);
+        grid.addRow(3, new Label("Trạng thái:"), cmbTrangThaiDialog);
+        dialog.getDialogPane().setContent(grid);
+        
+        // Xử lý khi nhấn XÁC NHẬN
+        dialog.setResultConverter(button -> {
+            if (button == btnXacNhan) {
+                try {
+                    int soLuongMoi = Integer.parseInt(txtSoLuong.getText());
+                    don.setSoLuong(soLuongMoi);
+                    don.setTrangThai(cmbTrangThaiDialog.getValue());
+                    RestaurantApplication.getInstance()
+                            .getDatabaseContext()
+                            .newEntity_DAO(DonDatBan_DAO.class)
+                            .capNhat(don);
+                    // refresh table
+                    tblView.refresh();
+                    Alert a = new Alert(Alert.AlertType.INFORMATION);
+                    a.setTitle("Thành công");
+                    a.setHeaderText(null);
+                    a.setContentText("Cập nhật đơn đặt bàn thành công!");
+                    a.show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Alert a = new Alert(Alert.AlertType.ERROR);
+                    a.setTitle("Lỗi");
+                    a.setHeaderText(null);
+                    a.setContentText("Không thể lưu thay đổi!");
+                    a.show();
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
 
 }
