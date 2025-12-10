@@ -1,10 +1,6 @@
-
 package controller.DatMon;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,15 +8,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import dao.impl.Ban_DAOImpl;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import controller.DatBan.DatBanTruoc_Controller;
-import controller.Menu.MenuNV_Controller;
 import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
 import dao.MonAn_DAO;
+import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.MonAn_DAOImpl;
@@ -30,9 +22,9 @@ import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
-import entity.NhanVien;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,250 +46,246 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
- 
 
-public class DoiMonTruoc_Controller implements Initializable{
+public class DoiMonTruoc_Controller implements Initializable {
+
     @FXML
     private TextField txtTim;
-    
+
     @FXML
     private Button btnTroLai;
-    
+
     @FXML
-    private TableColumn<MonAn, Integer> colSTT;
-    
-    @FXML
-    private TableColumn<MonAn, String> colTenMon;
-    
-    @FXML
-    private TableColumn<MonAn, Double> colDonGia;
-    
-    @FXML
-    private TableColumn<MonAn, Integer> colSoLuong;
-    
+    private TableColumn<ChiTietHoaDon, Integer> colSTT;   // MÓN CŨ phải là ChiTietHoaDon
+
     @FXML
     private ComboBox<String> comBoxPhanLoai;
-    
-    @FXML
-    private TableView<MonAn> tblDS;
 
-  
     @FXML
     private ScrollPane scrollPaneMon;
-    
+
+    // TABLE MÓN MỚI
+    @FXML private TableView<MonAn> tblDS;
+    @FXML private TableColumn<MonAn, Integer> colSoLuong;
+
+    // TABLE MÓN CŨ
+    @FXML private TableView<ChiTietHoaDon> tblMonCu;
+    @FXML private TableColumn<ChiTietHoaDon, String> colTenMonCu;
+    @FXML private TableColumn<ChiTietHoaDon, Integer> colSoLuongCu;
+    @FXML private TableColumn<ChiTietHoaDon, Double> colDonGia;
+
+
+    private ObservableList<ChiTietHoaDon> danhSachMon = FXCollections.observableArrayList();
+
     @FXML
     private GridPane gridPaneMon;
+
     public static Ban banChonStatic;
-    public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
+    public static DonDatBan donDatBanDuocChon;
+
     private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
     private List<MonAn> dsMonAn;
 
     private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
-    
+
+    // ==========================================================
+    // INITIALIZE
+    // ==========================================================
     @Override
-    public void initialize(URL location, ResourceBundle resources) { 
-    	if (danhSachBanChonStatic != null && !danhSachBanChonStatic.isEmpty()) {
-            System.out.println("Số bàn được chọn: " + danhSachBanChonStatic.size());
-            
-            // Ví dụ hiển thị lên UI
-            for (Ban b : danhSachBanChonStatic) {
-                System.out.println("Bàn: " + b.getMaBan());
-            }
-        }
-    	 //Lấy danh sách món ăn từ database
+    public void initialize(URL location, ResourceBundle resources) {
+
         dsMonAn = monAnDAO.getDanhSachMonAn();
-        //Khởi tạo ComboBox phân loại dựa trên dsMonAn
-        khoiTaoComboBoxPhanLoai();        
-        //Hiển thị món ăn lên GridPane
+        khoiTaoComboBoxPhanLoai();
+
         if (dsMonAn != null && !dsMonAn.isEmpty()) {
             loadMonAnToGrid(dsMonAn);
         }
-        txtTim.textProperty().addListener((observable, oldValue, newValue) -> {
-            timMonTheoTen();
+
+        txtTim.textProperty().addListener((obs, o, n) -> timMonTheoTen());
+
+        // =============== TABLE MÓN CŨ ====================
+
+        colSTT.setCellValueFactory(col ->
+                new ReadOnlyObjectWrapper<>(tblMonCu.getItems().indexOf(col.getValue()) + 1)
+        );
+
+        colTenMonCu.setCellValueFactory(c ->
+                new ReadOnlyObjectWrapper<>(c.getValue().getMonAn().getTenMon())
+        );
+
+        colSoLuongCu.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
+
+        colDonGia.setCellValueFactory(c ->
+                new ReadOnlyObjectWrapper<>(c.getValue().getThanhTien())
+        );
+
+        colDonGia.setCellFactory(column -> new TableCell<ChiTietHoaDon, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : dinhDangTien(item));
+            }
         });
-        colSTT.setCellValueFactory(col -> 
-        new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
-        	colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
-	        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-	        colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
-        @Override
-        protected void updateItem(Double item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty || item == null) {
-                setText(null);
-            } else {
-                setText(dinhDangTien(item));
-            }
-        }
-    });  
-	    // Số lượng
-	    colSoLuong.setCellValueFactory(col -> {
-	        Integer soLuong = dsMonAnDat.get(col.getValue());
-	        return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
-	    });
-	    // Khởi tạo TableView rỗng
-	    tblDS.setItems(FXCollections.observableArrayList());
-    }
-    
-    private void timMonTheoTen() {
-        String tuKhoa = txtTim.getText().trim().toLowerCase(); // chuyển về chữ thường
-        List<MonAn> dsLoc = new ArrayList<>();
-        
-        if (tuKhoa.isEmpty()) {
-            dsLoc = dsMonAn; // nếu rỗng thì hiển thị tất cả
-        } else {
-            for (MonAn mon : dsMonAn) {
-                if (mon.getTenMon().toLowerCase().contains(tuKhoa)) {
-                    dsLoc.add(mon);
-                }
-            }
-        }
-        
-        loadMonAnToGrid(dsLoc); // cập nhật GridPane
+
+        tblMonCu.setItems(danhSachMon);
+
+        // =============== TABLE MÓN MỚI ====================
+        colSoLuong.setCellValueFactory(col ->
+                new ReadOnlyObjectWrapper<>(dsMonAnDat.get(col.getValue()) != null
+                        ? dsMonAnDat.get(col.getValue()) : 0)
+        );
+
+        tblDS.setItems(FXCollections.observableArrayList());
     }
 
+    // ==========================================================
+    // TÌM MÓN
+    // ==========================================================
+    private void timMonTheoTen() {
+        String tuKhoa = txtTim.getText().trim().toLowerCase();
+        List<MonAn> dsLoc = new ArrayList<>();
+
+        if (tuKhoa.isEmpty()) dsLoc = dsMonAn;
+        else {
+            for (MonAn mon : dsMonAn) {
+                if (mon.getTenMon().toLowerCase().contains(tuKhoa))
+                    dsLoc.add(mon);
+            }
+        }
+
+        loadMonAnToGrid(dsLoc);
+    }
+
+    // ==========================================================
+    // LỌC LOẠI
+    // ==========================================================
     private void locMonTheoLoai() {
         String loaiChon = comBoxPhanLoai.getValue();
         List<MonAn> dsLoc = new ArrayList<>();
-        
-        if (loaiChon.equals("Tất cả")) {
-            dsLoc = dsMonAn;
-        } else {
+
+        if (loaiChon.equals("Tất cả")) dsLoc = dsMonAn;
+        else {
             for (MonAn mon : dsMonAn) {
-                if (loaiChon.equals(mon.getLoaiMon())) {
+                if (loaiChon.equals(mon.getLoaiMon()))
                     dsLoc.add(mon);
-                }
             }
         }
-        
+
         loadMonAnToGrid(dsLoc);
     }
-    
-    private void khoiTaoComboBoxPhanLoai() {
-        // Lấy danh sách loại món duy nhất
-        List<String> danhSachLoai = new ArrayList<>();
-        danhSachLoai.add("Tất cả"); // để hiển thị toàn bộ món
-        for (MonAn mon : dsMonAn) {
-            String loai = mon.getLoaiMon();
-            if (loai != null && !danhSachLoai.contains(loai)) {
-                danhSachLoai.add(loai);
-            }
-        }
-        comBoxPhanLoai.getItems().setAll(danhSachLoai);
-        comBoxPhanLoai.setPromptText("Phân loại");
 
-        // Thêm sự kiện chọn
+    private void khoiTaoComboBoxPhanLoai() {
+        List<String> dsLoai = new ArrayList<>();
+        dsLoai.add("Tất cả");
+
+        for (MonAn m : dsMonAn) {
+            if (!dsLoai.contains(m.getLoaiMon()))
+                dsLoai.add(m.getLoaiMon());
+        }
+
+        comBoxPhanLoai.getItems().setAll(dsLoai);
         comBoxPhanLoai.setOnAction(e -> locMonTheoLoai());
     }
-    
+
+    // ==========================================================
+    // LOAD GRIDVIEW MÓN ĂN
+    // ==========================================================
     private void loadMonAnToGrid(List<MonAn> danhSach) {
         gridPaneMon.getChildren().clear();
         gridPaneMon.getColumnConstraints().clear();
         gridPaneMon.getRowConstraints().clear();
-        gridPaneMon.setHgap(15);
-        gridPaneMon.setVgap(30);
 
-        int columns = 4; // số cột muốn hiển thị
-        int col = 0;
-        int row = 0;
+        int columns = 4;
+        int col = 0, row = 0;
 
-        // Chia đều cột
         for (int i = 0; i < columns; i++) {
             ColumnConstraints cc = new ColumnConstraints();
             cc.setPercentWidth(100.0 / columns);
             gridPaneMon.getColumnConstraints().add(cc);
         }
-        // Tính số row theo danh sách
+
         int totalRows = (int) Math.ceil(danhSach.size() / (double) columns);
         for (int i = 0; i < totalRows; i++) {
             gridPaneMon.getRowConstraints().add(new RowConstraints(220));
         }
+
         for (MonAn mon : danhSach) {
-            // Ảnh
+
             ImageView img = new ImageView();
-            String path = mon.getDuongDanAnh();
-            if (path != null && !path.isEmpty()) {
-                try {
-                    img.setImage(new Image("file:" + path));
-                } catch (Exception e) {
-                    System.out.println("Không load được ảnh: " + path);
-                }
-            }
+            try {
+                img.setImage(new Image("file:" + mon.getDuongDanAnh()));
+            } catch (Exception ex) {}
+
             img.setFitWidth(120);
             img.setFitHeight(120);
-            img.setPreserveRatio(true);
-            // Tên món
+
             Label lblTen = new Label(mon.getTenMon());
-            lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-            // Giá
+            lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
+
             Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
-            // Nút chọn
+
             Button btnChon = new Button("Chọn");
             btnChon.setOnAction(e -> chonMon(mon));
+
             VBox box = new VBox(img, lblTen, lblGia, btnChon);
             box.setSpacing(6);
-            box.setPrefWidth(150);
-            box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; "
-                       + "-fx-alignment:center; -fx-border-radius:10; -fx-background-radius:10;");
+            box.setStyle("-fx-alignment:center; -fx-border-color:#ccc; -fx-background-color:white;");
+
             gridPaneMon.add(box, col, row);
+
             col++;
             if (col == columns) {
                 col = 0;
                 row++;
             }
         }
-        gridPaneMon.requestLayout();
-    }
-    
-    // Hàm định dạng tiền
-    private String dinhDangTien(double soTien) {
-        return String.format("%,.0f", soTien); // định dạng kiểu 1,000,000
     }
 
+    // ==========================================================
+    // CHỌN / TĂNG / GIẢM / XOÁ MÓN
+    // ==========================================================
     private void chonMon(MonAn mon) {
+
         if (dsMonAnDat.containsKey(mon)) {
-            // Nếu đã có món này hỏi người dùng
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Món đã chọn");
-            alert.setHeaderText("Món '" + mon.getTenMon() + "' đã có trong danh sách.");
-            alert.setContentText("Bạn muốn làm gì?");
-            ButtonType btnTang = new ButtonType("➕ Tăng số lượng");
-            ButtonType btnGiam = new ButtonType("➖ Giảm số lượng");
-            ButtonType btnXoa = new ButtonType("❌ Xóa món");
+            alert.setHeaderText(mon.getTenMon());
+            alert.setContentText("Bạn muốn thao tác gì?");
+
+            ButtonType btnTang = new ButtonType("➕ Tăng");
+            ButtonType btnGiam = new ButtonType("➖ Giảm");
+            ButtonType btnXoa = new ButtonType("❌ Xoá");
             ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+
             alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent()) {
-                if (result.get() == btnTang) {
-                    dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
-                } else if (result.get() == btnGiam) {
-                    int soLuong = dsMonAnDat.get(mon) - 1;
-                    if (soLuong <= 0) dsMonAnDat.remove(mon);
-                    else dsMonAnDat.put(mon, soLuong);
-                } else if (result.get() == btnXoa) {
-                    dsMonAnDat.remove(mon);
-                }
-            }
-        } else {
-            //Thêm món mới
-            dsMonAnDat.put(mon, 1);
-        }
+            Optional<ButtonType> kq = alert.showAndWait();
 
-        //CẬP NHẬT TABLEVIEW
+            if (kq.get() == btnTang) {
+                dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+            } else if (kq.get() == btnGiam) {
+                int sl = dsMonAnDat.get(mon) - 1;
+                if (sl <= 0) dsMonAnDat.remove(mon);
+                else dsMonAnDat.put(mon, sl);
+            } else if (kq.get() == btnXoa) {
+                dsMonAnDat.remove(mon);
+            }
+
+        } else dsMonAnDat.put(mon, 1);
+
         tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
         tblDS.refresh();
     }
 
-  
-
-    @FXML
-    private void btnXacNhan(ActionEvent event) {
-       
+    private String dinhDangTien(double soTien) {
+        return String.format("%,.0f", soTien);
     }
 
-   
-
+    @FXML
+    private void btnXacNhan(ActionEvent e) {
+        // TODO: xử lý lưu món đổi
+    }
 }
