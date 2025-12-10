@@ -221,8 +221,8 @@ INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tie
 ('HD003', '2025-08-03', 2000000, 200000, 'Đã thanh toán', 'Chuyển khoản', 2200000, 200000, 'KH0003', 'KM006', 'NV003', 'DB003', 'C003'),
 ('HD004', '2025-09-01', 1200000, 120000, 'Đã thanh toán', 'Tiền mặt', 1300000, 80000, 'KH0004', 'KM007', 'NV004', 'DB004', 'C004');
 
-INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh) VALUES
-('M001', N'Bún Quậy', 45000, 'KM004', 'D:\\img\\bunquay.jpg'),
-('M002', N'Cút Lộn', 38000, 'KM005', 'D:\\img\\cutlon.jpg'),
-('M003', N'Gỏi Cuốn', 150000, 'KM006', 'D:\\img\\goicuon.jpg'),
-('M004', N'Mì Quảng', 28000, 'KM007', 'D:\\img\\miquang.jpg');
+INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh, loaiMon) VALUES
+('M001', N'Bún Quậy', 45000, 'KM004', 'D:\\img\\bunquay.jpg', N'Bún'), 
+('M002', N'Cút Lộn', 38000, 'KM005', 'D:\\img\\cutlon.jpg', N'Đồ ăn'),
+('M003', N'Gỏi Cuốn', 150000, 'KM006', 'D:\\img\\goicuon.jpg', N'Đồ ăn'),
+('M004', N'Mì Quảng', 28000, 'KM007', 'D:\\img\\miquang.jpg', N'Mì');
