@@ -67,6 +67,10 @@ public class ADatBanHienTai_Controller implements Initializable {
         cmbTrangThai.setOnAction(e -> loadDanhSachBan());
         cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
     }
+    @FXML
+    void btnQuayLai(ActionEvent event) {
+    	MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+    }
 
     private void khoiTaoComboBoxes() {
         cmbTrangThai.getItems().clear();

@@ -120,7 +120,7 @@
          <left>
             <AnchorPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnQuayLai" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quay lại" />
+                  <Button fx:id="btnQuayLai" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnQuayLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quay lại" />
                   <Label layoutX="200.0" layoutY="15.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Chi tiết hóa đơn" />
                </children>
             </AnchorPane>

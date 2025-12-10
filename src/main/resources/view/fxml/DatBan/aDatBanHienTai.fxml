@@ -42,7 +42,7 @@
             <AnchorPane prefHeight="46.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
                   <Label alignment="CENTER" layoutX="520.0" layoutY="1.0" prefHeight="46.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Bàn" />
-                  <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" text="Quay lại" />
+                  <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#btnQuayLai" text="Quay lại" />
                </children>
             </AnchorPane>
          </top>

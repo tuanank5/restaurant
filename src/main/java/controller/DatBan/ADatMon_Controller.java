@@ -141,7 +141,8 @@ public class ADatMon_Controller implements Initializable {
     	 // Lấy danh sách món ăn từ DB
         dsMonAn = monAnDAO.getDanhSachMonAn();
         loadTenNhanVien();
-        
+        // lấy sluong khách
+        txtSoLuong.setText(String.valueOf(MenuNV_Controller.soLuongKhach));
         // Khởi tạo ComboBox phân loại (dùng dsMonAn)
         khoiTaoComboBoxPhanLoai();
 
@@ -178,6 +179,10 @@ public class ADatMon_Controller implements Initializable {
         }
         tblDS.setOnMouseClicked(e -> capNhatTongTien());
 
+    }
+    @FXML
+    void btnQuayLai(ActionEvent event) {
+    	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
     }
     
     public void loadTenNhanVien() {
