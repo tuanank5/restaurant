@@ -13,6 +13,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "DonDatBan")
 @NamedQueries({
     @NamedQuery(
         name = "DonDatBan.list",
@@ -30,37 +31,31 @@ public class DonDatBan {
     private String maDatBan;
 
     @Column(name = "ngayGio", nullable = false)
-    private LocalDateTime ngayGioLapDon;   // đúng với SQL
+    private LocalDateTime ngayGioLapDon;
 
     @Column(name = "soLuong", nullable = false)
     private int soLuong;
-    
-    @ManyToOne
-    @JoinColumn(name = "maKH", referencedColumnName = "maKH", nullable = false)
-    private KhachHang khachHang;
 
     @ManyToOne
     @JoinColumn(name = "maBan", referencedColumnName = "maBan", nullable = false)
     private Ban ban;
 
-    @Column(name = "gioBatDau")
+    @Column(name = "gioBatDau", nullable = false)
     private LocalTime gioBatDau;
 
-    // ❌ ĐÃ BỎ: gioKetThuc vì SQL đã xóa
-
     @Column(name = "trangThai")
-    private String trangThai; // mới thêm trong SQL
+    private String trangThai;
 
     public DonDatBan() {
     }
 
-    public DonDatBan(String maDatBan, LocalDateTime ngayGioLapDon, int soLuong, 
-    				KhachHang khachHang, Ban ban, String trangThai) {
+    public DonDatBan(String maDatBan, LocalDateTime ngayGioLapDon, int soLuong,
+                     Ban ban, LocalTime gioBatDau, String trangThai) {
         this.maDatBan = maDatBan;
         this.ngayGioLapDon = ngayGioLapDon;
         this.soLuong = soLuong;
-        this.khachHang = khachHang;
         this.ban = ban;
+        this.gioBatDau = gioBatDau;
         this.trangThai = trangThai;
     }
 
@@ -87,15 +82,7 @@ public class DonDatBan {
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
-    
-    public KhachHang getKhachHang() {
-        return khachHang;
-    }
 
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
-    }
-    
     public Ban getBan() {
         return ban;
     }
@@ -120,11 +107,10 @@ public class DonDatBan {
         this.trangThai = trangThai;
     }
 
-    @Override
-    public String toString() {
-        return "DonDatBan [maDatBan=" + maDatBan + ", ngayGio=" + ngayGioLapDon + ", soLuong=" + soLuong
-                + ", khachHang=" + khachHang + ", ban=" + ban + ", gioBatDau="
-                + gioBatDau + ", trangThai=" + trangThai + "]";
-    }
+	@Override
+	public String toString() {
+		return "DonDatBan [maDatBan=" + maDatBan + ", ngayGioLapDon=" + ngayGioLapDon + ", soLuong=" + soLuong
+				+ ", ban=" + ban + ", gioBatDau=" + gioBatDau + ", trangThai=" + trangThai + "]";
+	}
 
 }
