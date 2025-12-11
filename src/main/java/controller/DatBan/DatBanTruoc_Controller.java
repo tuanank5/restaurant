@@ -239,7 +239,6 @@ public class DatBanTruoc_Controller implements Initializable {
         ButtonType btnChonMon = new ButtonType("Chọn món ăn", ButtonBar.ButtonData.LEFT);
         dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, btnChonMon, ButtonType.CANCEL);
 
-        // --- UI ---
         GridPane grid = new GridPane();
         grid.setHgap(20);
         grid.setVgap(20);
@@ -248,37 +247,68 @@ public class DatBanTruoc_Controller implements Initializable {
         TextField txtSDT = new TextField();
         TextField txtTenKH = new TextField();
         txtTenKH.setEditable(false);
+        
         TextField txtSoLuong = new TextField();
-
         DatePicker dpNgay = new DatePicker(dpNgayDatBan.getValue());
+        dpNgay.setDayCellFactory(p -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;");
+                }
+            }
+        });
+
         ComboBox<String> cmbGio = new ComboBox<>();
         cmbGio.getItems().addAll(cmbGioBatDau.getItems());
         cmbGio.setValue(cmbGioBatDau.getValue());
 
-        // --- Khi nhập số điện thoại thì load thông tin khách hàng ---
         txtSDT.textProperty().addListener((obs, oldV, newV) -> {
-            if (newV.trim().length() >= 10) {
-                try {
-                    var kh = new dao.impl.KhachHang_DAOlmpl().timTheoSDT(newV.trim()); 
-                    if (kh != null) {
-                        txtTenKH.setText(kh.getTenKH());
-                        khachHangDaChon = kh;          // ⭐ LƯU KH ngay khi tìm được
-                    } else {
-                        txtTenKH.setText("Không tìm thấy");
-                        khachHangDaChon = null;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (!newV.matches("\\d*")) {
+                showAlert(Alert.AlertType.ERROR, "Số điện thoại chỉ được chứa số!");
+                txtSDT.setText(oldV);
+                return;
+            }
+            if (newV.length() > 10) {
+                showAlert(Alert.AlertType.ERROR, "SĐT không được vượt quá 10 số!");
+                txtSDT.setText(oldV);
+                return;
+            }
+            if (newV.length() == 10) {
+                var kh = new dao.impl.KhachHang_DAOlmpl().timTheoSDT(newV);
+                if (kh == null) {
+                    showAlert(Alert.AlertType.WARNING, "Không tìm thấy khách hàng!");
+                    txtTenKH.setText("Không tìm thấy");
+                    khachHangDaChon = null;
+                } else {
+                    txtTenKH.setText(kh.getTenKH());
+                    khachHangDaChon = kh;
                 }
+            } else {
+                txtTenKH.setText("");
+                khachHangDaChon = null;
             }
         });
-        
-        txtSoLuong.textProperty().addListener((o, oldV, newV) -> {
+
+        txtSoLuong.textProperty().addListener((obs, oldV, newV) -> {
             try {
-                slKhach = Integer.parseInt(newV.trim());
-                if (slKhach <= 0) slKhach = 1;
+                int so = Integer.parseInt(newV.trim());
+                if (so <= 0) {
+                    showAlert(Alert.AlertType.ERROR, "Số lượng khách phải > 0");
+                    txtSoLuong.setText("1");
+                    return;
+                }
+                if (so > ban.getLoaiBan().getSoLuong()) {
+                    showAlert(Alert.AlertType.ERROR,
+                            "Số lượng khách vượt quá sức chứa (" + ban.getLoaiBan().getSoLuong() + ")");
+                    txtSoLuong.setText(String.valueOf(ban.getLoaiBan().getSoLuong()));
+                    return;
+                }
+                slKhach = so;
             } catch (Exception e) {
-                slKhach = 1;
+                txtSoLuong.setText("1");
             }
         });
 
@@ -289,21 +319,46 @@ public class DatBanTruoc_Controller implements Initializable {
         grid.addRow(4, new Label("Số lượng khách:"), txtSoLuong);
 
         dialog.getDialogPane().setContent(grid);
-
         dialog.setResultConverter(button -> {
+
+            if (button == btnXacNhan || button == btnChonMon) {
+                if (txtSDT.getText().trim().isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "Số điện thoại không được để trống!");
+                    return null;
+                }
+                if (khachHangDaChon == null) {
+                    showAlert(Alert.AlertType.ERROR, "Không tìm thấy khách hàng hợp lệ!");
+                    return null;
+                }
+                if (dpNgay.getValue().isBefore(LocalDate.now())) {
+                    showAlert(Alert.AlertType.ERROR, "Ngày đặt không được nhỏ hơn ngày hiện tại!");
+                    return null;
+                }
+                if (slKhach > ban.getLoaiBan().getSoLuong()) {
+                    showAlert(Alert.AlertType.ERROR,
+                            "Số lượng khách vượt quá số lượng ghế của bàn!");
+                    return null;
+                }
+            }
             if (button == btnXacNhan) {
-                xuLyXacNhanThongTin(ban, txtSDT.getText(), txtTenKH.getText(),
-                        dpNgay.getValue(), cmbGio.getValue(), txtSoLuong.getText());
+                xuLyXacNhanThongTin(
+                        ban,
+                        txtSDT.getText(),
+                        txtTenKH.getText(),
+                        dpNgay.getValue(),
+                        cmbGio.getValue(),
+                        txtSoLuong.getText()
+                );
             } else if (button == btnChonMon) {
-            	 DatBanTruoc_Controller.ngayDatBanStatic = dpNgay.getValue();
-                 DatBanTruoc_Controller.gioBatDauStatic = cmbGio.getValue();
+                DatBanTruoc_Controller.ngayDatBanStatic = dpNgay.getValue();
+                DatBanTruoc_Controller.gioBatDauStatic = cmbGio.getValue();
                 xuLyChonMon(ban);
             }
             return null;
         });
-
         dialog.showAndWait();
     }
+
     
     private void xuLyXacNhanThongTin(Ban ban, String sdtInput, String tenKHInput,
             LocalDate ngayInput, String gioInput, String soLuongInput) {		

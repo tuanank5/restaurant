@@ -128,28 +128,21 @@ public class DonDatBan_Controller implements Initializable{
         }
 
         DoiMonTruoc_Controller.donDatBanDuocChon = donDangChon;
-
         MenuNV_Controller.instance.readyUI("MonAn/DoiMon");
     }
-
-
 
     @FXML
     void btnThayDoi(ActionEvent event) {
         if (donDangChon == null) {
-
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Cảnh báo");
             alert.setHeaderText(null);
             alert.setContentText("Vui lòng chọn một đơn đặt bàn trước khi thay đổi!");
             alert.showAndWait();
-
             return;
         }
-
         // Lưu tạm dữ liệu chuyển màn hình
         ThayDoiBanTruoc_Controller.donDatBanDuocChon = donDangChon;
-
         MenuNV_Controller.instance.readyUI("DatBan/ThayDoiBanTruoc");
     }
 
