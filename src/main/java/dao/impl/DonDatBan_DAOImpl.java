@@ -360,4 +360,24 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	    }
 	}
 	
+	@Override
+	public KhachHang getKhachHangTheoMaDatBan(String maDatBan) {
+	    EntityManager em = getEntityManager();
+	    try {
+	        TypedQuery<KhachHang> query = em.createQuery(
+	            "SELECT hd.khachHang FROM HoaDon hd WHERE hd.donDatBan.maDatBan = :maDatBan",
+	            KhachHang.class
+	        );
+	        query.setParameter("maDatBan", maDatBan);
+	        return query.getSingleResult();
+	    } catch (NoResultException e) {
+	        return null;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    } finally {
+	        em.close();
+	    }
+	}
+	
 }

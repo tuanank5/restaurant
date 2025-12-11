@@ -75,7 +75,9 @@ public class DonDatBan_Controller implements Initializable{
     
     private DonDatBan donDangChon;
 
-    
+    private KhachHang_DAO khachHangDAO;
+    private DonDatBan_DAO donDatBanDAO;
+
     private ObservableList<DonDatBan> danhSachDonDatBan = FXCollections.observableArrayList();
     private List<DonDatBan> danhSachDonDatBanDB;
     private final int LIMIT = 15;
@@ -108,6 +110,13 @@ public class DonDatBan_Controller implements Initializable{
                 }
             }
         });
+        khachHangDAO = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(KhachHang_DAO.class);
+
+        donDatBanDAO = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(DonDatBan_DAO.class);
 	}
     
     @FXML
@@ -154,8 +163,9 @@ public class DonDatBan_Controller implements Initializable{
         filtered.setPredicate(don -> {
             if (don == null) return false;
             if (!sdt.isEmpty()) {
-                if (don.getKhachHang() == null || don.getKhachHang().getSdt() == null) return false;
-                if (!don.getKhachHang().getSdt().contains(sdt)) return false;
+            	KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+            	if (kh == null || kh.getSdt() == null) return false;
+            	if (!kh.getSdt().contains(sdt)) return false;
             }
             LocalDateTime ngayGio = don.getNgayGioLapDon();
             if (ngayGio == null) return false;
@@ -195,10 +205,13 @@ public class DonDatBan_Controller implements Initializable{
     }
 
     private void setValueTable() {
-        tblKhachHang.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getKhachHang() 
-                		!= null ?cellData.getValue().getKhachHang().getTenKH() : "")
-        );
+    	tblKhachHang.setCellValueFactory(cellData -> {
+    	    DonDatBan don = cellData.getValue();
+    	    if (don == null) return new SimpleStringProperty("");
+    	    KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+    	    return new SimpleStringProperty(kh != null ? kh.getTenKH() : "");
+    	});
+
 
         tblSoBan.setCellValueFactory(cellData ->new SimpleStringProperty(cellData.getValue().getBan() 
         		!= null ?cellData.getValue().getBan().getMaBan() : "")
@@ -226,7 +239,7 @@ public class DonDatBan_Controller implements Initializable{
         ButtonType btnXacNhan = new ButtonType("Cập nhật trạng thái", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, ButtonType.CANCEL);
 
-        KhachHang kh = don.getKhachHang();
+        KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
         // Các thông tin khác chỉ xem, không được chỉnh sửa
         TextField txtTen = new TextField(kh != null ? kh.getTenKH() : "");
         txtTen.setDisable(true);
