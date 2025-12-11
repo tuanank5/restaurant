@@ -1,15 +1,39 @@
 package controller.DatBan;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import controller.Menu.MenuNV_Controller;
+import dao.Ban_DAO;
+import dao.ChiTietHoaDon_DAO;
+import dao.DonDatBan_DAO;
+import dao.HoaDon_DAO;
+import dao.MonAn_DAO;
+import dao.impl.Ban_DAOImpl;
+import dao.impl.ChiTietHoaDon_DAOImpl;
+import dao.impl.DonDatBan_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
+import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.HoaDon;
+import entity.MonAn;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class AThanhToan_Controller {
 	
@@ -26,22 +50,22 @@ public class AThanhToan_Controller {
     private Button btnThuTien;
 
     @FXML
-    private ComboBox<?> cmbKM;
+    private ComboBox<String> cmbKM;
 
     @FXML
-    private TableColumn<?, ?> colDonGia;
+    private TableColumn<MonAn, String> colDonGia;
 
     @FXML
-    private TableColumn<?, ?> colDonGia1;
+    private TableColumn<MonAn, Integer> colSTT;
 
     @FXML
-    private TableColumn<?, ?> colSTT;
+    private TableColumn<MonAn, String> colSoLuong;
 
     @FXML
-    private TableColumn<?, ?> colSoLuong;
+    private TableColumn<MonAn, String> colTenMon;
 
     @FXML
-    private TableColumn<?, ?> colTenMon;
+    private TableColumn<MonAn, String> colThanhTien;
 
     @FXML
     private Label lblConPhaiThu;
@@ -56,22 +80,7 @@ public class AThanhToan_Controller {
     private Label lblTongThanhToan;
 
     @FXML
-    private TableColumn<?, ?> tblBan;
-
-    @FXML
-    private TableView<?> tblDS;
-
-    @FXML
-    private TableColumn<?, ?> tblKH;
-
-    @FXML
-    private TableColumn<?, ?> tblKM;
-
-    @FXML
-    private TableColumn<?, ?> tblSTT;
-
-    @FXML
-    private TableView<?> tblThongTin;
+    private TableView<MonAn> tblDS;
 
     @FXML
     private TextField txtBan;
@@ -84,9 +93,78 @@ public class AThanhToan_Controller {
 
     @FXML
     private TextField txtSL;
+    
+    // --- DAO ---
+    private Ban_DAO banDAO = new Ban_DAOImpl();
+    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
+    private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
+    private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+    private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
+
+    // --- Danh sách và trạng thái ---
+    private List<HoaDon> dsHoaDon = new ArrayList<>();
+    private List<Ban> dsBan = new ArrayList<Ban>();
+    private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
+    private Ban hoaDonDangChon = null;
+    private Button buttonHoaDonDangChonUI = null;
+    private String maHoaDonDangChon;
+    private boolean isFromSearch = false;
+    
+    private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
 
     @FXML
     public void initialize() {
-    	tblThongTin.setVisible(false);
+//    	colSTT.setCellValueFactory(col -> {
+//            int index = tblDS.getItems().indexOf(col.getValue());
+//            return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
+//        });
+//    	NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+//	    // Mã & Tên
+//	    colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
+//	    // Số lượng
+//	    colSoLuong.setCellValueFactory(cell -> {
+//	        Integer sl = dsMonAnDangChon.get(cell.getValue());
+//	        return new SimpleStringProperty(String.valueOf(sl != null ? sl : 0));
+//	    });
+//	    // Đơn giá
+//	    colDonGia.setCellValueFactory(cell -> {
+//	        double donGia = cell.getValue().getDonGia();
+//	        return new SimpleStringProperty(formatTienVN(donGia));
+//	    });
+//
+//	    // Thành tiền
+//	    colThanhTien.setCellValueFactory(cell -> {
+//	        MonAn mon = cell.getValue();
+//	        int sl = dsMonAnDangChon.getOrDefault(mon, 0);
+//	        double thanhTien = mon.getDonGia() * sl;
+//	        return new SimpleStringProperty(formatTienVN(thanhTien));
+//	    });
+//	    // Load dữ liệu
+//	    tblDanhSachMon.setItems(FXCollections.observableArrayList(dsMonAnDangChon.keySet()));
+//	    // Thông tin khách, NV, ngày
+//	    txtMaHoaDon.setText(taoMaHoaDon());
+//	    txtTenKH.setText(khachHangDangChon.getTenKH());
+//	    txtSDT.setText(khachHangDangChon.getSdt());
+//	    txtNV.setText(taiKhoan.getNhanVien().getTenNV());
+//	    txtNgay.setText(LocalDate.now().toString());
+//	    // Tổng thanh toán
+//	    try {
+//	        double tong = Double.parseDouble(tongTienSauVAT);
+//	        lblTongThanhToan.setText(formatTienVN(tong));
+//	    } catch (NumberFormatException e) {
+//	        lblTongThanhToan.setText(tongTienSauVAT);
+//	    }
+//	    // Tính tiền trả
+//	    txtTien.textProperty().addListener((obs, oldVal, newVal) -> calculateTienTra());
+        
     }
+    
+    private String formatTienVN(double tien) {
+		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+	    nf.setGroupingUsed(true);
+	    //nf.setMaximumFractionDigits(0); // không hiển thị phần thập phân
+	    nf.setMinimumFractionDigits(3); // hiển thị ít nhất 3 số sau dấu thập phân
+	    nf.setMaximumFractionDigits(3);
+	    return nf.format(tien) + " VND";
+	}
 }

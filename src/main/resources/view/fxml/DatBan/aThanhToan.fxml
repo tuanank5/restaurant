@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -36,19 +35,6 @@
                      </children>
                   </AnchorPane>
                </center>
-               <top>
-                  <TableView fx:id="tblThongTin" prefHeight="250.0" prefWidth="495.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" BorderPane.alignment="CENTER">
-                    <columns>
-                      <TableColumn fx:id="tblSTT" prefWidth="50.0" text="STT" />
-                        <TableColumn fx:id="tblKH" prefWidth="200.0" text="Khách hàng" />
-                        <TableColumn fx:id="tblBan" prefWidth="125.0" text="Thông tin bàn" />
-                        <TableColumn fx:id="tblKM" prefWidth="125.0" text="Khuyến mãi" />
-                    </columns>
-                     <BorderPane.margin>
-                        <Insets right="5.0" />
-                     </BorderPane.margin>
-                  </TableView>
-               </top>
             </BorderPane>
          </top>
          <center>
@@ -75,7 +61,7 @@
                   <TableColumn fx:id="colTenMon" prefWidth="250.0" text="Tên món" />
                   <TableColumn fx:id="colSoLuong" prefWidth="50.0" text="SL" />
                   <TableColumn fx:id="colDonGia" prefWidth="175.0" text="Đơn giá" />
-                  <TableColumn fx:id="colDonGia1" prefWidth="175.0" text="Thành tiền" />
+                  <TableColumn fx:id="colThanhTien" prefWidth="175.0" text="Thành tiền" />
                </columns>
             </TableView>
          </center>
