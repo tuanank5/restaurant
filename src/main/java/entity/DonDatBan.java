@@ -34,6 +34,10 @@ public class DonDatBan {
 
     @Column(name = "soLuong", nullable = false)
     private int soLuong;
+    
+    @ManyToOne
+    @JoinColumn(name = "maKH", referencedColumnName = "maKH", nullable = false)
+    private KhachHang khachHang;
 
     @ManyToOne
     @JoinColumn(name = "maBan", referencedColumnName = "maBan", nullable = false)
@@ -51,10 +55,11 @@ public class DonDatBan {
     }
 
     public DonDatBan(String maDatBan, LocalDateTime ngayGioLapDon, int soLuong, 
-                     Ban ban, String trangThai) {
+    				KhachHang khachHang, Ban ban, String trangThai) {
         this.maDatBan = maDatBan;
         this.ngayGioLapDon = ngayGioLapDon;
         this.soLuong = soLuong;
+        this.khachHang = khachHang;
         this.ban = ban;
         this.trangThai = trangThai;
     }
@@ -81,6 +86,14 @@ public class DonDatBan {
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
+    }
+    
+    public KhachHang getKhachHang() {
+        return khachHang;
+    }
+
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
     }
     
     public Ban getBan() {
@@ -110,7 +123,7 @@ public class DonDatBan {
     @Override
     public String toString() {
         return "DonDatBan [maDatBan=" + maDatBan + ", ngayGio=" + ngayGioLapDon + ", soLuong=" + soLuong
-                + ", ban=" + ban + ", gioBatDau="
+                + ", khachHang=" + khachHang + ", ban=" + ban + ", gioBatDau="
                 + gioBatDau + ", trangThai=" + trangThai + "]";
     }
 
