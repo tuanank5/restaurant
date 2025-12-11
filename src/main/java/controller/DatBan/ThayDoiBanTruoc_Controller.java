@@ -202,17 +202,24 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     }
 
     private void danhDauBanDangDat(Ban banDaDat) {
-        for (javafx.scene.Node node : gridPaneBan.getChildren()) {
-            if (node instanceof Button btn) {
-                String ma = btn.getText().replace("✔", "").trim();
-                if (ma.equals(banDaDat.getMaBan())) {
-                    danhSachBanDangChon.add(banDaDat);
-                    danhSachButtonDangChonUI.add(btn);
-                    btn.setText("✔ " + banDaDat.getMaBan());
-                    btn.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-                    txtSoBan.setText("1");
-                    break;
-                }
+    	for (javafx.scene.Node node : gridPaneBan.getChildren()) {
+
+    	    if (node instanceof Button) {
+    	        
+    	        Button btn = (Button) node;
+
+    	        String ma = btn.getText().replace("✔", "").trim();
+
+    	        if (ma.equals(banDaDat.getMaBan())) {
+    	            danhSachBanDangChon.add(banDaDat);
+    	            danhSachButtonDangChonUI.add(btn);
+
+    	            btn.setText("✔ " + banDaDat.getMaBan());
+    	            btn.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+
+    	            txtSoBan.setText("1");
+    	            break;
+    	        }
             }
         }
     }
