@@ -164,15 +164,22 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         btnBan.setPrefSize(170, 110);
         LocalDate ngay = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0,2)), 0);
-
+        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0, 2)), 0);
         String trangThai = getTrangThaiThucTe(ban, ngay, gio);
         btnBan.setStyle(getStyleByStatusAndType(trangThai, ban.getLoaiBan().getMaLoaiBan()));
+        
         btnBan.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 handleChonBan(ban, btnBan);
-            } else if (event.getClickCount() == 2) {
                 moFormThongTinKhachHang();
+            } 
+            else if (event.getClickCount() == 2) {
+                if (trangThai.equals("Trống")) {
+                    return;
+                }
+                if (trangThai.equals("Đã được đặt")) {
+                    moFormThongTinKhachHang();
+                }
             }
         });
         GridPane.setMargin(btnBan, new Insets(5.0));
@@ -180,31 +187,32 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     }
 
     private void handleChonBan(Ban ban, Button btnBan) {
-        if (!"Trống".equals(ban.getTrangThai())) {
-            showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn trống!");
+        String trangThai = getTrangThaiThucTe(
+                ban, 
+                dpNgayDatBan.getValue(), 
+                LocalTime.of(Integer.parseInt(cmbGioBatDau.getValue().substring(0, 2)), 0)
+        );
+        if (!trangThai.equals("Trống")) {
+            showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
             return;
         }
-        if (loaiBanCu != null &&
-                !ban.getLoaiBan().getMaLoaiBan().equals(loaiBanCu)) {
-            showAlert(Alert.AlertType.ERROR,
-                    "Không được đổi sang loại bàn khác!\nLoại bàn cũ: " + loaiBanCu);
-            return;
-        }
+        
         if (!danhSachBanDangChon.isEmpty()) {
             Ban banCu = danhSachBanDangChon.get(0);
             Button btnCu = danhSachButtonDangChonUI.get(0);
-            btnCu.setText(banCu.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getSoLuong() + " chỗ)");
             btnCu.setStyle(getStyleByStatusAndType(banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()));
             danhSachBanDangChon.clear();
             danhSachButtonDangChonUI.clear();
         }
+        
         danhSachBanDangChon.add(ban);
         danhSachButtonDangChonUI.add(btnBan);
-
         btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
         btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-        txtSoBan.setText(String.valueOf(danhSachBanDangChon.size()));
+        txtSoBan.setText("1");
     }
+
 
     private void danhDauBanDangDat(Ban banDaDat) {
     	for (javafx.scene.Node node : gridPaneBan.getChildren()) {
@@ -441,7 +449,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             return "Đang phục vụ";
         if (ngay == null || gio == null)
             return "Trống";
-
+        
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
         if (dsDon != null) {
             for (DonDatBan don : dsDon) {
@@ -454,14 +462,13 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                 LocalTime gioKT = gioDat.plusHours(2);
 
                 if (ngayDat.equals(ngay) &&
-                   ( !gio.isBefore(gioDat) && !gio.isAfter(gioKT) )) {
+                    (!gio.isBefore(gioDat) && !gio.isAfter(gioKT))) {
                     return "Đã được đặt";
                 }
             }
         }
         return "Trống";
     }
-
    
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
