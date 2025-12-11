@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import entity.HoaDon;
+import entity.KhachHang;
 
 public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 	long tongSoHoaDon();
@@ -43,5 +44,6 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
     String getMaxMaHoaDon();
     
     HoaDon getHoaDonTheoMaBan(String maBan);
+    public KhachHang getKhachHangTheoMaDatBan(String maDatBan);
 
 }

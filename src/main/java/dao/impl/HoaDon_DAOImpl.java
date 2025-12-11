@@ -8,16 +8,21 @@ import java.util.Map;
 
 import dao.HoaDon_DAO;
 import entity.HoaDon;
+import entity.KhachHang;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
 public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO {
 	
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+	
+	@PersistenceContext
+    private EntityManager entityManager;
 	
 	private EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -462,6 +467,19 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	        em.close();
 	    }
 	}
-
+	
+	@Override
+    public KhachHang getKhachHangTheoMaDatBan(String maDatBan) {
+        try {
+            return entityManager.createQuery(
+                "SELECT hd.khachHang FROM HoaDon hd WHERE hd.donDatBan.maDatBan = :ma", 
+                KhachHang.class
+            )
+            .setParameter("ma", maDatBan)
+            .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 }

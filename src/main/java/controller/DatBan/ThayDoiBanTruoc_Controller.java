@@ -11,9 +11,12 @@ import dao.DonDatBan_DAO;
 import dao.LoaiBan_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
+import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.LoaiBan_DAOImpl;
 import entity.Ban;
 import entity.DonDatBan;
+import entity.KhachHang;
 import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -357,11 +360,15 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Không tìm thấy thông tin đơn đặt bàn!");
             return;
         }
+        
+        KhachHang kh = new HoaDon_DAOImpl()
+                .getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+        
         Alert dialog = new Alert(Alert.AlertType.NONE);
         dialog.setTitle("Thông tin khách hàng");
         dialog.setHeaderText("Thông tin khách hàng");
-        TextField txtSDT = new TextField(donDatBanDuocChon.getKhachHang().getSdt());
-        TextField txtTenKH = new TextField(donDatBanDuocChon.getKhachHang().getTenKH());
+        TextField txtSDT = new TextField(kh != null ? kh.getSdt() : "");
+        TextField txtTenKH = new TextField(kh != null ? kh.getTenKH() : "");
         DatePicker dpNgayDat = new DatePicker(
                 donDatBanDuocChon.getNgayGioLapDon() != null ?
                         donDatBanDuocChon.getNgayGioLapDon().toLocalDate() : LocalDate.now()
@@ -415,6 +422,9 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         dialog.showAndWait().ifPresent(bt -> {
             if (bt == javafx.scene.control.ButtonType.OK) {
                 try {
+                	KhachHang khUpdate = new HoaDon_DAOImpl()
+                            .getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+                	
                     if (txtSDT.getText().isEmpty() || txtTenKH.getText().isEmpty()) {
                         showAlert(Alert.AlertType.WARNING, "Không được để trống SĐT hoặc Tên khách hàng!");
                         return;
@@ -429,12 +439,17 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                     LocalTime gioDat = LocalTime.of(gio, 0);
                     int soLuong = Integer.parseInt(txtSoLuong.getText());
                     
-                    donDatBanDuocChon.getKhachHang().setSdt(txtSDT.getText());
-                    donDatBanDuocChon.getKhachHang().setTenKH(txtTenKH.getText());
+                    if (khUpdate != null) {
+                        khUpdate.setSdt(txtSDT.getText());
+                        khUpdate.setTenKH(txtTenKH.getText());
+                        new KhachHang_DAOlmpl().capNhat(khUpdate);
+                    }
+                    
                     donDatBanDuocChon.setNgayGioLapDon(ngayDat.atTime(gioDat));
                     donDatBanDuocChon.setGioBatDau(gioDat);
                     donDatBanDuocChon.setSoLuong(soLuong);
                     donDAO.capNhat(donDatBanDuocChon);
+                    
                     showAlert(Alert.AlertType.INFORMATION, "Cập nhật thông tin khách hàng thành công!");
                 } catch (Exception e) {
                     e.printStackTrace();
