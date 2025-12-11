@@ -9,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 
 @Entity
 @NamedQueries({
@@ -47,10 +46,6 @@ public class KhachHang {
     @JoinColumn(name = "maHang", referencedColumnName = "maHang", nullable = true)
     private HangKhachHang hangKhachHang;
 
-    @OneToMany(mappedBy = "khachHang")
-    private List<DonDatBan> danhSachDon;
-
-
     public KhachHang() {
     }
 
@@ -64,8 +59,6 @@ public class KhachHang {
         this.diemTichLuy = diemTichLuy;
         this.hangKhachHang = hangKhachHang;
     }
-
-    // ===== Getter Setter =====
 
     public String getMaKH() {
         return maKH;
@@ -123,11 +116,10 @@ public class KhachHang {
         this.hangKhachHang = hangKhachHang;
     }
 
-	@Override
-	public String toString() {
-		return "KhachHang [maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt + ", email=" + email + ", diaChi="
-				+ diaChi + ", diemTichLuy=" + diemTichLuy + ", hangKhachHang="
-				+ hangKhachHang + ", danhSachDon=" + danhSachDon + "]";
-	}
-	
+    @Override
+    public String toString() {
+        return "KhachHang [maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt +
+               ", email=" + email + ", diaChi=" + diaChi + ", diemTichLuy=" +
+               diemTichLuy + ", hangKhachHang=" + hangKhachHang + "]";
+    }
 }

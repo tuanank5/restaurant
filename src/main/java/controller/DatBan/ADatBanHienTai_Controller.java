@@ -4,6 +4,8 @@ import dao.KhuyenMai_DAO;
 import dao.KhachHang_DAO;
 import dao.Ban_DAO;
 import dao.impl.Ban_DAOImpl;
+import dao.HoaDon_DAO;
+import dao.impl.HoaDon_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.KhuyenMai_DAOImpl;
 import dao.DonDatBan_DAO;
@@ -34,7 +36,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import controller.DatMon.DatMon_Controller;
 import controller.Menu.MenuNV_Controller;
 
 
@@ -57,6 +58,7 @@ public class ADatBanHienTai_Controller implements Initializable {
     private Ban banDangChon = null;
     private Button buttonBanDangChonUI = null;
     private boolean isFromSearch = false;
+    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 
     private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
 
@@ -262,9 +264,9 @@ public class ADatBanHienTai_Controller implements Initializable {
             if (dsDon != null && !dsDon.isEmpty()) {
                 DonDatBan donGan = dsDon.get(dsDon.size() - 1);
                 MenuNV_Controller.banDangChon = ban;
-                MenuNV_Controller.khachHangDangChon = donGan.getKhachHang();
+                KhachHang kh = hoaDonDAO.getKhachHangTheoMaDatBan(donGan.getMaDatBan());
+                MenuNV_Controller.khachHangDangChon = kh;
             }
-            //MenuNV_Controller.instance.readyUI("MonAn/DatMon");
             return;
         }
         //Style chọn bàn

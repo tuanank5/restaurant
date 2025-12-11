@@ -9,10 +9,13 @@ import java.util.ResourceBundle;
 import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
 import dao.DonDatBan_DAO;
+import dao.HoaDon_DAO;
+import dao.impl.HoaDon_DAOImpl;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
 import entity.Ban;
 import entity.DonDatBan;
+import entity.KhachHang;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,7 +45,7 @@ public class ADoiBan_Controller implements Initializable {
     private Ban banDangChon = null;
     private Button buttonBanDangChonUI = null;
     private boolean isFromSearch = false;
-
+    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -195,9 +198,9 @@ public class ADoiBan_Controller implements Initializable {
             if (dsDon != null && !dsDon.isEmpty()) {
                 DonDatBan donGan = dsDon.get(dsDon.size() - 1);
                 MenuNV_Controller.banDangChon = ban;
-                MenuNV_Controller.khachHangDangChon = donGan.getKhachHang();
+                KhachHang kh = hoaDonDAO.getKhachHangTheoMaDatBan(donGan.getMaDatBan());
+                MenuNV_Controller.khachHangDangChon = kh;
             }
-            //MenuNV_Controller.instance.readyUI("MonAn/DatMon");
             return;
         }
         //Style chọn bàn
