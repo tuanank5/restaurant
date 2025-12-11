@@ -369,6 +369,18 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         dialog.setHeaderText("Thông tin khách hàng");
         TextField txtSDT = new TextField(kh != null ? kh.getSdt() : "");
         TextField txtTenKH = new TextField(kh != null ? kh.getTenKH() : "");
+        txtSDT.textProperty().addListener((obs, oldV, newV) -> {
+            if (newV.matches("\\d{9,11}")) {  
+                KhachHang khTim = new KhachHang_DAOlmpl().getKhachHangTheoSDT(newV);
+                if (khTim != null) {
+                    txtTenKH.setText(khTim.getTenKH());
+                } else {
+                    txtTenKH.clear();
+                }
+            } else {
+                txtTenKH.clear();
+            }
+        });
         DatePicker dpNgayDat = new DatePicker(
                 donDatBanDuocChon.getNgayGioLapDon() != null ?
                         donDatBanDuocChon.getNgayGioLapDon().toLocalDate() : LocalDate.now()

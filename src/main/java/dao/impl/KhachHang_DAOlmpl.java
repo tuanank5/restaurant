@@ -65,9 +65,26 @@ public class KhachHang_DAOlmpl extends Entity_DAOImpl<KhachHang> implements Khac
         try {
             return em.createQuery("SELECT k FROM KhachHang k", KhachHang.class)
                     .getResultList();
-
         } finally {
             em.close();
         }
 	}
+	
+	@Override
+	public KhachHang getKhachHangTheoSDT(String sdt) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        return em.createQuery(
+	            "SELECT k FROM KhachHang k WHERE k.sdt = :s",
+	            KhachHang.class
+	        )
+	        .setParameter("s", sdt)
+	        .getSingleResult();
+	    } catch (Exception e) {
+	        return null;
+	    } finally {
+	        em.close();
+	    }
+	}
+
 }
