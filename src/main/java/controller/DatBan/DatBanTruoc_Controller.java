@@ -418,7 +418,7 @@ public class DatBanTruoc_Controller implements Initializable {
 			ddb.setGioBatDau(gioBatDau);
 			
 			ddb.setSoLuong(soLuongKH);
-			ddb.setKhachHang(kh);
+//			ddb.setKhachHang(kh);
 			ddb.setBan(ban);
 			ddb.setTrangThai("Chưa Nhận Bàn");
 			

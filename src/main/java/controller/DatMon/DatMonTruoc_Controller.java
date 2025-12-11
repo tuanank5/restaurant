@@ -365,7 +365,7 @@ public class DatMonTruoc_Controller implements Initializable{
                 	ddb.setNgayGioLapDon(LocalDateTime.of(date, time));
                 } catch (Exception ignore) {}
                 ddb.setSoLuong(soLuongKH);
-                ddb.setKhachHang(kh);
+//                ddb.setKhachHang(kh);
                 try {
                     ddb.setBan(ban);
                 } catch (Exception ignore) {}
