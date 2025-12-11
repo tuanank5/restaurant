@@ -8,5 +8,9 @@ public interface ChiTietHoaDon_DAO extends Entity_DAO<ChiTietHoaDon> {
     boolean themChiTiet(ChiTietHoaDon cthd);
 
     List<ChiTietHoaDon> getChiTietTheoMaHoaDon(String maHD);
+    
+    void deleteByMaHoaDon(String maHD);
 
 }
+
+

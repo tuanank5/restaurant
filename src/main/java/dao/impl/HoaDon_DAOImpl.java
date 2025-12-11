@@ -450,13 +450,13 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	public HoaDon getHoaDonTheoMaBan(String maBan) {
 	    EntityManager em = emf.createEntityManager();
 	    try {
-	        return em.createQuery(
-	                "SELECT h FROM HoaDon h WHERE h.maBan = :mb",
-	                HoaDon.class)
-	                .setParameter("mb", maBan)
-	                .getResultStream()
-	                .findFirst()
-	                .orElse(null);
+	    	return em.createQuery(
+	    	        "SELECT h FROM HoaDon h WHERE h.donDatBan.ban.maBan = :mb",
+	    	        HoaDon.class)
+	    	        .setParameter("mb", maBan)
+	    	        .getResultStream()
+	    	        .findFirst()
+	    	        .orElse(null);
 
 	    } finally {
 	        em.close();

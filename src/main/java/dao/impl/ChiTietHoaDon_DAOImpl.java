@@ -17,6 +17,24 @@ public class ChiTietHoaDon_DAOImpl
 
     private EntityManagerFactory emf = 
             Persistence.createEntityManagerFactory("default");
+    @Override
+    public void deleteByMaHoaDon(String maHD) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+
+            em.createQuery("DELETE FROM ChiTietHoaDon WHERE hoaDon.maHoaDon = :ma")
+              .setParameter("ma", maHD)
+              .executeUpdate();
+
+            tx.commit();
+
+        } finally {
+            em.close();
+        }
+    }
 
     @Override
     public List<ChiTietHoaDon> getChiTietTheoMaHoaDon(String maHD) {

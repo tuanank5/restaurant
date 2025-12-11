@@ -3,6 +3,7 @@ package controller.HoaDon;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -45,7 +46,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import util.AutoIDUitl;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 public class ChiTietHoaDon_Controller {	
 	@FXML
     private Button btnTroLai;
@@ -329,6 +332,7 @@ public class ChiTietHoaDon_Controller {
 	    nf.setMaximumFractionDigits(3);
 	    return nf.format(tien) + " VND";
 	}
+	
 	
 	private String taoMaHoaDon() {
 		return AutoIDUitl.sinhMaHoaDon();
