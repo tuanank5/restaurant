@@ -382,7 +382,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                 if (sl > soCho) {
                     showAlert(Alert.AlertType.ERROR,
                             "Số lượng khách vượt quá số chỗ ngồi của bàn (" + soCho + ")!");
-                    txtSoLuong.setText(String.valueOf(soCho));
                 }
             }
         });
