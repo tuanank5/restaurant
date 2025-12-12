@@ -348,8 +348,8 @@ public class NhanVien_Controller {
                 .getDatabaseContext()
                 .newEntity_DAO(NhanVien_DAO.class)
                 .getDanhSach(NhanVien.class, filter);
-        List<NhanVien> top15NhanVien = danhSachNhanVienDB.subList(0, Math.min(danhSachNhanVienDB.size(), LIMIT));
-        danhSachNhanVien.addAll(top15NhanVien);
+        List<NhanVien> topLimitNhanVien = danhSachNhanVienDB.subList(0, Math.min(danhSachNhanVienDB.size(), LIMIT));
+        danhSachNhanVien.addAll(topLimitNhanVien);
         tblNV.setItems(danhSachNhanVien);
     }
 	
