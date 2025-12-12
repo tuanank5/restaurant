@@ -486,6 +486,7 @@ public class DatBanTruoc_Controller implements Initializable {
             if (khachHangDaChon == null) {
                 showAlert(Alert.AlertType.WARNING, "Vui lòng nhập số điện thoại hợp lệ!");
                 return;
+                
             }
             DatMonTruoc_Controller.khachHangStatic = khachHangDaChon;
             DatMonTruoc_Controller.soLuongKHStatic = slKhach > 0 ? slKhach : 1;
