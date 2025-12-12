@@ -41,7 +41,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     @FXML private ComboBox<String> cmbLoaiBan;
     @FXML private DatePicker dpNgayDatBan;
     @FXML private GridPane gridPaneBan;
-    @FXML private TextField txtSoBan;
 
     public static DonDatBan donDatBanDuocChon;
     private String loaiBanCu;
@@ -213,7 +212,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         danhSachButtonDangChonUI.add(btnBan);
         btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
         btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-        txtSoBan.setText("1");
     }
 
 
@@ -229,7 +227,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     	            btn.setText("✔ " + banDaDat.getMaBan() +
     	                        "\n(" + banDaDat.getLoaiBan().getSoLuong() + " chỗ)");
     	            btn.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-    	            txtSoBan.setText("1");
     	            break;
     	        }
             }
@@ -345,8 +342,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             if (ban.getTrangThai() != null) {
                 cmbTrangThai.setValue(ban.getTrangThai());
             }
-            txtSoBan.setText("1");
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -209,11 +209,11 @@ VALUES
 ('KM006', N'Giảm 10% tổng hóa đơn cuối tuần', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-07', '2025-11-08', 10),
 ('KM007', N'Ưu đãi VIP cuối tháng', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-20', '2025-11-30', 25);
 
-INSERT INTO DonDatBan (maDatBan, ngayGio, soLuong, maKH, maBan, gioBatDau, trangThai) VALUES
-('DB001', DEFAULT, 4, 'KH0001', 'B01', '18:00:00', 'Chưa thanh toán'),
-('DB002', DEFAULT, 2, 'KH0002', 'B02', '19:00:00', 'Chưa thanh toán'),
-('DB003', DEFAULT, 6, 'KH0003', 'B03', '20:00:00', 'Chưa thanh toán'),
-('DB004', DEFAULT, 6, 'KH0004', 'B04', '21:00:00', 'Chưa thanh toán');
+INSERT INTO DonDatBan (maDatBan, ngayGio, soLuong, maBan, gioBatDau, trangThai) VALUES
+('DB001', DEFAULT, 4, 'B01', '18:00:00', 'Chưa thanh toán'),
+('DB002', DEFAULT, 2, 'B02', '19:00:00', 'Chưa thanh toán'),
+('DB003', DEFAULT, 6, 'B03', '20:00:00', 'Chưa thanh toán'),
+('DB004', DEFAULT, 6, 'B04', '21:00:00', 'Chưa thanh toán');
 
 INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tienNhan, tienThua, maKH, maKM, maNV, maDatBan, maCoc) VALUES
 ('HD001', '2025-08-01', 1000000, 100000, 'Đã thanh toán', 'Tiền mặt', 1200000, 200000, 'KH0001', 'KM004', 'NV001', 'DB001', 'C001'),
