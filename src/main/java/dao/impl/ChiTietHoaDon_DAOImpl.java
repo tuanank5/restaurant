@@ -41,7 +41,7 @@ public class ChiTietHoaDon_DAOImpl
         EntityManager em = emf.createEntityManager();
         try {
             return em.createQuery(
-                    "SELECT c FROM ChiTietHoaDon c WHERE c.hoaDon.maHoaDon = :maHD",
+                    "SELECT c FROM ChiTietHoaDon c WHERE c.hoaDon.maHD = :maHD",
                     ChiTietHoaDon.class)
                     .setParameter("maHD", maHD)
                     .getResultList();

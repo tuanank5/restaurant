@@ -267,9 +267,6 @@ public class ADatMon_Controller implements Initializable {
     	ddb.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
     	ddb.setNgayGioLapDon(nowDate);
     	ddb.setSoLuong(MenuNV_Controller.soLuongKhach);
-    	KhachHang kh = new KhachHang();
-    	kh.setMaKH("KH0001");
-//    	ddb.setKhachHang(kh);
     	ddb.setBan(MenuNV_Controller.banDangChon);
     	ddb.setGioBatDau(nowHour);
     	ddb.setTrangThai("Hiện tại");

@@ -197,7 +197,7 @@ public class ABanHienTai_Controller {
         LocalDate localDate = LocalDate.now();
         Date dateNow = Date.valueOf(localDate);
 
-        for (HoaDon hoaDon : dsHoaDon) {
+        for (final HoaDon hoaDon : dsHoaDon) {
             boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan());
 
             if (matchType && hoaDon.getNgayLap().equals(dateNow) && hoaDon.getTrangThai().equals("Chưa thanh toán")) {
