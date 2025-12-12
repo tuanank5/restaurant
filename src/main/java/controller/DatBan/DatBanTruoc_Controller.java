@@ -154,17 +154,16 @@ public class DatBanTruoc_Controller implements Initializable {
         LocalDateTime tDat = LocalDateTime.of(ngayChon, gioChon);
         for (DonDatBan don : dsDon) {
             LocalDate ngayDon = don.getNgayGioLapDon().toLocalDate();
-            LocalTime gioDon = don.getGioBatDau();
-            
             if (!ngayDon.equals(ngayChon)) continue;
-            LocalDateTime tDaDat = LocalDateTime.of(ngayDon, gioDon);
+            LocalTime gioDon = don.getGioBatDau();
+            LocalDateTime tDaDat = LocalDateTime.of(ngayChon, gioDon);
             LocalDateTime tDaKetThuc = tDaDat.plusHours(2);
-            boolean giaoNhau = !tDat.isAfter(tDaKetThuc);
-            if (giaoNhau) return true;
+            if (!tDat.isBefore(tDaDat) && !tDat.isAfter(tDaKetThuc)) {
+                return true;
+            }
         }
         return false;
     }
-
     
     // CHỌN BÀN — CHỈ CHO CHỌN 1 BÀN
     private void handleChonBan(Ban ban, Button btnBan) {

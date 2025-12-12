@@ -192,15 +192,12 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     }
 
     private void handleChonBan(Ban ban, Button btnBan) {
-        String trangThai = getTrangThaiThucTe(
-                ban, 
-                dpNgayDatBan.getValue(), 
-                LocalTime.of(Integer.parseInt(cmbGioBatDau.getValue().substring(0, 2)), 0)
-        );
-        if (!trangThai.equals("Trống")) {
-            showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
-            return;
-        }
+    	String trangThai = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(), 
+                LocalTime.of(Integer.parseInt(cmbGioBatDau.getValue().substring(0, 2)), 0));
+    	if (!trangThai.equals("Trống")) {
+    	    showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
+    	    return;
+    	}
         
         if (!danhSachBanDangChon.isEmpty()) {
             Ban banCu = danhSachBanDangChon.get(0);
@@ -273,19 +270,17 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         int col = 0, row = 0;
         final int MAX_COLS = 5;
         for (Ban ban : danhSachBan) {
-            boolean trung = coTrungLich(ban, ngay, gioBatDau);
+        	boolean trung = coTrungLich(ban, ngay, gioBatDau);
             Button btnBan = new Button(ban.getMaBan());
             btnBan.setPrefSize(170, 110);
             
             btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
             if (trung) {
-                // hiển thị màu đỏ khi đã được đặt
                 btnBan.setStyle(getStyleByStatusAndType("Đã được đặt", ban.getLoaiBan().getMaLoaiBan()));
             } else {
-                btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-                btnBan.setOnMouseClicked(e -> handleChonBan(ban, btnBan));
+                btnBan.setStyle(getStyleByStatusAndType("Trống", ban.getLoaiBan().getMaLoaiBan()));
             }
-
+            
             GridPane.setMargin(btnBan, new Insets(5));
             gridPaneBan.add(btnBan, col, row);
             col++;
@@ -303,18 +298,17 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             if (donDatBanDuocChon != null &&
                 don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
                 continue;
-            LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
-            LocalTime gioDat = don.getGioBatDau();
 
+            LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
             if (!ngayDat.equals(ngay)) continue;
-            LocalTime gioKetThuc = gioDat.plusHours(2);
-            if (gioMoi.compareTo(gioKetThuc) <= 0) {
+
+            LocalTime gioDat = don.getGioBatDau();
+            LocalTime gioKT = gioDat.plusHours(2);
+            if (!gioMoi.isBefore(gioDat) && !gioMoi.isAfter(gioKT))
                 return true;
-            }
         }
         return false;
     }
-
 
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
         String backgroundColor = "white";
@@ -486,13 +480,13 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                     continue;
 
                 LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
+                if (!ngayDat.equals(ngay)) continue;
+
                 LocalTime gioDat = don.getGioBatDau();
                 LocalTime gioKT = gioDat.plusHours(2);
 
-                if (ngayDat.equals(ngay)) {
-                    if (gio.compareTo(gioKT) <= 0)
-                        return "Đã được đặt";
-                }
+                if (!gio.isBefore(gioDat) && !gio.isAfter(gioKT))
+                    return "Đã được đặt";
             }
         }
         return "Trống";
