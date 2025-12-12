@@ -429,14 +429,14 @@ public class DatMonTruoc_Controller implements Initializable{
                 }
             }
 
-            showAlert(Alert.AlertType.INFORMATION,
-                "Đặt món thành công. Hóa đơn được lưu ở trạng thái 'Chưa Thanh Toán'.");
+            showAlert(Alert.AlertType.INFORMATION, "Đặt món thành công. Hóa đơn được lưu ở trạng thái 'Chưa Thanh Toán'.");
             dsMonAnDat.clear();
             tblDS.setItems(FXCollections.observableArrayList());
             tblDS.refresh();
             txtKH.clear();
             txtSdt.clear();
             txtSoLuongKH.setText("1");
+            MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
         } catch (Exception ex) {
             ex.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Đã có lỗi: " + ex.getMessage());

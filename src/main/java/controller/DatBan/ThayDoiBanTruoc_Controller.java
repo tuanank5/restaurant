@@ -87,8 +87,10 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 
     private void loadGioBatDau() {
         cmbGioBatDau.getItems().clear();
-        for (int gio = 8; gio <= 23; gio++) {
-            cmbGioBatDau.getItems().add(String.format("%02d:00", gio));
+        for (int hour = 8; hour <= 23; hour++) {
+            for (int minute = 0; minute < 60; minute += 5) {
+                cmbGioBatDau.getItems().add(String.format("%02d:%02d", hour, minute));
+            }
         }
         cmbGioBatDau.setValue("08:00");
     }
@@ -301,18 +303,18 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             if (donDatBanDuocChon != null &&
                 don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
                 continue;
-
             LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
             LocalTime gioDat = don.getGioBatDau();
 
             if (!ngayDat.equals(ngay)) continue;
             LocalTime gioKetThuc = gioDat.plusHours(2);
-            if (!gioMoi.isBefore(gioDat) && !gioMoi.isAfter(gioKetThuc)) {
+            if (gioMoi.compareTo(gioKetThuc) <= 0) {
                 return true;
             }
         }
         return false;
     }
+
 
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
         String backgroundColor = "white";
@@ -476,7 +478,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             return "Đang phục vụ";
         if (ngay == null || gio == null)
             return "Trống";
-        
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
         if (dsDon != null) {
             for (DonDatBan don : dsDon) {
@@ -488,14 +489,15 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                 LocalTime gioDat = don.getGioBatDau();
                 LocalTime gioKT = gioDat.plusHours(2);
 
-                if (ngayDat.equals(ngay) &&
-                    (!gio.isBefore(gioDat) && !gio.isAfter(gioKT))) {
-                    return "Đã được đặt";
+                if (ngayDat.equals(ngay)) {
+                    if (gio.compareTo(gioKT) <= 0)
+                        return "Đã được đặt";
                 }
             }
         }
         return "Trống";
     }
+
    
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);

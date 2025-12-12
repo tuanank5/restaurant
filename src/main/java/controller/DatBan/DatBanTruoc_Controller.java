@@ -95,12 +95,14 @@ public class DatBanTruoc_Controller implements Initializable {
     
     private void loadGioBatDau() {
         cmbGioBatDau.getItems().clear();
-        for (int gio = 8; gio <= 23; gio++) {
-            cmbGioBatDau.getItems().add(String.format("%02d:00", gio));
+        for (int hour = 8; hour <= 23; hour++) {
+            for (int minute = 0; minute < 60; minute += 5) {
+                cmbGioBatDau.getItems().add(String.format("%02d:%02d", hour, minute));
+            }
         }
         cmbGioBatDau.setValue("08:00");
     }
-
+    
     // LOAD DANH SÁCH BÀN — CHUẨN HÓA LOGIC
     private void loadDanhSachBan() {
         gridPaneBan.getChildren().clear();
@@ -150,15 +152,14 @@ public class DatBanTruoc_Controller implements Initializable {
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
         if (dsDon == null) return false;
         LocalDateTime tDat = LocalDateTime.of(ngayChon, gioChon);
-        LocalDateTime tDatKetThuc = tDat.plusHours(2);
         for (DonDatBan don : dsDon) {
             LocalDate ngayDon = don.getNgayGioLapDon().toLocalDate();
             LocalTime gioDon = don.getGioBatDau();
+            
             if (!ngayDon.equals(ngayChon)) continue;
             LocalDateTime tDaDat = LocalDateTime.of(ngayDon, gioDon);
             LocalDateTime tDaKetThuc = tDaDat.plusHours(2);
-            // KIỂM TRA GIAO NHAU
-            boolean giaoNhau = tDat.isBefore(tDaKetThuc) && tDaDat.isBefore(tDatKetThuc);
+            boolean giaoNhau = !tDat.isAfter(tDaKetThuc);
             if (giaoNhau) return true;
         }
         return false;
