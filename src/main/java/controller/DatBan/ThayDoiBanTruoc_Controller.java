@@ -497,7 +497,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         }
         return "Trống";
     }
-
    
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
