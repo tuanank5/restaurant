@@ -91,8 +91,12 @@ public class DonDatBan_Controller implements Initializable{
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+    	dpNgayDatBan.valueProperty().addListener((obs, o, n) -> apDungLoc());
+        cmbTrangThai.valueProperty().addListener((obs, o, n) -> apDungLoc());
+        txtSDT.textProperty().addListener((obs, o, n) -> apDungLoc());
 		khoiTaoComboBoxes();
 		setValueTable();
+		dpNgayDatBan.setValue(LocalDate.now());
         loadData();        
         tblView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             donDangChon = newVal;
@@ -157,25 +161,7 @@ public class DonDatBan_Controller implements Initializable{
 
     @FXML
     void btnTimKiem(ActionEvent event) {
-        String sdt = txtSDT.getText() != null ? txtSDT.getText().trim() : "";
-        LocalDate ngayChon = dpNgayDatBan.getValue();
-        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
-        filtered.setPredicate(don -> {
-            if (don == null) return false;
-            if (!sdt.isEmpty()) {
-            	KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
-            	if (kh == null || kh.getSdt() == null) return false;
-            	if (!kh.getSdt().contains(sdt)) return false;
-            }
-            LocalDateTime ngayGio = don.getNgayGioLapDon();
-            if (ngayGio == null) return false;
-            LocalDate ngayDon = ngayGio.toLocalDate();
-            if (ngayChon == null) {
-                return ngayDon.isAfter(LocalDate.now());
-            }
-            return !ngayDon.isBefore(ngayChon);
-        });
-        tblView.setItems(filtered);
+        apDungLoc();
     }
     
     private void khoiTaoComboBoxes() {
@@ -286,6 +272,34 @@ public class DonDatBan_Controller implements Initializable{
             return null;
         });
         dialog.showAndWait();
+    }
+    
+    private void apDungLoc() {
+        String sdt = txtSDT.getText() != null ? txtSDT.getText().trim() : "";
+        LocalDate ngayChon = dpNgayDatBan.getValue();
+        String trangThaiChon = cmbTrangThai.getValue();
+
+        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+        filtered.setPredicate(don -> {
+            if (don == null) return false;
+            if (!sdt.isEmpty()) {
+                KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+                if (kh == null || kh.getSdt() == null) return false;
+                if (!kh.getSdt().contains(sdt)) return false;
+            }
+            if (ngayChon != null) {
+                LocalDate ngayDon = don.getNgayGioLapDon().toLocalDate();
+                if (!ngayDon.equals(ngayChon)) return false;
+            }
+            if (!"Tất cả".equals(trangThaiChon)) {
+                String tt = don.getTrangThai();
+                if (tt == null) return false;
+                if (!tt.trim().equalsIgnoreCase(trangThaiChon.trim())) return false;
+            }
+            return true;
+        });
+        tblView.setItems(filtered);
+        capNhatTongDon();
     }
     
     private void showAlert(Alert.AlertType type, String msg) {

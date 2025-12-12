@@ -174,16 +174,17 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         btnBan.setStyle(getStyleByStatusAndType(trangThai, ban.getLoaiBan().getMaLoaiBan()));
         
         btnBan.setOnMouseClicked(event -> {
+            String trangThaiThucTe = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(),
+                    LocalTime.of(Integer.parseInt(cmbGioBatDau.getValue().substring(0, 2)), 0));
             if (event.getClickCount() == 1) {
                 handleChonBan(ban, btnBan);
-                moFormThongTinKhachHang();
-            } 
+            }
             else if (event.getClickCount() == 2) {
-                if (trangThai.equals("Trống")) {
-                    return;
-                }
-                if (trangThai.equals("Đã được đặt")) {
+                if (trangThaiThucTe.equals("Trống")) {
                     moFormThongTinKhachHang();
+                } else {
+                    showAlert(Alert.AlertType.WARNING, 
+                        "Chỉ có thể mở thông tin khách hàng khi bàn đang TRỐNG!");
                 }
             }
         });
@@ -399,16 +400,17 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             }
 
             if (!newV.isEmpty()) {
-                int sl = Integer.parseInt(newV);
-                int soCho = donDatBanDuocChon.getBan().getLoaiBan().getSoLuong();
-
-                if (sl > soCho) {
-                    showAlert(Alert.AlertType.ERROR,
-                            "Số lượng khách vượt quá số chỗ ngồi của bàn (" + soCho + ")!");
-                }
+            	int sl = Integer.parseInt(newV);
+            	int sucChuaBanMoi = danhSachBanDangChon.isEmpty()
+            	        ? donDatBanDuocChon.getBan().getLoaiBan().getSoLuong()
+            	        : danhSachBanDangChon.get(0).getLoaiBan().getSoLuong();
+            	
+            	if (sl > sucChuaBanMoi) {
+            	    showAlert(Alert.AlertType.ERROR,
+            	            "Số lượng khách vượt quá số chỗ ngồi của bàn (" + sucChuaBanMoi + ")!");
+            	}
             }
-        });
-        
+        });     
         GridPane pane = new GridPane();
         pane.setHgap(20);
         pane.setVgap(20);
