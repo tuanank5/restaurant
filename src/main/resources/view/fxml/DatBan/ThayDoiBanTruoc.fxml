@@ -25,7 +25,7 @@
 <center>
 <VBox BorderPane.alignment="CENTER">
 <children>
-<ScrollPane prefHeight="112.0" prefWidth="1100.0">
+<ScrollPane prefHeight="119.0" prefWidth="1100.0">
 <content>
 <GridPane fx:id="gridPaneBan">
 <Button fx:id="btnBan" prefHeight="110.0" prefWidth="170.0" text="B01 (10 chỗ)" />
