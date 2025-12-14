@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -24,12 +23,12 @@
                      <children>
                         <Label layoutX="50.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Từ ngày:" />
                         <Label layoutX="390.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đến ngày:" />
-                        <DatePicker layoutX="125.0" layoutY="20.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                        <DatePicker layoutX="475.0" layoutY="20.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <DatePicker fx:id="BeforDay" layoutX="125.0" layoutY="20.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <DatePicker fx:id="AfterDay" layoutX="475.0" layoutY="20.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                         <Label layoutX="50.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Lọc:" />
-                        <ComboBox layoutX="125.0" layoutY="70.0" prefWidth="234.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <ComboBox fx:id="cmbLoc" layoutX="125.0" layoutY="70.0" prefWidth="234.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                         <Button disable="true" layoutX="740.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
-                        <TextField layoutX="824.0" layoutY="20.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtTimKiem" layoutX="824.0" layoutY="20.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                      </children>
                   </AnchorPane>
                </center>

@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import controller.Menu.MenuNV_Controller;
+import entity.HoaDon;
 
 public class HoaDon_Controller {
 
@@ -17,44 +18,41 @@ public class HoaDon_Controller {
     public void setMenuController(MenuNV_Controller menuController) {
         this.menuController = menuController;
     }
-	  @FXML
-	    private BorderPane borderPane;
+    @FXML
+    private DatePicker AfterDay;
 
+    @FXML
+    private DatePicker BeforDay;
 
-@FXML
-private ComboBox<String> cmbLoc;
-	    @FXML
-	    private TableColumn<?, ?> colKH;
+    @FXML
+    private ComboBox<String> cmbLoc;
 
-	    @FXML
-	    private TableColumn<?, ?> colKM;
+    @FXML
+    private TableColumn<HoaDon,String> colKH;
 
-	    @FXML
-	    private TableColumn<?, ?> colKieuThanhToan;
+    @FXML
+    private TableColumn<HoaDon,String> colKM;
 
-	    @FXML
-	    private TableColumn<?, ?> colMaHD;
+    @FXML
+    private TableColumn<HoaDon,String> colKieuThanhToan;
 
-	    @FXML
-	    private TableColumn<?, ?> colNV;
+    @FXML
+    private TableColumn<HoaDon,String> colMaHD;
 
-	    @FXML
-	    private TableColumn<?, ?> colNgayLap;
+    @FXML
+    private TableColumn<HoaDon,String> colNV;
 
-	    @FXML
-	    private TableColumn<?, ?> colTrangThai;
+    @FXML
+    private TableColumn<HoaDon,String> colNgayLap;
 
-	    @FXML
-	    private DatePicker dpDenNgay;
+    @FXML
+    private TableColumn<HoaDon,String> colTrangThai;
 
-	    @FXML
-	    private DatePicker dpTuNgay;
+    @FXML
+    private TableView<HoaDon> tableView;
 
-	    @FXML
-	    private TableView<?> tableView;
-
-	    @FXML
-	    private TextField txtTimKiem;
+    @FXML
+    private TextField txtTimKiem;
 	    
 
 }

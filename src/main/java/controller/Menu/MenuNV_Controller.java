@@ -185,7 +185,7 @@ public class MenuNV_Controller {
 
     @FXML
     void btnHoaDon(ActionEvent event) {
-    	readyUI("HoaDon/HoaDon");
+    	readyUI("HoaDon/HoaDonTA");
     }
 
     @FXML
