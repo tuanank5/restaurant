@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,19 +74,22 @@ public class HoaDon_Controller implements Initializable{
     @FXML
     private TextField txtTimKiem;
     private ObservableList<HoaDon> danhSachHoaDon = FXCollections.observableArrayList();
-    private List<HoaDon> danhSachHoaDonDB;
+    private ObservableList<HoaDon> danhSachHoaDonDB = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		cauHinhCot();
-		loadData();
+	    cauHinhLoc();
+	    loadData();
+	    xuLyTimKiem();
 	}
 	
 	private void loadData() {
 	    HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 	    List<HoaDon> list = hoaDonDAO.getAllHoaDons();
-	    danhSachHoaDon.setAll(list);
+	    danhSachHoaDonDB.setAll(list);   // danh sách gốc
+	    danhSachHoaDon.setAll(list);     // danh sách hiển thị
 	    tableView.setItems(danhSachHoaDon);
 	}
 	
@@ -149,4 +153,78 @@ public class HoaDon_Controller implements Initializable{
 	    );
 	}
 	
+	private void cauHinhLoc() {
+	    cmbLoc.setItems(FXCollections.observableArrayList(
+	        "Tất cả",
+	        "Đã thanh toán",
+	        "Chưa thanh toán"
+	    ));
+	    cmbLoc.setValue("Tất cả");
+
+	    cmbLoc.setOnAction(e -> locDuLieu());
+	    AfterDay.setOnAction(e -> locDuLieu());
+	    BeforDay.setOnAction(e -> locDuLieu());
+	}
+	
+	private void locDuLieu() {
+	    danhSachHoaDon.setAll(
+	        danhSachHoaDonDB.stream()
+	            .filter(this::locTheoNgay)
+	            .filter(this::locTheoTrangThai)
+	            .collect(java.util.stream.Collectors.toList())
+	    );
+	}
+	
+	private boolean locTheoNgay(HoaDon hd) {
+	    if (hd.getNgayLap() == null)
+	        return false;
+	    LocalDate from = AfterDay.getValue();
+	    LocalDate to   = BeforDay.getValue();
+	    LocalDate ngayLap = hd.getNgayLap().toLocalDate();
+	    
+	    if (from == null && to == null)
+	        return true;
+
+	    if (from != null && to == null)
+	        return !ngayLap.isBefore(from);
+	    
+	    if (from == null && to != null)
+	        return !ngayLap.isAfter(to);
+
+	    if (from.isAfter(to)) {
+	        LocalDate temp = from;
+	        from = to;
+	        to = temp;
+	    }
+	    return !ngayLap.isBefore(from) && !ngayLap.isAfter(to);
+	}
+	
+	private boolean locTheoTrangThai(HoaDon hd) {
+	    String loc = cmbLoc.getValue();
+
+	    if (loc == null || loc.equals("Tất cả"))
+	        return true;
+
+	    return hd.getTrangThai() != null &&
+	           hd.getTrangThai().equalsIgnoreCase(loc);
+	}
+	
+	private void xuLyTimKiem() {
+	    txtTimKiem.textProperty().addListener((obs, oldText, newText) -> {
+	        String keyword = newText.toLowerCase().trim();
+
+	        danhSachHoaDon.setAll(
+	            danhSachHoaDonDB.stream()
+	                .filter(hd ->
+	                    hd.getMaHoaDon().toLowerCase().contains(keyword)
+	                    || (hd.getKhachHang() != null
+	                        && hd.getKhachHang().getTenKH().toLowerCase().contains(keyword))
+	                )
+	                .filter(this::locTheoNgay)
+	                .filter(this::locTheoTrangThai)
+	                .collect(java.util.stream.Collectors.toList())
+	        );
+	    });
+	}
+
 }
