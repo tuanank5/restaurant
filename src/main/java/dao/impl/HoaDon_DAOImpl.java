@@ -62,15 +62,12 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
     public List<HoaDon> getAllHoaDons() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<HoaDon> danhSachHoaDon = null;
-
         try {
             // Truy vấn để lấy tất cả hóa đơn
             danhSachHoaDon = entityManager.createQuery("SELECT HD FROM HoaDon HD", HoaDon.class).getResultList();
-
         } finally {
             entityManager.close(); // Đóng EntityManager
         }
-
         return danhSachHoaDon;
     }
 
