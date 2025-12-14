@@ -93,7 +93,7 @@
             </AnchorPane>
          </left>
          <center>
-            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Đặt món" BorderPane.alignment="CENTER">
+            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Đổi món" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets right="500.0" />
                </BorderPane.margin>

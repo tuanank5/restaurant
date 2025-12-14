@@ -1,6 +1,7 @@
 package controller.DatBan;
 
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -148,70 +149,55 @@ public class ADoiBan_Controller implements Initializable {
             }
         }
     }
+    
+//    private void handleChonBan(Ban ban, Button btnBan) {
+//    	String trangThai = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(), 
+//                LocalTime.of(Integer.parseInt(cmbGioBatDau.getValue().substring(0, 2)), 0));
+//    	if (!trangThai.equals("Trống")) {
+//    	    showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
+//    	    return;
+//    	}
+//        
+//        if (!danhSachBanDangChon.isEmpty()) {
+//            Ban banCu = danhSachBanDangChon.get(0);
+//            Button btnCu = danhSachButtonDangChonUI.get(0);
+//            btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getSoLuong() + " chỗ)");
+//            btnCu.setStyle(getStyleByStatusAndType(banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()));
+//            danhSachBanDangChon.clear();
+//            danhSachButtonDangChonUI.clear();
+//        }
+//        
+//        danhSachBanDangChon.add(ban);
+//        danhSachButtonDangChonUI.add(btnBan);
+//        btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+//        btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+//    }
 
 //    private void handleChonBan(Ban ban, Button btnBan) {
 //        Ban banCu = this.banDangChon;
 //        Button btnCu = this.buttonBanDangChonUI;
-//        
-//        // Cập nhật bàn đang chọn mới
 //        this.banDangChon = ban;
-//        // Xử lý nút Đặt bàn
-//        if ("Đã được đặt".equals(ban.getTrangThai()) || "Đang phục vụ".equals(ban.getTrangThai())) {
-//            btnDatBan.setDisable(true);
-//        } else {
-//            btnDatBan.setDisable(false);
+//        
+//        // --- Nếu đã được đặt → vẫn mở DatMon để xem hoặc sửa ---
+//        if ("Đã được đặt".equals(ban.getTrangThai()) && !isFromSearch) {
+//            List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+//            if (dsDon != null && !dsDon.isEmpty()) {
+//                DonDatBan donGan = dsDon.get(dsDon.size() - 1);
+//                MenuNV_Controller.banDangChon = ban;
+//                KhachHang kh = hoaDonDAO.getKhachHangTheoMaDatBan(donGan.getMaDatBan());
+//                MenuNV_Controller.khachHangDangChon = kh;
+//            }
+//            return;
 //        }
-//        // Gán thông tin bàn
-//        txtTrangThai.setText(ban.getTrangThai());
-//        txtViTri.setText(ban.getViTri());
-//        txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
-//        List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-//        int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
-//                ? dsDon.get(dsDon.size() - 1).getSoLuong()
-//                : ban.getLoaiBan().getSoLuong();
-//        txtSoLuong.setText(String.valueOf(soLuongHienThi));
-//        txtSoLuongKH.setText(String.valueOf(soLuongHienThi));
-//        // Hoàn nguyên style cho bàn CU
-//        if (btnCu != null && banCu != null) {
-//            btnCu.setStyle(getStyleByStatusAndType(
-//                    banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()
-//            ));
+//        //Style chọn bàn
+//        if (btnCu != null) {
+//            btnCu.getStyleClass().remove("ban-selected");
 //        }
-//        // Đặt style nổi bật cho bàn mới
-//        btnBan.setStyle(
-//            "-fx-background-color: yellow;" +
-//            "-fx-text-fill: black;" +
-//            "-fx-font-weight: bold;"
-//        );
-//        // Lưu lại tham chiếu UI của bàn mới
+//        btnBan.getStyleClass().add("ban-selected");
+//
 //        this.buttonBanDangChonUI = btnBan;
+//
 //    }
-
-    private void handleChonBan(Ban ban, Button btnBan) {
-        Ban banCu = this.banDangChon;
-        Button btnCu = this.buttonBanDangChonUI;
-        this.banDangChon = ban;
-        
-        // --- Nếu đã được đặt → vẫn mở DatMon để xem hoặc sửa ---
-        if ("Đã được đặt".equals(ban.getTrangThai()) && !isFromSearch) {
-            List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-            if (dsDon != null && !dsDon.isEmpty()) {
-                DonDatBan donGan = dsDon.get(dsDon.size() - 1);
-                MenuNV_Controller.banDangChon = ban;
-                KhachHang kh = hoaDonDAO.getKhachHangTheoMaDatBan(donGan.getMaDatBan());
-                MenuNV_Controller.khachHangDangChon = kh;
-            }
-            return;
-        }
-        //Style chọn bàn
-        if (btnCu != null) {
-            btnCu.getStyleClass().remove("ban-selected");
-        }
-        btnBan.getStyleClass().add("ban-selected");
-
-        this.buttonBanDangChonUI = btnBan;
-
-    }
 
 
     private void handleDatBan(ActionEvent event) {

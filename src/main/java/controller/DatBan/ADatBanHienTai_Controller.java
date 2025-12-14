@@ -52,6 +52,7 @@ public class ADatBanHienTai_Controller implements Initializable {
     // --- DAO ---
     private Ban_DAO banDAO = new Ban_DAOImpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
 
     // --- Danh sách và trạng thái ---
     private List<Ban> danhSachBan = new ArrayList<>();
@@ -61,6 +62,8 @@ public class ADatBanHienTai_Controller implements Initializable {
     private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 
     private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
+    
+    private KhachHang aBanHienTai_KH;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -145,12 +148,52 @@ public class ADatBanHienTai_Controller implements Initializable {
                         Label lblLoaiBan = new Label("Loại bàn: " + ban.getLoaiBan().getTenLoaiBan());
 
                         TextField txtSoLuong = new TextField();
-                        txtSoLuong.setPromptText("số lượng khách (tối đa " + soLuongChoNgoi + ")");
+                        txtSoLuong.setPromptText("Số lượng khách (tối đa " + soLuongChoNgoi + ")");
+                        
+                        TextField txtSDT = new TextField();
+                        txtSDT.setPromptText("Số điện thoại khách hàng");
+                        
+                        TextField txtKH = new TextField();
+                        txtKH.setPromptText("Họ tên khách hàng");
+                        txtKH.setEditable(false);
+                        aBanHienTai_KH = new KhachHang();
+                        
+                        //đang lỗi báo nhiều thông báo
+                        txtSDT.textProperty().addListener((obs, oldV, newV) -> {
+                            if (!newV.matches("\\d*")) {
+                                showAlert(Alert.AlertType.ERROR, "Số điện thoại chỉ được chứa số!");
+                                txtSDT.setText(oldV);
+                                return;
+                            }
+                            if (newV.length() > 10) {
+                                showAlert(Alert.AlertType.ERROR, "SĐT không được vượt quá 10 số!");
+                                txtSDT.setText(oldV);
+                                return;
+                            }
+                            if (newV.length() == 10) {
+                                KhachHang kh = khachHangDAO.timTheoSDT(newV);
+                                if (kh == null) {
+                                    showAlert(Alert.AlertType.WARNING, "Không tìm thấy khách hàng!");
+                                    txtKH.setText("Không tìm thấy");
+                                    aBanHienTai_KH = null;
+                                } else {
+                                    txtKH.setText(kh.getTenKH());
+                                    aBanHienTai_KH = kh;
+                                }
+                            } else {
+                                txtKH.setText("");
+                                aBanHienTai_KH = null;
+                            }
+                        });
 
                         grid.add(lblMaBan, 0, 0);
                         grid.add(lblLoaiBan, 0, 1);
-                        grid.add(new Label("Số lượng khách:"), 0, 2);
-                        grid.add(txtSoLuong, 1, 2);
+                        grid.add(new Label("Số điện thoại:"), 0, 2);
+                        grid.add(txtSDT, 1, 2);
+                        grid.add(new Label("Khách hàng:"), 0, 3);
+                        grid.add(txtKH, 1, 3);
+                        grid.add(new Label("Số lượng khách:"), 0, 4);
+                        grid.add(txtSoLuong, 1, 4);
 
                         dialog.getDialogPane().setContent(grid);
                         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -165,6 +208,23 @@ public class ADatBanHienTai_Controller implements Initializable {
                                     Alert err = new Alert(Alert.AlertType.ERROR);
                                     err.setHeaderText("Số lượng không hợp lệ!");
                                     err.setContentText("Vui lòng nhập số lượng từ 1 đến " + soLuongChoNgoi);
+                                    err.show();
+                                    return;
+                                }
+                                
+                                //SĐT chỉ được nhập số
+                                
+                                if (txtSDT.getText().trim().isEmpty()) {
+                                	Alert err = new Alert(Alert.AlertType.ERROR);
+                                    err.setHeaderText("Số điện thoại không hợp lệ!");
+                                    err.setContentText("Vui lòng nhập số điện thoại của khách hàng");
+                                    err.show();
+                                }
+                                
+                                if (txtKH.getText().trim().isEmpty()) {
+                                	Alert err = new Alert(Alert.AlertType.ERROR);
+                                    err.setHeaderText("Số điện thoại không hợp lệ!");
+                                    err.setContentText("Số điện thoại của khách hàng không tồn tại");
                                     err.show();
                                     return;
                                 }
