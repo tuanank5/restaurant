@@ -12,12 +12,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?> 
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhanVien.ThemNhanVien_Controller">
    <top>
@@ -32,14 +31,14 @@
          <top>
             <Pane prefHeight="35.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="lblDanhSachNhanVien" layoutX="389.0" layoutY="8.0" text="Danh sách nhân viên ">
+                  <Label fx:id="lblDanhSachNhanVien" layoutX="371.0" layoutY="8.0" onMouseClicked="#mouseClicked" text="Danh Sách Nhân Viên ">
                      <font>
                         <Font name="Times New Roman" size="16.0" />
                      </font>
                   </Label>
                   <Label layoutX="541.0" layoutY="8.0" text="Thêm nhân viên">
                      <font>
-                        <Font name="Times New Roman" size="16.0" />
+                        <Font name="Times New Roman Bold" size="16.0" />
                      </font>
                   </Label>
                   <Label layoutX="527.0" layoutY="4.0" text="/">
@@ -196,13 +195,13 @@
                </columnResizePolicy>
             </TableView>
          </center>
-         <bottom>
-	      	<BorderPane BorderPane.alignment="CENTER">
-		        <center>
-		          <HBox fx:id="hBox" prefHeight="20.0" prefWidth="1100.0" />
-		        </center>
-		    </BorderPane>
-		 </bottom>
+           <bottom>
+		      <BorderPane BorderPane.alignment="CENTER">
+		         <center>
+		            <HBox fx:id="hBox" prefHeight="20.0" prefWidth="1100.0" />
+		         </center>
+		      </BorderPane>
+		   </bottom>
       </BorderPane>
    </center>
    <bottom>
@@ -224,7 +223,7 @@
                <center>
                   <AnchorPane prefHeight="50.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnQuayLai" layoutX="206.0" layoutY="13.0" mnemonicParsing="false" text="Trở lại (ESC)" />
+                        <Button fx:id="btnQuayLai" layoutX="206.0" layoutY="13.0" mnemonicParsing="false" onAction="#controller" text="Trở lại (ESC)" />
                      </children>
                   </AnchorPane>
                </center>

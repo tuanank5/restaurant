@@ -41,6 +41,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import util.AutoIDUitl;
 import util.ComponentUtil;
@@ -132,18 +133,21 @@ public class ThemNhanVien_Controller implements Initializable{
     @FXML
     void controller(ActionEvent event) {
     	Object src = event.getSource();
-    	if(src == btnQuayLai) {
-//    		if(!lblDanhSachNhanVien.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
-//    			//xacNhanLuu("DatBan/DatBan");
-//    			MenuNV_Controller.instance.readyUI("NhanVien/NhanVien");
-//    		}else {
-//    			MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
-//    		}
+    	if (src == btnQuayLai) {
+    	    MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
     	}else if(src ==  btnLuu) {
     		luuLai();
     	} else if(src == btnHuy) {
     		resetAllField();
     	}
+    }
+    
+    @FXML
+    void mouseClicked(MouseEvent event) {
+        Object source = event.getSource();
+        if (event.getSource() == lblDanhSachNhanVien) {
+            MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+        }
     }
     
     private NhanVien getNhanVienNew() {
