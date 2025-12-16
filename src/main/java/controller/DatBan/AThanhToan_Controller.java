@@ -27,11 +27,13 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import config.RestaurantApplication;
+import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
 import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
+import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
 import dao.MonAn_DAO;
 import dao.NhanVien_DAO;
@@ -39,6 +41,7 @@ import dao.impl.Ban_DAOImpl;
 import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
+import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.KhuyenMai_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
@@ -46,6 +49,7 @@ import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HangKhachHang;
 import entity.HoaDon;
+import entity.KhachHang;
 import entity.KhuyenMai;
 import entity.MonAn;
 import entity.NhanVien;
@@ -55,6 +59,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -65,6 +73,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AThanhToan_Controller {
@@ -82,7 +91,7 @@ public class AThanhToan_Controller {
     private Button btnThuTien;
 
     @FXML
-    private ComboBox<String> cmbKM;
+    private ComboBox<KhuyenMai> cmbKM;
 
     @FXML
     private TableColumn<ChiTietHoaDon, String> colDonGia;
@@ -100,16 +109,13 @@ public class AThanhToan_Controller {
     private TableColumn<ChiTietHoaDon, String> colThanhTien;
 
     @FXML
-    private Label lblConPhaiThu;
-
-    @FXML
     private Label lblThanhTien;
 
     @FXML
     private Label lblThue;
 
     @FXML
-    private Label lblTongThanhToan;
+    private Label lblTong;
 
     @FXML
     private TableView<ChiTietHoaDon> tblDS;
@@ -126,12 +132,22 @@ public class AThanhToan_Controller {
     @FXML
     private TextField txtSL;
     
+    @FXML
+    private Label lblTichLuy;
+
+    @FXML
+    private Label lblTienGiam;
+    
+    @FXML
+    private Label lblSauGiam;
+    
     // --- DAO ---
     private Ban_DAO banDAO = new Ban_DAOImpl();
     private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
     private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
     private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     
     private KhuyenMai_DAO kmDAO = new KhuyenMai_DAOImpl();
 
@@ -144,13 +160,18 @@ public class AThanhToan_Controller {
     private Map<MonAn, Integer> dsMonAn;
     
     private HoaDon hoaDonHienTai;
+	double tongThanhTien = 0;
+	private double Vat_Rate = 0.1;
+	double tongTruocVAT = 0;
+	double tongSauVAT = 0;
+	
+	public static AThanhToan_Controller aTT;
 
     @FXML
     public void initialize() {
+    	aTT = this;
     	String maHD = MenuNV_Controller.instance.aBanHienTai_HD.getMaHoaDon();
     	dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(maHD);
-    	
-    	double tongThanhTien = 0;
     	
     	dsMonAn = new HashMap<>();
     	for (ChiTietHoaDon cthd : dsCTHD_DB) {
@@ -174,6 +195,8 @@ public class AThanhToan_Controller {
         txtBan.setText(hoaDonHienTai.getDonDatBan().getBan().getMaBan());
         
         loadCmbKM();
+        capNhatTongTien();
+        lblTichLuy.setText(formatTienVN(Double.parseDouble("0")));
         
         lblThanhTien.setText(formatTienVN(tongThanhTien));
     }
@@ -184,7 +207,7 @@ public class AThanhToan_Controller {
         if (source == btnTamTinh) {
         	xuatHD();
         } else if (source == btnThuTien) {
-            
+            AThuTien_Controller aThuTien_Controller = readyUI("DatBan/aThuTien").getController();
         } else if (source == btnEdit) {
             
         } else if (source == btnDiemTichLuy) {
@@ -198,7 +221,7 @@ public class AThanhToan_Controller {
                 .sorted(Comparator.comparingDouble(KhuyenMai::getPhanTramGiamGia).reversed())
                 .collect(Collectors.toList());
     	for(KhuyenMai km : dsKM) {
-            cmbKM.getItems().add(km.getPhanTramGiamGia() + "%" + " - " + km.getTenKM());
+            cmbKM.getItems().add(km);
         }
     	
     	cmbKM.setValue(cmbKM.getItems().get(0));
@@ -207,42 +230,34 @@ public class AThanhToan_Controller {
 	}
     
     private void capNhatTongTien() {
-//        double tongTruocVAT = dsMonAnDat.entrySet().stream()
-//            .mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
-//            .sum();
-//        double tienGiam = 0;
-//        KhuyenMai km = cmbKM.getValue();
-//        
-//        if (km != null) {
-//            switch (km.getLoaiKM()) {
-//
-//                case "Khuyến mãi trên tổng hóa đơn":
-//                    tienGiam = tongTruocVAT * km.getPhanTramGiamGia() / 100.0;
-//                    break;
-//
-//                case "Khuyến mãi món ăn":
-//                    tienGiam = tinhGiamGiaTheoMon(km);
-//                    break;
-//
-//                case "Ưu đãi cho khách hàng Kim Cương":
-//                    KhachHang kh = khachHangDAO.timTheoMa(txtMaKH.getText());
-//                    if (kh != null && kh.getHangKhachHang() != null &&
-//                            kh.getHangKhachHang().getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
-//                        tienGiam = tongTruocVAT * km.getPhanTramGiamGia() / 100.0;
-//                    }
-//                    break;
-//            }
-//        }
-//        double tongSauGiam = tongTruocVAT - tienGiam;
-//        if (tongSauGiam < 0) tongSauGiam = 0;
-//        
-//        double tienVAT = tongTruocVAT * Vat_Rate;
-//        double tongSauVAT = tongSauGiam + tienVAT;
-//
-//        lblVat.setText(dinhDangTien(tienVAT));
-//        lblTongTien.setText(dinhDangTien(tongTruocVAT));
-//        lblTienGiam.setText(dinhDangTien(tienGiam));
-//        lblTongTienVAT.setText(dinhDangTien(tongSauVAT));
+        double tienGiam = 0;
+        KhuyenMai km = cmbKM.getValue();
+        
+        if (km != null) {
+            switch (km.getLoaiKM()) {
+                case "Khuyến mãi trên tổng hóa đơn":
+                    tienGiam = tongThanhTien * km.getPhanTramGiamGia() / 100.0;
+                    break;
+
+                case "Ưu đãi cho khách hàng Kim Cương":
+                    KhachHang kh = khachHangDAO.timTheoMa(hoaDonHienTai.getKhachHang().getMaKH());
+                    if (kh != null && kh.getHangKhachHang() != null &&
+                            kh.getHangKhachHang().getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
+                        tienGiam = tongThanhTien * km.getPhanTramGiamGia() / 100.0;
+                    }
+                    break;
+            }
+        }
+        tongTruocVAT = tongThanhTien - tienGiam;
+        if (tongTruocVAT < 0) tongTruocVAT = 0;
+        
+        double thueVAT = tongThanhTien * Vat_Rate;
+        tongSauVAT = tongTruocVAT + thueVAT;
+
+        lblTienGiam.setText(formatTienVN(tienGiam));
+        lblSauGiam.setText(formatTienVN(tongTruocVAT));
+        lblThue.setText(formatTienVN(thueVAT));
+        lblTong.setText(formatTienVN(tongSauVAT));
     }
 
 	private void setValueTbl() {
@@ -271,9 +286,9 @@ public class AThanhToan_Controller {
 	    // Tổng thanh toán
 //	    try {
 //	        double tong = Double.parseDouble(tongTienSauVAT);
-//	        lblTongThanhToan.setText(formatTienVN(tong));
+//	        lblTong.setText(formatTienVN(tong));
 //	    } catch (NumberFormatException e) {
-//	        lblTongThanhToan.setText(tongTienSauVAT);
+//	        lblTong.setText(tongTienSauVAT);
 //	    }
 	    // Tính tiền trả
 //	    txtTien.textProperty().addListener((obs, oldVal, newVal) -> calculateTienTra());
@@ -357,7 +372,7 @@ public class AThanhToan_Controller {
             document.add(table);
 
             // TỔNG KẾT 
-            document.add(new Paragraph("Tổng thanh toán: " + lblTongThanhToan.getText(), fontNormal));
+            document.add(new Paragraph("Tổng thanh toán: " + lblTong.getText(), fontNormal));
 //            document.add(new Paragraph("Tiền khách đưa: " + txtTien.getText() + " VND", fontNormal));
 //            document.add(new Paragraph("Tiền thừa: " + lblTienTra.getText(), fontNormal));
 
@@ -399,4 +414,23 @@ public class AThanhToan_Controller {
 	    nf.setGroupingUsed(true);
 	    return nf.format(tien) + " VND";
 	}
+    
+    public FXMLLoader readyUI(String ui) {
+        Parent root = null;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        try {
+            fxmlLoader.setLocation(getClass().getResource("/view/fxml/" + ui + ".fxml"));
+            root = fxmlLoader.load();
+            
+            Stage newStage = new Stage();
+            newStage.setTitle("Thu tiền");
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.setScene(new Scene(root));
+            
+            newStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fxmlLoader;
+    }
 }

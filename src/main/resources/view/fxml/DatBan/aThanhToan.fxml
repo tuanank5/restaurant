@@ -12,7 +12,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.AThanhToan_Controller">
    <left>
-      <BorderPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <top>
             <BorderPane prefHeight="175.0" BorderPane.alignment="CENTER">
                <center>
@@ -70,14 +70,18 @@
                <center>
                   <AnchorPane prefHeight="125.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="90.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thành tiền:" />
-                        <Label layoutX="90.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thuế:" />
-                        <Label layoutX="340.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng thanh toán:" />
-                        <Label layoutX="340.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Còn phải thu:" />
-                        <Label fx:id="lblThanhTien" layoutX="190.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThanhTien" />
-                        <Label fx:id="lblThue" layoutX="190.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThue" />
-                        <Label fx:id="lblTongThanhToan" layoutX="490.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTongThanhToan" />
-                        <Label fx:id="lblConPhaiThu" layoutX="490.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblConPhaiThu" />
+                        <Label layoutX="15.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thành tiền:" />
+                        <Label layoutX="275.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thuế VAT:" />
+                        <Label layoutX="520.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng thanh toán:" />
+                        <Label fx:id="lblThanhTien" layoutX="125.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThanhTien" />
+                        <Label fx:id="lblThue" layoutX="385.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThue" />
+                        <Label fx:id="lblTong" layoutX="670.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTong" />
+                        <Label layoutX="275.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khuyến mãi:" />
+                        <Label layoutX="520.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Điểm tích lũy:" />
+                        <Label fx:id="lblTienGiam" layoutX="385.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTienGiam" />
+                        <Label fx:id="lblTichLuy" layoutX="670.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTichLuy" />
+                        <Label layoutX="15.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tiền sau giảm:" />
+                        <Label fx:id="lblSauGiam" layoutX="125.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblSauGiam" />
                      </children>
                   </AnchorPane>
                </center>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.AThuTien_Controller">
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="30.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số tiền cần phải thu:" />
+                        <Label fx:id="lblTienCanThu" layoutX="225.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTienCanThu" />
+                        <Label layoutX="30.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Nhập số tiền khách đưa:" />
+                        <TextField fx:id="txtTienKH" layoutX="225.0" layoutY="74.0" prefWidth="210.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                        <Label layoutX="30.0" layoutY="130.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Nhập tiền theo mệnh giá:" />
+                        <GridPane hgap="10.0" layoutX="225.0" layoutY="125.0" vgap="10.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="btn500" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="500.000" />
+                              <Button fx:id="btn50" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="50.000" GridPane.rowIndex="1" />
+                              <Button fx:id="btn5" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="5.000" GridPane.rowIndex="2" />
+                              <Button fx:id="btn200" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="200.000" GridPane.columnIndex="1" />
+                              <Button fx:id="btn20" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="20.000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="btn2" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="2.000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Button fx:id="btn100" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="100.000" GridPane.columnIndex="2" />
+                              <Button fx:id="btn10" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="10.000" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Button fx:id="btn1" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="1.000" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <Button fx:id="btnLamMoi" layoutX="446.0" layoutY="74.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Làm mới" />
+                        <Label layoutX="30.0" layoutY="285.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Gợi ý tiền mặt:" />
+                        <GridPane hgap="10.0" layoutX="225.0" layoutY="280.0" vgap="10.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="btnGoiY1" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="0" />
+                              <Button fx:id="btnGoiY3" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="0" GridPane.columnIndex="2" />
+                              <Button fx:id="btnGoiY2" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="0" GridPane.columnIndex="1" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </center>
+      </BorderPane>
+   </center>
+   <bottom>
+      <BorderPane prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="btnHuy" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy bỏ" />
+                  <Button fx:id="btnIn" layoutX="475.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="In và đóng" />
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
+   </bottom>
+</BorderPane>
