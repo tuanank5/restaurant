@@ -5,11 +5,14 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
 import dao.TaiKhoan_DAO;
 import dao.impl.TaiKhoan_DAOImpl;
 import entity.TaiKhoan;
@@ -21,7 +24,9 @@ import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.NhanVien_DAO;
 import entity.NhanVien;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,7 +40,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import util.AutoIDUitl;
+import util.ComponentUtil;
 import util.EmployeeCodeGeneratorUtil;
 
 public class ThemNhanVien_Controller implements Initializable{
@@ -102,13 +110,24 @@ public class ThemNhanVien_Controller implements Initializable{
     @FXML
     private TextField txtTenNV;
     
+    @FXML
+    private HBox hBox;
+    
     private NhanVien nhanVien;
+    private ObservableList<NhanVien> danhSachNhanVien = FXCollections.observableArrayList();
+    private List<NhanVien> danhSachNhanVienDB;
+    private final int LIMIT = 15;
+    private String status = "all";
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+    	setValueTable();
 		loadData();
+		loadDataNV();
 		hienThiMaNhanVienMoi();
+		resetAllField();
+		phanTrang(danhSachNhanVienDB.size());
 	}
     @FXML
     void controller(ActionEvent event) {
@@ -270,13 +289,83 @@ public class ThemNhanVien_Controller implements Initializable{
         cmbChucVu.getSelectionModel().selectFirst();
     }
     
-    private void loadData() {
+    private void loadDataNV() {
         cmbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ"));
         cmbGioiTinh.getSelectionModel().selectFirst();
         cmbChucVu.setItems(FXCollections.observableArrayList("Nhân viên", "Quản lý"));
         cmbChucVu.getSelectionModel().selectFirst();
     }
 
+    private void loadData() {
+        Map<String, Object> filter = new HashMap<>();
+        filter.put("trangThai", true);
+        danhSachNhanVienDB = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(NhanVien_DAO.class)
+                .getDanhSach(NhanVien.class, filter);
+        List<NhanVien> topLimitNhanVien = danhSachNhanVienDB.subList(0, Math.min(danhSachNhanVienDB.size(), LIMIT));
+        danhSachNhanVien.addAll(topLimitNhanVien);
+        tblThemNV.setItems(danhSachNhanVien);
+    }
+    
+    private void setValueTable() {
+    	tblMaNV.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getMaNV()));
+	    tblTenNV.setCellValueFactory(cell ->  new javafx.beans.property.SimpleStringProperty(cell.getValue().getTenNV()));
+	    tblEmail.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmail()));
+	    tblDiaChi.setCellValueFactory(cell ->  new javafx.beans.property.SimpleStringProperty(cell.getValue().getDiaChi()));
+	    tblChucVu.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getChucVu()));
+	    
+	    tblGioiTinh.setCellValueFactory(cell -> 
+	        new javafx.beans.property.SimpleStringProperty(
+	            cell.getValue().isGioiTinh() ? "Nữ" : "Nam"
+	        )
+	    );
+	    
+	    tblTrangThai.setCellValueFactory(cell -> 
+	        new javafx.beans.property.SimpleStringProperty(
+	            cell.getValue().isTrangThai() ? "Đang làm" : "Nghỉ"
+	        ));
+	    tblNamSinh.setCellValueFactory(cell ->new javafx.beans.property.SimpleObjectProperty<>(cell.getValue().getNamSinh()));
+    }
+    
+	private void loadData(List<NhanVien> nhanViens) {
+        danhSachNhanVien.clear();
+        danhSachNhanVien.addAll(nhanViens);
+        tblThemNV.setItems(danhSachNhanVien);
+    }
+	
+	private void phanTrang(int soLuongBanGhi) {
+    	hBox.getChildren().clear();
+        loadCountPage(soLuongBanGhi);
+        // Code bắt sự kiện
+        hBox.getChildren().forEach(button -> {
+            ((Button)button).setOnAction(event -> {
+                String value = ((Button) button).getText();
+                int skip = (Integer.parseInt(value) - 1) * LIMIT;
+                // Giới hạn phần tử cuối cùng để tránh vượt quá kích thước của danh sách
+                if (status.equalsIgnoreCase("all")) {
+                    int endIndex = Math.min(skip + LIMIT, danhSachNhanVienDB.size());
+                    List<NhanVien> nhanViens = danhSachNhanVienDB.subList(skip, endIndex);
+                    loadData(nhanViens);
+                } else {
+                    List<NhanVien> nhanViens = danhSachNhanVienDB.stream()
+                            .filter(nhanVien -> nhanVien.isTrangThai() == (status.equalsIgnoreCase("active")))
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    int endIndex = Math.min(skip + LIMIT, nhanViens.size());
+                    nhanViens = nhanViens.subList(skip, endIndex);
+                    loadData(nhanViens);
+                }
+            });
+        });
+    }
+	
+	private void loadCountPage(int soLuongBanGhi) {
+        int soLuongTrang = (int) Math.ceil((double) soLuongBanGhi / LIMIT);
+        for (int i = 0; i < soLuongTrang; i++) {
+            Button button = ComponentUtil.createButton(String.valueOf(i + 1), 14);
+            hBox.getChildren().add(button);
+        }
+    }
     
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
