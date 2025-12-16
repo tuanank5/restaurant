@@ -26,13 +26,14 @@ public class MenuNVQL_Controller {
 
     public static MenuNVQL_Controller instance;
 
-    private TaiKhoan taiKhoan;
 
     @FXML
     private BorderPane borderPane;
 
     @FXML
     private TextField txtThongTin;
+    
+    public static TaiKhoan taiKhoan;
 
     @FXML
     void btnDangXuat(ActionEvent event) {

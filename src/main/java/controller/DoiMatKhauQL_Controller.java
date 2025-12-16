@@ -1,7 +1,7 @@
 package controller;
 
 import config.RestaurantApplication;
-import controller.Menu.MenuNV_Controller;
+import controller.Menu.MenuNVQL_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -39,7 +39,7 @@ public class DoiMatKhauQL_Controller {
     }
     @FXML
     void btnLuuLai(ActionEvent event) {
-        TaiKhoan taiKhoan = MenuNV_Controller.taiKhoan;
+        TaiKhoan taiKhoan = MenuNVQL_Controller.taiKhoan;
         String mkCu = mkCuTextField.getText();
         String mkMoi = mkMoiTextField.getText();
         String mkNhapLai = mkNhapLaiTextField.getText();
@@ -90,7 +90,7 @@ public class DoiMatKhauQL_Controller {
 
     @FXML
     void btnQuayLai(ActionEvent event) {
-        MenuNV_Controller.getInstance().dashBoard();
+        MenuNVQL_Controller.instance.dashBoard();
     }
 
     private void showAlert(Alert.AlertType type, String content) {
