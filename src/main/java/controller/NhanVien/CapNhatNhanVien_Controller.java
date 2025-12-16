@@ -9,7 +9,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -18,13 +22,15 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CapNhatNhanVien_Controller implements Initializable {
-
+	
+	@FXML private BorderPane borderPane;
     @FXML private TextField txtMaNV;
     @FXML private TextField txtTenNV;
     @FXML private TextField txtEmail;
     @FXML private TextField txtDiaChi;
     @FXML private DatePicker txtNamSinh;
     @FXML private DatePicker txtNgayVaoLam;
+    @FXML private Label lblDanhSachNhanVien;
     @FXML private ComboBox<String> cmbGioiTinh;
     @FXML private ComboBox<String> cmbChucVu;
     @FXML private ComboBox<String> cmbTrangThai;
@@ -73,6 +79,20 @@ public class CapNhatNhanVien_Controller implements Initializable {
             xacNhanQuayLai();
         } else if(event.getSource() == btnHuy) {
         	hoanTac();
+        }
+    }
+    
+    @FXML
+    void keyPressed(KeyEvent event) throws IOException {
+        Object src = event.getSource();
+        if (src == borderPane) {
+            if (event.isControlDown() && event.getCode() == KeyCode.S) {
+                luuCapNhat();
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+            	if (event.getSource() == lblDanhSachNhanVien) {
+                    MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+                }
+            }
         }
     }
 
