@@ -143,9 +143,7 @@ public class KhuyenMai {
 
 	@Override
 	public String toString() {
-		return "KhuyenMai [maKM=" + maKM + ", tenKM=" + tenKM + ", loaiKM=" + loaiKM + ", sanPhamKM=" + sanPhamKM
-				+ ", ngayBatDau=" + ngayBatDau + ", ngayKetThuc=" + ngayKetThuc + ", phanTramGiamGia=" + phanTramGiamGia
-				+ "]";
+		return phanTramGiamGia < 10 ? "0" + phanTramGiamGia + "% - " + tenKM : phanTramGiamGia + "% - " + tenKM;
 	}
 	
 	
