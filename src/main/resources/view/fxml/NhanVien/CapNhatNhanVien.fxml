@@ -174,15 +174,15 @@
          <left>
             <AnchorPane prefHeight="50.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="14.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="Lưu lại (Ctrl + S)" />
-                  <Button layoutX="145.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Hoàn tác (Ctrl + Z)" />
+                  <Button fx:id="btnLuu" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" text="Lưu lại (Ctrl + S)" />
+                  <Button fx:id="btnHuy" layoutX="145.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="120.0" text="Hoàn tác (Ctrl + Z)" />
                </children>
             </AnchorPane>
          </left>
          <right>
             <AnchorPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="45.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="Trở lại (ESC)" />
+                  <Button fx:id="btnQuayLai" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" text="Trở lại (ESC)" />
                </children>
             </AnchorPane>
          </right>

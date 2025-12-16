@@ -2,9 +2,8 @@ package controller.NhanVien;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import dao.HangKhachHang_DAO;
+import dao.KhachHang_DAO;
 import dao.NhanVien_DAO;
-import entity.HangKhachHang;
 import entity.NhanVien;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,93 +14,103 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class CapNhatNhanVien_Controller implements Initializable{
+public class CapNhatNhanVien_Controller implements Initializable {
 
     @FXML private TextField txtMaNV;
     @FXML private TextField txtTenNV;
     @FXML private TextField txtEmail;
     @FXML private TextField txtDiaChi;
-
     @FXML private DatePicker txtNamSinh;
     @FXML private DatePicker txtNgayVaoLam;
-
     @FXML private ComboBox<String> cmbGioiTinh;
     @FXML private ComboBox<String> cmbChucVu;
     @FXML private ComboBox<String> cmbTrangThai;
-
-
     @FXML private Button btnLuu;
     @FXML private Button btnHuy;
+    @FXML private Button btnQuayLai;
 
-    private NhanVien nhanVien;
-    
+    private NhanVien nhanVien; // object gốc
+
     @Override
-	public void initialize(URL location, ResourceBundle resources) {
-    	cmbGioiTinh.setItems(
-    	            javafx.collections.FXCollections.observableArrayList("Nam", "Nữ")
-    	);
-    	cmbChucVu.setItems(
-    	            javafx.collections.FXCollections.observableArrayList("Nhân viên", "Quản lý")
-    	);
-    	cmbTrangThai.setItems(
-	            javafx.collections.FXCollections.observableArrayList("Đang Làm", "Đã Nghĩ")
+    public void initialize(URL location, ResourceBundle resources) {
+        cmbGioiTinh.setItems(
+                javafx.collections.FXCollections.observableArrayList("Nam", "Nữ")
         );
-	}
-    
+        cmbChucVu.setItems(
+                javafx.collections.FXCollections.observableArrayList("Nhân viên", "Quản lý")
+        );
+        cmbTrangThai.setItems(
+                javafx.collections.FXCollections.observableArrayList("Đang Làm", "Đã Nghĩ")
+        );
+    }
+
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
-        loadDuLieuLenForm();
+        hienThiThongTin(nhanVien);
     }
-    
-    private void loadDuLieuLenForm() {
-        txtMaNV.setText(nhanVien.getMaNV());
-        txtTenNV.setText(nhanVien.getTenNV());
-        txtEmail.setText(nhanVien.getEmail());
-        txtDiaChi.setText(nhanVien.getDiaChi());
-        txtNamSinh.setValue(nhanVien.getNamSinh().toLocalDate());
-        txtNgayVaoLam.setValue(nhanVien.getNgayVaoLam().toLocalDate());
-        cmbGioiTinh.setValue(nhanVien.isGioiTinh() ? "Nữ" : "Nam");
-        cmbChucVu.setValue(nhanVien.getChucVu());
-        cmbTrangThai.setValue(nhanVien.isTrangThai() ? "Đang Làm" : "Đã Nghĩ");
+
+    private void hienThiThongTin(NhanVien nv) {
+        txtMaNV.setText(nv.getMaNV());
+        txtTenNV.setText(nv.getTenNV());
+        txtEmail.setText(nv.getEmail());
+        txtDiaChi.setText(nv.getDiaChi());
+        txtNamSinh.setValue(nv.getNamSinh().toLocalDate());
+        txtNgayVaoLam.setValue(nv.getNgayVaoLam().toLocalDate());
+        cmbGioiTinh.setValue(nv.isGioiTinh() ? "Nữ" : "Nam");
+        cmbChucVu.setValue(nv.getChucVu());
+        cmbTrangThai.setValue(nv.isTrangThai() ? "Đang Làm" : "Đã Nghĩ");
         txtMaNV.setEditable(false);
     }
 
     @FXML
     void controller(ActionEvent event) {
-        Object src = event.getSource();
-        if (src == btnLuu) {
+        if (event.getSource() == btnLuu) {
             luuCapNhat();
-        } else if (src == btnHuy) {
-            quayLai();
+        } else if (event.getSource() == btnQuayLai) {
+            xacNhanQuayLai();
+        } else if(event.getSource() == btnHuy) {
+        	hoanTac();
         }
-    }   
+    }
 
     private void luuCapNhat() {
-        if (!validate()) return;
-        nhanVien.setTenNV(txtTenNV.getText().trim());
-        nhanVien.setEmail(txtEmail.getText().trim());
-        nhanVien.setDiaChi(txtDiaChi.getText().trim());
-        nhanVien.setNamSinh(Date.valueOf(txtNamSinh.getValue()));
-        nhanVien.setNgayVaoLam(Date.valueOf(txtNgayVaoLam.getValue()));
-        nhanVien.setGioiTinh(cmbGioiTinh.getValue().equals("Nữ"));
-        nhanVien.setChucVu(cmbChucVu.getValue());
+        NhanVien nhanVienNew = getNhanVienNew();
+        if (nhanVienNew == null) return;
+
+        Optional<ButtonType> option = showAlertConfirm("Bạn có chắc chắn muốn lưu thay đổi?");
+        if (option.get().getButtonData() == ButtonBar.ButtonData.NO) return;
 
         boolean check = RestaurantApplication.getInstance()
                 .getDatabaseContext()
                 .newEntity_DAO(NhanVien_DAO.class)
-                .capNhat(nhanVien);
+                .capNhat(nhanVienNew);
 
         if (check) {
             showAlert("Thông báo", "Cập nhật nhân viên thành công!", Alert.AlertType.INFORMATION);
+            this.nhanVien = nhanVienNew;
             quayLai();
         } else {
             showAlert("Lỗi", "Cập nhật thất bại!", Alert.AlertType.ERROR);
         }
+    }
+
+    private NhanVien getNhanVienNew() {
+        if (!validate()) return null;
+
+        NhanVien nv = new NhanVien();
+        nv.setMaNV(txtMaNV.getText().trim());
+        nv.setTenNV(txtTenNV.getText().trim());
+        nv.setEmail(txtEmail.getText().trim());
+        nv.setDiaChi(txtDiaChi.getText().trim());
+        nv.setNamSinh(Date.valueOf(txtNamSinh.getValue()));
+        nv.setNgayVaoLam(Date.valueOf(txtNgayVaoLam.getValue()));
+        nv.setGioiTinh(cmbGioiTinh.getValue().equals("Nữ"));
+        nv.setChucVu(cmbChucVu.getValue());
+        nv.setTrangThai(cmbTrangThai.getValue().equals("Đang Làm"));
+        return nv;
     }
 
     private boolean validate() {
@@ -111,7 +120,7 @@ public class CapNhatNhanVien_Controller implements Initializable{
             return false;
         }
 
-        if (!txtEmail.getText().matches("^[a-zA-Z][a-zA-Z0-9]+@[a-zA-Z]+(\\.[a-zA-Z]+)+$")) {
+        if (!txtEmail.getText().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
             showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
             return false;
         }
@@ -127,7 +136,38 @@ public class CapNhatNhanVien_Controller implements Initializable{
             return false;
         }
 
+        if (cmbTrangThai.getValue() == null) {
+            showAlert("Cảnh báo", "Vui lòng chọn trạng thái!", Alert.AlertType.WARNING);
+            return false;
+        }
+
         return true;
+    }
+
+    private void xacNhanQuayLai() {
+        Optional<ButtonType> option = showAlertConfirm("Bạn có muốn lưu thay đổi?");
+        if (option.get().getButtonData() == ButtonBar.ButtonData.YES) {
+            luuCapNhat();
+        } else {
+            quayLai();
+        }
+    }
+    
+    private void hoanTac(){
+        Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc chắn muốn hoàn tác?");
+        if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+            return;
+        }
+        boolean check = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(NhanVien_DAO.class)
+                .capNhat(nhanVien);
+        if (check) {
+            showAlert("Thông báo", "Hoàn tác thành công!", Alert.AlertType.INFORMATION);
+            hienThiThongTin(nhanVien);
+        } else {
+            showAlert("Thông báo", "Hoàn tác thất bại!", Alert.AlertType.WARNING);
+        }
     }
 
     private void quayLai() {
@@ -140,5 +180,14 @@ public class CapNhatNhanVien_Controller implements Initializable{
         alert.setHeaderText(content);
         alert.show();
     }
-    
+
+    private Optional<ButtonType> showAlertConfirm(String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(content);
+        ButtonType yes = new ButtonType("Có", ButtonBar.ButtonData.YES);
+        ButtonType no = new ButtonType("Không", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(yes, no);
+        return alert.showAndWait();
+    }
 }
