@@ -1,5 +1,6 @@
 package controller.NhanVien;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -41,13 +42,19 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import util.AutoIDUitl;
 import util.ComponentUtil;
 import util.EmployeeCodeGeneratorUtil;
 
 public class ThemNhanVien_Controller implements Initializable{
+	@FXML
+    private BorderPane borderPane;
+	
 	@FXML
     private Button btnHuy;
 
@@ -129,6 +136,17 @@ public class ThemNhanVien_Controller implements Initializable{
 		hienThiMaNhanVienMoi();
 		resetAllField();
 		phanTrang(danhSachNhanVienDB.size());
+		borderPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
+	        if (newScene != null) {
+	            newScene.setOnKeyPressed(event -> {
+	                if (event.getCode() == KeyCode.ESCAPE) {
+	                    MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+	                } else if (event.isControlDown() && event.getCode() == KeyCode.S) {
+	                    luuLai();
+	                }
+	            });
+	        }
+	    });
 	}
     @FXML
     void controller(ActionEvent event) {
@@ -147,6 +165,20 @@ public class ThemNhanVien_Controller implements Initializable{
         Object source = event.getSource();
         if (event.getSource() == lblDanhSachNhanVien) {
             MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+        }
+    }
+    
+    @FXML
+    void keyPressed(KeyEvent event) throws IOException {
+        Object src = event.getSource();
+        if (src == borderPane) {
+            if (event.isControlDown() && event.getCode() == KeyCode.S) {
+                luuLai();
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+            	if (event.getSource() == lblDanhSachNhanVien) {
+                    MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+                }
+            }
         }
     }
     
