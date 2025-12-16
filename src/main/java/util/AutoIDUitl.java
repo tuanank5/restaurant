@@ -10,6 +10,8 @@ import dao.HoaDon_DAO;
 import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
 import dao.MonAn_DAO;
+import dao.NhanVien_DAO;
+import dao.TaiKhoan_DAO;
 import entity.Ban;
 import entity.KhachHang;
 import entity.MonAn;
@@ -140,5 +142,37 @@ public class AutoIDUitl {
         int next = extractNumber(max) + 1;
         return formatID("HD", next, 4);
     }
+	
+	public static String sinhMaNhanVien() {
+	    NhanVien_DAO nvDAO = RestaurantApplication.getInstance()
+	            .getDatabaseContext()
+	            .newEntity_DAO(NhanVien_DAO.class);
+	    String max = nvDAO.getMaxMaNV(); 
+	    if (max == null) {
+	        return "NV001";
+	    }
+	    try {
+	        int so = Integer.parseInt(max.substring(2)); 
+	        return "NV" + String.format("%03d", so + 1);
+	    } catch (Exception e) {
+	        return "NV001";
+	    }
+	}
+	
+	public static String sinhMaTaiKhoan() {
+	    TaiKhoan_DAO tkDAO = RestaurantApplication.getInstance()
+	            .getDatabaseContext()
+	            .newEntity_DAO(TaiKhoan_DAO.class);
+	    String max = tkDAO.getMaxMaTK(); // ví dụ: TK021
+	    if (max == null) {
+	        return "TK001";
+	    }
+	    try {
+	        int so = Integer.parseInt(max.substring(2)); // "TK021" -> 21
+	        return "TK" + String.format("%03d", so + 1);
+	    } catch (Exception e) {
+	        return "TK001";
+	    }
+	}
 
 }

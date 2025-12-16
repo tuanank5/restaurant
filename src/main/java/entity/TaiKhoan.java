@@ -23,13 +23,13 @@ public class TaiKhoan {
     @Column(name = "matKhau", nullable = false, length = 20)
     private String matKhau;
 
-    @Column(name = "ngayDangNhap", nullable = false)
+    @Column(name = "ngayDangNhap")
     private Date ngayDangNhap;
 
-    @Column(name = "ngayDangXuat", nullable = false)
+    @Column(name = "ngayDangXuat")
     private Date ngayDangXuat;
 
-    @Column(name = "ngaySuaDoi", nullable = false)
+    @Column(name = "ngaySuaDoi")
     private Date ngaySuaDoi;
 
     @ManyToOne

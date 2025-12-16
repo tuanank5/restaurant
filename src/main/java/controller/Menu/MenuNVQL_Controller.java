@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import config.RestaurantApplication;
 import controller.Dashboard.DashboardNVQL_Controller;
-import controller.Dashboard.a;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -24,53 +23,50 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MenuNVQL_Controller {
-	
-	public static MenuNVQL_Controller instance;
 
-	private TaiKhoan taiKhoan;
-	
-	@FXML
+    public static MenuNVQL_Controller instance;
+
+    private TaiKhoan taiKhoan;
+
+    @FXML
     private BorderPane borderPane;
 
     @FXML
     private TextField txtThongTin;
 
-
     @FXML
     void btnDangXuat(ActionEvent event) {
-    	Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+
+        Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
+        if (!buttonType.isPresent() 
+            || buttonType.get().getButtonData() != ButtonBar.ButtonData.YES) {
             return;
         }
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
-            // Cập nhật lại ngày giờ đăng nhập
-        	LocalDate localDate = LocalDate.now();
-        	Date dateNow = Date.valueOf(localDate);
-        	
-            this.taiKhoan.setNgayDangXuat(dateNow);
+
+        try {
+            Date dateNow = Date.valueOf(LocalDate.now());
+            taiKhoan.setNgayDangXuat(dateNow);
+
             RestaurantApplication.getInstance()
                     .getDatabaseContext()
                     .newEntity_DAO(TaiKhoan_DAO.class)
                     .capNhat(taiKhoan);
             
-            // Để chỉnh lại - load lên bị lỗi
-            try {
-                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                currentStage.close();
-                
-                FXMLLoader fxmlLoader = new FXMLLoader(
-            			getClass().getResource("/view/fxml/Login.fxml"));
-                Parent root = fxmlLoader.load();
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
+            Stage currentStage = (Stage) ((Node) event.getSource())
+                    .getScene().getWindow();
+            currentStage.close();
 
-                stage.setScene(scene);
-                stage.setMaximized(true);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // Để chỉnh lại - load lên bị lỗi
+            FXMLLoader fxmlLoader =
+                    new FXMLLoader(getClass().getResource("/view/fxml/Login.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -78,75 +74,78 @@ public class MenuNVQL_Controller {
     public void initialize() {
         instance = this;
     }
-    
+
     @FXML
     void btnDashboard(ActionEvent event) {
-    	readyUI("Dashboard/DashboardNVQL");
+        readyUI("Dashboard/DashboardNVQL");
     }
 
     @FXML
     void btnDoiMatKhau(ActionEvent event) {
-
+        // TODO
     }
 
     @FXML
     void btnKhuyenMai(ActionEvent event) {
-    	readyUI("KhuyenMai/KhuyenMai");
+        readyUI("KhuyenMai/KhuyenMai");
     }
 
     @FXML
     void btnNhanVien(ActionEvent event) {
-    	readyUI("NhanVien/NhanVien");
+        readyUI("NhanVien/NhanVien");
     }
 
     @FXML
     void btnTaiKhoan(ActionEvent event) {
-    	readyUI("TaiKhoan/TaiKhoan");
+        readyUI("TaiKhoan/TaiKhoan");
     }
 
     @FXML
     void btnThongKe(ActionEvent event) {
-    	readyUI("ThongKe/ThongKe");
+        readyUI("ThongKe/ThongKe");
     }
-    
+
     @FXML
     void btnBan(ActionEvent event) {
-    	readyUI("QuanLyBan/QuanLyBan");
+        readyUI("QuanLyBan/QuanLyBan");
     }
-    
-	public FXMLLoader readyUI(String ui) {
-        Parent root = null;
+
+    public FXMLLoader readyUI(String ui) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
-            fxmlLoader.setLocation(getClass().getResource("/view/fxml/" + ui + ".fxml"));
-            root = fxmlLoader.load();
+            fxmlLoader.setLocation(
+                    getClass().getResource("/view/fxml/" + ui + ".fxml"));
+            Parent root = fxmlLoader.load();
             borderPane.setCenter(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return fxmlLoader;
     }
-	
-	public void setThongTin(TaiKhoan taiKhoan) {
+
+    public void setThongTin(TaiKhoan taiKhoan) {
         this.taiKhoan = taiKhoan;
-        String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
+        String hoTen = taiKhoan.getNhanVien().getTenNV()
+                + " - " + taiKhoan.getNhanVien().getMaNV();
         txtThongTin.setText(hoTen);
         dashBoard();
     }
-	
-	private Optional<ButtonType> showAlertConfirm(String content) {
+
+    private Optional<ButtonType> showAlertConfirm(String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Thông báo");
         alert.setHeaderText(content);
-        ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-        ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-        ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
+
+        ButtonType btnYes = new ButtonType("Có", ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType("Không", ButtonBar.ButtonData.NO);
+        ButtonType btnCancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(btnYes, btnNo, btnCancel);
         return alert.showAndWait();
     }
-	
-	public void dashBoard() {
-		DashboardNVQL_Controller dashboardNVQLController = readyUI("Dashboard/DashboardNVQL").getController();
-		//NhanVien_Controller nhanVienController = readyUI("NhanVien/NhanVien").getController();
-	}
+
+    public void dashBoard() {
+        DashboardNVQL_Controller controller =
+                readyUI("Dashboard/DashboardNVQL").getController();
+    }
 }
