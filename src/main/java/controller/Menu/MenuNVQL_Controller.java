@@ -143,6 +143,10 @@ public class MenuNVQL_Controller {
         alert.getButtonTypes().setAll(btnYes, btnNo, btnCancel);
         return alert.showAndWait();
     }
+    
+    public void setCenterUI(Node node) {
+        borderPane.setCenter(node);
+    }
 
     public void dashBoard() {
         DashboardNVQL_Controller controller =

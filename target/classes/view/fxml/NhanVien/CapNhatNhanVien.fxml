@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhanVien.CapNhatNhanVien_Controller">
    <top>
       <BorderPane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <top>
@@ -25,11 +25,25 @@
             </Label>
          </top>
          <center>
-            <Label text="Danh sách nhân viên / Cập nhật thông tin / Thông tin chi tiết" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Times New Roman Bold" size="14.0" />
-               </font>
-            </Label>
+            <Pane prefHeight="24.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label layoutX="122.0" layoutY="13.0" text="Danh Sách Nhân Viên">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="279.0" layoutY="13.0" text="Thông Tin Chi Tiết / Cập nhật Thông Tin">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="265.0" layoutY="10.0" prefHeight="17.0" prefWidth="0.0" text="/">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
          </center>
       </BorderPane>
    </top>
@@ -125,31 +139,31 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField GridPane.columnIndex="1">
+                  <TextField fx:id="txtMaNV" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField layoutX="310.0" layoutY="28.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <TextField fx:id="txtTenNV" layoutX="310.0" layoutY="28.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField layoutX="310.0" layoutY="88.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <TextField fx:id="txtEmail" layoutX="310.0" layoutY="88.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField layoutX="310.0" layoutY="208.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                  <TextField fx:id="txtDiaChi" layoutX="310.0" layoutY="208.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <ComboBox editable="true" prefWidth="150.0" promptText="--Chọn chức vụ--" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <DatePicker promptText="DD / MM / YYYY" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <ComboBox editable="true" layoutX="310.0" layoutY="148.0" prefWidth="150.0" promptText="--Chọn giới tính--" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <DatePicker layoutX="310.0" layoutY="267.0" promptText="DD / MM / YYYY" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <ComboBox editable="true" layoutX="310.0" layoutY="385.0" prefWidth="150.0" promptText="--Chọn trạng thái--" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <ComboBox fx:id="cmbChucVu" editable="true" prefWidth="150.0" promptText="--Chọn chức vụ--" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="txtNamSinh" promptText="DD / MM / YYYY" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="cmbGioiTinh" editable="true" layoutX="310.0" layoutY="148.0" prefWidth="150.0" promptText="--Chọn giới tính--" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <DatePicker fx:id="txtNgayVaoLam" layoutX="310.0" layoutY="267.0" promptText="DD / MM / YYYY" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <ComboBox fx:id="cmbTrangThai" editable="true" layoutX="310.0" layoutY="385.0" prefWidth="150.0" promptText="--Chọn trạng thái--" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                </children>
             </GridPane>
          </center>
