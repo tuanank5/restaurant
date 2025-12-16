@@ -23,16 +23,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MenuNVQL_Controller {
-
-    public static MenuNVQL_Controller instance;
-
-
     @FXML
     private BorderPane borderPane;
 
     @FXML
     private TextField txtThongTin;
     
+    public static MenuNVQL_Controller instance;
     public static TaiKhoan taiKhoan;
 
     @FXML
@@ -75,7 +72,11 @@ public class MenuNVQL_Controller {
     public void initialize() {
         instance = this;
     }
-
+    
+    public static MenuNVQL_Controller getInstance() {
+        return instance;
+    }
+    
     @FXML
     void btnDashboard(ActionEvent event) {
         readyUI("Dashboard/DashboardNVQL");

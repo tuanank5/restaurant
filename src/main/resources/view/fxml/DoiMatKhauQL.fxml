@@ -27,7 +27,7 @@
                <children>
                   <Label styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Mật khẩu cũ:" />
                   <Label styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Mật khẩu mới:" GridPane.rowIndex="1" />
-                  <Label styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Nhập lại mật khẩu mới:" GridPane.rowIndex="2" />
+                  <Label styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Xác nhận lại mật khẩu" GridPane.rowIndex="2" />
                   <PasswordField fx:id="mkCuTextField" styleClass="txt" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" GridPane.columnIndex="1" />
                   <PasswordField fx:id="mkMoiTextField" styleClass="txt" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <PasswordField fx:id="mkNhapLaiTextField" styleClass="txt" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />

@@ -35,7 +35,14 @@ public class DoiMatKhauQL_Controller {
 
     @FXML
     void controller(ActionEvent event) {
-
+    	Object src = event.getSource();
+    	if(src == btnQuayLai) {
+    		btnQuayLai(event);
+    	} else if(src == btnLuuLai) {
+    		btnLuuLai(event);
+    	} else if(src == btnLamMoi) {
+    		btnLamMoi(event);
+    	}
     }
     @FXML
     void btnLuuLai(ActionEvent event) {
@@ -90,7 +97,7 @@ public class DoiMatKhauQL_Controller {
 
     @FXML
     void btnQuayLai(ActionEvent event) {
-        MenuNVQL_Controller.instance.dashBoard();
+        MenuNVQL_Controller.getInstance().dashBoard();
     }
 
     private void showAlert(Alert.AlertType type, String content) {
