@@ -13,6 +13,7 @@ import Service.EmailService;
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
+import javafx.scene.control.ButtonBar;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -127,8 +129,7 @@ public class Login_Controller implements Initializable{
     
     @FXML
     void quenmatkhau(ActionEvent event) {
-    	String tenTK = txtUserName.getText();
-
+        String tenTK = txtUserName.getText();
         if (tenTK.isEmpty()) {
             showAlert("Cảnh báo", "Vui lòng nhập tên tài khoản", Alert.AlertType.WARNING);
             return;
@@ -143,30 +144,47 @@ public class Login_Controller implements Initializable{
             showAlert("Lỗi", "Không tìm thấy tài khoản", Alert.AlertType.ERROR);
             return;
         }
-
         TaiKhoan taiKhoan = list.get(0);
+        // Tạo dialog
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
+        dialog.setTitle("Quên mật khẩu");
+        dialog.setHeaderText("Nhập email của nhân viên để nhận OTP");
+
+        ButtonType okButtonType = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, cancelButtonType);
+
         TextField txtEmail = new TextField();
         txtEmail.setPromptText("Nhập email nhân viên");
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Quên mật khẩu");
-        alert.setHeaderText("Xác nhận email");
-        alert.getDialogPane().setContent(txtEmail);
-        alert.showAndWait().ifPresent(btn -> {
+        txtEmail.setPrefWidth(300);
+
+        javafx.scene.layout.VBox content = new javafx.scene.layout.VBox(10);
+        content.setStyle("-fx-padding: 20;");
+        content.getChildren().addAll(new javafx.scene.control.Label("Email nhân viên:"), txtEmail);
+        dialog.getDialogPane().setContent(content);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return txtEmail.getText();
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(emailInput -> {
             String emailNV = taiKhoan.getNhanVien().getEmail();
-            if (!txtEmail.getText().equalsIgnoreCase(emailNV)) {
+            if (!emailInput.equalsIgnoreCase(emailNV)) {
                 showAlert("Lỗi", "Email không khớp với nhân viên", Alert.AlertType.ERROR);
                 return;
             }
-            
             String otp = util.AutoIDUitl.generateOTP();
             String subject = "Mã xác nhận đặt lại mật khẩu";
-            String content = "Mã xác nhận của bạn là: " + otp + "\n"
+            String contentEmail = "Mã xác nhận của bạn là: " + otp + "\n"
                     + "Vui lòng không chia sẻ mã này cho bất kỳ ai.";
-
-            EmailService.sendEmail(emailNV, subject, content);
+            EmailService.sendEmail(emailNV, subject, contentEmail);
             moManHinhQuenMatKhau(taiKhoan, otp);
         });
     }
+
     
     private void moManHinhQuenMatKhau(TaiKhoan tk, String otp) {
         try {
