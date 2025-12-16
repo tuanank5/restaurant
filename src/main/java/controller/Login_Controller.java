@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import Service.EmailService;
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
@@ -121,6 +122,65 @@ public class Login_Controller implements Initializable{
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+    
+    @FXML
+    void quenmatkhau(ActionEvent event) {
+    	String tenTK = txtUserName.getText();
+
+        if (tenTK.isEmpty()) {
+            showAlert("Cảnh báo", "Vui lòng nhập tên tài khoản", Alert.AlertType.WARNING);
+            return;
+        }
+        Map<String, Object> filter = new HashMap<>();
+        filter.put("tenTaiKhoan", tenTK);
+        List<TaiKhoan> list = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(TaiKhoan_DAO.class)
+                .getDanhSach(TaiKhoan.class, filter);
+        if (list.isEmpty()) {
+            showAlert("Lỗi", "Không tìm thấy tài khoản", Alert.AlertType.ERROR);
+            return;
+        }
+
+        TaiKhoan taiKhoan = list.get(0);
+        TextField txtEmail = new TextField();
+        txtEmail.setPromptText("Nhập email nhân viên");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quên mật khẩu");
+        alert.setHeaderText("Xác nhận email");
+        alert.getDialogPane().setContent(txtEmail);
+        alert.showAndWait().ifPresent(btn -> {
+            String emailNV = taiKhoan.getNhanVien().getEmail();
+            if (!txtEmail.getText().equalsIgnoreCase(emailNV)) {
+                showAlert("Lỗi", "Email không khớp với nhân viên", Alert.AlertType.ERROR);
+                return;
+            }
+            
+            String otp = util.AutoIDUitl.generateOTP();
+            String subject = "Mã xác nhận đặt lại mật khẩu";
+            String content = "Mã xác nhận của bạn là: " + otp + "\n"
+                    + "Vui lòng không chia sẻ mã này cho bất kỳ ai.";
+
+            EmailService.sendEmail(emailNV, subject, content);
+            moManHinhQuenMatKhau(taiKhoan, otp);
+        });
+    }
+    
+    private void moManHinhQuenMatKhau(TaiKhoan tk, String otp) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/fxml/QuenMatKhau.fxml"));
+            Parent root = loader.load();
+            QuenMatKhau_Controller controller = loader.getController();
+            controller.initData(tk, otp);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Xác nhận mã & đặt lại mật khẩu");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     

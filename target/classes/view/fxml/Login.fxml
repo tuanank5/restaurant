@@ -44,7 +44,7 @@
             </PasswordField>
             <Button fx:id="btnLogin" layoutX="40.0" layoutY="250.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="220.0" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="ĐĂNG NHẬP" />
             <Label layoutX="100.0" layoutY="50.0" style="-fx-font-weight: bold;" styleClass="h2" stylesheets="@../css/SystemDesign.css" text="NHÀ HÀNG" />
-            <Button fx:id="btnQuenMatKhau" layoutX="40.0" layoutY="300.0" mnemonicParsing="false" prefHeight="30.0" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Quên mật khẩu" AnchorPane.rightAnchor="40.0" />
+            <Button fx:id="btnQuenMatKhau" layoutX="40.0" layoutY="300.0" mnemonicParsing="false" onAction="#quenmatkhau" prefHeight="30.0" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Quên mật khẩu" AnchorPane.rightAnchor="40.0" />
          </children>
       </AnchorPane>
    </children>

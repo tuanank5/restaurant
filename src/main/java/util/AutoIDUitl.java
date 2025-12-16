@@ -2,6 +2,7 @@ package util;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import config.RestaurantApplication;
 import dao.Ban_DAO;
@@ -174,5 +175,11 @@ public class AutoIDUitl {
 	        return "TK001";
 	    }
 	}
+	
+	public static String generateOTP() {
+        Random random = new Random();
+        int otp = 100000 + random.nextInt(900000);
+        return String.valueOf(otp);
+    }
 
 }

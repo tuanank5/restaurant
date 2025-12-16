@@ -135,7 +135,7 @@ CREATE TABLE TaiKhoan
 (
 	maTaiKhoan VARCHAR(20) PRIMARY KEY,
 	tenTaiKhoan VARCHAR(20),
-	matKhau VARCHAR(20),
+	matKhau VARCHAR(100),
 	ngayDangNhap DATE,
 	ngayDangXuat DATE,
 	ngaySuaDoi DATE,

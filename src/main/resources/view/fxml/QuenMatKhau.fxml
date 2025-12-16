@@ -1,61 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.TextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<BorderPane
+        prefHeight="250.0"
+        prefWidth="500.0"
+        xmlns="http://javafx.com/javafx/25"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="controller.QuenMatKhau_Controller">
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <BorderPane prefHeight="50.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
-         <left>
-            <Label styleClass="h1" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Đặt lại mật khẩu" BorderPane.alignment="BOTTOM_LEFT">
-               <BorderPane.margin>
-                  <Insets left="135.0" />
-               </BorderPane.margin>
-            </Label>
-         </left>
-      </BorderPane>
-   </top>
-   <bottom>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <GridPane layoutX="65.0" layoutY="25.0" prefWidth="365.0" vgap="10.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label prefHeight="19.0" prefWidth="134.0" styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Nhập mã xác nhận">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-                  <Label styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Mật khẩu mới" GridPane.rowIndex="1" />
-                  <Label styleClass="lbl" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Nhập lại mật khẩu mới" GridPane.rowIndex="2" />
-                  <TextField styleClass="txt" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" GridPane.columnIndex="1" />
-                  <PasswordField styleClass="txt" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <PasswordField styleClass="txt" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-               </children>
-            </GridPane>
-            <Button layoutX="399.0" layoutY="165.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Xác Nhận" />
-            <Button layoutX="304.0" layoutY="165.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../git/restaurant/src/main/resources/view/css/SystemDesign.css" text="Hoàn tác" />
-         </children>
-      </AnchorPane>
-   </bottom>
+    <!-- ====== HEADER ====== -->
+    <top>
+        <BorderPane prefHeight="50.0">
+            <left>
+                <Label text="Đặt lại mật khẩu"
+                       styleClass="h1"
+                       BorderPane.alignment="CENTER_LEFT">
+                    <BorderPane.margin>
+                        <Insets left="135"/>
+                    </BorderPane.margin>
+                </Label>
+            </left>
+        </BorderPane>
+    </top>
+
+    <!-- ====== CONTENT ====== -->
+    <center>
+        <AnchorPane>
+            <children>
+
+                <GridPane layoutX="65" layoutY="25" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="160"/>
+                        <ColumnConstraints prefWidth="200"/>
+                    </columnConstraints>
+
+                    <rowConstraints>
+                        <RowConstraints prefHeight="30"/>
+                        <RowConstraints prefHeight="30"/>
+                        <RowConstraints prefHeight="30"/>
+                    </rowConstraints>
+
+                    <!-- Mã xác nhận -->
+                    <Label text="Nhập mã xác nhận"
+                           styleClass="lbl"/>
+                    <TextField fx:id="txtmaXacNhan"
+                               GridPane.columnIndex="1"
+                               styleClass="txt"/>
+
+                    <!-- Mật khẩu mới -->
+                    <Label text="Mật khẩu mới"
+                           GridPane.rowIndex="1"
+                           styleClass="lbl"/>
+                    <PasswordField fx:id="txtmatKhauMoi"
+                                   GridPane.columnIndex="1"
+                                   GridPane.rowIndex="1"
+                                   styleClass="txt"/>
+
+                    <!-- Xác nhận mật khẩu -->
+                    <Label text="Nhập lại mật khẩu mới"
+                           GridPane.rowIndex="2"
+                           styleClass="lbl"/>
+                    <PasswordField fx:id="txtxacNhanMatKhau"
+                                   GridPane.columnIndex="1"
+                                   GridPane.rowIndex="2"
+                                   styleClass="txt"/>
+                </GridPane>
+
+                <!-- Buttons -->
+                <Button fx:id="btnXacNhan"
+                        layoutX="330"
+                        layoutY="170"
+                        text="Xác nhận"
+                        styleClass="btn"
+                        onAction="#btnXacNhan"/>
+
+                <Button fx:id="btnLamMoi"
+                        layoutX="230"
+                        layoutY="170"
+                        text="Hoàn tác"
+                        styleClass="btn"/>
+
+            </children>
+        </AnchorPane>
+    </center>
+
 </BorderPane>
