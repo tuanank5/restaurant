@@ -109,7 +109,6 @@ public class MenuNV_Controller {
                     .newEntity_DAO(TaiKhoan_DAO.class)
                     .capNhat(taiKhoan);
             
-            // Để chỉnh lại - load lên bị lỗi
             try {
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 currentStage.close();
@@ -126,7 +125,6 @@ public class MenuNV_Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Để chỉnh lại - load lên bị lỗi
         }
     }
 	
@@ -180,7 +178,7 @@ public class MenuNV_Controller {
 
     @FXML
     void btnDoiMatKhau(ActionEvent event) {
-
+    	readyUI("DoiMatKhauTA");
     }
 
     @FXML

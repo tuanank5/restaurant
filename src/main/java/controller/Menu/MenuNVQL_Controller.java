@@ -82,7 +82,7 @@ public class MenuNVQL_Controller {
 
     @FXML
     void btnDoiMatKhau(ActionEvent event) {
-        // TODO
+    	readyUI("DoiMatKhauQL");
     }
 
     @FXML

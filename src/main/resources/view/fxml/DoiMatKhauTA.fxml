@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DoiMatKhauNV_Controller">
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
@@ -33,8 +33,8 @@
                   <PasswordField fx:id="mkNhapLaiTextField" styleClass="txt" stylesheets="@../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
-            <Button layoutX="25.0" layoutY="150.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Quay lại" />
-            <Button layoutX="170.0" layoutY="150.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Làm mới" />
+            <Button fx:id="btnQuayLai" layoutX="25.0" layoutY="150.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Quay lại" />
+            <Button fx:id="btnLamMoi" layoutX="170.0" layoutY="150.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Làm mới" />
             <Button fx:id="btnLuuLai" layoutX="285.0" layoutY="150.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../css/SystemDesign.css" text="Xác nhận lưu" />
          </children>
       </AnchorPane>
