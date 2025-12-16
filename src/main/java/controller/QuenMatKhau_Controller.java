@@ -61,7 +61,7 @@ public class QuenMatKhau_Controller {
     @FXML
     void btnXacNhan(ActionEvent event) {
         LocalDateTime now = LocalDateTime.now();
-        if (otpTime.plusMinutes(5).isBefore(now)) {
+        if (otpTime.plusMinutes(1).isBefore(now)) {
             showAlert("Lỗi", "Mã OTP đã hết hạn. Vui lòng gửi lại.", Alert.AlertType.ERROR);
             return;
         }
@@ -90,7 +90,7 @@ public class QuenMatKhau_Controller {
             return;
         }
 
-        // **Lưu trực tiếp mật khẩu gốc vào DB**
+        // Lưu trực tiếp mật khẩu gốc vào DB
         taiKhoan.setMatKhau(matKhauMoi);
         taiKhoan.setNgaySuaDoi(Date.valueOf(java.time.LocalDate.now()));
 
