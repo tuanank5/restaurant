@@ -205,10 +205,13 @@ public class ThemKhachHang_Controller {
     	                showAlert("Thông báo", "Thêm khách hàng thất bại!", Alert.AlertType.WARNING);
     	            }
     	        }
-    	    } catch (Exception e) {
-    	        e.printStackTrace();
-    	        showAlert("Lỗi", "Xảy ra lỗi trong quá trình lưu khách hàng.", Alert.AlertType.ERROR);
-    	    }
+    	 	} catch (Exception e) {
+    		    if (e.getCause() != null && e.getCause().getMessage().contains("UNIQUE")) {
+    		        showAlert("Cảnh Báo", "Dữ liệu bị trùng (SĐT hoặc Email)!", Alert.AlertType.WARNING);
+    		    } else {
+    		        showAlert("Lỗi", "Xảy ra lỗi khi thêm khách hàng!", Alert.AlertType.ERROR);
+    		    }
+    		}
     }
     
     private KhachHang getKhachHangNew() {
@@ -251,6 +254,7 @@ public class ThemKhachHang_Controller {
                 }
             }
         }
+        
         //Kiểm tra email
         if (email.isEmpty()) {
             showAlert("Cảnh Báo", "Vui lòng nhập email!", Alert.AlertType.WARNING);
@@ -287,6 +291,25 @@ public class ThemKhachHang_Controller {
             comBoxHangKH.requestFocus();
             return null;
         }
+        
+        if (daTonTai("tenKH", tenKH)) {
+            showAlert("Cảnh Báo", "Tên khách hàng đã tồn tại!", Alert.AlertType.WARNING);
+            txtKhachHang.requestFocus();
+            return null;
+        }
+        
+        if (daTonTai("sdt", sdt)) {
+            showAlert("Cảnh Báo", "Số điện thoại đã tồn tại!", Alert.AlertType.WARNING);
+            txtSDT.requestFocus();
+            return null;
+        }
+        
+        if (daTonTai("email", email)) {
+            showAlert("Cảnh Báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
+            txtEmail.requestFocus();
+            return null;
+        }
+
 
         KhachHang kh = new KhachHang();
         kh.setMaKH(AutoIDUitl.phatSinhMaKH()); // quan trọng
@@ -303,6 +326,16 @@ public class ThemKhachHang_Controller {
         kh.setHangKhachHang(hang);
 
         return kh;
+    }
+    
+    private boolean daTonTai(String field, String value) {
+        Map<String, Object> filter = new HashMap<>();
+        filter.put(field, value);
+        List<KhachHang> list = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(KhachHang_DAO.class)
+                .getDanhSach(KhachHang.class, filter);
+        return !list.isEmpty();
     }
     
     private void showAlert(String title, String content, Alert.AlertType alertType) {

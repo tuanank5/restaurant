@@ -30,17 +30,17 @@ public class KhachHang {
     @Column(name = "tenKH", nullable = false, length = 100)
     private String tenKH;
 
-    @Column(name = "sdt", nullable = false, length = 20)
+    @Column(name = "sdt", nullable = false, length = 20, unique = true)
     private String sdt;
 
-    @Column(name = "email", length = 100)
+    @Column(name = "email", length = 100, unique = true)
     private String email;
 
     @Column(name = "diaChi", length = 200)
     private String diaChi;
 
     @Column(name = "diemTichLuy")
-    private int diemTichLuy;
+    private int diemTichLuy = 0;
 
     @ManyToOne
     @JoinColumn(name = "maHang", referencedColumnName = "maHang", nullable = true)
