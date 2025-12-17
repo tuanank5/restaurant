@@ -144,8 +144,9 @@ public class MenuNV_Controller {
 	public void dashBoard() {
 		//		Dashboard_Controller dashBoardController = readyUI("Dashboard").getController();
 		//		dashBoardController.setThongTin(taiKhoan);
-		DashboardNVScroll_Controller dashboardNVController = readyUI("Dashboard/DashboardNVScroll").getController();
+		DashboardNVScroll_Controller dashboardNVScrollController = readyUI("Dashboard/DashboardNVScroll").getController();
 	}
+	
 	public void refreshBanUI() {
 		if (banDangChon != null) {
 	        for (Ban b : danhSachBan) {
@@ -156,8 +157,9 @@ public class MenuNV_Controller {
 	        }
 	    }
 	    // Nếu DatBan đang hiển thị, reload UI để cập nhật trạng thái bàn
-	    readyUI("DatBan/DatBan-test");
+	    readyUI("DatBan/aBanHienTai");
 	}
+	
 	@FXML
     void btnDashboard(ActionEvent event) {
 		readyUI("Dashboard/DashboardNVScroll");

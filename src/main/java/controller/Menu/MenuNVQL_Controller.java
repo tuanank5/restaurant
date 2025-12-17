@@ -79,7 +79,7 @@ public class MenuNVQL_Controller {
     
     @FXML
     void btnDashboard(ActionEvent event) {
-        readyUI("Dashboard/DashboardNVQL");
+        readyUI("Dashboard/DashboardNVQLScroll");
     }
 
     @FXML
