@@ -39,6 +39,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import util.AutoIDUitl;
@@ -140,6 +141,12 @@ public class ABanHienTai_Controller {
         cmbLoaiBan.setOnAction(e -> loadDanhSachHoaDon());
         txtTongDatBan.setEditable(false);
         txtTongDatBan.setText(tongDatBan + "");
+        
+//        btnBan.setTooltip(new Tooltip("Thông báo cho nút Ban!"));
+//        btnChoThanhToan.setTooltip(new Tooltip("Thông báo cho nút Cho Thanh Toan!"));
+//        btnDatTruoc.setTooltip(new Tooltip("Thông báo cho nút Dat Truoc!"));
+//        btnDatBan.setTooltip(new Tooltip("Thông báo cho nút Dat Ban!"));
+//        btnKhac.setTooltip(new Tooltip("Thông báo cho nút Khac!"));
     }
 
     private void capNhatTrangThaiBanMacDinh() {
