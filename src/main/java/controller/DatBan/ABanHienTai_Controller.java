@@ -29,7 +29,9 @@ import entity.HoaDon;
 import entity.KhachHang;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -119,6 +121,8 @@ public class ABanHienTai_Controller {
         	
         }else if(source == btnBan) {
         	MenuNV_Controller.instance.readyUI("DatBan/aDoiBan");
+        }else if(source == btnMonAn) {
+        	MenuNV_Controller.instance.readyUI("DatBan/aDoiMon");
         }
     }
 
@@ -277,9 +281,11 @@ public class ABanHienTai_Controller {
                 btnMonAn.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneEast.setLeft(btnMonAn);
                 btnMonAn.setOnMouseClicked(event -> {
-                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
-//                	MenuNV_Controller.instance.readyUI("DatBan/aDoiMon");
+                    MenuNV_Controller.aBanHienTai_HD = hoaDon;
+                    MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
+                    MenuNV_Controller.instance.readyUI("DatBan/aDoiMon");
                 });
+
 
                 Button btnKhac = new Button("K");
                 btnKhac.setStyle(getButtonStyle()); // Cách định dạng cho nút
@@ -471,6 +477,8 @@ public class ABanHienTai_Controller {
 //            showAlert(Alert.AlertType.ERROR, "Cập nhật trạng thái thất bại!");
 //        }
 //    }
+    
+   
 
 }
 

@@ -1,86 +1,65 @@
 package controller.DatBan;
 
-import dao.KhuyenMai_DAO;
-import dao.KhachHang_DAO;
-import dao.Ban_DAO;
-import dao.ChiTietHoaDon_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.KhuyenMai_DAOImpl;
-import dao.DonDatBan_DAO;
-import dao.HoaDon_DAO;
-import dao.impl.DonDatBan_DAOImpl;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.KhachHang;
-import entity.KhuyenMai;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.LoaiBan;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
-import util.AutoIDUitl;
-import dao.impl.DonDatBan_DAOImpl;
-
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import config.RestaurantApplication;
-import controller.HoaDon.ChiTietHoaDon_Controller;
 import controller.Menu.MenuNV_Controller;
+import dao.DonDatBan_DAO;
+import dao.HoaDon_DAO;
 import dao.MonAn_DAO;
 import dao.NhanVien_DAO;
+import dao.impl.DonDatBan_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
 import dao.impl.NhanVien_DAOImpl;
+import config.RestaurantApplication;
+import dao.ChiTietHoaDon_DAO;
+import entity.ChiTietHoaDon;
+import entity.Ban;
+import entity.DonDatBan;
+import entity.HoaDon;
 import entity.MonAn;
-import entity.NhanVien;
-import entity.TaiKhoan;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.text.NumberFormat;
-import java.util.Locale;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 
-
-public class ADatMon_Controller implements Initializable {
-
-
-    @FXML
-    private Button btnGiam;
-
-    @FXML
-    private Button btnHuy;
+public class ADoiMon_Controller implements Initializable{
 
     @FXML
     private Button btnQuayLai;
 
     @FXML
-    private Button btnTang;
-
-    @FXML
     private Button btnXacNhan;
-
+    
     @FXML
     private ComboBox<String> cmbLoaiMon;
 
@@ -94,14 +73,18 @@ public class ADatMon_Controller implements Initializable {
     private TableColumn<MonAn, Integer> colSoLuong;
 
     @FXML
+    private TableColumn<MonAn, Integer> colSoLuong1;
+
+    @FXML
     private TableColumn<MonAn, String> colTenMon;
 
     @FXML
     private GridPane gridPaneMon;
 
+
     @FXML
     private Label lblTongTien;
-
+    
     @FXML
     private ScrollPane scrollPaneMon;
 
@@ -109,13 +92,13 @@ public class ADatMon_Controller implements Initializable {
     private TableView<MonAn> tblDS;
 
     @FXML
+    private TextField txtKhachHang;
+
+    @FXML
     private TextField txtMaBan;
 
     @FXML
-    private TextField txtNhanVien;
-
-    @FXML
-    private TextField txtSoLuong;
+    private TextField txtSoLuongKhach;
     
     //-----Bàn---------
     private Ban banDangChon;
@@ -126,31 +109,52 @@ public class ADatMon_Controller implements Initializable {
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
     private List<MonAn> dsMonAn;
     private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
-    
-    public void setBanDangChon(Ban ban) {
-        this.banDangChon = ban;
-        loadMonCuaBan();
-    }
-    
     private DonDatBan donDatBanHienTai;
+    private HoaDon hoaDonHienTai;
 
-    public void setDonDatBanHienTai(DonDatBan don) {
-        this.donDatBanHienTai = don;
+
+    @FXML
+    void btnQuayLai(ActionEvent event) {
+    	MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
     }
+
+    @FXML
+    void btnXacNhan(ActionEvent event) {
+        if (hoaDonHienTai == null) {
+            showAlert("Lỗi", "Không tìm thấy hóa đơn!", Alert.AlertType.ERROR);
+            return;
+        }
+
+        ChiTietHoaDon_DAO ctDAO = RestaurantApplication.getInstance()
+                .getDatabaseContext()
+                .newEntity_DAO(ChiTietHoaDon_DAO.class);
+
+        // 1️⃣ Xóa chi tiết cũ
+        ctDAO.deleteByMaHoaDon(hoaDonHienTai.getMaHoaDon());
+
+        // 2️⃣ Lưu chi tiết mới
+        for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
+            ChiTietHoaDon ct = new ChiTietHoaDon();
+            ct.setHoaDon(hoaDonHienTai);
+            ct.setMonAn(entry.getKey());
+            ct.setSoLuong(entry.getValue());
+            ctDAO.them(ct);
+        }
+
+        showAlert("Thành công", "Cập nhật món ăn thành công!", Alert.AlertType.INFORMATION);
+
+        MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+    }
+
     
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    	 // Lấy danh sách món ăn từ DB
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		hoaDonHienTai = MenuNV_Controller.aBanHienTai_HD;
+		donDatBanHienTai = MenuNV_Controller.donDatBanDangDoi;
         dsMonAn = monAnDAO.getDanhSachMonAn();
-        loadTenNhanVien();
-        // lấy sluong khách
-        txtSoLuong.setText(String.valueOf(MenuNV_Controller.soLuongKhach));
         // Khởi tạo ComboBox phân loại (dùng dsMonAn)
         khoiTaoComboBoxPhanLoai();
-
-        // Load toàn bộ món lên giao diện
         loadMonAnToGrid(dsMonAn);
-
         colSTT.setCellValueFactory(col -> {
             int index = tblDS.getItems().indexOf(col.getValue());
             return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
@@ -180,19 +184,17 @@ public class ADatMon_Controller implements Initializable {
             loadMonCuaBan();
         }
         tblDS.setOnMouseClicked(e -> capNhatTongTien());
+        this.donDatBanHienTai = MenuNV_Controller.donDatBanDangDoi;
+        loadMonDaDatTuHoaDon();
 
-    }
-    @FXML
-    void btnQuayLai(ActionEvent event) {
-    	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
+		
+	}
+	
+    public void setBanDangChon(Ban ban) {
+        this.banDangChon = ban;
+        loadMonCuaBan();
     }
     
-    public void loadTenNhanVien() {
-        if (MenuNV_Controller.taiKhoan != null) {
-            String ten = MenuNV_Controller.taiKhoan.getNhanVien().getTenNV();
-            txtNhanVien.setText(ten);
-        }
-    }
     
     private void khoiTaoComboBoxPhanLoai() {
         // Lấy danh sách loại món duy nhất
@@ -209,135 +211,27 @@ public class ADatMon_Controller implements Initializable {
         // Thêm sự kiện chọn
         cmbLoaiMon.setOnAction(e -> locMonTheoLoai());
     }
-
     private void locMonTheoLoai() {
         String loaiChon = cmbLoaiMon.getValue();
+
+        // FIX NULL
+        if (loaiChon == null || loaiChon.equals("Tất cả")) {
+            loadMonAnToGrid(dsMonAn);
+            return;
+        }
+
         List<MonAn> dsLoc = new ArrayList<>();
-        if (loaiChon.equals("Tất cả")) {
-            dsLoc = dsMonAn;
-        } else {
-            for (MonAn mon : dsMonAn) {
-                if (loaiChon.equals(mon.getLoaiMon())) {
-                    dsLoc.add(mon);
-                }
+        for (MonAn mon : dsMonAn) {
+            if (loaiChon.equals(mon.getLoaiMon())) {
+                dsLoc.add(mon);
             }
         }
-        
+
         loadMonAnToGrid(dsLoc);
     }
 
-    @FXML
-    void handleThanhToan(ActionEvent event) {
-        try {
-        	// Gán dữ liệu cho hóa đơn như bạn đang làm
-            MenuNV_Controller.banDangChon = banDangChon;
-            MenuNV_Controller.dsMonAnDangChon = dsMonAnDat;
-            //Cập nhật trạng thái bàn về TRỐNG trong database
-            Ban_DAO banDAO = new Ban_DAOImpl();
-            banDangChon.setTrangThai("Trống");
-            banDAO.capNhat(banDangChon);
-            //Xóa món ăn đã lưu tạm cho bàn này
-            MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
-            //Cập nhật giao diện danh sách bàn trong MenuNV
-            MenuNV_Controller.instance.refreshBanUI();
-            //Mở UI hóa đơn
-//------------------Chuyển qua gdien ------------------------------
-            MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void handleXacNhan(ActionEvent event) {
-    	if (dsMonAnDat.isEmpty()) {
-           	showAlert("Thông báo", "Vui lòng chọn món ăn", Alert.AlertType.INFORMATION);
-        } else {
-        	DonDatBan ddb = themDDB();
-        	themHD(ddb);
-    	}
-    }
     
-    private DonDatBan themDDB() {
-    	LocalDateTime nowDate = LocalDateTime.now();
-    	LocalTime nowHour = LocalTime.now();
-    	
-    	DonDatBan ddb = new DonDatBan();
-    	ddb.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
-    	ddb.setNgayGioLapDon(nowDate);
-    	ddb.setSoLuong(MenuNV_Controller.soLuongKhach);
-    	ddb.setBan(MenuNV_Controller.banDangChon);
-    	ddb.setGioBatDau(nowHour);
-    	ddb.setTrangThai("Hiện tại");
-    	
-    	if (RestaurantApplication.getInstance()
-   	                    .getDatabaseContext()
-   	                    .newEntity_DAO(DonDatBan_DAO.class)
-   	                    .them(ddb)) {
-    		return ddb;
-    	}
-
-		return null;
-	}
-
-	private void themHD(DonDatBan ddb) {
-    	HoaDon hd = new HoaDon();
-    	hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
-    	LocalDate localDate = LocalDate.now();
-        Date dateNow = Date.valueOf(localDate);
-    	hd.setNgayLap(dateNow);
-    	
-    	hd.setTrangThai("Chưa thanh toán");
-    	hd.setKieuThanhToan("Tiền mặt");
-    	
-    	KhachHang kh = new KhachHang();
-    	kh.setMaKH("KH0001");
-    	hd.setKhachHang(kh);
-    	hd.setKhuyenMai(null);
-    	hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-    	hd.setDonDatBan(ddb);
-    	hd.setCoc(null);
-    	
-    	try {
-   	     if (hd != null) {
-   	        boolean check = RestaurantApplication.getInstance()
-   	                    .getDatabaseContext()
-   	                    .newEntity_DAO(HoaDon_DAO.class)
-   	                    .them(hd);
-   	            //Kiểm tra kết quả thêm
-   	            if (check) {
-   	                showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
-   	                if (!dsMonAnDat.isEmpty()) {
-   	   	                themChiTietHoaDon(hd, dsMonAnDat);
-   	   	                MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
-   	                } 
-   	            } else {
-   	                showAlert("Thông báo", "Lưu hóa đơn tạm thất bại!", Alert.AlertType.WARNING);
-   	            }
-   	        }
-   	    } catch (Exception e) {
-   	        e.printStackTrace();
-   	        showAlert("Lỗi", "ADatMon_Controller lỗi", Alert.AlertType.ERROR);
-   	    }
-    }
-    
-    private void themChiTietHoaDon(HoaDon hd, Map<MonAn, Integer> dsMonAn) {
-    	ChiTietHoaDon cthd = new ChiTietHoaDon();
-    	for (Map.Entry<MonAn, Integer> entry : dsMonAn.entrySet()) {
-            MonAn monAn = entry.getKey(); // Lấy món ăn
-            Integer soLuong = entry.getValue(); // Lấy số lượng tương ứng
-            cthd.setHoaDon(hd);
-            cthd.setMonAn(monAn);
-            cthd.setSoLuong(soLuong);
-            RestaurantApplication.getInstance()
-               .getDatabaseContext()
-               .newEntity_DAO(ChiTietHoaDon_DAO.class)
-               .them(cthd);
-        }
-	}
-
-	private void loadMonAnToGrid(List<MonAn> danhSach) {
+    private void loadMonAnToGrid(List<MonAn> danhSach) {
         gridPaneMon.getChildren().clear();
         gridPaneMon.getColumnConstraints().clear();
         gridPaneMon.getRowConstraints().clear();
@@ -422,8 +316,6 @@ public class ADatMon_Controller implements Initializable {
     }
 
     
-
-// -------------------------Tăng giảm số lượng-----------------------    
     private void chonMon(MonAn mon) {
         if (dsMonAnDat.containsKey(mon)) {
             // Nếu đã có món này hỏi người dùng
@@ -464,17 +356,48 @@ public class ADatMon_Controller implements Initializable {
         lblTongTien.setText(dinhDangTien(tongTruocVAT));
     }
     
-    
+    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
+
     private String dinhDangTien(double soTien) {
     	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
         return nf.format(soTien);
     }
-    
+    private void loadMonDaDatTuHoaDon() {
+        if (hoaDonHienTai == null) {
+            System.out.println("❌ hoaDonHienTai = null");
+            return;
+        }
+
+        dsMonAnDat.clear();
+
+        List<ChiTietHoaDon> dsCT =
+                RestaurantApplication.getInstance()
+                        .getDatabaseContext()
+                        .newEntity_DAO(ChiTietHoaDon_DAO.class)
+                        .getChiTietTheoMaHoaDon(hoaDonHienTai.getMaHoaDon());
+
+        for (ChiTietHoaDon ct : dsCT) {
+            dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
+        }
+
+        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+        tblDS.refresh();
+        capNhatTongTien();
+    }
+
+
+    public void setDonDatBanHienTai(DonDatBan don) {
+        this.donDatBanHienTai = don;
+        loadMonDaDatTuHoaDon();
+    }
+
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(content);
         alert.show();
     }
+    
+    
+
 }
-   

@@ -49,6 +49,7 @@ public class ChiTietHoaDon_DAOImpl
             em.close();
         }
     }
+
     
     @Override
     public boolean themChiTiet(ChiTietHoaDon cthd) {
