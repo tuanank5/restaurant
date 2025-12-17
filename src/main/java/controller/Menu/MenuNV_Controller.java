@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import config.RestaurantApplication;
+import controller.Dashboard.DashboardNVScroll_Controller;
 import controller.Dashboard.DashboardNV_Controller;
 import dao.Ban_DAO;
 import dao.TaiKhoan_DAO;
@@ -143,7 +144,7 @@ public class MenuNV_Controller {
 	public void dashBoard() {
 		//		Dashboard_Controller dashBoardController = readyUI("Dashboard").getController();
 		//		dashBoardController.setThongTin(taiKhoan);
-		DashboardNV_Controller dashboardNVController = readyUI("Dashboard/DashboardNV").getController();
+		DashboardNVScroll_Controller dashboardNVController = readyUI("Dashboard/DashboardNVScroll").getController();
 	}
 	public void refreshBanUI() {
 		if (banDangChon != null) {
@@ -159,7 +160,7 @@ public class MenuNV_Controller {
 	}
 	@FXML
     void btnDashboard(ActionEvent event) {
-		
+		readyUI("Dashboard/DashboardNVScroll");
     }
 	
 	@FXML
