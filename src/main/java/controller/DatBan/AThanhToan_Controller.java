@@ -136,12 +136,14 @@ public class AThanhToan_Controller {
     private ObservableList<ChiTietHoaDon> dsCTHD = FXCollections.observableArrayList();
     private List<ChiTietHoaDon> dsCTHD_DB;
     
-    private Map<MonAn, Integer> dsMonAn;
-    private HoaDon hoaDonHienTai;
-	double thanhTien = 0;
+    private double thanhTien = 0;
 	private double Vat_Rate = 0.1;
-	double tongTruocVAT;
+	private double tongTruocVAT;
 	double tongSauVAT;
+	HoaDon hoaDonHienTai;
+	Map<MonAn, Integer> dsMonAn;
+	KhuyenMai kmDangChon;
+	double thueHD;
 	
 	public static AThanhToan_Controller aTT;
 
@@ -210,6 +212,7 @@ public class AThanhToan_Controller {
     private void capNhatTongTien() {
         double tienGiam = 0;
         KhuyenMai km = cmbKM.getValue();
+        kmDangChon = km;
         
         if (km != null) {
             switch (km.getLoaiKM()) {
@@ -230,6 +233,7 @@ public class AThanhToan_Controller {
         if (tongTruocVAT < 0) tongTruocVAT = 0;
         
         double thue = thanhTien * Vat_Rate;
+        thueHD = thue;
         tongSauVAT = tongTruocVAT + thue;
 
         lblTienGiam.setText(formatTienVN(tienGiam));

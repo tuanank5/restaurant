@@ -156,13 +156,15 @@ public class ABanHienTai_Controller {
     	LocalDate nowDate = LocalDate.now();
     	LocalTime nowHour = LocalTime.now();
     	List<DonDatBan> dsDDBnow = new ArrayList<DonDatBan>();
-    	
-    	for (DonDatBan ddb : dsDDB) {
-    		LocalDate ngayGioLapDon = ddb.getNgayGioLapDon().toLocalDate();
-    		if (ngayGioLapDon.equals(nowDate)) {
-    			if (nowHour.isAfter(ddb.getGioBatDau().minusHours(1)) && nowHour.isBefore(ddb.getGioBatDau().plusHours(1))) {
-    				dsDDBnow.add(ddb);
-    			}
+
+    	for (HoaDon hd : dsHoaDon) {
+    		if (hd.getTrangThai().equals("Chưa thanh toán")) {
+    			LocalDate ngayGioLapDon = hd.getDonDatBan().getNgayGioLapDon().toLocalDate();
+        		if (ngayGioLapDon.equals(nowDate)) {
+        			if (nowHour.isAfter(hd.getDonDatBan().getGioBatDau().minusHours(1)) && nowHour.isBefore(hd.getDonDatBan().getGioBatDau().plusHours(1))) {
+        				dsDDBnow.add(hd.getDonDatBan());
+        			}
+        		}
     		}
     	}
     	
@@ -177,7 +179,6 @@ public class ABanHienTai_Controller {
     			}
     		}
     	}
-		
 	}
 
 	private void khoiTaoComboBoxes() {
