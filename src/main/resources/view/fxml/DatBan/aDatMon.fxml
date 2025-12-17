@@ -19,7 +19,7 @@
    <left>
       <BorderPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView fx:id="tblDS" prefHeight="315.0" prefWidth="296.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
+            <TableView fx:id="tblDS" prefHeight="366.0" prefWidth="500.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
                <columns>
                   <TableColumn fx:id="colSTT" prefWidth="50.0" text="STT" />
                   <TableColumn fx:id="colTenMon" prefWidth="250.0" text="Tên món" />
@@ -80,8 +80,8 @@
                <bottom>
                   <AnchorPane prefHeight="64.0" prefWidth="500.0" style="-fx-border-width: 2px 1px 0 0;" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnXacNhan" layoutX="386.0" mnemonicParsing="false" onAction="#handleXacNhan" prefHeight="60.0" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="7.200000000000003" AnchorPane.rightAnchor="14.0" />
-                        <Button fx:id="btnHuy" layoutX="274.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy" />
+                        <Button fx:id="btnXacNhan" layoutX="386.0" mnemonicParsing="false" onAction="#handleXacNhan" prefHeight="60.0" prefWidth="100.0" styleClass="btnXacNhan" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="7.200000000000003" AnchorPane.rightAnchor="14.0" />
+                        <Button fx:id="btnHuy" layoutX="274.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="btnXacNhan" stylesheets="@../../css/SystemDesign.css" text="Hủy" />
                      </children>
                   </AnchorPane>
                </bottom>
@@ -116,9 +116,9 @@
    <top>
       <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
-            <AnchorPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="58.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnQuayLai" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnQuayLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quay lại" />
+                  <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnQuayLai" styleClass="btnQuayLai" stylesheets="@../../css/SystemDesign.css" text="Quay lại" />
                   <Label layoutX="200.0" layoutY="15.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Chi tiết hóa đơn" />
                </children>
             </AnchorPane>
