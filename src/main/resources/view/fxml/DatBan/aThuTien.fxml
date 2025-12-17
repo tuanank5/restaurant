@@ -62,6 +62,8 @@
                               <Button fx:id="btnGoiY2" mnemonicParsing="false" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="0" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
+                        <Label layoutX="30.0" layoutY="335.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số tiền cần phải trả lại:" />
+                        <Label fx:id="lblTienCanTra" layoutX="225.0" layoutY="335.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTienCanTra" />
                      </children>
                   </AnchorPane>
                </center>
@@ -74,8 +76,8 @@
          <center>
             <AnchorPane BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnHuy" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy bỏ" />
-                  <Button fx:id="btnIn" layoutX="475.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="In và đóng" />
+                  <Button fx:id="btnHuy" layoutX="355.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy bỏ" />
+                  <Button fx:id="btnIn" layoutX="455.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="In và đóng" />
                </children>
             </AnchorPane>
          </center>
