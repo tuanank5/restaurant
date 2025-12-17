@@ -132,7 +132,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 
     //CHỌN MÓN
     private void chonMon(MonAn mon) {
-        if (dsMonAnDat.containsKey(mon)) {
+    	if (dsMonAnDat.containsKey(mon)) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Món đã chọn");
             alert.setHeaderText(mon.getTenMon());
@@ -140,30 +140,42 @@ public class DoiMonTruoc_Controller implements Initializable {
 
             ButtonType btnTang = new ButtonType("➕ Tăng");
             ButtonType btnGiam = new ButtonType("➖ Giảm");
-            ButtonType btnXoa = new ButtonType("❌ Xoá");
-            ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-
+            ButtonType btnXoa  = new ButtonType("❌ Xoá");
+            ButtonType btnHuy  = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
 
-            Optional<ButtonType> kq = alert.showAndWait();
+            Button btnTangNode = (Button) alert.getDialogPane().lookupButton(btnTang);
+            Button btnGiamNode = (Button) alert.getDialogPane().lookupButton(btnGiam);
+            Button btnXoaNode  = (Button) alert.getDialogPane().lookupButton(btnXoa);
 
-            if (!kq.isPresent()) return;
-
-            if (kq.get() == btnTang) {
+            btnTangNode.addEventFilter(ActionEvent.ACTION, e -> {
                 dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+                hienThiMonMoi();
+                e.consume();
+            });
 
-            } else if (kq.get() == btnGiam) {
+            btnGiamNode.addEventFilter(ActionEvent.ACTION, e -> {
                 int sl = dsMonAnDat.get(mon) - 1;
-                if (sl <= 0) dsMonAnDat.remove(mon);
-                else dsMonAnDat.put(mon, sl);
+                if (sl <= 0) {
+                    dsMonAnDat.remove(mon);
+                    hienThiMonMoi();
+                    alert.close();
+                } else {
+                    dsMonAnDat.put(mon, sl);
+                    hienThiMonMoi();
+                    e.consume();
+                }
+            });
 
-            } else if (kq.get() == btnXoa) {
+            btnXoaNode.addEventHandler(ActionEvent.ACTION, e -> {
                 dsMonAnDat.remove(mon);
-            }
-        } else {
+                hienThiMonMoi();
+            });
+            alert.show(); 
+        }else {
             dsMonAnDat.put(mon, 1);
+            hienThiMonMoi();
         }
-        hienThiMonMoi();
     }
 
     //HIỂN THỊ MÓN MỚI
