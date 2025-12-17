@@ -48,17 +48,28 @@ public class Login_Controller implements Initializable{
     @FXML
     public void login(ActionEvent event) {
         try {
-            // Lấy ra thông tin Tài Khoàn
-            String user = txtUserName.getText();
-            String pass = txtPassword.getText();
-            if (user.isEmpty() || pass.isEmpty()) {
-                showAlert("Cảnh báo", "Vui lòng nhập đầy đủ tài khoản và mật khẩu", Alert.AlertType.WARNING);
-            } if (!user.matches("^(QL|NV)\\d{4}$")) {
-                showAlert("Cảnh báo", "Tài khoản phải bắt đầu bằng 'QL' hoặc 'NV' theo sau là 4 chữ số.", Alert.AlertType.WARNING);
-                return;
-            } if(pass.length() < 6) {
-            	showAlert("Cảnh báo", "Độ dài mật khẩu không phù hợp", Alert.AlertType.WARNING);
-            }
+        	String user = txtUserName.getText().trim();
+        	String pass = txtPassword.getText().trim();
+        	if (user.isEmpty() && pass.isEmpty()) {
+        	    showAlert("Cảnh báo", "Vui lòng nhập tài khoản và mật khẩu!", Alert.AlertType.WARNING);
+        	    return;
+        	}
+        	if (user.isEmpty()) {
+        	    showAlert("Cảnh báo", "Vui lòng nhập tài khoản!", Alert.AlertType.WARNING);
+        	    return;
+        	}
+        	if (pass.isEmpty()) {
+        	    showAlert("Cảnh báo", "Vui lòng nhập mật khẩu!", Alert.AlertType.WARNING);
+        	    return;
+        	}
+        	if (!user.matches("^(QL|NV)\\d{4}$")) {
+        	    showAlert("Cảnh báo","Tài khoản phải bắt đầu bằng 'QL' hoặc 'NV' theo sau là 4 chữ số!",Alert.AlertType.WARNING);
+        	    return;
+        	}
+        	if (pass.length() < 6) {
+        	    showAlert("Cảnh báo","Mật khẩu phải có ít nhất 6 ký tự!",Alert.AlertType.WARNING);
+        	    return;
+        	}
             else {
                 Map<String, Object> filter = new HashMap<>();
                 filter.put("tenTaiKhoan", user);
@@ -117,9 +128,6 @@ public class Login_Controller implements Initializable{
                         showAlert("Cảnh báo", "Tên đăng nhập hoặc mật khẩu không chính xác! Vui lòng thử lại",
                                 Alert.AlertType.WARNING);
                     }
-                } else {
-                    showAlert("Cảnh báo", "Tên đăng nhập hoặc mật khẩu không chính xác! Vui lòng thử lại",
-                            Alert.AlertType.WARNING);
                 }
             }
         } catch (IOException ex) {
