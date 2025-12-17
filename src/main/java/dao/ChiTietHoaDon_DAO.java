@@ -12,5 +12,3 @@ public interface ChiTietHoaDon_DAO extends Entity_DAO<ChiTietHoaDon> {
     void deleteByMaHoaDon(String maHD);
 
 }
-
-

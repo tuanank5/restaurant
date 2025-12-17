@@ -43,7 +43,7 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
     Double getTongDoanhThuNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
     String getMaxMaHoaDon();
     
-    HoaDon getHoaDonTheoMaBan(String maBan);
+    HoaDon getHoaDonTheoMaDatBan(String maDatBan);
     public KhachHang getKhachHangTheoMaDatBan(String maDatBan);
 
 }

@@ -24,17 +24,12 @@ public class ChiTietHoaDon_DAOImpl
 
         try {
             tx.begin();
-
             em.createQuery(
-                "DELETE FROM ChiTietHoaDon c WHERE c.hoaDon.maHD = :maHD"
+                "DELETE FROM ChiTietHoaDon ct WHERE ct.hoaDon.maHD = :ma"
             )
-            .setParameter("maHD", maHD)
+            .setParameter("ma", maHD)
             .executeUpdate();
-
             tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (tx.isActive()) tx.rollback();
         } finally {
             em.close();
         }
@@ -45,7 +40,9 @@ public class ChiTietHoaDon_DAOImpl
         EntityManager em = emf.createEntityManager();
         try {
             return em.createQuery(
-                "SELECT c FROM ChiTietHoaDon c WHERE c.hoaDon.maHD = :maHD",
+                "SELECT ct FROM ChiTietHoaDon ct " +
+                "JOIN FETCH ct.monAn " +
+                "WHERE ct.hoaDon.maHD = :maHD",
                 ChiTietHoaDon.class
             )
             .setParameter("maHD", maHD)
@@ -56,7 +53,6 @@ public class ChiTietHoaDon_DAOImpl
     }
 
 
-    
     @Override
     public boolean themChiTiet(ChiTietHoaDon cthd) {
         EntityManager em = emf.createEntityManager();
@@ -99,44 +95,44 @@ public class ChiTietHoaDon_DAOImpl
         return false;
     }
 
-    @Override
-    public List<ChiTietHoaDon> getDanhSach(String namedQuery, 
-                                         Class<ChiTietHoaDon> entityType) {
-        return null;
-    }
-
-    @Override
-    public List<ChiTietHoaDon> getDanhSach(String namedQuery, 
-                                         Class<ChiTietHoaDon> entityType,
-                                         int limit, int skip) {
-        return null;
-    }
-
-    @Override
-    public List<ChiTietHoaDon> getDanhSach(Class<ChiTietHoaDon> entityType,
-                                         Map<String, Object> parameters) {
-        return null;
-    }
-
-    @Override
-    public List<ChiTietHoaDon> getDanhSach(Class<ChiTietHoaDon> entityType,
-                                         Map<String, Object> parameters,
-                                         int limit, int skip) {
-        return null;
-    }
-
-    @Override
-    public List<ChiTietHoaDon> getDanhSachByDate(int day, int month,
-                                               int year,
-                                               Class<ChiTietHoaDon> entityType,
-                                               String nameColumn) {
-        return null;
-    }
-
-    @Override
-    public Long count(String namedQuery,
-                      Class<ChiTietHoaDon> entityType) {
-        return null;
-    }
+//    @Override
+//    public List<ChiTietHoaDon> getDanhSach(String namedQuery, 
+//                                         Class<ChiTietHoaDon> entityType) {
+//        return null;
+//    }
+//
+//    @Override
+//    public List<ChiTietHoaDon> getDanhSach(String namedQuery, 
+//                                         Class<ChiTietHoaDon> entityType,
+//                                         int limit, int skip) {
+//        return null;
+//    }
+//
+//    @Override
+//    public List<ChiTietHoaDon> getDanhSach(Class<ChiTietHoaDon> entityType,
+//                                         Map<String, Object> parameters) {
+//        return null;
+//    }
+//
+//    @Override
+//    public List<ChiTietHoaDon> getDanhSach(Class<ChiTietHoaDon> entityType,
+//                                         Map<String, Object> parameters,
+//                                         int limit, int skip) {
+//        return null;
+//    }
+//
+//    @Override
+//    public List<ChiTietHoaDon> getDanhSachByDate(int day, int month,
+//                                               int year,
+//                                               Class<ChiTietHoaDon> entityType,
+//                                               String nameColumn) {
+//        return null;
+//    }
+//
+//    @Override
+//    public Long count(String namedQuery,
+//                      Class<ChiTietHoaDon> entityType) {
+//        return null;
+//    }
 
 }

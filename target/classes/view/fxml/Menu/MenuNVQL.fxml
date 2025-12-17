@@ -12,27 +12,27 @@
       <Pane prefHeight="700.0" prefWidth="300.0" style="-fx-background-color: #2C3E50;" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="5.0" layoutY="75.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Main menu" />
-            <Button layoutX="80.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Dashboard" />
-            <Button layoutX="80.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnTaiKhoan" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý tài khoản" />
+            <Button layoutX="80.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Dashboard" />
+            <Button layoutX="80.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnTaiKhoan" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Quản lý tài khoản" />
             <Label layoutX="50.0" layoutY="25.0" style="-fx-text-fill: #ffffff;" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Nhà hàng Út Bi" />
             <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="54.0" size="30" />
-            <Button layoutX="80.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnBan" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý bàn" />
-            <Button layoutX="80.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnNhanVien" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý nhân viên" />
-            <Button layoutX="80.0" layoutY="225.0" mnemonicParsing="false" onAction="#btnThongKe" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý thống kê" />
+            <Button layoutX="80.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnBan" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Quản lý bàn" />
+            <Button layoutX="80.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnNhanVien" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Quản lý nhân viên" />
+            <Button layoutX="80.0" layoutY="225.0" mnemonicParsing="false" onAction="#btnThongKe" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Quản lý thống kê" />
             <FontAwesomeIconView fill="#f9c410" glyphName="DASHBOARD" layoutX="20.0" layoutY="150.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="GEAR" layoutX="20.0" layoutY="200.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="TAG" layoutX="20.0" layoutY="300.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USER" layoutX="20.0" layoutY="350.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="400.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="BAR_CHART" layoutX="20.0" layoutY="250.0" size="25" />
-            <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnKhuyenMai" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Cập nhật khuyến mãi" />
+            <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnKhuyenMai" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Cập nhật khuyến mãi" />
             <Label layoutX="5.0" layoutY="500.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Settings" />
             <FontAwesomeIconView fill="#f9c410" glyphName="LOCK" layoutX="20.0" layoutY="575.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="SIGN_OUT" layoutX="20.0" layoutY="625.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USER" layoutX="20.0" layoutY="675.0" size="25" />
-            <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnDoiMatKhau" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi mật khẩu" />
-            <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnDangXuat" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đăng xuất" />
-            <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="160.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+            <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnDoiMatKhau" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Đổi mật khẩu" />
+            <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnDangXuat" prefHeight="30.0" prefWidth="160.0" styleClass="btnChucNang" stylesheets="@../../css/SystemDesign.css" text="Đăng xuất" />
+            <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="179.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
          </children>
       </Pane>
    </left>

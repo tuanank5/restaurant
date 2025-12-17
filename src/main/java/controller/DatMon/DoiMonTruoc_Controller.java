@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import controller.Menu.MenuNV_Controller;
 import dao.HoaDon_DAO;
 import dao.impl.HoaDon_DAOImpl;
 import dao.ChiTietHoaDon_DAO;
@@ -58,7 +59,6 @@ public class DoiMonTruoc_Controller implements Initializable {
     @FXML private ScrollPane scrollPaneMon;
     @FXML private GridPane gridPaneMon;
 
-    // TABLE MÓN CŨ
     @FXML private TableView<ChiTietHoaDon> tblMonCu;
     @FXML private TableColumn<ChiTietHoaDon, Integer> colSTT;
     @FXML private TableColumn<ChiTietHoaDon, String> colTenMonCu;
@@ -90,26 +90,32 @@ public class DoiMonTruoc_Controller implements Initializable {
 
         txtTim.textProperty().addListener((obs, o, n) -> timMonTheoTen());
 
-        // ===== TABLE MÓN CŨ =====
         tblMonCu.setItems(danhSachMon);
 
         colSTT.setCellValueFactory(col ->
             new ReadOnlyObjectWrapper<>(tblMonCu.getItems().indexOf(col.getValue()) + 1)
         );
 
-        colTenMonCu.setCellValueFactory(c ->
-            new ReadOnlyObjectWrapper<>(c.getValue().getMonAn().getTenMon())
-        );
+        colTenMonCu.setCellValueFactory(c -> {
+            ChiTietHoaDon ct = c.getValue();
+            return new ReadOnlyObjectWrapper<>(
+                ct.getMonAn() == null ? "" : ct.getMonAn().getTenMon()
+            );
+        });
 
         colSoLuongCu.setCellValueFactory(c ->
             new ReadOnlyObjectWrapper<>(c.getValue().getSoLuong())
         );
 
         colDonGia.setCellValueFactory(c ->
-            new ReadOnlyObjectWrapper<>(c.getValue().getThanhTien())
+            new ReadOnlyObjectWrapper<>(
+                c.getValue().getMonAn() == null
+                    ? 0.0
+                    : c.getValue().getMonAn().getDonGia()
+            )
         );
 
-        colDonGia.setCellFactory(column -> new TableCell<ChiTietHoaDon, Double>() {
+        colDonGia.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
@@ -117,12 +123,15 @@ public class DoiMonTruoc_Controller implements Initializable {
             }
         });
 
-        loadMonCu();
+        javafx.application.Platform.runLater(() -> {
+            loadMonCu();
+        });
     }
 
-    // ===== CHỌN MÓN =====
-    private void chonMon(MonAn mon) {
 
+
+    //CHỌN MÓN
+    private void chonMon(MonAn mon) {
         if (dsMonAnDat.containsKey(mon)) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Món đã chọn");
@@ -151,45 +160,48 @@ public class DoiMonTruoc_Controller implements Initializable {
             } else if (kq.get() == btnXoa) {
                 dsMonAnDat.remove(mon);
             }
-
         } else {
             dsMonAnDat.put(mon, 1);
         }
-
         hienThiMonMoi();
     }
 
-    // ===== HIỂN THỊ MÓN MỚI =====
+    //HIỂN THỊ MÓN MỚI
     private void hienThiMonMoi() {
         danhSachMon.clear();
         for (Map.Entry<MonAn,Integer> e : dsMonAnDat.entrySet()) {
-            ChiTietHoaDon ct = new ChiTietHoaDon();
-            ct.setMonAn(e.getKey());
-            ct.setSoLuong(e.getValue());
-            ct.setThanhTien(e.getKey().getDonGia() * e.getValue());
+        	ChiTietHoaDon ct = new ChiTietHoaDon();
+        	ct.setMonAn(e.getKey());
+        	ct.setSoLuong(e.getValue());
             danhSachMon.add(ct);
         }
-        tblMonCu.refresh();  // Cập nhật TableView ngay
+        tblMonCu.refresh();
     }
 
-    // ===== LOAD MÓN CŨ TỪ HÓA ĐƠN =====
+    // lấy món cũ lên     
     private void loadMonCu() {
-
         if (donDatBanDuocChon == null) return;
+        if (donDatBanDuocChon == null) return;
+        HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(
+            donDatBanDuocChon.getMaDatBan()
+        );
+        
+        if (hd == null) return;
+        List<ChiTietHoaDon> dsCTHD =
+            chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHoaDon());
 
-        String maBan = donDatBanDuocChon.getMaDatBan();
-        HoaDon hd = hoaDonDAO.getHoaDonTheoMaBan(maBan);
+        dsMonAnDat.clear();
+        danhSachMon.clear();
 
-        if (hd == null) {
-            danhSachMon.clear();
-            return;
+        for (ChiTietHoaDon ct : dsCTHD) {
+            if (ct.getMonAn() != null) {
+                dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
+            }
         }
-
-        List<ChiTietHoaDon> list = chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHoaDon());
-        danhSachMon.setAll(list);
+        hienThiMonMoi();
     }
 
-    // ===== TÌM MÓN =====
+    //TÌM MÓN
     private void timMonTheoTen() {
         String tuKhoa = txtTim.getText().trim().toLowerCase();
         List<MonAn> dsLoc = new ArrayList<>();
@@ -205,7 +217,7 @@ public class DoiMonTruoc_Controller implements Initializable {
         loadMonAnToGrid(dsLoc);
     }
 
-    // ===== LỌC LOẠI MÓN =====
+    //LỌC LOẠI MÓN
     private void locMonTheoLoai() {
         String loaiChon = comBoxPhanLoai.getValue();
         List<MonAn> dsLoc = new ArrayList<>();
@@ -231,7 +243,7 @@ public class DoiMonTruoc_Controller implements Initializable {
         comBoxPhanLoai.setOnAction(e -> locMonTheoLoai());
     }
 
-    // ===== LOAD GRID MÓN ĂN =====
+    //LOAD GRID MÓN ĂN
     private void loadMonAnToGrid(List<MonAn> danhSach) {
         gridPaneMon.getChildren().clear();
         gridPaneMon.getColumnConstraints().clear();
@@ -260,7 +272,6 @@ public class DoiMonTruoc_Controller implements Initializable {
 
             Label lblTen = new Label(mon.getTenMon());
             lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
-
             Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
 
             Button btnChon = new Button("Chọn");
@@ -271,8 +282,8 @@ public class DoiMonTruoc_Controller implements Initializable {
             box.setStyle("-fx-alignment:center; -fx-border-color:#ccc; -fx-background-color:white;");
 
             gridPaneMon.add(box, col, row);
-
             col++;
+            
             if (col == columns) {
                 col = 0;
                 row++;
@@ -284,23 +295,22 @@ public class DoiMonTruoc_Controller implements Initializable {
         return String.format("%,.0f", soTien);
     }
 
-    // ===== XÁC NHẬN ĐỔI MÓN =====
     @FXML
     private void btnXacNhan(ActionEvent e) {
-
         if (donDatBanDuocChon == null) {
             alert("Lỗi", "Chưa chọn đơn đặt bàn!");
             return;
         }
         
-        // ===== DEBUG =====
-        System.out.println("Bàn chọn: " + donDatBanDuocChon.getMaDatBan());
-        HoaDon hd1 = hoaDonDAO.getHoaDonTheoMaBan(donDatBanDuocChon.getMaDatBan());
+        System.out.println("Đơn đặt bàn: " + donDatBanDuocChon.getMaDatBan());
+        HoaDon hd1 = hoaDonDAO.getHoaDonTheoMaDatBan(
+            donDatBanDuocChon.getMaDatBan()
+        );
+        
         System.out.println("HoaDon: " + hd1);
-        // =================
-
-        String maBan = donDatBanDuocChon.getMaDatBan();
-        HoaDon hd = hoaDonDAO.getHoaDonTheoMaBan(maBan);
+        HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(
+        	    donDatBanDuocChon.getMaDatBan()
+        	);
 
         if (hd == null) {
             alert("Lỗi", "Không tìm thấy hóa đơn!");
@@ -310,7 +320,6 @@ public class DoiMonTruoc_Controller implements Initializable {
         try {
             // Xóa món cũ
             chiTietHoaDonDAO.deleteByMaHoaDon(hd.getMaHoaDon());
-
             // Ghi món mới
             for (Map.Entry<MonAn,Integer> eMon : dsMonAnDat.entrySet()) {
                 MonAn mon = eMon.getKey();
@@ -322,9 +331,8 @@ public class DoiMonTruoc_Controller implements Initializable {
                 ct.setThanhTien(mon.getDonGia() * sl);
                 chiTietHoaDonDAO.themChiTiet(ct); 
             }
-
             alert("Thành công", "Đổi món thành công!");
-
+            MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
         } catch (Exception ex) {
             alert("Lỗi", "Không lưu được: " + ex.getMessage());
         }
@@ -339,5 +347,3 @@ public class DoiMonTruoc_Controller implements Initializable {
     }
     
 }
-
-

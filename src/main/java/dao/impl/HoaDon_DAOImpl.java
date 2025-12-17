@@ -445,21 +445,25 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	}
 	
 	@Override
-	public HoaDon getHoaDonTheoMaBan(String maBan) {
+	public HoaDon getHoaDonTheoMaDatBan(String maDatBan) {
 	    EntityManager em = emf.createEntityManager();
 	    try {
-	    	return em.createQuery(
-	    	        "SELECT h FROM HoaDon h WHERE h.donDatBan.ban.maBan = :mb",
-	    	        HoaDon.class)
-	    	        .setParameter("mb", maBan)
-	    	        .getResultStream()
-	    	        .findFirst()
-	    	        .orElse(null);
-
+	        return em.createQuery(
+	            "SELECT hd FROM HoaDon hd " +
+	            "WHERE hd.donDatBan.maDatBan = :ma",
+	            HoaDon.class
+	        )
+	        .setParameter("ma", maDatBan)
+	        .getResultStream()
+	        .findFirst()
+	        .orElse(null);
 	    } finally {
 	        em.close();
 	    }
 	}
+
+
+
 	
 	@Override
 	public KhachHang getKhachHangTheoMaDatBan(String maDatBan) {
