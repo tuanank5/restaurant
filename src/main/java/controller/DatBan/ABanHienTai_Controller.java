@@ -24,6 +24,7 @@ import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
@@ -274,10 +275,13 @@ public class ABanHienTai_Controller {
 
                 BorderPane paneTien = new BorderPane();
                 paneEast.setTop(paneTien);
-                paneTien.setCenter(new Label("0đ"));
-                paneTien.setStyle(getBorderStyle()); // Thêm viền cho paneTien
+                double tongTien = tinhTongTienMon(hoaDon);
+                Label lblTien = new Label(String.format(" %,.0f VND ", tongTien));
 
-                Button btnMonAn = new Button("MA");
+                paneTien.setCenter(lblTien);
+
+
+                Button btnMonAn = new Button("\nMA");
                 btnMonAn.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneEast.setLeft(btnMonAn);
                 btnMonAn.setOnMouseClicked(event -> {
@@ -287,7 +291,7 @@ public class ABanHienTai_Controller {
                 });
 
 
-                Button btnKhac = new Button("K");
+                Button btnKhac = new Button("\nK");
                 btnKhac.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneEast.setRight(btnKhac);
                 btnKhac.setOnMouseClicked(event -> {
@@ -477,6 +481,21 @@ public class ABanHienTai_Controller {
 //            showAlert(Alert.AlertType.ERROR, "Cập nhật trạng thái thất bại!");
 //        }
 //    }
+    
+    private double tinhTongTienMon(HoaDon hoaDon) {
+        List<ChiTietHoaDon> dsCT =
+                RestaurantApplication.getInstance()
+                        .getDatabaseContext()
+                        .newEntity_DAO(ChiTietHoaDon_DAO.class)
+                        .getChiTietTheoMaHoaDon(hoaDon.getMaHoaDon());
+
+        double tong = 0;
+        for (ChiTietHoaDon ct : dsCT) {
+            tong += ct.getSoLuong() * ct.getMonAn().getDonGia(); 
+        }
+        return tong;
+    }
+
     
    
 

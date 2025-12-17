@@ -25,12 +25,16 @@ public class ChiTietHoaDon_DAOImpl
         try {
             tx.begin();
 
-            em.createQuery("DELETE FROM ChiTietHoaDon WHERE hoaDon.maHoaDon = :ma")
-              .setParameter("ma", maHD)
-              .executeUpdate();
+            em.createQuery(
+                "DELETE FROM ChiTietHoaDon c WHERE c.hoaDon.maHD = :maHD"
+            )
+            .setParameter("maHD", maHD)
+            .executeUpdate();
 
             tx.commit();
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx.isActive()) tx.rollback();
         } finally {
             em.close();
         }
@@ -41,14 +45,16 @@ public class ChiTietHoaDon_DAOImpl
         EntityManager em = emf.createEntityManager();
         try {
             return em.createQuery(
-                    "SELECT c FROM ChiTietHoaDon c WHERE c.hoaDon.maHD = :maHD",
-                    ChiTietHoaDon.class)
-                    .setParameter("maHD", maHD)
-                    .getResultList();
+                "SELECT c FROM ChiTietHoaDon c WHERE c.hoaDon.maHD = :maHD",
+                ChiTietHoaDon.class
+            )
+            .setParameter("maHD", maHD)
+            .getResultList();
         } finally {
             em.close();
         }
     }
+
 
     
     @Override
