@@ -60,7 +60,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
         cmbTrangThai.setValue("Tất cả");
         cmbTrangThai.setOnAction(e -> filterBanTheoTrangThai());
-        loadLoaiBan();
         loadGioBatDau();
         
         if (donDatBanDuocChon != null) {
@@ -74,15 +73,22 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         btnTroLai.setOnAction(event -> onTroLai(event));
         dpNgayDatBan.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
         cmbGioBatDau.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
+        khoiTaoLoaiBan();
     }
 
-    private void loadLoaiBan() {
-        dsLoaiBan = loaiBanDAO.getAll();
+    private void khoiTaoLoaiBan() {
         cmbLoaiBan.getItems().clear();
+        cmbLoaiBan.getItems().add("Tất cả");
+
+        List<LoaiBan> dsLoaiBan = loaiBanDAO.getDanhSach("LoaiBan.list", LoaiBan.class);
         for (LoaiBan lb : dsLoaiBan) {
             cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
         }
+        cmbLoaiBan.setValue("Tất cả");
+
+        cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
     }
+
 
     private void loadGioBatDau() {
         cmbGioBatDau.getItems().clear();
@@ -152,7 +158,20 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
         int col = 0, row = 0;
         final int MAX_COLS = 5;
+        String loaiBanChon = cmbLoaiBan.getValue();
+        LocalDate ngay = dpNgayDatBan.getValue();
+        String gioStr = cmbGioBatDau.getValue();
+        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0,2)), 0);
+
         for (Ban ban : danhSachBan) {
+            String trangThaiThucTe = getTrangThaiThucTe(ban, ngay, gio);
+
+            // Lọc theo loại bàn
+            boolean matchLoai = "Tất cả".equals(loaiBanChon) || 
+                                ban.getLoaiBan().getTenLoaiBan().equals(loaiBanChon);
+
+            if (!matchLoai) continue;
+
             Button btnBan = taoNutBan(ban);
             gridPaneBan.add(btnBan, col, row);
             col++;
@@ -161,6 +180,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                 row++;
             }
         }
+        
     }
 
     private Button taoNutBan(Ban ban) {
