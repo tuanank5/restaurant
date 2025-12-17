@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,6 +31,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 public class MenuNV_Controller {
@@ -58,7 +60,8 @@ public class MenuNV_Controller {
 	public static TaiKhoan taiKhoan;
 
 	@FXML
-    private BorderPane borderPane;
+	private BorderPane contentPane;
+
 
     @FXML
     private TextField txtThongTin;
@@ -73,18 +76,30 @@ public class MenuNV_Controller {
     }
 
     
-	public FXMLLoader readyUI(String ui) {
-        Parent root = null;
-        FXMLLoader fxmlLoader = new FXMLLoader();
+    public FXMLLoader readyUI(String ui) {
         try {
-            fxmlLoader.setLocation(getClass().getResource("/view/fxml/" + ui + ".fxml"));
-            root = fxmlLoader.load();
-            borderPane.setCenter(root);
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/fxml/" + ui + ".fxml")
+            );
+            Parent root = loader.load();
+
+            contentPane.setCenter(root);
+
+            if (root instanceof Region r) {
+                BorderPane.setAlignment(r, Pos.CENTER);
+                r.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            }
+
+            return loader;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return fxmlLoader;
     }
+
+
+	
+
 	
 	public void setThongTin(TaiKhoan taiKhoan) {
 	    this.taiKhoan = taiKhoan;

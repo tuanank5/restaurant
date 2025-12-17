@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -12,98 +13,117 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.ABanHienTai_Controller">
-   <top>
-      <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <left>
-            <AnchorPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button fx:id="btnChoThanhToan" layoutX="30.0" layoutY="30.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Chờ thanh toán" />
-                  <Button fx:id="btnDatTruoc" layoutX="180.0" layoutY="30.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt trước" />
-               </children>
-            </AnchorPane>
-         </left>
-         <right>
-            <AnchorPane prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button fx:id="btnDatBan" layoutX="30.0" layoutY="30.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt bàn" />
-                  <ComboBox fx:id="cmbLoaiBan" layoutX="200.0" layoutY="30.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
-                  <Label layoutX="130.0" layoutY="35.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn:" />
-                  <Button disable="true" layoutX="387.0" layoutY="30.0" mnemonicParsing="false" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
-                  <TextField fx:id="txtTimKiem" layoutX="470.0" layoutY="30.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-               </children>
-            </AnchorPane>
-         </right>
-      </BorderPane>
-   </top>
-   <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <center>
-            <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <ScrollPane>
-                     <content>
-                        <GridPane fx:id="gridPaneHD">
-                           <columnConstraints>
-                              <ColumnConstraints />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints />
-                           </rowConstraints>
-                           <children>
-                              <BorderPane fx:id="borderPane">
-                                 <left>
-                                    <BorderPane fx:id="paneWest" BorderPane.alignment="CENTER">
-                                       <top>
-                                          <BorderPane fx:id="paneBan" BorderPane.alignment="CENTER" />
-                                       </top>
-                                       <left>
-                                          <Button fx:id="btnThanhToan" mnemonicParsing="false" BorderPane.alignment="CENTER" />
-                                       </left>
-                                       <right>
-                                          <Button fx:id="btnBan" mnemonicParsing="false" BorderPane.alignment="CENTER" />
-                                       </right>
+<BorderPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="-1" prefWidth="-1" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatBan.ABanHienTai_Controller">
+
+    <!-- ================= TOP ================= -->
+    <top>
+        <BorderPane prefHeight="100.0">
+            <left>
+                <AnchorPane prefWidth="300.0">
+                    <children>
+                        <Button fx:id="btnChoThanhToan" layoutX="30" layoutY="30" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Chờ thanh toán" />
+
+                        <Button fx:id="btnDatTruoc" layoutX="180" layoutY="30" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt trước" />
+                    </children>
+                </AnchorPane>
+            </left>
+
+            <right>
+                <AnchorPane prefWidth="700.0">
+                    <children>
+                        <Button fx:id="btnDatBan" layoutX="30" layoutY="30" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt bàn" />
+
+                        <Label layoutX="130" layoutY="35" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn:" />
+
+                        <ComboBox fx:id="cmbLoaiBan" layoutX="200" layoutY="30" prefWidth="150" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+
+                        <Button disable="true" layoutX="387" layoutY="30" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm">
+                     <styleClass>
+                        <String fx:value="btn" />
+                        <String fx:value="btn" />
+                     </styleClass></Button>
+
+                        <TextField fx:id="txtTimKiem" layoutX="470" layoutY="30" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                    </children>
+                </AnchorPane>
+            </right>
+        </BorderPane>
+    </top>
+
+    <!-- ================= CENTER ================= -->
+    <center>
+        <BorderPane maxHeight="Infinity" maxWidth="Infinity">
+            <center>
+                <VBox maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <content>
+                            <GridPane fx:id="gridPaneHD" maxHeight="Infinity" maxWidth="Infinity">
+                                <children>
+                                    <BorderPane fx:id="borderPane" maxHeight="Infinity" maxWidth="Infinity">
+
+                                        <top>
+                                            <BorderPane fx:id="paneNorth" />
+                                        </top>
+
+                                        <left>
+                                            <BorderPane fx:id="paneWest">
+                                                <top>
+                                                    <BorderPane fx:id="paneBan" />
+                                                </top>
+                                                <left>
+                                                    <Button fx:id="btnThanhToan" />
+                                                </left>
+                                                <right>
+                                                    <Button fx:id="btnBan" />
+                                                </right>
+                                            </BorderPane>
+                                        </left>
+
+                                        <right>
+                                            <BorderPane fx:id="paneEast">
+                                                <top>
+                                                    <BorderPane fx:id="paneTien" />
+                                                </top>
+                                                <left>
+                                                    <Button fx:id="btnMonAn" />
+                                                </left>
+                                                <right>
+                                                    <Button fx:id="btnKhac" />
+                                                </right>
+                                            </BorderPane>
+                                        </right>
+
                                     </BorderPane>
-                                 </left>
-                                 <right>
-                                    <BorderPane fx:id="paneEast" BorderPane.alignment="CENTER">
-                                       <right>
-                                          <Button fx:id="btnKhac" mnemonicParsing="false" BorderPane.alignment="CENTER" />
-                                       </right>
-                                       <left>
-                                          <Button fx:id="btnMonAn" mnemonicParsing="false" BorderPane.alignment="CENTER" />
-                                       </left>
-                                       <top>
-                                          <BorderPane fx:id="paneTien" BorderPane.alignment="CENTER" />
-                                       </top>
-                                    </BorderPane>
-                                 </right>
-                                 <top>
-                                    <BorderPane fx:id="paneNorth" BorderPane.alignment="CENTER" />
-                                 </top>
-                              </BorderPane>
-                           </children>
-                        </GridPane>
-                     </content>
-                  </ScrollPane>
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-   </center>
-   <bottom>
-      <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <right>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-         </right>
-         <left>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <TextField fx:id="txtTongDatBan" layoutX="125.0" layoutY="10.0" prefWidth="50.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                  <Label layoutX="30.0" layoutY="15.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng đặt bàn:" />
-               </children>
-            </AnchorPane>
-         </left>
-      </BorderPane>
-   </bottom>
+                                </children>
+                        <columnConstraints>
+                           <ColumnConstraints />
+                        </columnConstraints>
+                        <rowConstraints>
+                           <RowConstraints />
+                        </rowConstraints>
+                            </GridPane>
+                        </content>
+                    </ScrollPane>
+
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+
+    <!-- ================= BOTTOM ================= -->
+    <bottom>
+        <BorderPane prefHeight="50">
+            <left>
+                <AnchorPane>
+                    <children>
+                        <Label layoutX="30" layoutY="15" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng đặt bàn:" />
+
+                        <TextField fx:id="txtTongDatBan" layoutX="125" layoutY="10" prefWidth="50" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                    </children>
+                </AnchorPane>
+            </left>
+        </BorderPane>
+    </bottom>
+
 </BorderPane>
