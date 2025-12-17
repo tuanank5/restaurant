@@ -49,6 +49,7 @@ public class MenuNV_Controller {
 	public static Ban banDangChon;
 	public static DonDatBan DonDatBan;
 	public static KhachHang khachHangDangChon;
+	public static DonDatBan donDatBanDangDoi;
 	public static ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
 	
 	// Lưu món ăn tạm theo từng bàn

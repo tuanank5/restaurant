@@ -117,7 +117,9 @@ public class ABanHienTai_Controller {
         	loadDanhSachHoaDon();
         } else if (source == btnDatTruoc) {
         	
-        } 
+        }else if(source == btnBan) {
+        	MenuNV_Controller.instance.readyUI("DatBan/aDoiBan");
+        }
     }
 
 	@FXML
@@ -256,7 +258,8 @@ public class ABanHienTai_Controller {
                 btnBan.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneWest.setRight(btnBan);
                 btnBan.setOnMouseClicked(event -> {
-                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
+//                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
+                	MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
                 	MenuNV_Controller.instance.readyUI("DatBan/aDoiBan");
                 });
 
