@@ -2,6 +2,8 @@ package dao.impl;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -204,6 +206,9 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	
 	@Override
     public List<DonDatBan> getAllDonDatBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+		LocalDateTime startDateTime = dateStart.atStartOfDay(); 
+		LocalDateTime endDateTime   = dateEnd.atTime(LocalTime.MAX);
+		
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<DonDatBan> dsDon = null;
 
@@ -211,8 +216,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
             String jpql = "SELECT DDB FROM DonDatBan DDB WHERE DDB.ngayGioLapDon BETWEEN :dateStart AND :dateEnd";
             TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
 
-            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
-            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
+            query.setParameter("dateStart", startDateTime);
+            query.setParameter("dateEnd", endDateTime);
 
             dsDon = query.getResultList();
 
@@ -225,6 +230,9 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	
 	@Override
     public List<String> getKhachHangTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+		LocalDateTime startDateTime = dateStart.atStartOfDay(); 
+		LocalDateTime endDateTime   = dateEnd.atTime(LocalTime.MAX);
+		
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<String> dsKH = null;
 
@@ -234,8 +242,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 
             TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
 
-            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
-            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
+            query.setParameter("dateStart", startDateTime);
+            query.setParameter("dateEnd", endDateTime);
 
             dsKH = query.getResultList();
         } finally {
@@ -322,6 +330,9 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	
 	@Override
     public Map<LoaiBan, Integer> countLoaiBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+		LocalDateTime startDateTime = dateStart.atStartOfDay(); 
+		LocalDateTime endDateTime   = dateEnd.atTime(LocalTime.MAX);
+		
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Map<LoaiBan, Integer> demLoaiBan = new HashMap<>();
         try {
@@ -332,8 +343,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
                     "GROUP BY B.loaiBan";
             TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
 
-            query.setParameter("dateStart", java.sql.Timestamp.valueOf(dateStart.atStartOfDay()));
-            query.setParameter("dateEnd", java.sql.Timestamp.valueOf(dateEnd.atStartOfDay()));
+            query.setParameter("dateStart", startDateTime);
+            query.setParameter("dateEnd", endDateTime);
 
             for (Object[] result : query.getResultList()) {
             	LoaiBan loai = (LoaiBan) result[0];
