@@ -66,10 +66,10 @@
 <center>
 <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="txtSDT" layoutX="83.0" layoutY="36.0" prefHeight="25.0" prefWidth="300.0" />
+                        <TextField fx:id="txtKH" layoutX="83.0" layoutY="36.0" prefHeight="25.0" prefWidth="300.0" />
                         <Button layoutX="394.0" layoutY="22.0" mnemonicParsing="false" onAction="#btnTimKiem" prefHeight="35.0" prefWidth="45.0" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="407.0" layoutY="45.0" size="18" text="" wrappingWidth="18.142857551574707" />
-                        <Label layoutX="84.0" layoutY="13.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách Hàng - Số Điện Thoại" />
+                        <Label layoutX="84.0" layoutY="13.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách Hàng" />
                      </children>
 </Pane>
 </center>
