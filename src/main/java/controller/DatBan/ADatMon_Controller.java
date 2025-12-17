@@ -70,6 +70,9 @@ public class ADatMon_Controller implements Initializable {
     private Button btnGiam;
 
     @FXML
+    private TextField txtKhachHang;
+    
+    @FXML
     private Button btnHuy;
 
     @FXML
@@ -112,16 +115,11 @@ public class ADatMon_Controller implements Initializable {
     private TextField txtMaBan;
 
     @FXML
-    private TextField txtNhanVien;
-
-    @FXML
     private TextField txtSoLuong;
     
     //-----Bàn---------
     private Ban banDangChon;
-
-    
-    private NhanVien_DAO nhanVienDAO = new NhanVien_DAOImpl();
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
     private List<MonAn> dsMonAn;
@@ -142,7 +140,7 @@ public class ADatMon_Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     	 // Lấy danh sách món ăn từ DB
         dsMonAn = monAnDAO.getDanhSachMonAn();
-        loadTenNhanVien();
+        loadTenKhachHang();
         // lấy sluong khách
         txtSoLuong.setText(String.valueOf(MenuNV_Controller.soLuongKhach));
         // Khởi tạo ComboBox phân loại (dùng dsMonAn)
@@ -187,13 +185,24 @@ public class ADatMon_Controller implements Initializable {
     	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
     }
     
-    public void loadTenNhanVien() {
-        if (MenuNV_Controller.taiKhoan != null) {
-            String ten = MenuNV_Controller.taiKhoan.getNhanVien().getTenNV();
-            txtNhanVien.setText(ten);
+// cài khách hàng
+    private KhachHang khachHangDangChon;
+
+    public void setKhachHang(KhachHang kh) {
+        this.khachHangDangChon = kh;
+        if (kh != null) {
+            txtKhachHang.setText(kh.getTenKH());
         }
     }
     
+    private void loadTenKhachHang() {
+        if (MenuNV_Controller.khachHangDangChon != null) {
+            txtKhachHang.setText(MenuNV_Controller.khachHangDangChon.getTenKH());
+        } else {
+            txtKhachHang.setText("Khách lẻ");
+        }
+    }
+
     private void khoiTaoComboBoxPhanLoai() {
         // Lấy danh sách loại món duy nhất
         List<String> danhSachLoai = new ArrayList<>();
@@ -281,46 +290,55 @@ public class ADatMon_Controller implements Initializable {
 		return null;
 	}
 
-	private void themHD(DonDatBan ddb) {
-    	HoaDon hd = new HoaDon();
-    	hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
-    	LocalDate localDate = LocalDate.now();
+    private void themHD(DonDatBan ddb) {
+        HoaDon hd = new HoaDon();
+        hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
+        LocalDate localDate = LocalDate.now();
         Date dateNow = Date.valueOf(localDate);
-    	hd.setNgayLap(dateNow);
-    	
-    	hd.setTrangThai("Chưa thanh toán");
-    	hd.setKieuThanhToan("Tiền mặt");
-    	
-    	KhachHang kh = new KhachHang();
-    	kh.setMaKH("KH0001");
-    	hd.setKhachHang(kh);
-    	hd.setKhuyenMai(null);
-    	hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-    	hd.setDonDatBan(ddb);
-    	hd.setCoc(null);
-    	
-    	try {
-   	     if (hd != null) {
-   	        boolean check = RestaurantApplication.getInstance()
-   	                    .getDatabaseContext()
-   	                    .newEntity_DAO(HoaDon_DAO.class)
-   	                    .them(hd);
-   	            //Kiểm tra kết quả thêm
-   	            if (check) {
-   	                showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
-   	                if (!dsMonAnDat.isEmpty()) {
-   	   	                themChiTietHoaDon(hd, dsMonAnDat);
-   	   	                MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
-   	                } 
-   	            } else {
-   	                showAlert("Thông báo", "Lưu hóa đơn tạm thất bại!", Alert.AlertType.WARNING);
-   	            }
-   	        }
-   	    } catch (Exception e) {
-   	        e.printStackTrace();
-   	        showAlert("Lỗi", "ADatMon_Controller lỗi", Alert.AlertType.ERROR);
-   	    }
+        hd.setNgayLap(dateNow);
+
+        hd.setTrangThai("Chưa thanh toán");
+        hd.setKieuThanhToan("Tiền mặt");
+
+        // --- Gán khách hàng ---
+        KhachHang kh;
+        if (this.khachHangDangChon != null) {
+            kh = this.khachHangDangChon;
+        } else if (MenuNV_Controller.khachHangDangChon != null) {
+            kh = MenuNV_Controller.khachHangDangChon;
+        } else {
+            kh = new KhachHang();
+            kh.setMaKH("KH0001"); // mặc định khách lẻ
+            kh.setTenKH("Khách lẻ");
+        }
+        hd.setKhachHang(kh);
+
+        hd.setKhuyenMai(null);
+        hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+        hd.setDonDatBan(ddb);
+        hd.setCoc(null);
+
+        try {
+            boolean check = RestaurantApplication.getInstance()
+                    .getDatabaseContext()
+                    .newEntity_DAO(HoaDon_DAO.class)
+                    .them(hd);
+
+            if (check) {
+                showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
+                if (!dsMonAnDat.isEmpty()) {
+                    themChiTietHoaDon(hd, dsMonAnDat);
+                    MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+                }
+            } else {
+                showAlert("Thông báo", "Lưu hóa đơn tạm thất bại!", Alert.AlertType.WARNING);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "ADatMon_Controller lỗi", Alert.AlertType.ERROR);
+        }
     }
+
     
     private void themChiTietHoaDon(HoaDon hd, Map<MonAn, Integer> dsMonAn) {
     	ChiTietHoaDon cthd = new ChiTietHoaDon();

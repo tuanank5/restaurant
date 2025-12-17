@@ -13,10 +13,12 @@ import java.util.ResourceBundle;
 import controller.Menu.MenuNV_Controller;
 import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
+import dao.KhachHang_DAO;
 import dao.MonAn_DAO;
 import dao.NhanVien_DAO;
 import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
+import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.MonAn_DAOImpl;
 import dao.impl.NhanVien_DAOImpl;
 import config.RestaurantApplication;
@@ -105,6 +107,7 @@ public class ADoiMon_Controller implements Initializable{
 
     
     private NhanVien_DAO nhanVienDAO = new NhanVien_DAOImpl();
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
     private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
     private List<MonAn> dsMonAn;
@@ -154,6 +157,7 @@ public class ADoiMon_Controller implements Initializable{
         dsMonAn = monAnDAO.getDanhSachMonAn();
         // Khởi tạo ComboBox phân loại (dùng dsMonAn)
         khoiTaoComboBoxPhanLoai();
+        loadThongTinKhachVaSoLuong();
         loadMonAnToGrid(dsMonAn);
         colSTT.setCellValueFactory(col -> {
             int index = tblDS.getItems().indexOf(col.getValue());
@@ -398,6 +402,34 @@ public class ADoiMon_Controller implements Initializable{
         alert.show();
     }
     
+    private void loadThongTinKhachVaSoLuong() {
+
+        // ===== TÊN KHÁCH =====
+        if (hoaDonHienTai != null && hoaDonHienTai.getKhachHang() != null) {
+            txtKhachHang.setText(hoaDonHienTai.getKhachHang().getTenKH());
+        } else {
+            txtKhachHang.setText("Khách lẻ");
+        }
+
+        // ===== SỐ LƯỢNG KHÁCH =====
+        if (donDatBanHienTai != null) {
+            txtSoLuongKhach.setText(
+                    String.valueOf(donDatBanHienTai.getSoLuong())
+            );
+        }
+
+        // ===== MÃ BÀN =====
+            txtMaBan.setText(
+                    donDatBanHienTai.getBan().getMaBan()
+            );
+        
+    }
+
+
+    }
+
+
+    
     
 
-}
+

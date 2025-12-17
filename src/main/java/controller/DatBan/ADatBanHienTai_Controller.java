@@ -117,8 +117,6 @@ public class ADatBanHienTai_Controller implements Initializable {
 
                 btnBan.setOnMouseClicked(event -> {
                     if (event.getClickCount() == 1) {
-
-                        // ❌ Bàn không trống → cảnh báo
                         if (!"Trống".equals(ban.getTrangThai())) {
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.setTitle("Không thể chọn bàn");
@@ -132,8 +130,6 @@ public class ADatBanHienTai_Controller implements Initializable {
                             btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
                             return;
                         }
-
-                        // ✔ Bàn trống → mở dialog nhập số lượng khách
                         int soLuongChoNgoi = ban.getLoaiBan().getSoLuong();
 
                         Dialog<ButtonType> dialog = new Dialog<>();
@@ -231,8 +227,7 @@ public class ADatBanHienTai_Controller implements Initializable {
 
                                 MenuNV_Controller.banDangChon = ban;
                                 MenuNV_Controller.soLuongKhach = soLuongNhap;
-                                MenuNV_Controller.khachHangDangChon = null;
-
+                                MenuNV_Controller.khachHangDangChon = aBanHienTai_KH;
                                 MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
 
                             } catch (NumberFormatException ex) {
