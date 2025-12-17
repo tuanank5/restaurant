@@ -7,7 +7,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,33 +25,20 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import config.RestaurantApplication;
-import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
-import dao.Ban_DAO;
 import dao.ChiTietHoaDon_DAO;
-import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
 import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
-import dao.MonAn_DAO;
-import dao.NhanVien_DAO;
-import dao.impl.Ban_DAOImpl;
 import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.KhuyenMai_DAOImpl;
-import dao.impl.MonAn_DAOImpl;
-import entity.Ban;
 import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HangKhachHang;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.KhuyenMai;
 import entity.MonAn;
-import entity.NhanVien;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -60,14 +46,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -142,28 +126,22 @@ public class AThanhToan_Controller {
     private Label lblSauGiam;
     
     // --- DAO ---
-    private Ban_DAO banDAO = new Ban_DAOImpl();
     private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
     private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
-    private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-    private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
-    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-    
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();    
     private KhuyenMai_DAO kmDAO = new KhuyenMai_DAOImpl();
 
     // --- Danh sách và trạng thái ---
     private List<HoaDon> dsHoaDon = new ArrayList<>();
-    private List<KhuyenMai> dsKM = new ArrayList<>();
-    
     private ObservableList<ChiTietHoaDon> dsCTHD = FXCollections.observableArrayList();
     private List<ChiTietHoaDon> dsCTHD_DB;
-    private Map<MonAn, Integer> dsMonAn;
     
+    private Map<MonAn, Integer> dsMonAn;
     private HoaDon hoaDonHienTai;
-	double tongThanhTien = 0;
+	double thanhTien = 0;
 	private double Vat_Rate = 0.1;
-	double tongTruocVAT = 0;
-	double tongSauVAT = 0;
+	double tongTruocVAT;
+	double tongSauVAT;
 	
 	public static AThanhToan_Controller aTT;
 
@@ -175,7 +153,7 @@ public class AThanhToan_Controller {
     	
     	dsMonAn = new HashMap<>();
     	for (ChiTietHoaDon cthd : dsCTHD_DB) {
-    		tongThanhTien += cthd.getMonAn().getDonGia() * cthd.getSoLuong();
+    		thanhTien += cthd.getMonAn().getDonGia() * cthd.getSoLuong();
     		dsMonAn.put(cthd.getMonAn(), cthd.getSoLuong());
     	}
     
@@ -196,9 +174,9 @@ public class AThanhToan_Controller {
         
         loadCmbKM();
         capNhatTongTien();
-        lblTichLuy.setText(formatTienVN(Double.parseDouble("0")));
         
-        lblThanhTien.setText(formatTienVN(tongThanhTien));
+        lblTichLuy.setText(formatTienVN(Double.parseDouble("0")));
+        lblThanhTien.setText(formatTienVN(thanhTien));
     }
     
     @FXML
@@ -207,7 +185,7 @@ public class AThanhToan_Controller {
         if (source == btnTamTinh) {
         	xuatHD();
         } else if (source == btnThuTien) {
-            AThuTien_Controller aThuTien_Controller = readyUI("DatBan/aThuTien").getController();
+            readyUI("DatBan/aThuTien");
         } else if (source == btnEdit) {
             
         } else if (source == btnDiemTichLuy) {
@@ -236,27 +214,27 @@ public class AThanhToan_Controller {
         if (km != null) {
             switch (km.getLoaiKM()) {
                 case "Khuyến mãi trên tổng hóa đơn":
-                    tienGiam = tongThanhTien * km.getPhanTramGiamGia() / 100.0;
+                    tienGiam = thanhTien * km.getPhanTramGiamGia() / 100.0;
                     break;
 
                 case "Ưu đãi cho khách hàng Kim Cương":
                     KhachHang kh = khachHangDAO.timTheoMa(hoaDonHienTai.getKhachHang().getMaKH());
                     if (kh != null && kh.getHangKhachHang() != null &&
                             kh.getHangKhachHang().getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
-                        tienGiam = tongThanhTien * km.getPhanTramGiamGia() / 100.0;
+                        tienGiam = thanhTien * km.getPhanTramGiamGia() / 100.0;
                     }
                     break;
             }
         }
-        tongTruocVAT = tongThanhTien - tienGiam;
+        tongTruocVAT = thanhTien - tienGiam;
         if (tongTruocVAT < 0) tongTruocVAT = 0;
         
-        double thueVAT = tongThanhTien * Vat_Rate;
-        tongSauVAT = tongTruocVAT + thueVAT;
+        double thue = thanhTien * Vat_Rate;
+        tongSauVAT = tongTruocVAT + thue;
 
         lblTienGiam.setText(formatTienVN(tienGiam));
         lblSauGiam.setText(formatTienVN(tongTruocVAT));
-        lblThue.setText(formatTienVN(thueVAT));
+        lblThue.setText(formatTienVN(thue));
         lblTong.setText(formatTienVN(tongSauVAT));
     }
 
@@ -265,33 +243,25 @@ public class AThanhToan_Controller {
             int index = tblDS.getItems().indexOf(col.getValue());
             return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
         });
-    	NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    	
 	    colTenMon.setCellValueFactory(cell -> {
 	        String tenMon = cell.getValue().getMonAn().getTenMon();
 	        return new SimpleStringProperty(tenMon);
 	    });
+	    
 	    colSoLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
+	    
 	    colDonGia.setCellValueFactory(cell -> {
 	        double donGia = cell.getValue().getMonAn().getDonGia();
 	        return new SimpleStringProperty(formatTienVN(donGia));
 	    });
-
-	    // Thành tiền
+	    
 	    colThanhTien.setCellValueFactory(cell -> {
 	        MonAn mon = cell.getValue().getMonAn();
 	        int sl = cell.getValue().getSoLuong();
 	        double thanhTien = mon.getDonGia() * sl;
 	        return new SimpleStringProperty(formatTienVN(thanhTien));
 	    });
-	    // Tổng thanh toán
-//	    try {
-//	        double tong = Double.parseDouble(tongTienSauVAT);
-//	        lblTong.setText(formatTienVN(tong));
-//	    } catch (NumberFormatException e) {
-//	        lblTong.setText(tongTienSauVAT);
-//	    }
-	    // Tính tiền trả
-//	    txtTien.textProperty().addListener((obs, oldVal, newVal) -> calculateTienTra());
 	}
 	
 	private void xuatHD() {
@@ -373,8 +343,8 @@ public class AThanhToan_Controller {
 
             // TỔNG KẾT 
             document.add(new Paragraph("Tổng thanh toán: " + lblTong.getText(), fontNormal));
-//            document.add(new Paragraph("Tiền khách đưa: " + txtTien.getText() + " VND", fontNormal));
-//            document.add(new Paragraph("Tiền thừa: " + lblTienTra.getText(), fontNormal));
+//            document.add(new Paragraph("Tiền khách đưa: " + .getText() + " VND", fontNormal));
+//            document.add(new Paragraph("Tiền thừa: " + .getText(), fontNormal));
 
             document.add(Chunk.NEWLINE);
             Paragraph thanks = new Paragraph("Cảm ơn quý khách đã sử dụng dịch vụ!", fontNormal);
@@ -389,9 +359,6 @@ public class AThanhToan_Controller {
             alert.setHeaderText("Thành công!");
             alert.setContentText("Hóa đơn đã được lưu tại:\n" + file.getAbsolutePath());
             alert.showAndWait();
-            
-           // QUAY LẠI GIAO DIỆN DatBan 
-//          MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
             
         } catch (Exception e) {
             e.printStackTrace();

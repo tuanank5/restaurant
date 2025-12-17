@@ -57,11 +57,11 @@
          <center>
             <TableView fx:id="tblDS" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" BorderPane.alignment="CENTER">
                <columns>
-                  <TableColumn fx:id="colSTT" prefWidth="50.0" text="STT" />
+                  <TableColumn fx:id="colSTT" prefWidth="75.0" text="STT" />
                   <TableColumn fx:id="colTenMon" prefWidth="250.0" text="Tên món" />
-                  <TableColumn fx:id="colSoLuong" prefWidth="50.0" text="SL" />
-                  <TableColumn fx:id="colDonGia" prefWidth="175.0" text="Đơn giá" />
-                  <TableColumn fx:id="colThanhTien" prefWidth="175.0" text="Thành tiền" />
+                  <TableColumn fx:id="colSoLuong" prefWidth="75.0" text="SL" />
+                  <TableColumn fx:id="colDonGia" prefWidth="200.0" text="Đơn giá" />
+                  <TableColumn fx:id="colThanhTien" prefWidth="200.0" text="Thành tiền" />
                </columns>
             </TableView>
          </center>
