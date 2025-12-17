@@ -68,7 +68,7 @@ public class DonDatBan_Controller implements Initializable{
     private TableView<DonDatBan> tblView;
 
     @FXML
-    private TextField txtSDT;
+    private TextField txtKH;
     
     @FXML
     private TextField txtTongDonDat;
@@ -91,9 +91,9 @@ public class DonDatBan_Controller implements Initializable{
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-    	dpNgayDatBan.valueProperty().addListener((obs, o, n) -> apDungLoc());
-        cmbTrangThai.valueProperty().addListener((obs, o, n) -> apDungLoc());
-        txtSDT.textProperty().addListener((obs, o, n) -> apDungLoc());
+    	dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> timTheoNgayDatBan());
+    	cmbTrangThai.valueProperty().addListener((obs, oldVal, newVal) -> timTheoTrangThai());
+        txtKH.textProperty().addListener((obs, oldVal, newVal) -> timTheoTenKH());
 		khoiTaoComboBoxes();
 		setValueTable();
 		dpNgayDatBan.setValue(LocalDate.now());
@@ -274,8 +274,71 @@ public class DonDatBan_Controller implements Initializable{
         dialog.showAndWait();
     }
     
+    @FXML
+    private void timTheoNgayDatBan() {
+        LocalDate ngayChon = dpNgayDatBan.getValue();
+        if (ngayChon == null) {
+            tblView.setItems(danhSachDonDatBan); // hiển thị tất cả
+            capNhatTongDon();
+            return;
+        }
+
+        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+        filtered.setPredicate(don -> {
+            LocalDate ngayDon = don.getNgayGioLapDon().toLocalDate();
+            return ngayDon.equals(ngayChon);
+        });
+
+        tblView.setItems(filtered);
+        capNhatTongDon();
+    }
+
+    private void timTheoTenKH() {
+        String key = txtKH.getText() != null ? txtKH.getText().trim().toLowerCase() : "";
+
+        if (key.isEmpty()) {
+            tblView.setItems(danhSachDonDatBan);
+            capNhatTongDon();
+            return;
+        }
+
+        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+        filtered.setPredicate(don -> {
+            if (don == null) return false;
+
+            KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+            if (kh == null || kh.getTenKH() == null) return false;
+
+            // So khớp tên khách (không phân biệt hoa/thường)
+            return kh.getTenKH().toLowerCase().contains(key);
+        });
+
+        tblView.setItems(filtered);
+        capNhatTongDon();
+    }
+
+    @FXML
+    private void timTheoTrangThai() {
+        String trangThaiChon = cmbTrangThai.getValue(); // giá trị hiện tại
+        if (trangThaiChon == null || "Tất cả".equals(trangThaiChon)) {
+            tblView.setItems(danhSachDonDatBan);
+            capNhatTongDon();
+            return;
+        }
+
+        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+        filtered.setPredicate(don -> {
+            String tt = don.getTrangThai();
+            if (tt == null) return false;
+            return tt.trim().equalsIgnoreCase(trangThaiChon.trim());
+        });
+
+        tblView.setItems(filtered);
+        capNhatTongDon();
+    }
+
     private void apDungLoc() {
-        String sdt = txtSDT.getText() != null ? txtSDT.getText().trim() : "";
+        String sdt = txtKH.getText() != null ? txtKH.getText().trim() : "";
         LocalDate ngayChon = dpNgayDatBan.getValue();
         String trangThaiChon = cmbTrangThai.getValue();
 
