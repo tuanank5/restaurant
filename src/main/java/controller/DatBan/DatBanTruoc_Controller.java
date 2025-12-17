@@ -60,12 +60,14 @@ public class DatBanTruoc_Controller implements Initializable {
 
     public static LocalDate ngayDatBanStatic;
     public static String gioBatDauStatic;
+    private String loaiBanChon = "Tất cả";
+
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	dpNgayDatBan.setValue(LocalDate.now());
-    	loadLoaiBan();
         loadGioBatDau();
+        khoiTaoLoaiBan(); 
         loadDanhSachBan();
         cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
         cmbTrangThai.setValue("Tất cả");
@@ -83,14 +85,11 @@ public class DatBanTruoc_Controller implements Initializable {
         btnTroLai.setOnAction(event -> onTroLai(event));
         dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> loadDanhSachBan());
         cmbGioBatDau.setOnAction(e -> loadDanhSachBan());
-    }
-    
-    private void loadLoaiBan() {
-        dsLoaiBan = loaiBanDAO.getAll();
-        cmbLoaiBan.getItems().clear();
-        for (LoaiBan lb : dsLoaiBan) {
-            cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
-        }
+        cmbLoaiBan.setOnAction(e -> {
+            loaiBanChon = cmbLoaiBan.getValue();
+            loadDanhSachBan();
+        });
+
     }
     
     private void loadGioBatDau() {
@@ -103,6 +102,25 @@ public class DatBanTruoc_Controller implements Initializable {
         cmbGioBatDau.setValue("08:00");
     }
     
+
+    private void khoiTaoLoaiBan() {
+        cmbLoaiBan.getItems().clear();
+        cmbLoaiBan.getItems().add("Tất cả");
+
+        List<LoaiBan> dsLoaiBan = loaiBanDAO.getDanhSach("LoaiBan.list", LoaiBan.class);
+        for (LoaiBan lb : dsLoaiBan) {
+            cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
+        }
+
+        cmbLoaiBan.setValue("Tất cả");
+
+        cmbLoaiBan.setOnAction(e -> {
+            loaiBanChon = cmbLoaiBan.getValue();   // ← bắt buộc phải có
+            loadDanhSachBan();
+        });
+    }
+
+
     // LOAD DANH SÁCH BÀN — CHUẨN HÓA LOGIC
     private void loadDanhSachBan() {
         gridPaneBan.getChildren().clear();
@@ -112,7 +130,14 @@ public class DatBanTruoc_Controller implements Initializable {
         LocalDate ngayChon = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
         LocalTime gioChon = (gioStr != null ? LocalTime.parse(gioStr) : null);
+        
         for (Ban ban : danhSachBan) {
+        	if (loaiBanChon != null && !loaiBanChon.equals("Tất cả")) {
+                if (!ban.getLoaiBan().getTenLoaiBan().equalsIgnoreCase(loaiBanChon)) {
+                    continue;
+                }
+            }
+            
             boolean banBan = (ngayChon != null && gioChon != null)
                     && isBanDangBan(ban, ngayChon, gioChon);
             String bgColor = banBan ? "#ff0000" : "#00aa00"; // đỏ / xanh
