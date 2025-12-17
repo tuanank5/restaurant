@@ -148,8 +148,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         List<String> dsKH = null;
 
         try {
-            String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
-                    "FROM DonDatBan DDB WHERE FUNCTION('MONTH', DDB.ngayGioLapDon) = :thang AND FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
+            String jpql = "SELECT DISTINCT HD.khachHang.maKH " +
+                    "FROM HoaDon HD WHERE FUNCTION('MONTH', HD.donDatBan.ngayGioLapDon) = :thang AND FUNCTION('YEAR', HD.donDatBan.ngayGioLapDon) = :nam";
 
             TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
             query.setParameter("thang", thang);
@@ -162,7 +162,7 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         }
 
         return dsKH;
-    }
+    } //
 	
 	@Override
     public List<DonDatBan> getAllDonDatBanTheoNam(int nam) {
@@ -187,8 +187,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         List<String> dsKH = null;
 
         try {
-        	String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
-                    "FROM DonDatBan DDB WHERE FUNCTION('YEAR', DDB.ngayGioLapDon) = :nam";
+        	String jpql = "SELECT DISTINCT HD.khachHang.maKH " +
+                    "FROM HoaDon HD WHERE FUNCTION('YEAR', HD.donDatBan.ngayGioLapDon) = :nam";
 
             TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
             query.setParameter("nam", nam);
@@ -200,7 +200,7 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         }
 
         return dsKH;
-    }
+    } //
 	
 	@Override
     public List<DonDatBan> getAllDonDatBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
@@ -229,8 +229,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         List<String> dsKH = null;
 
         try {
-        	String jpql = "SELECT DISTINCT DDB.khachHang.maKH " +
-                    "FROM DonDatBan DDB WHERE DDB.ngayGioLapDon BETWEEN :dateStart AND :dateEnd";
+        	String jpql = "SELECT DISTINCT HD.khachHang.maKH " +
+                    "FROM HoaDon HD WHERE HD.donDatBan.ngayGioLapDon BETWEEN :dateStart AND :dateEnd";
 
             TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
 
@@ -242,7 +242,7 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
             entityManager.close();
         }
         return dsKH;
-    }
+    } //
 	
 	@Override
     public Map<String, Integer> countDonDatBanTheoNam(int year) {
