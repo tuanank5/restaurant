@@ -443,31 +443,49 @@ public class ADatMon_Controller implements Initializable {
 
 // -------------------------Tăng giảm số lượng-----------------------    
     private void chonMon(MonAn mon) {
-        if (dsMonAnDat.containsKey(mon)) {
-            // Nếu đã có món này hỏi người dùng
+    	if (dsMonAnDat.containsKey(mon)) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Món đã chọn");
             alert.setHeaderText("Món '" + mon.getTenMon() + "' đã có trong danh sách.");
             alert.setContentText("Bạn muốn làm gì?");
+
             ButtonType btnTang = new ButtonType("➕ Tăng số lượng");
             ButtonType btnGiam = new ButtonType("➖ Giảm số lượng");
             ButtonType btnXoa = new ButtonType("❌ Xóa món");
             ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent()) {
-                if (result.get() == btnTang) {
-                    dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
-                } else if (result.get() == btnGiam) {
-                    int soLuong = dsMonAnDat.get(mon) - 1;
-                    if (soLuong <= 0) dsMonAnDat.remove(mon);
-                    else dsMonAnDat.put(mon, soLuong);
-                } else if (result.get() == btnXoa) {
+            Button btnTangNode = (Button) alert.getDialogPane().lookupButton(btnTang);
+            Button btnGiamNode = (Button) alert.getDialogPane().lookupButton(btnGiam);
+            Button btnXoaNode  = (Button) alert.getDialogPane().lookupButton(btnXoa);
+
+            btnTangNode.addEventFilter(ActionEvent.ACTION, e -> {
+                dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+                tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+                tblDS.refresh();
+                e.consume();
+            });
+
+            btnGiamNode.addEventFilter(ActionEvent.ACTION, e -> {
+                int soLuong = dsMonAnDat.get(mon) - 1;
+                if (soLuong <= 0) {
                     dsMonAnDat.remove(mon);
+                    alert.close();
+                } else {
+                    dsMonAnDat.put(mon, soLuong);
                 }
-            }
-        } else {
+                tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+                tblDS.refresh();
+                e.consume();
+            });
+            
+            btnXoaNode.addEventHandler(ActionEvent.ACTION, e -> {
+                dsMonAnDat.remove(mon);
+                tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+                tblDS.refresh();
+            });
+            alert.show();
+    	} else {
             // Thêm món mới
             dsMonAnDat.put(mon, 1);
         }
