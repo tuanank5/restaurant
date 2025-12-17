@@ -110,6 +110,7 @@ public class ABanHienTai_Controller {
     private Button buttonHoaDonDangChonUI = null;
     private String maHoaDonDangChon;
     private boolean isFromSearch = false;
+    private int tongDatBan;
     
     @FXML
     private void controller(ActionEvent event) throws IOException {
@@ -137,6 +138,8 @@ public class ABanHienTai_Controller {
         khoiTaoComboBoxes();
         loadDanhSachHoaDon();
         cmbLoaiBan.setOnAction(e -> loadDanhSachHoaDon());
+        txtTongDatBan.setEditable(false);
+        txtTongDatBan.setText(tongDatBan + "");
     }
 
     private void capNhatTrangThaiBanMacDinh() {
@@ -194,6 +197,7 @@ public class ABanHienTai_Controller {
     }
 
     private void loadDanhSachHoaDon() {
+    	tongDatBan = 0;
         gridPaneHD.getChildren().clear();
         hoaDonDangChon = null;
         buttonHoaDonDangChonUI = null;
@@ -304,6 +308,7 @@ public class ABanHienTai_Controller {
                 gridPaneHD.add(borderPane, col, row);
 
                 capNhatTrangThaiBanTheoHD(hoaDon);
+                tongDatBan += 1;
                 
                 col++;
                 if (col >= MAX_COLS) {
