@@ -21,10 +21,6 @@ public class MonAn {
     @Column(name = "donGia", nullable = false)
     private double donGia;
 
-    @ManyToOne
-    @JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = false)
-    private KhuyenMai khuyenMai;
-
     @Column(name = "duongDanAnh", length = 255) // Thêm cột lưu đường dẫn ảnh
     private String duongDanAnh;
 
@@ -35,15 +31,13 @@ public class MonAn {
         // constructor rỗng cho JPA
     }
 
-    public MonAn(String maMon, String tenMon, double donGia,
-            KhuyenMai khuyenMai, String duongDanAnh, String loaiMon) {
-   this.maMon = maMon;
-   this.tenMon = tenMon;
-   this.donGia = donGia;
-   this.khuyenMai = khuyenMai;
-   this.duongDanAnh = duongDanAnh;
-   this.loaiMon = loaiMon;
-}
+    public MonAn(String maMon, String tenMon, double donGia, String duongDanAnh, String loaiMon) {
+	   this.maMon = maMon;
+	   this.tenMon = tenMon;
+	   this.donGia = donGia;
+	   this.duongDanAnh = duongDanAnh;
+	   this.loaiMon = loaiMon;
+	}
 
     public String getMaMon() {
         return maMon;
@@ -67,14 +61,6 @@ public class MonAn {
 
     public void setDonGia(double donGia) {
         this.donGia = donGia;
-    }
-
-    public KhuyenMai getKhuyenMai() {
-        return khuyenMai;
-    }
-
-    public void setKhuyenMai(KhuyenMai khuyenMai) {
-        this.khuyenMai = khuyenMai;
     }
 
     public String getDuongDanAnh() {
@@ -109,12 +95,7 @@ public class MonAn {
 
     @Override
     public String toString() {
-        return "MonAn [maMon=" + maMon +
-                ", tenMon=" + tenMon +
-                ", donGia=" + donGia +
-                ", khuyenMai=" + khuyenMai +
-                ", duongDanAnh=" + duongDanAnh +
+        return "MonAn [maMon=" + maMon + ", tenMon=" + tenMon + ", donGia=" + donGia + ", duongDanAnh=" + duongDanAnh +
                 ", loaiMon=" + loaiMon + "]";
     }
-
 }

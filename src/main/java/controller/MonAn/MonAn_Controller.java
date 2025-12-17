@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
-import dao.KhuyenMai_DAO;
-import dao.impl.KhuyenMai_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
-import entity.KhuyenMai;
 import entity.MonAn;
 
 import javafx.collections.FXCollections;
@@ -33,21 +30,18 @@ public class MonAn_Controller implements Initializable{
 	    }
 	    
 	    @FXML private Button btnSua, btnThem, btnThemAnh, btnXoa;
-	    @FXML private ComboBox<KhuyenMai> cmbKM;
 	    @FXML private ComboBox<String> cmbLoaiMon;
 	    @FXML private ImageView img;
 	    @FXML private TableView<MonAn> tblMon;
 	    @FXML private TableColumn<MonAn, String> colMa, colTen, colLoaiMon;
 	    @FXML private TableColumn<MonAn, Double> colDonGia;
-	    @FXML private TableColumn<MonAn, KhuyenMai> colKM;
+//	    @FXML private TableColumn<MonAn, KhuyenMai> colKM;
 	    @FXML private TextField txtMaMon, txtTenMon, txtDonGia;
 
 
 	    private String duongDanAnh;
 	    
 	    private MonAn_DAOImpl monDAO = new MonAn_DAOImpl();
-	    private KhuyenMai_DAOImpl kmDAO = new KhuyenMai_DAOImpl();
-	    private KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAOImpl();
 
 	    @FXML
 	    private void handleThemAnh() {
@@ -75,26 +69,11 @@ public class MonAn_Controller implements Initializable{
 
 	    @Override
 	    public void initialize(URL url, ResourceBundle rb) {
-	    	khoiTaoComboBoxKhuyenMai();
 	    	 txtMaMon.setText(AutoIDUitl.sinhMaMon());
 	        // --- Cấu hình cột TableView ---
 	        colMa.setCellValueFactory(new PropertyValueFactory<>("maMon"));
 	        colTen.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
 	        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-	        
-	        // Cột Khuyến mãi hiển thị tên KM + %
-	        colKM.setCellValueFactory(new PropertyValueFactory<>("khuyenMai"));
-	        colKM.setCellFactory(column -> new TableCell<MonAn, KhuyenMai>() {
-	        	@Override
-	            protected void updateItem(KhuyenMai item, boolean empty) {
-	                super.updateItem(item, empty);
-	                if (empty || item == null) {
-	                	setText("");
-	                } else {
-	                    setText(item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
-	                }
-	            }
-	        });
 	        colLoaiMon.setCellValueFactory(cellData -> 
 	        new javafx.beans.property.SimpleStringProperty(cellData.getValue().getLoaiMon())
 	    );
@@ -170,12 +149,10 @@ public class MonAn_Controller implements Initializable{
 	                alert.showAndWait();
 	                return;
 	            }
-
 	            String tenMon = txtTenMon.getText().trim();
 	            String donGiaStr = txtDonGia.getText().trim();
-	            KhuyenMai km = cmbKM.getValue();
 
-	            if (tenMon.isEmpty() || donGiaStr.isEmpty() || km == null) {
+	            if (tenMon.isEmpty() || donGiaStr.isEmpty()) {
 	                Alert alert = new Alert(Alert.AlertType.WARNING);
 	                alert.setTitle("Thông báo");
 	                alert.setHeaderText(null);
@@ -199,7 +176,6 @@ public class MonAn_Controller implements Initializable{
 	            // Cập nhật thông tin cho đối tượng chọn
 	            monChon.setTenMon(tenMon);
 	            monChon.setDonGia(donGia);
-	            monChon.setKhuyenMai(km);
 	            monChon.setDuongDanAnh(duongDanAnh); // ảnh có thể thay đổi
 	            monChon.setLoaiMon(cmbLoaiMon.getValue());
 	            
@@ -228,36 +204,6 @@ public class MonAn_Controller implements Initializable{
 	        }
 	    }
 
-	    
-	    private void khoiTaoComboBoxKhuyenMai() {
-	        // Lấy danh sách Khuyến Mãi từ DB
-	    	List<KhuyenMai> danhSachKM = khuyenMaiDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
-
-	        if (danhSachKM != null && !danhSachKM.isEmpty()) {
-	            // Đưa danh sách vào ComboBox
-	            cmbKM.getItems().setAll(danhSachKM);
-
-	            // Hiển thị tên KM + %
-	            cmbKM.setCellFactory(lv -> new ListCell<KhuyenMai>() {
-	                @Override
-	                protected void updateItem(KhuyenMai item, boolean empty) {
-	                    super.updateItem(item, empty);
-	                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
-	                }
-	            });
-
-	            cmbKM.setButtonCell(new ListCell<KhuyenMai>() {
-	                @Override
-	                protected void updateItem(KhuyenMai item, boolean empty) {
-	                    super.updateItem(item, empty);
-	                    setText(empty || item == null ? "" : item.getTenKM() + " - " + item.getPhanTramGiamGia() + "%");
-	                }
-	            });
-	        } else {
-	            cmbKM.getItems().clear(); // Trường hợp danh sách rỗng
-	        }
-	    }
-
 	    // ------------------- Load dữ liệu từ DB lên TableView -------------------
 	    private void loadTable() {
 	        List<MonAn> danhSachMon = monDAO.getDanhSachMonAn(); // dùng phương thức DAO chuẩn
@@ -277,10 +223,9 @@ public class MonAn_Controller implements Initializable{
 	            String maMon = txtMaMon.getText().trim();
 	            String tenMon = txtTenMon.getText().trim();
 	            String donGiaStr = txtDonGia.getText().trim();
-	            KhuyenMai km = cmbKM.getValue(); // Lấy KM từ ComboBox
 
 	            // --- Kiểm tra dữ liệu nhập ---
-	            if (maMon.isEmpty() || tenMon.isEmpty() || donGiaStr.isEmpty() || km == null) {
+	            if (maMon.isEmpty() || tenMon.isEmpty() || donGiaStr.isEmpty()) {
 	                Alert alert = new Alert(Alert.AlertType.WARNING);
 	                alert.setTitle("Thông báo");
 	                alert.setHeaderText(null);
@@ -304,7 +249,7 @@ public class MonAn_Controller implements Initializable{
 	            // --- Tạo đối tượng MonAn ---
 	            String loaiMon = cmbLoaiMon.getValue();
 
-	            MonAn mon = new MonAn(maMon, tenMon, donGia, km, duongDanAnh, loaiMon);
+	            MonAn mon = new MonAn(maMon, tenMon, donGia, duongDanAnh, loaiMon);
 
 	            // --- Thêm vào DB ---
 	            boolean themThanhCong = monDAO.them(mon);
@@ -334,27 +279,10 @@ public class MonAn_Controller implements Initializable{
 	        }
 	    }
 
-	    //Sinh mã tự động
-//        private String sinhMaMon() {
-//            List<MonAn> listMon = monDAO.getDanhSachMonAn();
-//            int max = 0;
-//            for (MonAn m : listMon) {
-//                try {
-//                    int so = Integer.parseInt(m.getMaMon().substring(1));
-//                    if (so > max) max = so;
-//                } catch (Exception e) {
-//                    // bỏ qua nếu format khác
-//                }
-//            }
-//            return String.format("M%03d", max + 1); // Ví dụ: M01, M02,...
-//        }
-
-
 	    private void resetForm() {
 	        txtMaMon.setText(AutoIDUitl.sinhMaMon()); // tự sinh mã mới
 	        txtTenMon.clear();
 	        txtDonGia.clear();
-	        cmbKM.getSelectionModel().clearSelection();
 	        img.setImage(null);
 	        duongDanAnh = null;
 	    }
@@ -363,13 +291,7 @@ public class MonAn_Controller implements Initializable{
 	        txtMaMon.setText(mon.getMaMon());
 	        txtTenMon.setText(mon.getTenMon());
 	        txtDonGia.setText(String.valueOf(mon.getDonGia()));
-
-	        if (mon.getKhuyenMai() != null) {
-	            cmbKM.getSelectionModel().select(mon.getKhuyenMai());
-	        } else {
-	        	cmbKM.getSelectionModel().clearSelection();
-	        }
-
+	        
 	        // Hiển thị Loại Món
 	        if (mon.getLoaiMon() != null && !mon.getLoaiMon().isEmpty()) {
 	            cmbLoaiMon.getSelectionModel().select(mon.getLoaiMon());

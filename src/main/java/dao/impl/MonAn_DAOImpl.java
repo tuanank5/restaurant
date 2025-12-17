@@ -49,8 +49,8 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
         try {
             tx.begin();
             // Merge khuyến mãi để đảm bảo managed entity
-            KhuyenMai kmManaged = em.merge(mon.getKhuyenMai());
-            mon.setKhuyenMai(kmManaged);
+//            KhuyenMai kmManaged = em.merge(mon.getKhuyenMai());
+//          mon.setKhuyenMai(kmManaged);
             em.persist(mon);
             em.flush();
             tx.commit();
