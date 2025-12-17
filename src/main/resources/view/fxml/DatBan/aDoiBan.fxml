@@ -48,8 +48,19 @@
          </top>
       </BorderPane>
    </top>
-   <center>
-      <VBox>
+   <bottom>
+      <BorderPane BorderPane.alignment="CENTER">
+         <right>
+            <AnchorPane prefHeight="44.0" prefWidth="164.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="btnXacNhan" layoutX="100.0" layoutY="9.0" mnemonicParsing="false" onAction="#btnXacNhan" text="Xác nhận" />
+               </children>
+            </AnchorPane>
+         </right>
+      </BorderPane>
+   </bottom>
+   <right>
+      <VBox BorderPane.alignment="CENTER">
          <children>
             <ScrollPane>
                <content>
@@ -71,16 +82,5 @@
             </ScrollPane>
          </children>
       </VBox>
-   </center>
-   <bottom>
-      <BorderPane BorderPane.alignment="CENTER">
-         <right>
-            <AnchorPane prefHeight="44.0" prefWidth="164.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button fx:id="btnXacNhan" layoutX="100.0" layoutY="9.0" mnemonicParsing="false" onAction="#btnXacNhan" text="Xác nhận" />
-               </children>
-            </AnchorPane>
-         </right>
-      </BorderPane>
-   </bottom>
+   </right>
 </BorderPane>
