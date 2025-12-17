@@ -296,6 +296,12 @@ public class DoiMonTruoc_Controller implements Initializable {
     }
 
     @FXML
+    private void btnTroLai(ActionEvent e) {
+        // Quay về màn hình trước (VD: quay lại màn hình đặt bàn)
+        MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
+    }
+
+    @FXML
     private void btnXacNhan(ActionEvent e) {
         if (donDatBanDuocChon == null) {
             alert("Lỗi", "Chưa chọn đơn đặt bàn!");

@@ -73,7 +73,7 @@
             <AnchorPane prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">
                <children>
                   <TextField fx:id="txtTim" layoutX="30.0" layoutY="12.0" prefHeight="26.0" prefWidth="480.0" promptText="Nhập tên món ăn để tìm" />
-                  <Button fx:id="btnTroLai" layoutX="528.0" layoutY="7.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="79.0" text="Trở lại">
+                  <Button fx:id="btnTroLai" layoutX="528.0" layoutY="7.0" mnemonicParsing="false" onAction="#btnTroLai" prefHeight="36.0" prefWidth="79.0" text="Trở lại">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
