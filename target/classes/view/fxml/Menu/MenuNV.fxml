@@ -26,7 +26,7 @@
             <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="400.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="450.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="ARROWS_H" layoutX="20.0" layoutY="300.0" size="25" />
-            <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi/ Hủy bàn" />
+            <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi/Hủy bàn" />
             <Label layoutX="5.0" layoutY="510.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Settings" />
             <FontAwesomeIconView fill="#f9c410" glyphName="LOCK" layoutX="20.0" layoutY="575.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="SIGN_OUT" layoutX="20.0" layoutY="625.0" size="25" />
