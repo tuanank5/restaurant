@@ -28,6 +28,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,6 +37,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 
     @FXML private Button btnBan;
     @FXML private Button btnTroLai;
+    @FXML private Button btnXacNhan;
     @FXML private ComboBox<String> cmbGioBatDau;
     @FXML private ComboBox<String> cmbTrangThai;
     @FXML private ComboBox<String> cmbLoaiBan;
@@ -74,6 +76,13 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         dpNgayDatBan.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
         cmbGioBatDau.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
         khoiTaoLoaiBan();
+        
+        btnTroLai.setTooltip(new Tooltip("Thông báo cho nút Trở lại!"));
+        cmbLoaiBan.setTooltip(new Tooltip("Lọc theo loại bàn!"));
+        cmbGioBatDau.setTooltip(new Tooltip("Lọc theo giờ bắt đầu!"));
+        cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái của bàn!"));
+        dpNgayDatBan.setTooltip(new Tooltip("Lọc theo ngày đặt bàn!"));
+        btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
     }
 
     private void khoiTaoLoaiBan() {
