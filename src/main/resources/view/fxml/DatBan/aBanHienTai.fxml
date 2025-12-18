@@ -16,12 +16,7 @@
    <top>
       <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
-            <AnchorPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button fx:id="btnChoThanhToan" layoutX="30.0" layoutY="30.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Chờ thanh toán" />
-                  <Button fx:id="btnDatTruoc" layoutX="180.0" layoutY="30.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt trước" />
-               </children>
-            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER" />
          </left>
          <right>
             <AnchorPane prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">

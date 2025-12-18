@@ -75,11 +75,11 @@
                         <Label layoutX="520.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng thanh toán:" />
                         <Label fx:id="lblThanhTien" layoutX="125.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThanhTien" />
                         <Label fx:id="lblThue" layoutX="385.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblThue" />
-                        <Label fx:id="lblTong" layoutX="670.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTong" />
+                        <Label fx:id="lblTong" layoutX="635.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTong" />
                         <Label layoutX="275.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khuyến mãi:" />
                         <Label layoutX="520.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Điểm tích lũy:" />
                         <Label fx:id="lblTienGiam" layoutX="385.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTienGiam" />
-                        <Label fx:id="lblTichLuy" layoutX="670.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTichLuy" />
+                        <Label fx:id="lblTichLuy" layoutX="624.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblTichLuy" />
                         <Label layoutX="15.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tiền sau giảm:" />
                         <Label fx:id="lblSauGiam" layoutX="125.0" layoutY="80.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="lblSauGiam" />
                      </children>

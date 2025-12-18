@@ -56,6 +56,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -139,6 +141,8 @@ public class AThanhToan_Controller {
     private double thanhTien = 0;
 	private double Vat_Rate = 0.1;
 	private double tongTruocVAT;
+	private int diemHienTai = 0;
+	private int diemSuDung = 0; 
 	double tongSauVAT;
 	HoaDon hoaDonHienTai;
 	Map<MonAn, Integer> dsMonAn;
@@ -191,7 +195,7 @@ public class AThanhToan_Controller {
         } else if (source == btnEdit) {
             
         } else if (source == btnDiemTichLuy) {
-            
+        	hienDialogDiemTichLuy();
         }
     }
     
@@ -229,14 +233,15 @@ public class AThanhToan_Controller {
                     break;
             }
         }
-        tongTruocVAT = thanhTien - tienGiam;
+        tongTruocVAT = thanhTien - tienGiam - diemSuDung;
         if (tongTruocVAT < 0) tongTruocVAT = 0;
         
-        double thue = thanhTien * Vat_Rate;
+        double thue = tongTruocVAT * Vat_Rate;
         thueHD = thue;
         tongSauVAT = tongTruocVAT + thue;
 
         lblTienGiam.setText(formatTienVN(tienGiam));
+        lblTichLuy.setText(formatTienVN(diemSuDung));
         lblSauGiam.setText(formatTienVN(tongTruocVAT));
         lblThue.setText(formatTienVN(thue));
         lblTong.setText(formatTienVN(tongSauVAT));
@@ -403,5 +408,63 @@ public class AThanhToan_Controller {
             e.printStackTrace();
         }
         return fxmlLoader;
+    }
+    
+    private void hienDialogDiemTichLuy() {
+        KhachHang kh = hoaDonHienTai.getKhachHang();
+        diemHienTai = kh.getDiemTichLuy(); // lấy điểm từ entity KhachHang
+
+        Stage dialog = new Stage();
+        dialog.setTitle("Sử dụng điểm tích lũy");
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setWidth(300);
+        dialog.setMinWidth(300);
+        dialog.setHeight(220);
+
+        Label lblDiemCo = new Label("Điểm hiện có: " + diemHienTai);
+        Label lblQuyDoi = new Label("Quy đổi: 1.000 điểm = 1.000 VND");
+
+        TextField txtDiem = new TextField();
+        txtDiem.setPromptText("Nhập số điểm muốn sử dụng");
+
+        Label lblLoi = new Label();
+        lblLoi.setStyle("-fx-text-fill: red;");
+
+        Button btnApDung = new Button("Áp dụng");
+        Button btnHuy = new Button("Hủy");
+
+        btnApDung.setOnAction(e -> {
+            try {
+                int diemNhap = Integer.parseInt(txtDiem.getText());
+                if (diemNhap <= 0) {
+                    lblLoi.setText("Số điểm phải lớn hơn 0");
+                    return;
+                }
+
+                if (diemNhap > diemHienTai) {
+                    lblLoi.setText("Không đủ điểm tích lũy");
+                    return;
+                }
+                diemSuDung = diemNhap;
+                lblTichLuy.setText(formatTienVN(diemSuDung));
+
+                capNhatTongTien();
+                dialog.close();
+            } catch (NumberFormatException ex) {
+                lblLoi.setText("Vui lòng nhập số hợp lệ");
+            }
+        });
+
+        btnHuy.setOnAction(e -> dialog.close());
+        VBox box = new VBox(10,
+                lblDiemCo,
+                lblQuyDoi,
+                txtDiem,
+                lblLoi,
+                new HBox(20, btnApDung, btnHuy)
+        );
+        box.setStyle("-fx-padding: 20;");
+        dialog.setScene(new Scene(box));
+        dialog.showAndWait();
     }
 }
