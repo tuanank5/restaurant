@@ -27,6 +27,8 @@ import controller.Menu.MenuNV_Controller;
 import dao.HoaDon_DAO;
 import entity.HoaDon;
 import entity.KhachHang;
+import dao.KhachHang_DAO;
+import dao.impl.KhachHang_DAOlmpl;
 import entity.KhuyenMai;
 import entity.MonAn;
 import javafx.event.ActionEvent;
@@ -98,8 +100,8 @@ public class AThuTien_Controller {
     private HoaDon hoaDonHienTai = AThanhToan_Controller.aTT.hoaDonHienTai;
     private Map<MonAn, Integer> dsMonAn = AThanhToan_Controller.aTT.dsMonAn;
     private KhuyenMai kmDangChon = AThanhToan_Controller.aTT.kmDangChon;
-    private double thueHD = AThanhToan_Controller.aTT.thueHD;
-    
+    private double thueHD = AThanhToan_Controller.aTT.thueHD;    
+    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
     private double tongThanhTienLamTron = Math.round(tongThanhTien / 1000.0) * 1000;
     
     private int tienKH = 0;
@@ -236,6 +238,7 @@ public class AThuTien_Controller {
    	                    .capNhat(hoaDonHienTai);
    	            //Kiểm tra kết quả thêm
    	            if (check) {
+   	            	capNhatDiemTichLuySauThanhToan();
    	                xuatHD();
 	   	            Stage stage = (Stage) btnHuy.getScene().getWindow();
 	   	            stage.close();
@@ -368,6 +371,22 @@ public class AThuTien_Controller {
                alert.showAndWait();
            }
    	}
+    
+    private void capNhatDiemTichLuySauThanhToan() {
+        KhachHang kh = hoaDonHienTai.getKhachHang();
+
+        int diemCu = kh.getDiemTichLuy();
+        int diemSuDung = AThanhToan_Controller.aTT.diemSuDung;
+
+        int diemMoi = diemCu - diemSuDung + 50;
+        if (diemMoi < 0) diemMoi = 0;
+
+        kh.setDiemTichLuy(diemMoi);
+
+        // cập nhật DB
+        khachHangDAO.capNhat(kh);
+    }
+
     
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);

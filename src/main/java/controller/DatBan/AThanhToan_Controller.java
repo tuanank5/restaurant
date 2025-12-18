@@ -142,7 +142,7 @@ public class AThanhToan_Controller {
 	private double Vat_Rate = 0.1;
 	private double tongTruocVAT;
 	private int diemHienTai = 0;
-	private int diemSuDung = 0; 
+	static int diemSuDung = 0; 
 	double tongSauVAT;
 	HoaDon hoaDonHienTai;
 	Map<MonAn, Integer> dsMonAn;
@@ -467,4 +467,5 @@ public class AThanhToan_Controller {
         dialog.setScene(new Scene(box));
         dialog.showAndWait();
     }
+
 }
