@@ -27,6 +27,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -74,6 +75,15 @@ public class KhachHang_Controller {
 
     @FXML
     private TableColumn<KhachHang,String> tblTenKH;
+    
+    @FXML
+    private Button btnTC;
+
+    @FXML
+    private Button btnThem;
+
+    @FXML
+    private Button btnXuat;
 
     @FXML
     private TextField txtTimKiem;
@@ -87,6 +97,12 @@ public class KhachHang_Controller {
         loadData();
         System.out.println("TableView items: " + tableView.getItems().size());
         phanTrang(danhSachKhachHangDB.size());
+        
+        btnXuat.setTooltip(new Tooltip("Thông báo cho nút Xuất Excel!"));
+        btnTC.setTooltip(new Tooltip("Thông báo cho nút Tất cả!"));
+        btnThem.setTooltip(new Tooltip("Thông báo cho nút Thêm khách hàng!"));
+        txtTimKiem.setTooltip(new Tooltip("Tìm kiếm theo tên Khách hàng!"));
+        
     }
     
     @FXML
