@@ -37,16 +37,16 @@
                      <left>
                         <AnchorPane prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="27.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: green;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt Bàn" textFill="WHITE">
+                              <Button fx:id="btnDatBan" layoutX="27.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: green;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt Bàn" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font></Button>
-                              <Button layoutX="131.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnThayDoi" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: #f39c12;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi Bàn" textFill="WHITE">
+                              <Button fx:id="btnThayDoi" layoutX="131.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnThayDoi" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: #f39c12;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi Bàn" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font></Button>
-                              <Button layoutX="359.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnHuyDon" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: #e74c3c;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy Đơn" textFill="WHITE" />
-                              <Button layoutX="242.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnDoiMon" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: #3498db;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi Món" textFill="WHITE" />
+                              <Button fx:id="btnHuyDon" layoutX="359.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnHuyDon" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: #e74c3c;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy Đơn" textFill="WHITE" />
+                              <Button fx:id="btnDoiMon" layoutX="242.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnDoiMon" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: #3498db;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi Món" textFill="WHITE" />
                            </children>
                         </AnchorPane>
                      </left>

@@ -28,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -36,6 +37,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
@@ -72,6 +74,19 @@ public class DonDatBan_Controller implements Initializable{
     
     @FXML
     private TextField txtTongDonDat;
+    
+    @FXML
+    private Button btnDatBan;
+
+    @FXML
+    private Button btnDoiMon;
+
+    @FXML
+    private Button btnHuyDon;
+
+    @FXML
+    private Button btnThayDoi;
+
     
     private DonDatBan donDangChon;
 
@@ -121,6 +136,14 @@ public class DonDatBan_Controller implements Initializable{
         donDatBanDAO = RestaurantApplication.getInstance()
                 .getDatabaseContext()
                 .newEntity_DAO(DonDatBan_DAO.class);
+        
+        cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái đơn đặt bàn!"));
+        dpNgayDatBan.setTooltip(new Tooltip("Chọn ngày đặt bàn để lọc theo đơn đặt bàn!"));
+        txtKH.setTooltip(new Tooltip("Nhập tên khách hàng để tìm kiếm trong đơn đặt bàn!"));
+        btnDatBan.setTooltip(new Tooltip("Thông báo cho nút Đặt Bàn!"));
+        btnDoiMon.setTooltip(new Tooltip("Thông báo cho nút Đổi Món!"));
+        btnThayDoi.setTooltip(new Tooltip("Thông báo cho nút Đổi Bàn!"));
+        btnHuyDon.setTooltip(new Tooltip("Thông báo cho nút Huỷ Đơn Bàn!"));
 	}
     
     @FXML
