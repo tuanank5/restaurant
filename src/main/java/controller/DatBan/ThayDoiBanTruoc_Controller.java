@@ -170,11 +170,14 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         String loaiBanChon = cmbLoaiBan.getValue();
         LocalDate ngay = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0,2)), 0);
-
+        LocalTime gio = parseGio(gioStr);
+        
         for (Ban ban : danhSachBan) {
-            String trangThaiThucTe = getTrangThaiThucTe(ban, ngay, gio);
-
+        	String trangThaiThucTe = getTrangThaiThucTe(ban, ngay, gio);
+        	String trangThaiChon = cmbTrangThai.getValue();
+        	if (!"Tất cả".equals(trangThaiChon) &&
+        	    !trangThaiThucTe.equals(trangThaiChon))
+        	    continue;     	
             // Lọc theo loại bàn
             boolean matchLoai = "Tất cả".equals(loaiBanChon) || 
                                 ban.getLoaiBan().getTenLoaiBan().equals(loaiBanChon);
@@ -188,8 +191,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                 col = 0;
                 row++;
             }
-        }
-        
+        }      
     }
 
     private Button taoNutBan(Ban ban) {
@@ -197,13 +199,13 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         btnBan.setPrefSize(170, 110);
         LocalDate ngay = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0, 2)), 0);
+        LocalTime gio = parseGio(gioStr);
         String trangThai = getTrangThaiThucTe(ban, ngay, gio);
         btnBan.setStyle(getStyleByStatusAndType(trangThai, ban.getLoaiBan().getMaLoaiBan()));
         
         btnBan.setOnMouseClicked(event -> {
             String trangThaiThucTe = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(),
-                    LocalTime.of(Integer.parseInt(cmbGioBatDau.getValue().substring(0, 2)), 0));
+            		parseGio(cmbGioBatDau.getValue()));
             if (event.getClickCount() == 1) {
                 handleChonBan(ban, btnBan);
             }
@@ -222,7 +224,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 
     private void handleChonBan(Ban ban, Button btnBan) {
     	String trangThai = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(), 
-                LocalTime.of(Integer.parseInt(cmbGioBatDau.getValue().substring(0, 2)), 0));
+    			parseGio(cmbGioBatDau.getValue()));
     	if (!trangThai.equals("Trống")) {
     	    showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
     	    return;
@@ -232,7 +234,8 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             Ban banCu = danhSachBanDangChon.get(0);
             Button btnCu = danhSachButtonDangChonUI.get(0);
             btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getTenLoaiBan() + ")");
-            btnCu.setStyle(getStyleByStatusAndType(banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()));
+            String trangThaiThucTe = getTrangThaiThucTe(banCu,dpNgayDatBan.getValue(),parseGio(cmbGioBatDau.getValue()));
+            btnCu.setStyle(getStyleByStatusAndType( trangThaiThucTe,banCu.getLoaiBan().getMaLoaiBan()));
             danhSachBanDangChon.clear();
             danhSachButtonDangChonUI.clear();
         }
@@ -270,7 +273,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         final int MAX_COLS = 5;
         LocalDate ngay = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0,2)), 0);
+        LocalTime gio = parseGio(gioStr);
 
         for (Ban ban : danhSachBan) {
             String trangThai = getTrangThaiThucTe(ban, ngay, gio);
@@ -378,9 +381,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             }
             if (ban.getLoaiBan() != null) {
                 cmbLoaiBan.setValue(ban.getLoaiBan().getTenLoaiBan());
-            }
-            if (ban.getTrangThai() != null) {
-                cmbTrangThai.setValue(ban.getTrangThai());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -505,10 +505,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     }
     
     private String getTrangThaiThucTe(Ban ban, LocalDate ngay, LocalTime gio) {
-        // Ưu tiên trạng thái đang phục vụ
-        if ("Đang phục vụ".equalsIgnoreCase(ban.getTrangThai()))
-            return "Đang phục vụ";
-
         if (ngay == null || gio == null)
             return "Trống";
 
@@ -517,14 +513,13 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             return "Trống";
 
         for (DonDatBan don : dsDon) {
+        	if (donDatBanDuocChon != null
+        	        && don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan())
+        	        && danhSachBanDangChon.isEmpty()) {
+        	    continue;
+        	}
 
-            // BỎ QUA đơn đang chỉnh sửa
-            if (donDatBanDuocChon != null &&
-                don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
-                continue;
-
-            LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
-            if (!ngayDat.equals(ngay))
+            if (!don.getNgayGioLapDon().toLocalDate().equals(ngay))
                 continue;
 
             LocalTime gioBatDau = don.getGioBatDau();
@@ -532,28 +527,32 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
             LocalTime gioKetThuc = gioBatDau.plusHours(1);
 
             boolean trongKhoang;
-            // xử lý trường hợp qua ngày
             if (gioKetThuc.isAfter(gioChan)) {
                 trongKhoang = !gio.isBefore(gioChan) && !gio.isAfter(gioKetThuc);
             } else {
                 trongKhoang = !gio.isBefore(gioChan) || !gio.isAfter(gioKetThuc);
             }
-
             if (!trongKhoang)
                 continue;
 
-            String trangThaiDon = don.getTrangThai();
-
-            if ("Đang phục vụ".equalsIgnoreCase(trangThaiDon)
-                    || "Đã nhận bàn".equalsIgnoreCase(trangThaiDon)) {
+            if ("Đang phục vụ".equalsIgnoreCase(don.getTrangThai())
+                    || "Đã nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
                 return "Đang phục vụ";
             }
-
-            if ("Chưa nhận bàn".equalsIgnoreCase(trangThaiDon)) {
+            if ("Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
                 return "Đã được đặt";
             }
         }
         return "Trống";
+    }
+
+    private LocalTime parseGio(String gioStr) {
+        if (gioStr == null) return null;
+        String[] parts = gioStr.split(":");
+        return LocalTime.of(
+            Integer.parseInt(parts[0]),
+            Integer.parseInt(parts[1])
+        );
     }
 
    
