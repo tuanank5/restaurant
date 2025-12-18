@@ -301,7 +301,7 @@ public class ADatMon_Controller implements Initializable {
         hd.setKieuThanhToan("Chưa thanh toán");
 
         // --- Gán khách hàng ---
-        KhachHang kh = this.khachHangDangChon;
+        KhachHang kh = MenuNV_Controller.khachHangDangChon;
         hd.setKhachHang(kh);
 
         hd.setKhuyenMai(null);

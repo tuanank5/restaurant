@@ -22,20 +22,20 @@
    <children>
       <HBox prefHeight="80.0" prefWidth="1100.0">
          <children>
-            <AnchorPane prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+            <AnchorPane prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
                <children>
-                  <JFXRadioButton fx:id="radThangNam" layoutX="14.0" layoutY="14.0" text="Thống kê theo tháng/năm" />
-                  <JFXComboBox fx:id="cmbThang" layoutX="14.0" layoutY="37.0" promptText="Tháng" />
-                  <JFXComboBox fx:id="cmbNam" layoutX="124.0" layoutY="37.0" promptText="Năm" />
+                  <JFXRadioButton fx:id="radThangNam" layoutX="14.0" layoutY="14.0" styleClass="rad" stylesheets="@../../css/SystemDesign.css" text="Thống kê theo tháng/năm" />
+                  <JFXComboBox fx:id="cmbThang" layoutX="14.0" layoutY="37.0" promptText="Tháng" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <JFXComboBox fx:id="cmbNam" layoutX="124.0" layoutY="37.0" promptText="Năm" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </AnchorPane>
-            <AnchorPane prefWidth="550.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+            <AnchorPane prefWidth="550.0" styleClass="pane" stylesheets="@../../css/Dashboard.css">
                <children>
-                  <JFXRadioButton fx:id="radNgay" layoutX="24.0" layoutY="14.0" text="Thống kê theo ngày" />
-                  <Label layoutX="24.0" layoutY="42.0" text="Từ ngày" />
-                  <DatePicker fx:id="txtDateStart" layoutX="84.0" layoutY="38.0" />
-                  <Label layoutX="279.0" layoutY="42.0" text="Đến ngày" />
-                  <DatePicker fx:id="txtDateEnd" layoutX="349.0" layoutY="38.0" />
+                  <JFXRadioButton fx:id="radNgay" layoutX="24.0" layoutY="14.0" styleClass="rad" stylesheets="@../../css/SystemDesign.css" text="Thống kê theo ngày" />
+                  <Label layoutX="24.0" layoutY="42.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Từ ngày:" />
+                  <DatePicker fx:id="txtDateStart" layoutX="84.0" layoutY="38.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" />
+                  <Label layoutX="279.0" layoutY="42.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đến ngày" />
+                  <DatePicker fx:id="txtDateEnd" layoutX="349.0" layoutY="38.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" />
                </children>
                <HBox.margin>
                   <Insets left="50.0" />
@@ -45,24 +45,24 @@
       </HBox>
       <HBox layoutY="100.0" prefHeight="100.0" prefWidth="1100.0">
          <children>
-            <VBox alignment="CENTER" prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+            <VBox alignment="CENTER" prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
                <children>
                   <FontAwesomeIconView glyphName="BAR_CHART" size="30" />
-                  <Label fx:id="lblDoanhThu" text="0" />
-                  <Label text="Doanh Thu" />
+                  <Label fx:id="lblDoanhThu" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="0" />
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Doanh Thu" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+            <VBox alignment="CENTER" prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin>
                <children>
                   <FontAwesomeIconView glyphName="FILE_TEXT" size="30" />
-                  <Label fx:id="lblHoaDon" text="0" />
-                  <Label text="Hóa Đơn" />
+                  <Label fx:id="lblHoaDon" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="0" />
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Hóa Đơn" />
                </children>
             </VBox>
-            <JFXButton fx:id="btnLoc" prefHeight="100.0" prefWidth="150.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" text="LỌC">
+            <JFXButton fx:id="btnLoc" prefHeight="100.0" prefWidth="150.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" text="LỌC (F5)">
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin>
@@ -73,7 +73,7 @@
          <children>
             <AnchorPane prefHeight="350.0" prefWidth="1100.0">
                <children>
-                  <AreaChart fx:id="areaChart_DoanhThu" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+                  <AreaChart fx:id="areaChart_DoanhThu" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css">
                      <xAxis>
                         <CategoryAxis fx:id="axis" side="BOTTOM" />
                      </xAxis>
@@ -81,7 +81,7 @@
                         <NumberAxis side="LEFT" />
                      </yAxis>
                   </AreaChart>
-                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="DOANH THU THEO THÁNG">
+                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="DOANH THU THEO THÁNG">
                      <xAxis>
                         <CategoryAxis label="Tháng" side="BOTTOM" />
                      </xAxis>
@@ -91,7 +91,7 @@
                   </BarChart>
                </children>
             </AnchorPane>
-            <Label fx:id="lblThongTinDoanhThu" prefHeight="50.0" prefWidth="1100.0" />
+            <Label fx:id="lblThongTinDoanhThu" prefHeight="50.0" prefWidth="1100.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" />
          </children>
       </VBox>
    </children>

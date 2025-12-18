@@ -1,4 +1,4 @@
-package controller.Dashboard;
+package controller.ThongKe;
 
 import java.text.DecimalFormat;
 import java.time.Instant;
@@ -36,7 +36,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
-public class DashboardNVQL_Controller {
+public class ThongKeNVQL_Controller {
 	
 	@FXML
     private AnchorPane anchorPane_main;
@@ -98,7 +98,7 @@ public class DashboardNVQL_Controller {
     private final HoaDon_DAOImpl hoaDon_DAO;
     private final DonDatBan_DAOImpl donDatBan_DAO;
     
-    public DashboardNVQL_Controller() {
+    public ThongKeNVQL_Controller() {
     	this.hoaDon_DAO = new HoaDon_DAOImpl();
     	this.donDatBan_DAO = new DonDatBan_DAOImpl();
     }
@@ -1029,3 +1029,4 @@ public class DashboardNVQL_Controller {
         }
     }
 }
+

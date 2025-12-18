@@ -104,7 +104,7 @@ public class MenuNVQL_Controller {
 
     @FXML
     void btnThongKe(ActionEvent event) {
-        readyUI("ThongKe/ThongKe");
+        readyUI("ThongKe/ThongKeNVQLScroll");
     }
 
     @FXML

@@ -199,4 +199,9 @@ public class MenuNV_Controller {
     void btnMonAn(ActionEvent event) {
     	readyUI("MonAn/MonAn");
     }
+    
+    @FXML
+    void btnThongKe(ActionEvent event) {
+    	readyUI("ThongKe/ThongKeNVScroll");
+    }
 }
