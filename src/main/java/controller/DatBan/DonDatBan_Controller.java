@@ -142,6 +142,7 @@ public class DonDatBan_Controller implements Initializable{
         donDatBanDAO = RestaurantApplication.getInstance()
                 .getDatabaseContext()
                 .newEntity_DAO(DonDatBan_DAO.class);
+        kiemTraKhachToiTreVaHuyDon();
         
         cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái đơn đặt bàn!"));
         dpNgayDatBan.setTooltip(new Tooltip("Chọn ngày đặt bàn để lọc theo đơn đặt bàn!"));
@@ -358,11 +359,7 @@ public class DonDatBan_Controller implements Initializable{
     }
     
     private void kiemTraKhachToiTreVaHuyDon() {
-//        LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
-    	LocalDateTime hienTai = LocalDateTime.of(
-    	        LocalDate.now(),
-    	        LocalTime.of(11, 30)
-    	);
+        LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
         for (DonDatBan don : danhSachDonDatBan) {
             if (!"Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai()))
                 continue;
