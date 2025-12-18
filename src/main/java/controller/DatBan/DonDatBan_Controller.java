@@ -159,10 +159,6 @@ public class DonDatBan_Controller implements Initializable{
         MenuNV_Controller.instance.readyUI("DatBan/ThayDoiBanTruoc");
     }
 
-    @FXML
-    void btnTimKiem(ActionEvent event) {
-        apDungLoc();
-    }
     
     private void khoiTaoComboBoxes() {
         cmbTrangThai.getItems().clear();
@@ -337,33 +333,6 @@ public class DonDatBan_Controller implements Initializable{
         capNhatTongDon();
     }
 
-    private void apDungLoc() {
-        String sdt = txtKH.getText() != null ? txtKH.getText().trim() : "";
-        LocalDate ngayChon = dpNgayDatBan.getValue();
-        String trangThaiChon = cmbTrangThai.getValue();
-
-        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
-        filtered.setPredicate(don -> {
-            if (don == null) return false;
-            if (!sdt.isEmpty()) {
-                KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
-                if (kh == null || kh.getSdt() == null) return false;
-                if (!kh.getSdt().contains(sdt)) return false;
-            }
-            if (ngayChon != null) {
-                LocalDate ngayDon = don.getNgayGioLapDon().toLocalDate();
-                if (!ngayDon.equals(ngayChon)) return false;
-            }
-            if (!"Tất cả".equals(trangThaiChon)) {
-                String tt = don.getTrangThai();
-                if (tt == null) return false;
-                if (!tt.trim().equalsIgnoreCase(trangThaiChon.trim())) return false;
-            }
-            return true;
-        });
-        tblView.setItems(filtered);
-        capNhatTongDon();
-    }
     
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
