@@ -18,6 +18,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -31,6 +33,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.ExportExcelUtil;
 
@@ -96,8 +99,37 @@ public class KhachHang_Controller {
 
     @FXML
     void btnThemKhachHang(ActionEvent event) {
-    	MenuNV_Controller.instance.readyUI("KhachHang/ThemKhachHang");
+        moDialogThemKhachHang();
     }
+
+    private void moDialogThemKhachHang() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/fxml/KhachHang/ThemKhachHang.fxml")
+            );
+            Parent root = loader.load();
+
+            // Lấy controller nếu cần truyền dữ liệu
+            ThemKhachHang_Controller controller = loader.getController();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Thêm Khách Hàng");
+            dialogStage.initModality(Modality.APPLICATION_MODAL); // 🔴 khóa màn hình chính
+            dialogStage.initOwner(tableView.getScene().getWindow());
+            dialogStage.setScene(new Scene(root));
+            dialogStage.setResizable(false);
+
+            dialogStage.showAndWait(); // chờ đóng dialog
+
+            // Sau khi đóng dialog → reload danh sách
+            loadData();
+            phanTrang(danhSachKhachHangDB.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     
     @FXML
     void btnXuatExcel(ActionEvent event) throws IOException{
@@ -213,7 +245,8 @@ public class KhachHang_Controller {
         danhSachKhachHangDB = RestaurantApplication.getInstance()
                 .getDatabaseContext()
                 .newEntity_DAO(KhachHang_DAO.class)
-                .getDanhSach(KhachHang.class, filter);     
+                .getDanhSach(KhachHang.class, filter);
+        danhSachKhachHang.clear();
         danhSachKhachHang.addAll(danhSachKhachHangDB);
         tableView.setItems(danhSachKhachHang);
     }

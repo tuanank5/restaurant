@@ -38,6 +38,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import util.AutoIDUitl;
 
 public class ThemKhachHang_Controller {
@@ -98,61 +99,54 @@ public class ThemKhachHang_Controller {
         }
         return fxmlLoader;
     }
+    
     @FXML
     void controller(ActionEvent event) {
-    	Object src = event.getSource();
-    	if(src == btnTroLai) {
-    		if(!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
-    			//xacNhanLuu("DatBan/DatBan");
-    			MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
-    		}else {
-    			MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
-    		}
-    	}else if(src ==  btnLuu) {
-    		luuLai();
-    	} else if(src == btnXoa) {
-    		resetAllField();
-    	}
+        Object src = event.getSource();
+
+        if (src == btnTroLai) {
+            dongDialog();
+
+        } else if (src == btnLuu) {
+            luuLai();
+
+        } else if (src == btnXoa) {
+            resetAllField();
+        }
     }
+
     
+    private void dongDialog() {
+        Stage stage = (Stage) borderPane.getScene().getWindow();
+        stage.close();
+    }
+
     @FXML
     void mouseClicked(MouseEvent event) {
-        Object source = event.getSource();
-        // Kiểm tra nếu người dùng click vào label "Danh Sách Khách Hàng"
-        if (source == lblDanhSachKhachHang) {
-            if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
-                // Nếu không phải ở danh sách chính, xác nhận lưu và quay lại giao diện gọi đến
-                //xacNhanLuu("DatBan/DatBan");
-                MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
-            } else {
-                // Nếu đang ở trang danh sách khách hàng chính, quay lại danh sách khách hàng
-                //xacNhanLuu("KhachHang/KhachHang");
-                MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
-            }
-        }
+//        Object source = event.getSource();
+//        // Kiểm tra nếu người dùng click vào label "Danh Sách Khách Hàng"
+//        if (source == lblDanhSachKhachHang) {
+//            if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
+//                // Nếu không phải ở danh sách chính, xác nhận lưu và quay lại giao diện gọi đến
+//                //xacNhanLuu("DatBan/DatBan");
+//                MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
+//            } else {
+//                // Nếu đang ở trang danh sách khách hàng chính, quay lại danh sách khách hàng
+//                //xacNhanLuu("KhachHang/KhachHang");
+//                MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
+//            }
+//        }
     }
     
     @FXML
-    void keyPressed(KeyEvent event) throws IOException {
-        Object src = event.getSource();
-        // Kiểm tra nếu người dùng thao tác trong AnchorPane chính của giao diện
-        if (src == borderPane) {
-            //Tổ hợp phím Ctrl + S -> Lưu nhân viên
-            if (event.isControlDown() && event.getCode() == KeyCode.S) {
-                luuLai();
-            //Nhấn phím ESC -> Xác nhận lưu rồi quay lại giao diện trước
-            } else if (event.getCode() == KeyCode.ESCAPE) {
-                //Nếu không đang ở màn hình "Danh Sách Nhân Viên"
-                if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Nhân Viên")) {
-                    //xacNhanLuu("DatBan/DatBan");
-                    MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");// Ví dụ quay về trang chính hoặc form trước đó
-                } else {
-                    //xacNhanLuu("KhachHang/KhachHang");
-                    MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");// Quay lại danh sách nhân viên
-                }
-            }
+    void keyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ESCAPE) {
+            dongDialog();
+        } else if (event.isControlDown() && event.getCode() == KeyCode.S) {
+            luuLai();
         }
     }
+
     
     // Chức năng xác nhận lưu khách hàng
     private void xacNhanLuu(String ui) {
@@ -195,6 +189,7 @@ public class ThemKhachHang_Controller {
     	            if (check) {
     	                showAlert("Thông báo", "Thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
     	                this.khachHang = khachHangNew;
+    	                dongDialog();
     	                // Nếu không ở form thêm, thì quay lại
     	                if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
     	                	readyUI(ui);
