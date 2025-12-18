@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaiKhoan.ChiTietTaiKhoan_Controller">
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
@@ -31,13 +31,11 @@
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
                               <Label layoutX="160.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã nhân viên:" />
-                              <TextField editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtMaNV" editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                               <Label layoutX="160.0" layoutY="75.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Họ tên nhân viên:" />
-                              <TextField editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <Label layoutX="160.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số điện thoại:" />
-                              <Label layoutX="160.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chức vụ:" />
-                              <TextField editable="false" layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField editable="false" layoutX="287.0" layoutY="169.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtTenNV" editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <Label layoutX="160.0" layoutY="122.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chức vụ:" />
+                              <TextField fx:id="txtChucVu" editable="false" layoutX="287.0" layoutY="117.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                            </children>
                         </AnchorPane>
                      </center>
@@ -60,11 +58,11 @@
                               <Label layoutX="160.0" layoutY="125.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đăng nhập:" />
                               <Label layoutX="160.0" layoutY="175.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đăng xuất:" />
                               <Label layoutX="160.0" layoutY="225.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày sửa đổi:" />
-                              <TextField editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField editable="false" layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField editable="false" layoutX="287.0" layoutY="169.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                              <TextField editable="false" layoutX="287.0" layoutY="219.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtMaTK" editable="false" layoutX="287.0" layoutY="19.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtTenTK" editable="false" layoutX="287.0" layoutY="69.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtNgayDN" editable="false" layoutX="287.0" layoutY="119.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtNgayDX" editable="false" layoutX="287.0" layoutY="169.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <TextField fx:id="txtNgaySuaDoi" editable="false" layoutX="287.0" layoutY="219.0" prefHeight="30.0" prefWidth="234.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                            </children>
                         </AnchorPane>
                      </center>
@@ -77,7 +75,7 @@
    <top>
       <AnchorPane prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="25.0" layoutY="25.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Tài Khoản  &lt;" />
+            <Label fx:id="lblDanhSachTaiKhoan" layoutX="25.0" layoutY="25.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Tài Khoản  &lt;" />
             <Label layoutX="275.0" layoutY="25.0" style="-fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Chi Tiết Tài Khoản" />
             <Button mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại (ESC)" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
          </children>

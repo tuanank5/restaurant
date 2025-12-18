@@ -14,9 +14,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class TaiKhoan_Controller implements Initializable {
 
@@ -45,6 +49,18 @@ public class TaiKhoan_Controller implements Initializable {
     	 xuLyTimKiem();
     	 xuLyLocTheoNgay();
     	 xuLyNutTatCa();
+    	 tableView.setRowFactory(tv -> {
+    	        TableRow<TaiKhoan> row = new TableRow<>();
+
+    	        row.setOnMouseClicked(event -> {
+    	            if (!row.isEmpty() && event.getClickCount() == 2) {
+    	                TaiKhoan tk = row.getItem();
+    	                moManHinhChiTiet(tk);
+    	            }
+    	        });
+
+    	        return row;
+    	    });
     }
 
     private void cauHinhTable() {
@@ -120,6 +136,26 @@ public class TaiKhoan_Controller implements Initializable {
                 return ngayDN != null && ngayDN.toLocalDate().equals(newD);
             });
         });
+    }
+    
+    private void moManHinhChiTiet(TaiKhoan taiKhoan) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/view/fxml/TaiKhoan/ChiTietTaiKhoanTA.fxml")
+            );
+            Parent root = loader.load();
+
+            ChiTietTaiKhoan_Controller controller = loader.getController();
+            controller.setTaiKhoan(taiKhoan);
+
+            Stage stage = new Stage();
+            stage.setTitle("Chi tiết tài khoản");
+            stage.setScene(new Scene(root));
+            stage.initOwner(borderPane.getScene().getWindow());
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void xuLyNutTatCa() {
