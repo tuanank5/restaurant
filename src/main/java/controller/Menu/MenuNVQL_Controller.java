@@ -99,7 +99,7 @@ public class MenuNVQL_Controller {
 
     @FXML
     void btnTaiKhoan(ActionEvent event) {
-        readyUI("TaiKhoan/TaiKhoan");
+        readyUI("TaiKhoan/TaiKhoanTA");
     }
 
     @FXML
