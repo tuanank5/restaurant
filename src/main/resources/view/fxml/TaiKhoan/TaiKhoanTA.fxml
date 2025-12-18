@@ -31,7 +31,7 @@
             </AnchorPane>
          </top>
          <center>
-            <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
+            <TableView fx:id="tableView" onMouseClicked="#mouseClicked" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
                <columns>
                   <TableColumn fx:id="colMaTK" prefWidth="75.0" text="Mã tài khoản" />
                   <TableColumn fx:id="colTenTK" prefWidth="75.0" text="Tên tài khoản" />

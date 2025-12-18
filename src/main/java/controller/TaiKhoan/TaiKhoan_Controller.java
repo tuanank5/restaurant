@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import config.RestaurantApplication;
+import controller.Menu.MenuNVQL_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -49,20 +51,15 @@ public class TaiKhoan_Controller implements Initializable {
     	 xuLyTimKiem();
     	 xuLyLocTheoNgay();
     	 xuLyNutTatCa();
-    	 tableView.setRowFactory(tv -> {
-    	        TableRow<TaiKhoan> row = new TableRow<>();
-
-    	        row.setOnMouseClicked(event -> {
-    	            if (!row.isEmpty() && event.getClickCount() == 2) {
-    	                TaiKhoan tk = row.getItem();
-    	                moManHinhChiTiet(tk);
-    	            }
-    	        });
-
-    	        return row;
-    	    });
     }
-
+    
+    @FXML
+    void mouseClicked(MouseEvent event) {
+    	if (event.getClickCount() == 2) {
+            showThongTin();
+        }
+    }
+    
     private void cauHinhTable() {
         colMaTK.setCellValueFactory(c ->
             new SimpleStringProperty(c.getValue().getMaTaiKhoan()));
@@ -138,23 +135,12 @@ public class TaiKhoan_Controller implements Initializable {
         });
     }
     
-    private void moManHinhChiTiet(TaiKhoan taiKhoan) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/view/fxml/TaiKhoan/ChiTietTaiKhoanTA.fxml")
-            );
-            Parent root = loader.load();
-
-            ChiTietTaiKhoan_Controller controller = loader.getController();
-            controller.setTaiKhoan(taiKhoan);
-
-            Stage stage = new Stage();
-            stage.setTitle("Chi tiết tài khoản");
-            stage.setScene(new Scene(root));
-            stage.initOwner(borderPane.getScene().getWindow());
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void showThongTin() {
+        TaiKhoan taiKhoan = tableView.getSelectionModel().getSelectedItem();
+        if (taiKhoan != null) {
+            ChiTietTaiKhoan_Controller chiTiet =
+                MenuNVQL_Controller.instance.readyUI("TaiKhoan/ChiTietTaiKhoanTA").getController();
+            chiTiet.setTaiKhoan(taiKhoan);
         }
     }
 
