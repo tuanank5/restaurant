@@ -18,7 +18,7 @@
    <left>
       <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView fx:id="tblMonCu" prefHeight="315.0" prefWidth="296.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
+            <TableView fx:id="tblMonCu" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
    <columns>
       <TableColumn fx:id="colSTT" prefWidth="50.0" text="STT" />
       <TableColumn fx:id="colTenMonCu" prefWidth="150.0" text="Tên món" />
@@ -32,7 +32,7 @@
                <bottom>
                   <AnchorPane prefHeight="100.0" prefWidth="200.0" style="-fx-border-width: 2px 1px 0 0; -fx-border-color: #dddddd;" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnXacNhan" mnemonicParsing="false" onAction="#hanhDongXacNhan" prefHeight="32.0" prefWidth="101.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="21.0">
+                        <Button fx:id="btnXacNhan" mnemonicParsing="false" onAction="#hanhDongXacNhan" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
                            <font>
                               <Font name="System Bold Italic" size="12.0" />
                            </font></Button>
@@ -44,11 +44,11 @@
       </BorderPane>
    </left>
    <center>
-      <BorderPane prefHeight="595.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+      <BorderPane prefWidth="800.0" BorderPane.alignment="CENTER">
          <center>
             <ScrollPane fx:id="scrollPaneMon" prefHeight="200.0" prefWidth="200.0">
                <content>
-                  <GridPane fx:id="gridPaneMon" prefHeight="648.0" prefWidth="798.0">
+                  <GridPane fx:id="gridPaneMon" prefHeight="608.0" prefWidth="798.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -65,28 +65,24 @@
       </BorderPane>
    </center>
    <top>
-      <BorderPane prefHeight="89.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="90.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <left>
-            <AnchorPane prefHeight="39.0" prefWidth="399.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
-                  <ComboBox fx:id="comBoxPhanLoai" layoutX="14.0" layoutY="11.0" prefWidth="150.0" promptText="Phân loại" />
+                  <ComboBox fx:id="comBoxPhanLoai" layoutX="10.0" prefWidth="150.0" promptText="Phân loại" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </AnchorPane>
          </left>
          <right>
-            <AnchorPane prefHeight="39.0" prefWidth="798.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefWidth="800.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="txtTim" layoutX="6.0" layoutY="10.0" prefHeight="26.0" prefWidth="561.0" promptText="Nhập tên món ăn để tìm" />
-                  <Button fx:id="btnTroLai" layoutX="704.0" layoutY="9.0" mnemonicParsing="false" onAction="#hanhDongTroLai" prefHeight="28.0" prefWidth="79.0" text="Trở lại">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
+                  <TextField fx:id="txtTim" prefWidth="300.0" promptText="Nhập tên món ăn để tìm" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <Button fx:id="btnTroLai" layoutX="700.0" mnemonicParsing="false" onAction="#hanhDongTroLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại" />
                </children>
             </AnchorPane>
          </right>
          <top>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="42.0" prefWidth="127.0" text="ĐỔI MÓN" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="ĐỔI MÓN" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>

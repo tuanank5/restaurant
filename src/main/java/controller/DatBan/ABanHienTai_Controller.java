@@ -122,9 +122,9 @@ public class ABanHienTai_Controller {
         	loadDanhSachHoaDon();
         } else if (source == btnDatTruoc) {
         	
-        }else if(source == btnBan) {
+        } else if(source == btnBan) {
         	MenuNV_Controller.instance.readyUI("DatBan/aDoiBan");
-        }else if(source == btnMonAn) {
+        } else if(source == btnMonAn) {
         	MenuNV_Controller.instance.readyUI("DatBan/aDoiMon");
         }
     }
@@ -142,11 +142,6 @@ public class ABanHienTai_Controller {
         txtTongDatBan.setEditable(false);
         txtTongDatBan.setText(tongDatBan + "");
         
-//        btnBan.setTooltip(new Tooltip("Thông báo cho nút Ban!"));
-//        btnChoThanhToan.setTooltip(new Tooltip("Thông báo cho nút Cho Thanh Toan!"));
-//        btnDatTruoc.setTooltip(new Tooltip("Thông báo cho nút Dat Truoc!"));
-//        btnDatBan.setTooltip(new Tooltip("Thông báo cho nút Dat Ban!"));
-//        btnKhac.setTooltip(new Tooltip("Thông báo cho nút Khac!"));
     }
 
     private void capNhatTrangThaiBanMacDinh() {
@@ -168,7 +163,7 @@ public class ABanHienTai_Controller {
     	List<DonDatBan> dsDDBnow = new ArrayList<DonDatBan>();
 
     	for (HoaDon hd : dsHoaDon) {
-    		if (hd.getTrangThai().equals("Chưa thanh toán")) {
+    		if (hd.getTrangThai().equals("Đặt trước")) {
     			LocalDate ngayGioLapDon = hd.getDonDatBan().getNgayGioLapDon().toLocalDate();
         		if (ngayGioLapDon.equals(nowDate)) {
         			if (nowHour.isAfter(hd.getDonDatBan().getGioBatDau().minusHours(1)) && nowHour.isBefore(hd.getDonDatBan().getGioBatDau().plusHours(1))) {
@@ -219,7 +214,9 @@ public class ABanHienTai_Controller {
         for (final HoaDon hoaDon : dsHoaDon) {
             boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan());
 
-            if (matchType && hoaDon.getNgayLap().equals(dateNow) && hoaDon.getTrangThai().equals("Chưa thanh toán")) {
+            if (matchType && hoaDon.getNgayLap().equals(dateNow) 
+            		&& hoaDon.getKieuThanhToan().equals("Chưa thanh toán")
+            		&& hoaDon.getDonDatBan().getTrangThai().equals("Đã nhận bàn")) {
 //            	BorderPane borderPane = new BorderPane();
 //            	BorderPane paneNorth = new BorderPane();
 //            	borderPane.setTop(paneNorth);
@@ -325,10 +322,6 @@ public class ABanHienTai_Controller {
             }
         }
     }
-    
-    private void loadDanhSachHoaDonDatTruoc() {
-		
-	}
     
     private void capNhatTrangThaiBanTheoHD(HoaDon hd) {
     	for (Ban ban : dsBan) {

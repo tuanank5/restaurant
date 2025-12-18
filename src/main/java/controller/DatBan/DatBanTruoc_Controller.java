@@ -500,7 +500,7 @@ public class DatBanTruoc_Controller implements Initializable {
 			ddb.setSoLuong(soLuongKH);
 //			ddb.setKhachHang(kh);
 			ddb.setBan(ban);
-			ddb.setTrangThai("Chưa Nhận Bàn");
+			ddb.setTrangThai("Chưa nhận bàn");
 			
 			boolean ok = ddbDAO.them(ddb);
 			if (!ok) {
@@ -524,36 +524,36 @@ public class DatBanTruoc_Controller implements Initializable {
 				showAlert(Alert.AlertType.ERROR, "Không cập nhật được trạng thái bàn.");
 				return;
 				}				
-				//Tạo hóa đơn
-				if (danhSachDatBanDaTao.isEmpty()) {
+			//Tạo hóa đơn
+			if (danhSachDatBanDaTao.isEmpty()) {
 				showAlert(Alert.AlertType.ERROR, "Không có đơn đặt bàn để tạo hóa đơn.");
 				return;
-				}
+			}
 				
-				DonDatBan donDau = danhSachDatBanDaTao.get(0);				
-				try {
-					HoaDon hd = new HoaDon();
-					hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
-					hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
-					hd.setTongTien(0.0);
-					hd.setThue(0.0);
-					hd.setTrangThai("Chưa Thanh Toán");
-					hd.setKieuThanhToan("");
-					hd.setTienNhan(0.0);
-					hd.setTienThua(0.0);
-					hd.setKhachHang(kh);
-					hd.setKhuyenMai(null);
-					hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-					hd.setDonDatBan(donDau);				
-					boolean okHD = hdDAO.them(hd);
-				if (!okHD) {
+			DonDatBan donDau = danhSachDatBanDaTao.get(0);				
+			try {
+				HoaDon hd = new HoaDon();
+				hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
+				hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
+				hd.setTongTien(0.0);
+				hd.setThue(0.0);
+				hd.setTrangThai("Đặt trước");
+				hd.setKieuThanhToan("Chưa thanh toán");
+				hd.setTienNhan(0.0);
+				hd.setTienThua(0.0);
+				hd.setKhachHang(kh);
+				hd.setKhuyenMai(null);
+				hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+				hd.setDonDatBan(donDau);				
+				boolean okHD = hdDAO.them(hd);
+			if (!okHD) {
 				showAlert(Alert.AlertType.ERROR, "Không thể lưu hóa đơn.");
 				return;
 				}			
 			} catch (Exception e) {
-			e.printStackTrace();
-			showAlert(Alert.AlertType.ERROR, "Lỗi khi tạo hóa đơn.");
-			return;
+				e.printStackTrace();
+				showAlert(Alert.AlertType.ERROR, "Lỗi khi tạo hóa đơn.");
+				return;
 			}		
 			showAlert(Alert.AlertType.INFORMATION, "Đặt bàn thành công!");
     }

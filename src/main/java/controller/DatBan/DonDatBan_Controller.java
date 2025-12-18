@@ -185,7 +185,7 @@ public class DonDatBan_Controller implements Initializable{
     
     private void khoiTaoComboBoxes() {
         cmbTrangThai.getItems().clear();
-        cmbTrangThai.getItems().addAll("Tất cả","Đã Nhận Bàn","Chưa Nhận Bàn");
+        cmbTrangThai.getItems().addAll("Tất cả","Đã nhận bàn","Chưa nhận bàn");
         cmbTrangThai.getSelectionModel().select("Tất cả");
     }
     
@@ -255,9 +255,9 @@ public class DonDatBan_Controller implements Initializable{
 
         // Chỉ cho phép thay đổi trạng thái
         ComboBox<String> cmbTrangThaiDialog = new ComboBox<>();
-        cmbTrangThaiDialog.getItems().addAll("Đã Nhận Bàn", "Chưa Nhận Bàn");
+        cmbTrangThaiDialog.getItems().addAll("Đã nhận bàn", "Chưa nhận bàn");
         cmbTrangThaiDialog.setValue(
-            don.getTrangThai() != null ? don.getTrangThai() : "Chưa Nhận Bàn"
+            don.getTrangThai() != null ? don.getTrangThai() : "Chưa nhận bàn"
         );
 
         GridPane grid = new GridPane();

@@ -278,7 +278,7 @@ public class ADatMon_Controller implements Initializable {
     	ddb.setSoLuong(MenuNV_Controller.soLuongKhach);
     	ddb.setBan(MenuNV_Controller.banDangChon);
     	ddb.setGioBatDau(nowHour);
-    	ddb.setTrangThai("Hiện tại");
+    	ddb.setTrangThai("Đã nhận bàn");
     	
     	if (RestaurantApplication.getInstance()
    	                    .getDatabaseContext()
@@ -297,8 +297,8 @@ public class ADatMon_Controller implements Initializable {
         Date dateNow = Date.valueOf(localDate);
         hd.setNgayLap(dateNow);
 
-        hd.setTrangThai("Chưa thanh toán");
-        hd.setKieuThanhToan("Tiền mặt");
+        hd.setTrangThai("Hiện tại");
+        hd.setKieuThanhToan("Chưa thanh toán");
 
         // --- Gán khách hàng ---
         KhachHang kh;

@@ -393,7 +393,7 @@ public class DatMonTruoc_Controller implements Initializable{
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                ddb.setTrangThai("Chưa Nhận Bàn");
+                ddb.setTrangThai("Chưa nhận bàn");
                 boolean okDDB = donDatBanDAO.them(ddb);
                 if (!okDDB) {
                     showAlert(Alert.AlertType.ERROR, "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan());
@@ -417,8 +417,8 @@ public class DatMonTruoc_Controller implements Initializable{
             hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
             hd.setTongTien(tongTien);
             hd.setThue(0.0);
-            hd.setTrangThai("Chưa Thanh Toán");
-            hd.setKieuThanhToan("");
+            hd.setTrangThai("Đặt trước");
+            hd.setKieuThanhToan("Chưa thanh toán");
             hd.setTienNhan(0.0);
             hd.setTienThua(0.0);
             hd.setKhachHang(kh);
