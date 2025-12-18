@@ -32,7 +32,7 @@
                <bottom>
                   <AnchorPane prefHeight="100.0" prefWidth="200.0" style="-fx-border-width: 2px 1px 0 0; -fx-border-color: #dddddd;" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#btnXacNhan" prefHeight="32.0" prefWidth="101.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="21.0">
+                        <Button fx:id="btnXacNhan" mnemonicParsing="false" onAction="#hanhDongXacNhan" prefHeight="32.0" prefWidth="101.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="21.0">
                            <font>
                               <Font name="System Bold Italic" size="12.0" />
                            </font></Button>
@@ -77,7 +77,7 @@
             <AnchorPane prefHeight="39.0" prefWidth="798.0" BorderPane.alignment="CENTER">
                <children>
                   <TextField fx:id="txtTim" layoutX="6.0" layoutY="10.0" prefHeight="26.0" prefWidth="561.0" promptText="Nhập tên món ăn để tìm" />
-                  <Button fx:id="btnTroLai" layoutX="704.0" layoutY="9.0" mnemonicParsing="false" onAction="#btnTroLai" prefHeight="28.0" prefWidth="79.0" text="Trở lại">
+                  <Button fx:id="btnTroLai" layoutX="704.0" layoutY="9.0" mnemonicParsing="false" onAction="#hanhDongTroLai" prefHeight="28.0" prefWidth="79.0" text="Trở lại">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

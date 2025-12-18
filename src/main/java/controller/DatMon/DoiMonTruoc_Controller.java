@@ -44,6 +44,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -55,6 +56,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 
     @FXML private TextField txtTim;
     @FXML private Button btnTroLai;
+    @FXML private Button btnXacNhan;
     @FXML private ComboBox<String> comBoxPhanLoai;
     @FXML private ScrollPane scrollPaneMon;
     @FXML private GridPane gridPaneMon;
@@ -126,9 +128,12 @@ public class DoiMonTruoc_Controller implements Initializable {
         javafx.application.Platform.runLater(() -> {
             loadMonCu();
         });
+       
+        btnTroLai.setTooltip(new Tooltip("Thông báo cho nút Trở lại!"));
+        btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
+        txtTim.setTooltip(new Tooltip("Nhập tên món ăn để tìm!"));
+        comBoxPhanLoai.setTooltip(new Tooltip("Lọc để tìm món ăn!"));
     }
-
-
 
     //CHỌN MÓN
     private void chonMon(MonAn mon) {
@@ -308,13 +313,12 @@ public class DoiMonTruoc_Controller implements Initializable {
     }
 
     @FXML
-    private void btnTroLai(ActionEvent e) {
-        // Quay về màn hình trước (VD: quay lại màn hình đặt bàn)
+    private void hanhDongTroLai(ActionEvent e) {
         MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
     }
 
     @FXML
-    private void btnXacNhan(ActionEvent e) {
+    private void hanhDongXacNhan(ActionEvent e) {
         if (donDatBanDuocChon == null) {
             alert("Lỗi", "Chưa chọn đơn đặt bàn!");
             return;
