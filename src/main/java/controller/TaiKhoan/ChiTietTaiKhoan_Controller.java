@@ -3,7 +3,9 @@ package controller.TaiKhoan;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import controller.Menu.MenuNVQL_Controller;
 import entity.TaiKhoan;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -45,6 +47,11 @@ public class ChiTietTaiKhoan_Controller implements Initializable{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@FXML
+    void btnQuayLai(ActionEvent event) {
+		MenuNVQL_Controller.instance.readyUI("TaiKhoan/TaiKhoanTA");
+    }
 	
 	public void setTaiKhoan(TaiKhoan taiKhoan) {
 	    this.taiKhoan = taiKhoan;
