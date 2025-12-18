@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Menu.MenuNV_Controller">
    <left>
@@ -25,7 +26,7 @@
             <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="400.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="450.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="ARROWS_H" layoutX="20.0" layoutY="300.0" size="25" />
-            <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi/ Hủy bàn" />
+            <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi/Hủy bàn" />
             <Label layoutX="5.0" layoutY="510.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Settings" />
             <FontAwesomeIconView fill="#f9c410" glyphName="LOCK" layoutX="20.0" layoutY="575.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="SIGN_OUT" layoutX="20.0" layoutY="625.0" size="25" />
@@ -33,7 +34,10 @@
             <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnDoiMatKhau" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi mật khẩu" />
             <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnDangXuat" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đăng xuất" />
             <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="160.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-            <Button layoutX="80.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Dashboard" />
+            <Button layoutX="80.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Dashboard">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
             <FontAwesomeIconView fill="#f9c410" glyphName="DASHBOARD" layoutX="20.0" layoutY="150.0" size="25" />
             <Button layoutX="80.0" layoutY="475.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Ca làm việc" />
             <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="500.0" size="25" />

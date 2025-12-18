@@ -204,10 +204,8 @@ INSERT INTO Coc (maCoc, loaiCoc, phanTramCoc, soTienCoc) VALUES
 
 INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, phanTramGiamGia)
 VALUES
-('KM004', N'Ưu đãi VIP tháng 11', N'Ưu đãi cho khách hàng Kim Cương', N'Tất cả', '2025-11-01', '2025-11-30', 20),
-('KM005', N'Giảm giá Pizza đặc biệt', N'Khuyến mãi món ăn', N'SP004', '2025-11-05', '2025-11-15', 15),
-('KM006', N'Giảm 10% tổng hóa đơn cuối tuần', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-07', '2025-11-08', 10),
-('KM007', N'Ưu đãi VIP cuối tháng', N'Ưu đãi cho khách hàng VIP', N'Tất cả', '2025-11-20', '2025-11-30', 25);
+('KM001', N'Ưu đãi VIP tháng 11', N'Ưu đãi cho khách hàng Kim Cương', N'Tất cả', '2025-11-01', '2025-11-30', 20),
+('KM002', N'Giảm 10% tổng hóa đơn cuối tuần', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-07', '2025-11-08', 10),
 
 INSERT INTO DonDatBan (maDatBan, ngayGio, soLuong, maBan, gioBatDau, trangThai) VALUES
 ('DB001', DEFAULT, 4, 'B01', '18:00:00', 'Chưa thanh toán'),
@@ -216,10 +214,10 @@ INSERT INTO DonDatBan (maDatBan, ngayGio, soLuong, maBan, gioBatDau, trangThai) 
 ('DB004', DEFAULT, 6, 'B04', '21:00:00', 'Chưa thanh toán');
 
 INSERT INTO HoaDon (maHD, ngayLap, tongTien, thue, trangThai, kieuThanhToan, tienNhan, tienThua, maKH, maKM, maNV, maDatBan, maCoc) VALUES
-('HD001', '2025-08-01', 1000000, 100000, 'Đã thanh toán', 'Tiền mặt', 1200000, 200000, 'KH0001', 'KM004', 'NV001', 'DB001', 'C001'),
-('HD002', '2025-08-02', 1500000, 150000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0002', 'KM005', 'NV002', 'DB002', 'C002'),
-('HD003', '2025-08-03', 2000000, 200000, 'Đã thanh toán', 'Chuyển khoản', 2200000, 200000, 'KH0003', 'KM006', 'NV003', 'DB003', 'C003'),
-('HD004', '2025-09-01', 1200000, 120000, 'Đã thanh toán', 'Tiền mặt', 1300000, 80000, 'KH0004', 'KM007', 'NV004', 'DB004', 'C004');
+('HD001', '2025-08-01', 1000000, 100000, 'Đã thanh toán', 'Tiền mặt', 1200000, 200000, 'KH0001', 'KM001', 'NV001', 'DB001', 'C001'),
+('HD002', '2025-08-02', 1500000, 150000, 'Chưa thanh toán', 'Thẻ tín dụng', 0, 0, 'KH0002', 'KM001', 'NV002', 'DB002', 'C002'),
+('HD003', '2025-08-03', 2000000, 200000, 'Đã thanh toán', 'Chuyển khoản', 2200000, 200000, 'KH0003', 'KM002', 'NV003', 'DB003', 'C003'),
+('HD004', '2025-09-01', 1200000, 120000, 'Đã thanh toán', 'Tiền mặt', 1300000, 80000, 'KH0004', 'KM002', 'NV004', 'DB004', 'C004');
 
 INSERT INTO MonAn (maMon, tenMon, donGia, maKM, duongDanAnh, loaiMon) VALUES
 ('M001', N'Bún Quậy', 45000, 'KM004', 'D:\\img\\bunquay.jpg', N'Bún'), 

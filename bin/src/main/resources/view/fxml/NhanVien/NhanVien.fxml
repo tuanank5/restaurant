@@ -23,15 +23,6 @@
                </top>
                <center>
                   <BorderPane prefHeight="75.0" prefWidth="900.0" BorderPane.alignment="CENTER">
-                     <left>
-                        <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm nhân viên" />
-                              <Button fx:id="btnUpdateNV" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Cập nhật nhân viên" />
-                              <Button fx:id="btnXuatPDF" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất PDF" />
-                           </children>
-                        </AnchorPane>
-                     </left>
                      <right>
                         <AnchorPane prefHeight="75.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                            <children>
@@ -40,6 +31,14 @@
                            </children>
                         </AnchorPane>
                      </right>
+                     <center>
+                        <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm nhân viên" />
+                              <Button fx:id="btnXuatPDF" layoutX="207.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất PDF" />
+                           </children>
+                        </AnchorPane>
+                     </center>
                   </BorderPane>
                </center>
                <bottom>
