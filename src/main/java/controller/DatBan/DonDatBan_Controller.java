@@ -14,6 +14,7 @@ import controller.DatMon.DoiMonTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
+import dao.impl.DonDatBan_DAOImpl;
 import javafx.scene.control.ButtonBar;
 import entity.Ban;
 import entity.DonDatBan;
@@ -105,6 +106,7 @@ public class DonDatBan_Controller implements Initializable{
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
+    	donDatBanDAO = new DonDatBan_DAOImpl();
 		// TODO Auto-generated method stub
     	dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> timTheoNgayDatBan());
     	cmbTrangThai.valueProperty().addListener((obs, oldVal, newVal) -> timTheoTrangThai());
@@ -190,12 +192,7 @@ public class DonDatBan_Controller implements Initializable{
     }
     
     private void loadData() {
-        Map<String, Object> filter = new HashMap<>();
-
-        danhSachDonDatBanDB = RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(DonDatBan_DAO.class)
-                .getDanhSach(DonDatBan.class, filter);
+        danhSachDonDatBanDB = donDatBanDAO.getAllDDBTruoc();
         danhSachDonDatBan.clear();
         danhSachDonDatBan.addAll(danhSachDonDatBanDB);
 

@@ -13,6 +13,7 @@ import java.util.Map;
 import dao.DonDatBan_DAO;
 import entity.Ban;
 import entity.DonDatBan;
+import entity.HoaDon;
 import entity.KhachHang;
 import entity.LoaiBan;
 import jakarta.persistence.EntityManager;
@@ -389,6 +390,25 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	    } finally {
 	        em.close();
 	    }
+	}
+	
+	@Override
+	public List<DonDatBan> getAllDDBTruoc() {
+	    EntityManager entityManager = entityManagerFactory.createEntityManager();
+	    List<DonDatBan> dsDDB = null;
+
+	    try {
+	        dsDDB = entityManager.createQuery(
+	        		"SELECT HD.donDatBan FROM HoaDon HD WHERE HD.trangThai = :trangThai", 
+	                DonDatBan.class)
+	                .setParameter("trangThai", "Đặt trước")
+	                .getResultList();
+
+	    } finally {
+	        entityManager.close(); // Đóng EntityManager
+	    }
+
+	    return dsDDB;
 	}
 	
 }

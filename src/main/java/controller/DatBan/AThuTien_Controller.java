@@ -220,7 +220,7 @@ public class AThuTien_Controller {
                 Date dateNow = Date.valueOf(localDate);
             	hoaDonHienTai.setNgayLap(dateNow);
             	
-            	hoaDonHienTai.setTrangThai("Đã thanh toán");
+            	hoaDonHienTai.setTrangThai("Hiện tại");
             	hoaDonHienTai.setKieuThanhToan("Tiền mặt");
 //            	
 //            	KhachHang kh = new KhachHang();
@@ -345,7 +345,7 @@ public class AThuTien_Controller {
 
                // TỔNG KẾT 
                document.add(new Paragraph("Tổng thanh toán: " + lblTienCanThu.getText(), fontNormal));
-               document.add(new Paragraph("Tiền khách đưa: " + txtTienKH.getText() + " VND", fontNormal));
+               document.add(new Paragraph("Tiền khách đưa: " + formatTienVN(Double.parseDouble(txtTienKH.getText())), fontNormal));
                document.add(new Paragraph("Tiền thừa: " + lblTienCanTra.getText(), fontNormal));
 
                document.add(Chunk.NEWLINE);

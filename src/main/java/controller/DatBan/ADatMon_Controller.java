@@ -185,7 +185,7 @@ public class ADatMon_Controller implements Initializable {
     	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
     }
     
-// cài khách hàng
+    // cài khách hàng
     private KhachHang khachHangDangChon;
 
     public void setKhachHang(KhachHang kh) {
@@ -301,16 +301,7 @@ public class ADatMon_Controller implements Initializable {
         hd.setKieuThanhToan("Chưa thanh toán");
 
         // --- Gán khách hàng ---
-        KhachHang kh;
-        if (this.khachHangDangChon != null) {
-            kh = this.khachHangDangChon;
-        } else if (MenuNV_Controller.khachHangDangChon != null) {
-            kh = MenuNV_Controller.khachHangDangChon;
-        } else {
-            kh = new KhachHang();
-            kh.setMaKH("KH0001"); // mặc định khách lẻ
-            kh.setTenKH("Khách lẻ");
-        }
+        KhachHang kh = this.khachHangDangChon;
         hd.setKhachHang(kh);
 
         hd.setKhuyenMai(null);
