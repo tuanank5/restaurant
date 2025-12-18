@@ -13,7 +13,7 @@ public class ThongKeNVQLScroll_Controller {
 	
 	@FXML
     public void initialize(){
-        loadTabContent(pane_Dashboard, "/view/fxml/Dashboard/DashboardNVQL.fxml");
+        loadTabContent(pane_Dashboard, "/view/fxml/ThongKe/ThongKeNVQL.fxml");
     }
 
     private void loadTabContent(ScrollPane pane, String fxmlFile){
