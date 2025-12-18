@@ -184,7 +184,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     }
 
     private Button taoNutBan(Ban ban) {
-        Button btnBan = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+    	Button btnBan = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
         btnBan.setPrefSize(170, 110);
         LocalDate ngay = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
@@ -222,7 +222,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         if (!danhSachBanDangChon.isEmpty()) {
             Ban banCu = danhSachBanDangChon.get(0);
             Button btnCu = danhSachButtonDangChonUI.get(0);
-            btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getSoLuong() + " chỗ)");
+            btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getTenLoaiBan() + ")");
             btnCu.setStyle(getStyleByStatusAndType(banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()));
             danhSachBanDangChon.clear();
             danhSachButtonDangChonUI.clear();
@@ -230,7 +230,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
         
         danhSachBanDangChon.add(ban);
         danhSachButtonDangChonUI.add(btnBan);
-        btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+        btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
         btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
     }
 
@@ -245,7 +245,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     	            danhSachBanDangChon.add(banDaDat);
     	            danhSachButtonDangChonUI.add(btn);
     	            btn.setText("✔ " + banDaDat.getMaBan() +
-    	                        "\n(" + banDaDat.getLoaiBan().getSoLuong() + " chỗ)");
+    	                        "\n(" + banDaDat.getLoaiBan().getTenLoaiBan() + ")");
     	            btn.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
     	            break;
     	        }

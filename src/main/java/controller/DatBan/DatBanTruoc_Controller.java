@@ -138,7 +138,7 @@ public class DatBanTruoc_Controller implements Initializable {
             String bgColor = banBan ? "#ff0000" : "#00aa00"; // đỏ / xanh
             if (ban.getTrangThai().equals("Đang phục vụ"))
                 bgColor = "#ec9407"; // cam
-            Button btn = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            Button btn = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")"); 
             btn.setPrefSize(170, 110);
             btn.setStyle(buildStyle(bgColor));
             final boolean isBanBanFinal = banBan;
@@ -198,14 +198,14 @@ public class DatBanTruoc_Controller implements Initializable {
             danhSachBanDangChon.clear();
             danhSachButtonDangChonUI.clear();
             btnBan.setStyle(buildStyle("#00aa00"));
-            btnBan.setText(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            btnBan.setText(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
         } else {
             danhSachBanDangChon.clear();
             danhSachButtonDangChonUI.clear();
             danhSachBanDangChon.add(ban);
             danhSachButtonDangChonUI.add(btnBan);
             btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-            btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+            btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
         }
     }
 
