@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -19,7 +20,7 @@
             <center>
                 <Label alignment="CENTER" prefHeight="45.0" prefWidth="357.0" text="Danh sách khách hàng">
                     <font>
-                        <Font name="System Bold Italic" size="24.0" />
+                        <Font name="System Bold" size="30.0" />
                     </font>
                 </Label>
             </center>
@@ -31,12 +32,30 @@
         <VBox prefHeight="600" spacing="10" style="-fx-background-color: white;">
             <!-- Action Buttons & Search -->
             <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="15">
-                <Button onAction="#btnThemKhachHang" style="-fx-background-color: green; -fx-text-fill: white;" text="Thêm khách hàng" />
-                <Button onAction="#btnXuatExcel" style="-fx-background-color: blue; -fx-text-fill: white;" text="Xuất Excel" />
-                <Button onAction="#btnTatCa" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Label text="Tìm kiếm:" />
-                <TextField fx:id="txtTimKiem" onMouseClicked="#mouseClicked" prefWidth="200" />
+                <Button fx:id="btnThem" onAction="#btnThemKhachHang" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: green; -fx-text-fill: white;" text="Thêm khách hàng">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Button>
+                <Button fx:id="btnXuat" onAction="#btnXuatExcel" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: blue; -fx-text-fill: white;" text="Xuất Excel">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Button>
+                <Button fx:id="btnTC" onAction="#btnTatCa" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Button>
+                <Region prefHeight="60.0" prefWidth="300.0" HBox.hgrow="ALWAYS" />
+                <Label prefHeight="18.0" prefWidth="66.0" text="Tìm kiếm:">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+                <TextField fx:id="txtTimKiem" onMouseClicked="#mouseClicked" prefWidth="200">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin></TextField>
             </HBox>
 
             <!-- TableView -->

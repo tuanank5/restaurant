@@ -55,7 +55,7 @@ CREATE TABLE DonDatBan
 	soLuong INT CHECK (soLuong > 0),
 	maBan VARCHAR(20) REFERENCES Ban(maBan) ON DELETE CASCADE,
 	gioBatDau TIME NOT NULL,
-	trangThai NVARCHAR(20)
+	trangThai NVARCHAR(50)
 );
  
 CREATE TABLE DonLapDoiHuyBan
