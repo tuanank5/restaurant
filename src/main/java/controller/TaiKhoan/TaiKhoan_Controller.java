@@ -46,8 +46,8 @@ public class TaiKhoan_Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	 cauHinhTable();   // chỉ set column
-    	 loadData();       // load DB
+    	 cauHinhTable();
+    	 loadData(); 
     	 xuLyTimKiem();
     	 xuLyLocTheoNgay();
     	 xuLyNutTatCa();
