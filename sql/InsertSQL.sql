@@ -205,7 +205,7 @@ INSERT INTO Coc (maCoc, loaiCoc, phanTramCoc, soTienCoc) VALUES
 INSERT INTO KhuyenMai (maKM, tenKM, loaiKM, sanPhamKM, ngayBatDau, ngayKetThuc, phanTramGiamGia)
 VALUES
 ('KM001', N'Ưu đãi VIP tháng 11', N'Ưu đãi cho khách hàng Kim Cương', N'Tất cả', '2025-11-01', '2025-11-30', 20),
-('KM002', N'Giảm 10% tổng hóa đơn cuối tuần', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-07', '2025-11-08', 10),
+('KM002', N'Giảm 10% tổng hóa đơn cuối tuần', N'Khuyến mãi trên tổng hóa đơn', N'Tất cả', '2025-11-07', '2025-11-08', 10);
 
 INSERT INTO DonDatBan (maDatBan, ngayGio, soLuong, maBan, gioBatDau, trangThai) VALUES
 ('DB001', DEFAULT, 4, 'B01', '18:00:00', N'Chưa thanh toán'),
