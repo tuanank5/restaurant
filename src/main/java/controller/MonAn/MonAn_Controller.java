@@ -89,6 +89,15 @@ public class MonAn_Controller implements Initializable{
 	        btnThem.setOnAction(e -> handleThemMon());
 	        btnSua.setOnAction(e -> handleSuaMon());
 	        btnXoa.setOnAction(e -> handleXoaMon());
+	        
+	        btnSua.setTooltip(new Tooltip("Thông báo cho nút Sửa món!"));
+	        btnThem.setTooltip(new Tooltip("Thông báo cho nút Thêm món!"));
+	        btnThemAnh.setTooltip(new Tooltip("Thông báo cho nút Thêm ảnh món!"));
+	        btnXoa.setTooltip(new Tooltip("Thông báo cho nút Xoá món!"));
+	        txtTenMon.setTooltip(new Tooltip("Nhập tên món!"));
+	        txtDonGia.setTooltip(new Tooltip("Nhập đơn giá món!"));
+	        cmbLoaiMon.setTooltip(new Tooltip("Chọn loại món!"));
+	        txtMaMon.setTooltip(new Tooltip("Mã của món!"));
 	    }
 	    
 	    @FXML
