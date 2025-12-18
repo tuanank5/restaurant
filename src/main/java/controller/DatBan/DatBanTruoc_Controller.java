@@ -136,22 +136,36 @@ public class DatBanTruoc_Controller implements Initializable {
             boolean banBan = (ngayChon != null && gioChon != null)
                     && isBanDangBan(ban, ngayChon, gioChon);
             String bgColor = banBan ? "#ff0000" : "#00aa00"; // đỏ / xanh
-            if (ban.getTrangThai().equals("Đang phục vụ"))
-                bgColor = "#ec9407"; // cam
+            String trangThai = getTrangThaiThucTe(ban, ngayChon, gioChon);
+            switch (trangThai) {
+                case "Đang phục vụ":
+                    bgColor = "#ec9407"; // cam
+                    break;
+                case "Đã được đặt":
+                    bgColor = "#ff0000"; // đỏ
+                    break;
+                default:
+                    bgColor = "#00aa00"; // xanh
+            }
             Button btn = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")"); 
             btn.setPrefSize(170, 110);
             btn.setStyle(buildStyle(bgColor));
-            final boolean isBanBanFinal = banBan;
+            final boolean isDangPhucVu = "Đang phục vụ".equals(trangThai);
+            final boolean isBanBanFinal = banBan || isDangPhucVu;
             btn.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
                     // Double click -> mở form nhập thông tin khách hàng
                     hienThiFormThongTinKhachHang(ban);
                     return;
                 }
-                if (isBanBanFinal) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING,
-                            "Bàn này đang được đặt trong 2 giờ.\nKhông thể chọn!");
-                    alert.showAndWait();
+                if (isDangPhucVu) {
+                    showAlert(Alert.AlertType.WARNING,
+                            "Bàn này đang phục vụ khách.\nKhông thể chọn!");
+                    return;
+                }
+                if (banBan) {
+                    showAlert(Alert.AlertType.WARNING,
+                            "Bàn này đã được đặt trước.\nKhông thể chọn!");
                     return;
                 }
                 handleChonBan(ban, btn);
@@ -248,7 +262,6 @@ public class DatBanTruoc_Controller implements Initializable {
     }
     
     private Button taoNutBan(Ban ban) {
-
         LocalDate ngayChon = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
         LocalTime gioChon = gioStr != null ? LocalTime.parse(gioStr) : null;
@@ -257,8 +270,17 @@ public class DatBanTruoc_Controller implements Initializable {
                 && isBanDangBan(ban, ngayChon, gioChon);
 
         String bgColor = banBan ? "#ff0000" : "#00aa00";  // đỏ / xanh
-        if (ban.getTrangThai().equals("Đang phục vụ"))
-            bgColor = "#ec9407";                          // cam
+        String trangThai = getTrangThaiThucTe(ban, ngayChon, gioChon);
+        switch (trangThai) {
+            case "Đang phục vụ":
+                bgColor = "#ec9407"; // cam
+                break;
+            case "Đã được đặt":
+                bgColor = "#ff0000"; // đỏ
+                break;
+            default:
+                bgColor = "#00aa00"; // xanh
+        }                          
 
         Button btn = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
         btn.setPrefSize(170, 110);
@@ -283,28 +305,32 @@ public class DatBanTruoc_Controller implements Initializable {
 
         return btn;
     }
-
-    
+ 
     private String getTrangThaiThucTe(Ban ban, LocalDate ngay, LocalTime gio) {
-        if ("Đang phục vụ".equals(ban.getTrangThai()))
-            return "Đang phục vụ";
         if (ngay == null || gio == null)
             return "Trống";
+
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-        if (dsDon != null) {
-            for (DonDatBan don : dsDon) {
-                if (donDatBanDuocChon != null &&
-                    don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
-                    continue;
+        if (dsDon == null || dsDon.isEmpty())
+            return "Trống";
 
-                LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
-                if (!ngayDat.equals(ngay)) continue;
+        for (DonDatBan don : dsDon) {
+            LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
+            if (!ngayDat.equals(ngay)) continue;
 
-                LocalTime gioDat = don.getGioBatDau();
-                LocalTime gioKT = gioDat.plusHours(2);
+            LocalTime gioBatDau = don.getGioBatDau();
+            LocalTime gioKetThuc = gioBatDau.plusHours(2);
+            if (gio.isBefore(gioBatDau) || gio.isAfter(gioKetThuc))
+                continue;
 
-                if (!gio.isBefore(gioDat) && !gio.isAfter(gioKT))
-                    return "Đã được đặt";
+            String trangThaiDon = don.getTrangThai();
+
+            if ("Đang phục vụ".equalsIgnoreCase(trangThaiDon)
+                    || "Đã nhận bàn".equalsIgnoreCase(trangThaiDon)) {
+                return "Đang phục vụ";
+            }
+            if ("Chưa nhận bàn".equalsIgnoreCase(trangThaiDon)) {
+                return "Đã được đặt";
             }
         }
         return "Trống";
@@ -498,7 +524,6 @@ public class DatBanTruoc_Controller implements Initializable {
 			ddb.setGioBatDau(gioBatDau);
 			
 			ddb.setSoLuong(soLuongKH);
-//			ddb.setKhachHang(kh);
 			ddb.setBan(ban);
 			ddb.setTrangThai("Chưa nhận bàn");
 			

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import dao.HoaDon_DAO;
+import entity.Ban;
 import entity.HoaDon;
 import entity.KhachHang;
 import jakarta.persistence.EntityManager;
@@ -461,9 +462,6 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	        em.close();
 	    }
 	}
-
-
-
 	
 	@Override
 	public KhachHang getKhachHangTheoMaDatBan(String maDatBan) {
@@ -481,6 +479,29 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public HoaDon timHoaDonDangPhucVuTheoBan(Ban ban,LocalDate ngay) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        String jpql =
+	            "SELECT hd FROM HoaDon hd " +
+	            "WHERE hd.donDatBan.ban = :ban " +
+	            "AND hd.trangThai = :trangThai " +
+	            "AND hd.ngayLap = :homNay";
 
+	        return em.createQuery(jpql, HoaDon.class)
+	                .setParameter("ban", ban)
+	                .setParameter("trangThai", "Đang phục vụ")
+	                .setParameter("homNay", java.sql.Date.valueOf(LocalDate.now()))
+	                .setMaxResults(1)
+	                .getResultStream()
+	                .findFirst()
+	                .orElse(null);
 
+	    } finally {
+	        em.close();
+	    }
+	}
+	
 }
