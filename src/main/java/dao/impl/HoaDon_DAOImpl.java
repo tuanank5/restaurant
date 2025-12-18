@@ -526,6 +526,8 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	        em.close();
 	    }
 	}
+	
+	
 
 	
 }
