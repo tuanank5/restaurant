@@ -1,7 +1,7 @@
 package controller.HoaDon;
 
 import javafx.scene.control.TextField;
-
+import javafx.scene.control.Tooltip;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -83,6 +83,11 @@ public class HoaDon_Controller implements Initializable{
 	    cauHinhLoc();
 	    loadData();
 	    xuLyTimKiem();
+	    
+	    BeforDay.setTooltip(new Tooltip("Lọc hoá đơn từ ngày!"));
+	    AfterDay.setTooltip(new Tooltip("Lọc hoá đơn đến ngày!"));
+	    cmbLoc.setTooltip(new Tooltip("Lọc theo trạng thái hoá đơn!"));
+	    txtTimKiem.setTooltip(new Tooltip("Tìm kiếm hoá đơn theo tên Khách hàng!"));
 	}
 	
 	private void loadData() {
