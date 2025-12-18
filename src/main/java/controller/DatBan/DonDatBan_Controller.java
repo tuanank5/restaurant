@@ -3,6 +3,7 @@ package controller.DatBan;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
@@ -12,13 +13,16 @@ import java.util.ResourceBundle;
 import config.RestaurantApplication;
 import controller.DatMon.DoiMonTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
+import dao.Ban_DAO;
 import dao.DonDatBan_DAO;
+import dao.HoaDon_DAO;
 import dao.KhachHang_DAO;
 import dao.impl.DonDatBan_DAOImpl;
 import javafx.scene.control.ButtonBar;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.HangKhachHang;
+import entity.HoaDon;
 import entity.KhachHang;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -155,7 +159,7 @@ public class DonDatBan_Controller implements Initializable{
 
     @FXML
     void btnHuyDon(ActionEvent event) {
-
+    	kiemTraKhachToiTreVaHuyDon();
     }
     
     @FXML
@@ -352,7 +356,64 @@ public class DonDatBan_Controller implements Initializable{
         tblView.setItems(filtered);
         capNhatTongDon();
     }
+    
+    private void kiemTraKhachToiTreVaHuyDon() {
+//        LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
+    	LocalDateTime hienTai = LocalDateTime.of(
+    	        LocalDate.now(),
+    	        LocalTime.of(11, 30)
+    	);
+        for (DonDatBan don : danhSachDonDatBan) {
+            if (!"Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai()))
+                continue;
 
+            LocalDateTime gioBatDau = LocalDateTime.of(
+                    don.getNgayGioLapDon().toLocalDate(),
+                    don.getGioBatDau()
+            );
+
+            if (hienTai.isBefore(gioBatDau.plusHours(1)))
+                continue;
+
+            HoaDon hoaDon = RestaurantApplication.getInstance()
+                    .getDatabaseContext()
+                    .newEntity_DAO(HoaDon_DAO.class)
+                    .timHoaDonTheoDonDatBan(don);
+
+            if (hoaDon == null)
+                continue;
+
+            if (!"Đặt trước".equalsIgnoreCase(hoaDon.getTrangThai())
+                    || !"Chưa thanh toán".equalsIgnoreCase(hoaDon.getKieuThanhToan()))
+                continue;
+
+            don.setTrangThai("Đã hủy");
+            donDatBanDAO.capNhat(don);
+
+            hoaDon.setTrangThai("Đã hủy");
+            RestaurantApplication.getInstance()
+                    .getDatabaseContext()
+                    .newEntity_DAO(HoaDon_DAO.class)
+                    .capNhat(hoaDon);
+
+            Ban ban = don.getBan();
+            if (ban != null) {
+                ban.setTrangThai("Trống");
+                RestaurantApplication.getInstance()
+                        .getDatabaseContext()
+                        .newEntity_DAO(Ban_DAO.class)
+                        .capNhat(ban);
+            }
+            KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+            showAlert(
+                Alert.AlertType.WARNING,
+                "Đơn đặt bàn của khách "
+                + (kh != null ? kh.getTenKH() : "")
+                + " đã bị hủy do đến trễ quá 1 tiếng!"
+            );
+        }
+        loadData();
+    }
     
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import dao.HoaDon_DAO;
 import entity.Ban;
+import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
 import jakarta.persistence.EntityManager;
@@ -503,5 +504,28 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public HoaDon timHoaDonTheoDonDatBan(DonDatBan donDatBan) {
+	    if (donDatBan == null || donDatBan.getMaDatBan() == null)
+	        return null;
+
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        String jpql =
+	            "SELECT hd FROM HoaDon hd " +
+	            "WHERE hd.donDatBan.maDatBan = :maDatBan";
+
+	        return em.createQuery(jpql, HoaDon.class)
+	                .setParameter("maDatBan", donDatBan.getMaDatBan())
+	                .setMaxResults(1)
+	                .getResultStream()
+	                .findFirst()
+	                .orElse(null);
+	    } finally {
+	        em.close();
+	    }
+	}
+
 	
 }
