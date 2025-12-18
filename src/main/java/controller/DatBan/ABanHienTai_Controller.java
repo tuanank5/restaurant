@@ -270,8 +270,13 @@ public class ABanHienTai_Controller {
                 btnThanhToan.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneWest.setLeft(btnThanhToan);
                 btnThanhToan.setOnMouseClicked(event -> {
-                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
-                	MenuNV_Controller.instance.readyUI("DatBan/aThanhToan");
+                	double tongTien = tinhTongTienMon(hoaDon);
+                	if (tongTien > 0) {
+                		MenuNV_Controller.aBanHienTai_HD = hoaDon;
+                    	MenuNV_Controller.instance.readyUI("DatBan/aThanhToan");
+                	} else {
+                		
+                	}
                 });
 
                 Button btnBan = new Button("B");
@@ -296,7 +301,7 @@ public class ABanHienTai_Controller {
                 paneTien.setCenter(lblTien);
 
 
-                Button btnMonAn = new Button("\nMA");
+                Button btnMonAn = new Button("MA");
                 btnMonAn.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneEast.setLeft(btnMonAn);
                 btnMonAn.setOnMouseClicked(event -> {
@@ -306,7 +311,7 @@ public class ABanHienTai_Controller {
                 });
 
 
-                Button btnKhac = new Button("\nK");
+                Button btnKhac = new Button("K");
                 btnKhac.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneEast.setRight(btnKhac);
                 btnKhac.setOnMouseClicked(event -> {
