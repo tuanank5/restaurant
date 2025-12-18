@@ -321,17 +321,28 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     private boolean coTrungLich(Ban ban, LocalDate ngay, LocalTime gioMoi) {
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
         if (dsDon == null || dsDon.isEmpty()) return false;
+
         for (DonDatBan don : dsDon) {
             if (donDatBanDuocChon != null &&
                 don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
                 continue;
 
             LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
-            if (!ngayDat.equals(ngay)) continue;
+            if (!ngayDat.equals(ngay))
+                continue;
 
-            LocalTime gioDat = don.getGioBatDau();
-            LocalTime gioKT = gioDat.plusHours(2);
-            if (!gioMoi.isBefore(gioDat) && !gioMoi.isAfter(gioKT))
+            LocalTime gioBatDau = don.getGioBatDau();
+            LocalTime gioChan = gioBatDau.minusHours(1);
+            LocalTime gioKetThuc = gioBatDau.plusHours(1);
+
+            boolean trung;
+
+            if (gioKetThuc.isAfter(gioChan)) {
+                trung = !gioMoi.isBefore(gioChan) && !gioMoi.isAfter(gioKetThuc);
+            } else {
+                trung = !gioMoi.isBefore(gioChan) || !gioMoi.isAfter(gioKetThuc);
+            }
+            if (trung)
                 return true;
         }
         return false;
@@ -494,29 +505,57 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
     }
     
     private String getTrangThaiThucTe(Ban ban, LocalDate ngay, LocalTime gio) {
-        if ("Đang phục vụ".equals(ban.getTrangThai()))
+        // Ưu tiên trạng thái đang phục vụ
+        if ("Đang phục vụ".equalsIgnoreCase(ban.getTrangThai()))
             return "Đang phục vụ";
+
         if (ngay == null || gio == null)
             return "Trống";
+
         List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-        if (dsDon != null) {
-            for (DonDatBan don : dsDon) {
-                if (donDatBanDuocChon != null &&
-                    don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
-                    continue;
+        if (dsDon == null || dsDon.isEmpty())
+            return "Trống";
 
-                LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
-                if (!ngayDat.equals(ngay)) continue;
+        for (DonDatBan don : dsDon) {
 
-                LocalTime gioDat = don.getGioBatDau();
-                LocalTime gioKT = gioDat.plusHours(2);
+            // BỎ QUA đơn đang chỉnh sửa
+            if (donDatBanDuocChon != null &&
+                don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
+                continue;
 
-                if (!gio.isBefore(gioDat) && !gio.isAfter(gioKT))
-                    return "Đã được đặt";
+            LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
+            if (!ngayDat.equals(ngay))
+                continue;
+
+            LocalTime gioBatDau = don.getGioBatDau();
+            LocalTime gioChan = gioBatDau.minusHours(1);
+            LocalTime gioKetThuc = gioBatDau.plusHours(1);
+
+            boolean trongKhoang;
+            // xử lý trường hợp qua ngày
+            if (gioKetThuc.isAfter(gioChan)) {
+                trongKhoang = !gio.isBefore(gioChan) && !gio.isAfter(gioKetThuc);
+            } else {
+                trongKhoang = !gio.isBefore(gioChan) || !gio.isAfter(gioKetThuc);
+            }
+
+            if (!trongKhoang)
+                continue;
+
+            String trangThaiDon = don.getTrangThai();
+
+            if ("Đang phục vụ".equalsIgnoreCase(trangThaiDon)
+                    || "Đã nhận bàn".equalsIgnoreCase(trangThaiDon)) {
+                return "Đang phục vụ";
+            }
+
+            if ("Chưa nhận bàn".equalsIgnoreCase(trangThaiDon)) {
+                return "Đã được đặt";
             }
         }
         return "Trống";
     }
+
    
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);

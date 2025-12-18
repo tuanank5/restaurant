@@ -105,8 +105,7 @@ public class DatBanTruoc_Controller implements Initializable {
         });
 
     }
-
-    
+   
     private void loadGioBatDau() {
         cmbGioBatDau.getItems().clear();
         for (int hour = 8; hour <= 23; hour++) {
@@ -191,8 +190,9 @@ public class DatBanTruoc_Controller implements Initializable {
             if (!ngayDon.equals(ngayChon)) continue;
             LocalTime gioDon = don.getGioBatDau();
             LocalDateTime tDaDat = LocalDateTime.of(ngayChon, gioDon);
-            LocalDateTime tDaKetThuc = tDaDat.plusHours(2);
-            if (!tDat.isBefore(tDaDat) && !tDat.isAfter(tDaKetThuc)) {
+            LocalDateTime tBatDauChan = tDaDat.minusHours(1);
+            LocalDateTime tDaKetThuc = tDaDat.plusHours(1);
+            if (!tDat.isBefore(tBatDauChan) && !tDat.isAfter(tDaKetThuc)) {
                 return true;
             }
         }
@@ -245,7 +245,7 @@ public class DatBanTruoc_Controller implements Initializable {
         final int MAX_COLS = 5;
         LocalDate ngay = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0,2)), 0);
+        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0,1)), 0);
 
         for (Ban ban : danhSachBan) {
             String trangThai = getTrangThaiThucTe(ban, ngay, gio);
@@ -319,10 +319,18 @@ public class DatBanTruoc_Controller implements Initializable {
             if (!ngayDat.equals(ngay)) continue;
 
             LocalTime gioBatDau = don.getGioBatDau();
-            LocalTime gioKetThuc = gioBatDau.plusHours(2);
-            if (gio.isBefore(gioBatDau) || gio.isAfter(gioKetThuc))
+            LocalTime gioChan = gioBatDau.minusHours(1); 
+            LocalTime gioKetThuc = gioBatDau.plusHours(1);
+            boolean trongKhoang;
+            // xử lý qua ngày
+            if (gioKetThuc.isAfter(gioChan)) {
+                trongKhoang = !gio.isBefore(gioChan) && !gio.isAfter(gioKetThuc);
+            } else {
+                trongKhoang = !gio.isBefore(gioChan) || !gio.isAfter(gioKetThuc);
+            }
+            if (!trongKhoang)
                 continue;
-
+            
             String trangThaiDon = don.getTrangThai();
 
             if ("Đang phục vụ".equalsIgnoreCase(trangThaiDon)

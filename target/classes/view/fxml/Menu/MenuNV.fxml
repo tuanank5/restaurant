@@ -40,7 +40,11 @@
             <FontAwesomeIconView fill="#f9c410" glyphName="DASHBOARD" layoutX="20.0" layoutY="150.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="575.0" size="25" text="" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="450.0" size="25" />
+<<<<<<< HEAD
             <Button layoutX="80.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnThongKe" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thống kê" />
+=======
+            <Button layoutX="80.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnKhachHang" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thống kê" />
+>>>>>>> branch 'main' of https://github.com/tuanank5/restaurant.git
          </children>
       </Pane>
    </left>
