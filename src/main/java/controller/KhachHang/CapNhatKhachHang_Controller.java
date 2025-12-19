@@ -42,6 +42,9 @@ public class CapNhatKhachHang_Controller {
     private Button btnLuuLai;
 
     @FXML
+    private Button btnQuayLai;
+    
+    @FXML
     private Button btnTaoLaiMK;
 
     @FXML
@@ -92,6 +95,8 @@ public class CapNhatKhachHang_Controller {
         } 
         else if (src == btnTaoLaiMK) {
             xacNhanLuu("KhachHang/ThongTinChiTietKhachHang");
+        } else if(src == btnQuayLai) {
+        	MenuNV_Controller.instance.readyUI("KhachHang/ThongTinChiTietKhachHang");
         }
     }
 
