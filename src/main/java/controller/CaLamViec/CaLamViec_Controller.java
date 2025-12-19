@@ -2,17 +2,27 @@
 //hihi
 package controller.CaLamViec;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.jfoenix.controls.JFXButton;
+
+import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 
 import dao.HoaDon_DAO;
+import dao.TaiKhoan_DAO;
 import dao.impl.HoaDon_DAOImpl;
 import entity.TaiKhoan;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -21,6 +31,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class CaLamViec_Controller {
 
@@ -29,9 +40,6 @@ public class CaLamViec_Controller {
 
   @FXML
   private JFXButton Btn_1500;
-
-  @FXML
-  private Button btnXacNhan;
 
   @FXML
   private Label label_TienPhaiNop;
@@ -80,26 +88,6 @@ public class CaLamViec_Controller {
       capNhatThongTinNhanVien();
       capNhatDoanhThu();
       tinhTienPhaiNop();
-  
-      btnXacNhan.setOnAction(event -> {
-          Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-          alert.setTitle("Thông báo");
-          alert.setHeaderText("Bạn có chắc chắn muốn kết ca?");
-
-          ButtonType yes = new ButtonType("Có", ButtonBar.ButtonData.YES);
-          ButtonType no = new ButtonType("Không", ButtonBar.ButtonData.NO);
-          alert.getButtonTypes().setAll(yes, no);
-
-          alert.showAndWait().ifPresent(button -> {
-              if (button.getButtonData() == ButtonBar.ButtonData.YES) {
-                  Alert thongBao = new Alert(Alert.AlertType.INFORMATION);
-                  thongBao.setTitle("Thông báo");
-                  thongBao.setHeaderText("Kết ca thành công!");
-                  thongBao.showAndWait();
-                  // dangXuat(); // nếu có màn đăng nhập thì mở lại sau
-              }
-          });
-      });
   }
 
   // ================== SET TÀI KHOẢN ==================
@@ -143,30 +131,26 @@ public class CaLamViec_Controller {
 
   // ================== TÍNH TIỀN PHẢI NỘP ==================
 	//================== TÍNH TIỀN PHẢI NỘP ==================
-	private void tinhTienPhaiNop() {
-	   if (taiKhoan == null) return;
-	
-	   try {
-	       // Tiền nhận đầu ca (user nhập)
-	       String text = textField_TienNhan.getText().replace(",", "").trim();
-	       long tienNhanDauCa = text.isEmpty() ? 0 : Long.parseLong(text);
-	
-	       // Tổng doanh thu (lấy từ label, không gọi DAO)
-	       String doanhThuText = label_TongDoanhThu.getText().replace(",", "").trim();
-	       double tongDoanhThu = doanhThuText.isEmpty() ? 0 : Double.parseDouble(doanhThuText);
-	
-	       // ✅ Tiền phải nộp lại = tổng doanh thu - tiền nhận đầu ca
-	       double tienPhaiNop = tongDoanhThu - tienNhanDauCa;
-	
-	       // nếu bạn không muốn âm (trường hợp nhập sai), thì chặn:
-	       // if (tienPhaiNop < 0) tienPhaiNop = 0;
-	
-	       label_TienPhaiNop.setText(decimalFormat.format(tienPhaiNop));
-	
-	   } catch (Exception e) {
-	       label_TienPhaiNop.setText("0");
-	       System.err.println("⚠️ Lỗi tính tiền phải nộp");
-	   }
+  private void tinhTienPhaiNop() {
+	    if (taiKhoan == null) return;
+	    try {
+	        // Tiền đầu ca
+	        String text = textField_TienNhan.getText().replaceAll("[^0-9]", "");
+	        long tienDauCa = text.isEmpty() ? 0 : Long.parseLong(text);
+
+	        // Tổng doanh thu trong ngày (SỬA Ở ĐÂY)
+	        String doanhThuText = label_TongDoanhThu.getText().replaceAll("[^0-9]", "");
+	        long tongDoanhThu = doanhThuText.isEmpty() ? 0 : Long.parseLong(doanhThuText);
+
+	        // Tiền phải nộp
+	        long tienPhaiNop = tienDauCa + tongDoanhThu;
+
+	        label_TienPhaiNop.setText(decimalFormat.format(tienPhaiNop));
+
+	    } catch (Exception e) {
+	        label_TienPhaiNop.setText("0");
+	        System.err.println("⚠️ Lỗi tính tiền phải nộp");
+	    }
 	}
 
 	 // ================== NÚT TIỀN NHANH ==================
@@ -186,7 +170,48 @@ public class CaLamViec_Controller {
 	 private void setupEnterKeyHandler() {
 	      textField_TienNhan.setOnAction(e -> onEnterPressed());
 	  }
-	
+	 
+	 @FXML
+	 void btnXacNhan(ActionEvent event) {
+		 btnDangXuat(event);
+	 }
+	 
+	 @FXML
+	 private void btnDangXuat(ActionEvent event) {
+	       Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn kết ca?");
+	        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+	            return;
+	        }
+	        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
+	            // Cập nhật lại ngày giờ đăng nhập
+	        	LocalDate localDate = LocalDate.now();
+	        	Date dateNow = Date.valueOf(localDate);
+	        	
+	            this.taiKhoan.setNgayDangXuat(dateNow);
+	            RestaurantApplication.getInstance()
+	                    .getDatabaseContext()
+	                    .newEntity_DAO(TaiKhoan_DAO.class)
+	                    .capNhat(taiKhoan);
+	            
+	            try {
+	                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	                currentStage.close();
+	                
+	                FXMLLoader fxmlLoader = new FXMLLoader(
+	            			getClass().getResource("/view/fxml/Login.fxml"));
+	                Parent root = fxmlLoader.load();
+	                Stage stage = new Stage();
+	                Scene scene = new Scene(root);
+
+	                stage.setScene(scene);
+	                stage.setMaximized(true);
+	                stage.show();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	 
 	 private void onEnterPressed() {
 	      String text = textField_TienNhan.getText().replace(",", "");
 	      try {
@@ -196,5 +221,16 @@ public class CaLamViec_Controller {
 	      } catch (NumberFormatException e) {
 	          System.out.println("Invalid input");
 	      }
-	   }
 	 }
+	 
+	 private Optional<ButtonType> showAlertConfirm(String content) {
+	        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	        alert.setTitle("Thông báo");
+	        alert.setHeaderText(content);
+	        ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
+	        ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
+	        ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+	        alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
+	        return alert.showAndWait();
+	    }
+}

@@ -228,44 +228,66 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
     public Double getTongDoanhThuTheoNgayVaNhanVien(Date ngayLap, String maNV) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Double tongDoanhThu = 0.0;
-
         try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('DATE', HD.ngayLap) = :ngayLap AND HD.nhanVien.maNV = :maNV";
+            LocalDate localDate = ngayLap.toLocalDate();
+
+            Date start = Date.valueOf(localDate);
+            Date end = Date.valueOf(localDate.plusDays(1));
+
+            String jpql = """
+                SELECT SUM(HD.tongTien)
+                FROM HoaDon HD
+                WHERE HD.ngayLap >= :start
+                  AND HD.ngayLap < :end
+                  AND HD.nhanVien.maNV = :maNV
+            """;
+
             TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
-            query.setParameter("ngayLap", ngayLap);
+            query.setParameter("start", start);
+            query.setParameter("end", end);
             query.setParameter("maNV", maNV);
 
             tongDoanhThu = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
+
+        } catch (Exception e) {
+            e.printStackTrace(); // ⚠️ rất quan trọng
             tongDoanhThu = 0.0;
         } finally {
             entityManager.close();
         }
 
-        return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
+        return tongDoanhThu != null ? tongDoanhThu : 0.0;
     }
 
     @Override
     public Long countHoaDonTheoNgayVaNhanVien(Date ngayLap, String maNV) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Long soLuongHoaDon = 0L;
-
         try {
-            String jpql = "SELECT COUNT(HD) FROM HoaDon HD WHERE FUNCTION('DATE', HD.ngayLap) = :ngayLap AND HD.nhanVien.maNV = :maNV";
+            LocalDate localDate = ngayLap.toLocalDate();
+            Date start = Date.valueOf(localDate);
+            Date end = Date.valueOf(localDate.plusDays(1));
+            
+            String jpql = """
+                SELECT COUNT(HD)
+                FROM HoaDon HD
+                WHERE HD.ngayLap >= :start
+                  AND HD.ngayLap < :end
+                  AND HD.nhanVien.maNV = :maNV
+            """;
             TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
-            query.setParameter("ngayLap", ngayLap);
+            query.setParameter("start", start);
+            query.setParameter("end", end);
             query.setParameter("maNV", maNV);
 
             soLuongHoaDon = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
+        } catch (Exception e) {
+            e.printStackTrace();
             soLuongHoaDon = 0L;
         } finally {
             entityManager.close();
         }
-
-        return (soLuongHoaDon != null) ? soLuongHoaDon : 0L;
+        return soLuongHoaDon != null ? soLuongHoaDon : 0L;
     }
 
 	@Override
