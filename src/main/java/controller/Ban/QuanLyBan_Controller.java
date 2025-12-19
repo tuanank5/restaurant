@@ -35,6 +35,9 @@ public class QuanLyBan_Controller {
     private BorderPane borderPane;
 
     @FXML
+    private TextField txtTimKiem;
+    
+    @FXML
     private Button btnSua;
 
     @FXML
@@ -64,8 +67,10 @@ public class QuanLyBan_Controller {
     @FXML
     private TextField txtViTri;
 
-    @FXML
-    private ComboBox<String> comBoxTrangThai; 
+ //   @FXML
+//    private ComboBox<String> comBoxTrangThai; 
+    
+    private ObservableList<Ban> dsBan; 
 
     @FXML
     private ComboBox<LoaiBan> comBoxLoaiBan; 
@@ -154,8 +159,18 @@ public class QuanLyBan_Controller {
                 // Điền dữ liệu vào các TextField và ComboBox
                 txtMaBan.setText(newSelection.getMaBan()); // Mã bàn vẫn giữ, không sửa
                 txtViTri.setText(newSelection.getViTri());
-                comBoxTrangThai.setValue(newSelection.getTrangThai());
-                comBoxLoaiBan.setValue(newSelection.getLoaiBan());
+//                comBoxTrangThai.setValue(newSelection.getTrangThai());
+                
+                if (newSelection.getLoaiBan() != null) {
+                    // tìm loại bàn trong comboBox
+                    for (LoaiBan lb : comBoxLoaiBan.getItems()) {
+                        if (lb.getMaLoaiBan().equals(newSelection.getLoaiBan().getMaLoaiBan())) {
+                            comBoxLoaiBan.setValue(lb);
+                            break;
+                        }
+                    }
+                }
+
             }else {
                 // Không có dòng nào được chọn → disable nút Sửa/Xóa
                 btnSua.setDisable(true);
@@ -176,10 +191,41 @@ public class QuanLyBan_Controller {
         danhSachBan.setAll(listBan);
         tblBan.setItems(danhSachBan);
         txtMaBan.setText(AutoIDUitl.sinhMaBan());
+        txtTimKiem.setOnKeyReleased(event -> {
+            String keyword = txtTimKiem.getText().trim();
+            timKiemBan(keyword);
+        });
 
-        
+
+
     }
     
+    private void timKiemBan(String keyword) {
+        String kw = keyword.toLowerCase();
+
+        if (kw.isEmpty()) {
+            tblBan.setItems(danhSachBan); // reset danh sách gốc
+            return;
+        }
+
+        ObservableList<Ban> kq = FXCollections.observableArrayList();
+
+        for (Ban b : danhSachBan) {
+            boolean matchMa = b.getMaBan().toLowerCase().contains(kw);
+            boolean matchViTri = b.getViTri().toLowerCase().contains(kw);
+            boolean matchLoai = b.getLoaiBan() != null &&
+                    b.getLoaiBan().getTenLoaiBan().toLowerCase().contains(kw);
+
+            if (matchMa || matchViTri || matchLoai) {
+                kq.add(b);
+            }
+        }
+
+        tblBan.setItems(kq);
+    }
+
+
+
     @FXML
     void controller(ActionEvent event) {
         if (event.getSource() == btnThem) {

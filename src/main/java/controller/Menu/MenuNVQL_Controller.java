@@ -109,7 +109,7 @@ public class MenuNVQL_Controller {
 
     @FXML
     void btnBan(ActionEvent event) {
-        readyUI("QuanLyBan/QuanLyBan");
+        readyUI("QuanLyBan/QuanLyBanTA");
     }
 
     public FXMLLoader readyUI(String ui) {
