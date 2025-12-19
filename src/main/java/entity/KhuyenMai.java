@@ -32,9 +32,6 @@ public class KhuyenMai {
     @Column(name = "loaiKM", nullable = false, length = 50)
     private String loaiKM;
 
-    @Column(name = "sanPhamKM", nullable = false, length = 50)
-    private String sanPhamKM;
-
     @Column(name = "ngayBatDau", nullable = false)
     private Date ngayBatDau;
 
@@ -48,13 +45,12 @@ public class KhuyenMai {
 		
 	}
 
-	public KhuyenMai(String maKM, String tenKM, String loaiKM, String sanPhamKM, Date ngayBatDau, Date ngayKetThuc,
+	public KhuyenMai(String maKM, String tenKM, String loaiKM, Date ngayBatDau, Date ngayKetThuc,
 			int phanTramGiamGia) {
 		super();
 		this.maKM = maKM;
 		this.tenKM = tenKM;
 		this.loaiKM = loaiKM;
-		this.sanPhamKM = sanPhamKM;
 		this.ngayBatDau = ngayBatDau;
 		this.ngayKetThuc = ngayKetThuc;
 		this.phanTramGiamGia = phanTramGiamGia;
@@ -82,14 +78,6 @@ public class KhuyenMai {
 
 	public void setLoaiKM(String loaiKM) {
 		this.loaiKM = loaiKM;
-	}
-
-	public String getSanPhamKM() {
-		return sanPhamKM;
-	}
-
-	public void setSanPhamKM(String sanPhamKM) {
-		this.sanPhamKM = sanPhamKM;
 	}
 
 	public Date getNgayBatDau() {

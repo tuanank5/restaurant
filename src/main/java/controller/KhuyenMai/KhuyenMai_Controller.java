@@ -38,7 +38,6 @@ public class KhuyenMai_Controller {
     @FXML private TableColumn<KhuyenMai, String> colMaKM;
     @FXML private TableColumn<KhuyenMai, String> colTenKM;
     @FXML private TableColumn<KhuyenMai, String> colloaiKM;
-    @FXML private TableColumn<KhuyenMai, String> colSanPhamKM;
     @FXML private TableColumn<KhuyenMai, Date> colNgayBatDau;
     @FXML private TableColumn<KhuyenMai, Date> colNgayKetThuc;
     @FXML private TableColumn<KhuyenMai, Integer> colPhanTramGiamGia;
@@ -46,7 +45,7 @@ public class KhuyenMai_Controller {
     @FXML private TableView<KhuyenMai> tblKM;
     @FXML private TextField txtTimKiem;
 
-    @FXML private TextField txtMaKM, txtTenKM, txtSanPhamKM;
+    @FXML private TextField txtMaKM, txtTenKM;
     @FXML private ComboBox<String> comBoxLoaiKM;
     @FXML private ComboBox<Integer> comBoxPhanTram;
     @FXML private DatePicker dpNgayBatDau, dpNgayKetThuc;
@@ -69,6 +68,7 @@ public class KhuyenMai_Controller {
         setComboBoxValue();
         loadData();
         timKiem();
+        hienThiMaKMMoi();
         btnSuaKM.setDisable(true);
         btnXoaKM.setDisable(true);
         tblKM.setOnMouseClicked(event -> {
@@ -85,10 +85,9 @@ public class KhuyenMai_Controller {
     private void setComboBoxValue() {
         comBoxLoaiKM.setItems(FXCollections.observableArrayList(
         		"Ưu đãi cho khách hàng Kim Cương",
-                "Khuyến mãi món ăn",
                 "Khuyến mãi trên tổng hóa đơn"
                 ));
-        comBoxPhanTram.setItems(FXCollections.observableArrayList(5,10,15,20,25,30,35,40,45,50));
+        comBoxPhanTram.setItems(FXCollections.observableArrayList(5,10,15,20,25,30,35,40));
     }
 
     @FXML
@@ -119,17 +118,12 @@ public class KhuyenMai_Controller {
     }
 
     private void them() {
+        if (!validateKhuyenMai()) return;
         try {
-        	//Tự tạo Mã KM
-            String max = khuyenMaiDAO.getMaxMaKM();
-            String maMoi = AutoIDUitl.sinhMaKhuyenMai();
-
-
             KhuyenMai km = new KhuyenMai(
-                    maMoi,
+                    txtMaKM.getText(),
                     txtTenKM.getText().trim(),
                     comBoxLoaiKM.getValue(),
-                    txtSanPhamKM.getText().trim(),
                     Date.valueOf(dpNgayBatDau.getValue()),
                     Date.valueOf(dpNgayKetThuc.getValue()),
                     comBoxPhanTram.getValue()
@@ -139,13 +133,14 @@ public class KhuyenMai_Controller {
                 loadData();
                 showAlert("Thành công", "Thêm khuyến mãi thành công!", Alert.AlertType.INFORMATION);
                 guiEmailThongBaoKM(km);
-                clearForm(); //Clear form sau khi thêm
+                clearForm();
             }
-
         } catch (Exception e) {
-            showAlert("Lỗi", "Vui lòng nhập đầy đủ và đúng thông tin!", Alert.AlertType.ERROR);
+            showAlert("Lỗi", "Không thể thêm khuyến mãi!", Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
+
     
     private void guiEmailThongBaoKM(KhuyenMai km) {
         List<KhachHang> dsKH = khachHangDAO.getDanhSach(KhachHang.class, new HashMap<>());
@@ -154,7 +149,6 @@ public class KhuyenMai_Controller {
         String contentTemplate = "🎁 THÔNG BÁO KHUYẾN MÃI MỚI\n\n"
                 + "Tên khuyến mãi: " + km.getTenKM() + "\n"
                 + "Loại KM: " + km.getLoaiKM() + "\n"
-                + "Áp dụng cho sản phẩm: " + km.getSanPhamKM() + "\n"
                 + "Thời gian: " + km.getNgayBatDau() + " → " + km.getNgayKetThuc() + "\n"
                 + "Mức giảm giá: " + km.getPhanTramGiamGia() + "%\n\n"
                 + "👉 Hãy đến nhà hàng để nhận ưu đãi nhé!\n";
@@ -182,16 +176,18 @@ public class KhuyenMai_Controller {
         executor.shutdown();
         System.out.println("Tất cả email đã được submit để gửi.");
     }
-
-    
+ 
     private void sua() {
         KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
         if (km == null) return;
-
+        if (dangDienRa(km)) {
+            showAlert("Lỗi", "Khuyến mãi đang diễn ra, không thể cập nhật!", Alert.AlertType.ERROR);
+            return;
+        }
+        if (!validateKhuyenMai()) return;
         try {
             km.setTenKM(txtTenKM.getText().trim());
             km.setLoaiKM(comBoxLoaiKM.getValue());
-            km.setSanPhamKM(txtSanPhamKM.getText().trim());
             km.setNgayBatDau(Date.valueOf(dpNgayBatDau.getValue()));
             km.setNgayKetThuc(Date.valueOf(dpNgayKetThuc.getValue()));
             km.setPhanTramGiamGia(comBoxPhanTram.getValue());
@@ -199,10 +195,11 @@ public class KhuyenMai_Controller {
             if (khuyenMaiDAO.sua(km)) {
                 loadData();
                 showAlert("Thành công", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
+                clearForm();
             }
-
         } catch (Exception e) {
             showAlert("Lỗi", "Dữ liệu không hợp lệ!", Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 
@@ -222,7 +219,6 @@ public class KhuyenMai_Controller {
     private void fillForm(KhuyenMai km) {
         txtMaKM.setText(km.getMaKM());
         txtTenKM.setText(km.getTenKM());
-        txtSanPhamKM.setText(km.getSanPhamKM());
         comBoxLoaiKM.setValue(km.getLoaiKM());
         comBoxPhanTram.setValue(km.getPhanTramGiamGia());
         dpNgayBatDau.setValue(km.getNgayBatDau().toLocalDate());
@@ -233,6 +229,7 @@ public class KhuyenMai_Controller {
         tblKM.getSelectionModel().clearSelection();
         btnSuaKM.setDisable(true);
         btnXoaKM.setDisable(true);
+        clearForm();
     }
 
     private void loadData() {
@@ -245,7 +242,6 @@ public class KhuyenMai_Controller {
         colMaKM.setCellValueFactory(new PropertyValueFactory<>("maKM"));
         colTenKM.setCellValueFactory(new PropertyValueFactory<>("tenKM"));
         colloaiKM.setCellValueFactory(new PropertyValueFactory<>("loaiKM"));
-        colSanPhamKM.setCellValueFactory(new PropertyValueFactory<>("sanPhamKM"));
         colNgayBatDau.setCellValueFactory(new PropertyValueFactory<>("ngayBatDau"));
         colNgayKetThuc.setCellValueFactory(new PropertyValueFactory<>("ngayKetThuc"));
         colPhanTramGiamGia.setCellValueFactory(new PropertyValueFactory<>("phanTramGiamGia"));
@@ -253,16 +249,99 @@ public class KhuyenMai_Controller {
 
     private void timKiem() {
         FilteredList<KhuyenMai> filtered = new FilteredList<>(danhSachKhuyenMai, p -> true);
-
-        txtTimKiem.textProperty().addListener((obs, oldValue, newValue) ->
-                filtered.setPredicate(km -> km.getMaKM().toLowerCase().contains(newValue.toLowerCase())
-                        || km.getTenKM().toLowerCase().contains(newValue.toLowerCase())
-                        || km.getSanPhamKM().toLowerCase().contains(newValue.toLowerCase()))
-        );
-
+        txtTimKiem.textProperty().addListener((obs, oldValue, newValue) -> {
+            String keyword = newValue.toLowerCase();
+            filtered.setPredicate(km -> km.getMaKM().toLowerCase().contains(keyword)
+                 || km.getTenKM().toLowerCase().contains(keyword)
+                 || km.getLoaiKM().toLowerCase().contains(keyword)
+            );
+        });
         tblKM.setItems(filtered);
     }
+    
+    private void clearForm() {
+        txtMaKM.clear();
+        txtTenKM.clear();
+        comBoxLoaiKM.getSelectionModel().clearSelection();
+        comBoxPhanTram.getSelectionModel().clearSelection();
+        dpNgayBatDau.setValue(null);
+        dpNgayKetThuc.setValue(null);
+        hienThiMaKMMoi();
+    }
+    
+    private boolean validateKhuyenMai() {
+        if (txtTenKM.getText().isBlank()
+                || comBoxLoaiKM.getValue() == null
+                || dpNgayBatDau.getValue() == null
+                || dpNgayKetThuc.getValue() == null
+                || comBoxPhanTram.getValue() == null) {
 
+            showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.ERROR);
+            return false;
+        }
+        Date today = new Date(System.currentTimeMillis());
+        Date start = Date.valueOf(dpNgayBatDau.getValue());
+        Date end   = Date.valueOf(dpNgayKetThuc.getValue());
+        //Ngày bắt đầu < hôm nay
+        if (start.before(today)) {
+            showAlert("Lỗi", "Ngày bắt đầu không được nhỏ hơn ngày hiện tại!", Alert.AlertType.ERROR);
+            return false;
+        }
+
+        //Ngày kết thúc <= ngày bắt đầu
+        if (!end.after(start)) {
+            showAlert("Lỗi", "Ngày kết thúc phải lớn hơn ngày bắt đầu!", Alert.AlertType.ERROR);
+            return false;
+        }
+
+        //Trùng khuyến mãi
+        if (khuyenMaiDaTonTai()) {
+            showAlert("Lỗi", "Khuyến mãi đã tồn tại hoặc trùng thời gian!", Alert.AlertType.ERROR);
+            return false;
+        }
+        //Giới hạn %
+        int giam = comBoxPhanTram.getValue();
+        if (comBoxLoaiKM.getValue().contains("tổng") && giam > 30) {
+            showAlert("Lỗi", "Khuyến mãi tổng hóa đơn tối đa 30%!", Alert.AlertType.ERROR);
+            return false;
+        }
+
+        if (comBoxLoaiKM.getValue().contains("Kim Cương") && giam > 40) {
+            showAlert("Lỗi", "Ưu đãi Kim Cương tối đa 40%!", Alert.AlertType.ERROR);
+            return false;
+        }
+        return true;
+    }
+    
+    private void hienThiMaKMMoi() {
+        String maMoi = AutoIDUitl.sinhMaKhuyenMai();
+        txtMaKM.setText(maMoi);
+        txtMaKM.setEditable(false);
+    }
+    
+    private boolean dangDienRa(KhuyenMai km) {
+        Date today = new Date(System.currentTimeMillis());
+        return !today.before(km.getNgayBatDau()) && !today.after(km.getNgayKetThuc());
+    }
+    
+    private boolean khuyenMaiDaTonTai() {
+        List<KhuyenMai> ds = khuyenMaiDAO.getDanhSach(KhuyenMai.class, new HashMap<>());
+        Date start = Date.valueOf(dpNgayBatDau.getValue());
+        Date end   = Date.valueOf(dpNgayKetThuc.getValue());
+        for (KhuyenMai km : ds) {
+            boolean trungTenLoai =
+                    km.getTenKM().equalsIgnoreCase(txtTenKM.getText().trim())
+                    && km.getLoaiKM().equalsIgnoreCase(comBoxLoaiKM.getValue());
+            boolean giaoThoiGian =
+                    !(end.before(km.getNgayBatDau()) || start.after(km.getNgayKetThuc()));
+
+            if (trungTenLoai && giaoThoiGian) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -278,16 +357,5 @@ public class KhuyenMai_Controller {
                 new ButtonType("Không", ButtonBar.ButtonData.NO)
         );
         return alert.showAndWait();
-    }
-    
- // Phương thức xóa form
-    private void clearForm() {
-        txtMaKM.clear();
-        txtTenKM.clear();
-        txtSanPhamKM.clear();
-        comBoxLoaiKM.getSelectionModel().clearSelection();
-        comBoxPhanTram.getSelectionModel().clearSelection();
-        dpNgayBatDau.setValue(null);
-        dpNgayKetThuc.setValue(null);
     }
 }
