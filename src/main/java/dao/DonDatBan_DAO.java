@@ -40,4 +40,12 @@ public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
     public KhachHang getKhachHangTheoMaDatBan(String maDatBan);
     
     public List<DonDatBan> getAllDDBTruoc();
+    
+    List<String> getKhachHangTheoThangNVCuThe(int thang, int nam, String maNV);
+    List<String> getKhachHangTheoNgayNVCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
+    List<String> getKhachHangTheoNamNVCuThe(int nam, String maNV);
+    
+    List<DonDatBan> getAllDonDatBanNVTheoThang(int thang, int nam, String maNV);
+    List<DonDatBan> getAllDonDatBanTheoNamNVCuThe(int nam, String maNV);
+    List<DonDatBan> getAllDonDatBanTheoNgayNVCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
 }

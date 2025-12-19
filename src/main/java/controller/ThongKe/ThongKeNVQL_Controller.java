@@ -167,11 +167,10 @@ public class ThongKeNVQL_Controller {
     
     private void checkDate(){
         if(txtDateStart.getValue().isAfter(LocalDate.now()) ||  txtDateEnd.getValue().isAfter(LocalDate.now())){
-            Alert alert = new Alert(Alert.AlertType.ERROR); // Loại thông báo là ERROR
-            alert.setTitle("");
-            alert.setHeaderText(null); // Không cần tiêu đề phụ
-            alert.setContentText("Chưa có dữ liệu"); // Nội dung thông báo
-            // Hiển thị dialog
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Chưa có dữ liệu!");
             alert.showAndWait();
             txtDateEnd.setValue(LocalDate.now());
             txtDateStart.setValue(LocalDate.now());
@@ -180,11 +179,10 @@ public class ThongKeNVQL_Controller {
             txtDateEnd.setValue(txtDateStart.getValue());
         }
         if (txtDateEnd.getValue().isBefore(txtDateStart.getValue())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR); // Loại thông báo là ERROR
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Lỗi");
-            alert.setHeaderText(null); // Không cần tiêu đề phụ
-            alert.setContentText("Ngày kết thúc không thể trước ngày bắt đầu!"); // Nội dung thông báo
-            // Hiển thị dialog
+            alert.setHeaderText(null);
+            alert.setContentText("Ngày kết thúc không được trước ngày bắt đầu!");
             alert.showAndWait();
             txtDateEnd.setValue(txtDateStart.getValue());
         }
@@ -221,18 +219,19 @@ public class ThongKeNVQL_Controller {
         areaChart_DoanhThu.setVisible(false);
 
         Map<String, Double> doanhThuTungThang = hoaDon_DAO.getDoanhThuTheoNam(nam);
-//        ============ UpDate 4 Ô TOP ==============
+        //UpDate 4 Ô TOP
         List<HoaDon> dsHD = hoaDon_DAO.getHoaDonTheoNam(nam);
-        List<DonDatBan> dsVe = donDatBan_DAO.getAllDonDatBanTheoNam(nam);
+        List<DonDatBan> dsDDB = donDatBan_DAO.getAllDonDatBanTheoNam(nam);
         List<String> dsKH = donDatBan_DAO.getKhachHangTheoNam(nam);
         Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuTheoNam(nam);
         String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
         lblDoanhThu.setText(formattedDoanhThu);
         updateHDInfo(dsHD);
-        updateDDBInfo(dsVe);
+        updateDDBInfo(dsDDB);
         updateKHInfo(dsKH);
-//        ============ END - UpDate 4 Ô TOP ==============
-//        ============ UpDate Chart ==============
+        //END - UpDate 4 Ô TOP
+        
+        //UpDate Chart
         Map<LoaiBan, Integer> countLoaiGhe = donDatBan_DAO.countLoaiBanTheoNam(nam);
         Map<String, Integer> countDonDatBan = donDatBan_DAO.countDonDatBanTheoNam(nam);
 
@@ -246,7 +245,8 @@ public class ThongKeNVQL_Controller {
         areaChart_DoanhThu.setVisible(true);
         LocalDate dateStart = txtDateStart.getValue();
         LocalDate dateEnd = txtDateEnd.getValue();
-//        ============ UpDate 4 Ô TOP ==============
+        
+        //UpDate 4 Ô TOP
         List<HoaDon> dsHD = hoaDon_DAO.getHoaDonTheoNgayCuThe(dateStart, dateEnd);
         List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
         List<String> dsKH = donDatBan_DAO.getKhachHangTheoNgayCuThe(dateStart, dateEnd);
@@ -256,8 +256,9 @@ public class ThongKeNVQL_Controller {
         updateHDInfo(dsHD);
         updateDDBInfo(dsDon);
         updateKHInfo(dsKH);
-//        ============ END - UpDate 4 Ô TOP ==============
-//        ============ UpDate Chart ==============
+        //END - UpDate 4 Ô TOP
+        
+        //UpDate Chart
         Map<LoaiBan, Integer> countLoaiGhe = donDatBan_DAO.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
 
         updateChartDoanhThu(dsHD);
@@ -294,7 +295,7 @@ public class ThongKeNVQL_Controller {
         axis.setAutoRanging(true);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
         if(radThangNam.isSelected()) {
-            int nam= cmbNam.getValue();
+            int nam = cmbNam.getValue();
             int thang = cmbThang.getValue();
 
             // Tạo danh sách đầy đủ các ngày trong tháng với doanh thu mặc định là 0
@@ -308,8 +309,6 @@ public class ThongKeNVQL_Controller {
 
             // Cập nhật doanh thu cụ thể trong Map
             for (HoaDon hoaDon : dsHD) {
-//                LocalDate ngayLap = hoaDon.getNgayLap().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            	
             	Instant instant = hoaDon.getNgayLap().toLocalDate()
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant();
@@ -344,8 +343,8 @@ public class ThongKeNVQL_Controller {
 
             // ========== Cập nhật thông tin Doanh Thu =============
             double maxDoanhThu = 0;
-            double minDoanhThu = Double.MAX_VALUE;
-            double minDoanhThu2 = Double.MAX_VALUE;
+            double minDoanhThu = 0;
+            double minDoanhThuKhac0 = 0;
             double totalDoanhThu = 0;
             int countDays = doanhThuTheoNgay.size();
             List<String> daysWithMaxRevenue = new ArrayList<>();
@@ -383,11 +382,11 @@ public class ThongKeNVQL_Controller {
                 }
 
                 // Kiểm tra và cập nhật mức doanh thu thấp nhất khác 0
-                if (doanhThu < minDoanhThu2 && doanhThu != 0) {
-                    minDoanhThu2 = doanhThu;
+                if (doanhThu < minDoanhThuKhac0 && doanhThu != 0) {
+                	minDoanhThuKhac0 = doanhThu;
                     daysWithMinKhac0.clear();
                     daysWithMinKhac0.add(ngay);
-                } else if (doanhThu == minDoanhThu2) {
+                } else if (doanhThu == minDoanhThuKhac0) {
                     daysWithMinKhac0.add(ngay);
                 }
 
@@ -417,13 +416,14 @@ public class ThongKeNVQL_Controller {
                     "Doanh thu cao nhất: %s (Ngày: %s)\nDoanh thu thấp nhất: %s (Ngày: %s)\nDoanh thu thấp nhất khác 0: %s (Ngày: %s)\nDoanh thu trung bình: %s\nSố ngày có doanh thu: %d/%d\nTăng trưởng doanh thu so với tháng trước: %.2f%%",
                     decimalFormat.format(maxDoanhThu), daysWithMaxText,
                     decimalFormat.format(minDoanhThu), daysWithMinText,
-                    decimalFormat.format(minDoanhThu2), daysWithMinText2,
+                    decimalFormat.format(minDoanhThuKhac0), daysWithMinText2,
                     decimalFormat.format(averageDoanhThu),
                     daysWithRevenue,countDays,
                     revenueGrowth
             );
             lblThongTinDoanhThu.setText(infoText);
         }
+        
         else if (radNgay.isSelected()){
             LocalDate dateStart = txtDateStart.getValue();
             LocalDate dateEnd = txtDateEnd.getValue();
@@ -604,9 +604,9 @@ public class ThongKeNVQL_Controller {
             // Cập nhật biểu đồ
             barChart_DonDatBan.getData().add(series);
             // ========== Cập nhật thông tin Doanh Thu =============
-            int maxSoVe = 0;
-            int minSoVe = Integer.MAX_VALUE;
-            int minSoVe2 = Integer.MAX_VALUE;
+            int maxSoDDB = 0;
+            int minSoDDB = Integer.MAX_VALUE;
+            int minSoDDB2 = Integer.MAX_VALUE;
             int totalDoanhThu = 0;
             int countDays = donDatTheoNgay.size();
             List<String> daysWithMaxRevenue = new ArrayList<>();
@@ -626,29 +626,29 @@ public class ThongKeNVQL_Controller {
                 totalDoanhThu += (int) doanhThu;
 
                 // Kiểm tra và cập nhật mức doanh thu cao nhất
-                if (doanhThu > maxSoVe) {
-                    maxSoVe = (int) doanhThu;
+                if (doanhThu > maxSoDDB) {
+                    maxSoDDB = (int) doanhThu;
                     daysWithMaxRevenue.clear();
                     daysWithMaxRevenue.add(ngay);
-                } else if (doanhThu == maxSoVe) {
+                } else if (doanhThu == maxSoDDB) {
                     daysWithMaxRevenue.add(ngay);
                 }
 
                 // Kiểm tra và cập nhật mức doanh thu thấp nhất
-                if (doanhThu < minSoVe) {
-                    minSoVe = (int) doanhThu;
+                if (doanhThu < minSoDDB) {
+                    minSoDDB = (int) doanhThu;
                     daysWithMinRevenue.clear();
                     daysWithMinRevenue.add(ngay);
-                } else if (doanhThu == minSoVe) {
+                } else if (doanhThu == minSoDDB) {
                     daysWithMinRevenue.add(ngay);
                 }
 
                 // Kiểm tra và cập nhật mức doanh thu thấp nhất khác 0
-                if (doanhThu < minSoVe2 && doanhThu != 0) {
-                    minSoVe2 = (int) doanhThu;
+                if (doanhThu < minSoDDB2 && doanhThu != 0) {
+                    minSoDDB2 = (int) doanhThu;
                     daysWithMinKhac0.clear();
                     daysWithMinKhac0.add(ngay);
-                } else if (doanhThu == minSoVe2) {
+                } else if (doanhThu == minSoDDB2) {
                     daysWithMinKhac0.add(ngay);
                 }
 
@@ -676,15 +676,15 @@ public class ThongKeNVQL_Controller {
             // Cập nhật thông tin cho label
             String infoText = String.format(
                     "Số đơn đặt bàn cao nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất khác 0: %d (Ngày: %s)\nSố đơn đặt bàn trung bình: %.1f\nSố ngày có đơn đặt bàn: %d/%d\nTăng trưởng số đơn đặt bàn so với tháng trước: %.2f%%",
-                    maxSoVe, daysWithMaxText,
-                    minSoVe, daysWithMinText,
-                    minSoVe2, daysWithMinText2,
+                    maxSoDDB, daysWithMaxText,
+                    minSoDDB, daysWithMinText,
+                    minSoDDB2, daysWithMinText2,
                     averageDoanhThu,
                     daysWithRevenue,countDays,
                     revenueGrowth
             );
             lblThongTinDonDatBan.setText(infoText);
-            yAxis.setUpperBound(maxSoVe + 1);
+            yAxis.setUpperBound(maxSoDDB + 1);
         }
         else if (radNgay.isSelected()){
             LocalDate dateStart = txtDateStart.getValue();
@@ -736,10 +736,10 @@ public class ThongKeNVQL_Controller {
             barChart_DonDatBan.getData().add(series);
 
         // ========== Cập nhật thông tin Doanh Thu =============
-        int maxSoVe = 0;
-        int minSoVe = Integer.MAX_VALUE;
-        int minSoVe2 = Integer.MAX_VALUE;
-        int totalSoVe = dsDon.size();
+        int maxSoDDB = 0;
+        int minSoDDB = Integer.MAX_VALUE;
+        int minSoDDB2 = Integer.MAX_VALUE;
+        int totalSoDDB = dsDon.size();
         int countDays = donDatTheoNgay.size();
         List<String> daysWithMaxRevenue = new ArrayList<>();
         List<String> daysWithMinRevenue = new ArrayList<>();
@@ -750,43 +750,43 @@ public class ThongKeNVQL_Controller {
         // Duyệt qua từng ngày để tính các thông số
         for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
             String ngay = entry.getKey();
-            double soVe = entry.getValue();
+            double soDDB = entry.getValue();
 
             // Kiểm tra và cập nhật mức doanh thu cao nhất
-            if (soVe > maxSoVe) {
-                maxSoVe = (int) soVe;
+            if (soDDB > maxSoDDB) {
+                maxSoDDB = (int) soDDB;
                 daysWithMaxRevenue.clear(); // Xóa danh sách cũ nếu tìm thấy doanh thu cao hơn
                 daysWithMaxRevenue.add(ngay); // Thêm ngày hiện tại vào danh sách
-            } else if (soVe == maxSoVe) {
+            } else if (soDDB == maxSoDDB) {
                 daysWithMaxRevenue.add(ngay); // Thêm ngày vào danh sách nếu doanh thu bằng mức cao nhất
             }
 
             // Kiểm tra và cập nhật mức doanh thu thấp nhất
-            if (soVe < minSoVe) {
-                minSoVe = (int) soVe;
+            if (soDDB < minSoDDB) {
+                minSoDDB = (int) soDDB;
                 daysWithMinRevenue.clear();
                 daysWithMinRevenue.add(ngay);
-            } else if (soVe == minSoVe) {
+            } else if (soDDB == minSoDDB) {
                 daysWithMinRevenue.add(ngay);
             }
 
             // Kiểm tra và cập nhật mức doanh thu thấp nhất khác 0
-            if (soVe < minSoVe2 && soVe != 0) {
-                minSoVe2 = (int) soVe;
+            if (soDDB < minSoDDB2 && soDDB != 0) {
+                minSoDDB2 = (int) soDDB;
                 daysWithMinKhac0.clear();
                 daysWithMinKhac0.add(ngay);
-            } else if (soVe == minSoVe2) {
+            } else if (soDDB == minSoDDB2) {
                 daysWithMinKhac0.add(ngay);
             }
 
             // Đếm số ngày có doanh thu khác 0
-            if (soVe > 0) {
+            if (soDDB > 0) {
                 daysWithRevenue++;
             }
         }
 
         // Tính doanh thu trung bình
-        double averageDoanhThu = (double) totalSoVe / countDays;
+        double averageDoanhThu = (double) totalSoDDB / countDays;
 
         // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu cao nhất
         String daysWithMaxText = String.join(", ", daysWithMaxRevenue);
@@ -798,14 +798,14 @@ public class ThongKeNVQL_Controller {
         // Cập nhật thông tin cho label
         String infoText = String.format(
                 "Số đơn đặt bàn cao nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất khác 0: %s (Ngày: %s)\nSố đơn đặt bàn bán được trung bình: %.1f\nSố ngày có đơn đặt bàn: %d/%d",
-                maxSoVe, daysWithMaxText,
-                minSoVe, daysWithMinText,
-                minSoVe2, daysWithMinText2,
+                maxSoDDB, daysWithMaxText,
+                minSoDDB, daysWithMinText,
+                minSoDDB2, daysWithMinText2,
                 averageDoanhThu,
                 daysWithRevenue, countDays
         );
         lblThongTinDonDatBan.setText(infoText);
-        yAxis.setUpperBound(maxSoVe + 1);
+        yAxis.setUpperBound(maxSoDDB + 1);
         }
     }
     
@@ -938,13 +938,12 @@ public class ThongKeNVQL_Controller {
         barChart_DonDatBan.getData().add(series);
 
         // ========== Cập nhật thông tin Doanh Thu =============
-        int maxSoVe = 0;
-        int minSoVe = Integer.MAX_VALUE;
-        int totalVe = dsMap.values().stream().mapToInt(Integer::intValue).sum();
+        int maxSoDDB = 0;
+        int minSoDDB = Integer.MAX_VALUE;
+        int totalDDB = dsMap.values().stream().mapToInt(Integer::intValue).sum();
         List<String> monthsWithMaxRevenue = new ArrayList<>();
         List<String> monthsWithMinRevenue = new ArrayList<>();
 
-        int daysWithRevenue = 0;
         int previousTotalDoanhThu = donDatBan_DAO.getAllDonDatBanTheoNam(nam - 1).size();
         double revenueGrowth = 0;
 
@@ -954,30 +953,30 @@ public class ThongKeNVQL_Controller {
             double doanhThu = entry.getValue();
 
             // Kiểm tra và cập nhật mức doanh thu cao nhất
-            if (doanhThu > maxSoVe) {
-                maxSoVe = (int) doanhThu;
+            if (doanhThu > maxSoDDB) {
+                maxSoDDB = (int) doanhThu;
                 monthsWithMaxRevenue.clear();
                 monthsWithMaxRevenue.add(ngay);
-            } else if (doanhThu == maxSoVe) {
+            } else if (doanhThu == maxSoDDB) {
                 monthsWithMaxRevenue.add(ngay);
             }
 
             // Kiểm tra và cập nhật mức doanh thu thấp nhất
-            if (doanhThu < minSoVe) {
-                minSoVe = (int) doanhThu;
+            if (doanhThu < minSoDDB) {
+                minSoDDB = (int) doanhThu;
                 monthsWithMinRevenue.clear();
                 monthsWithMinRevenue.add(ngay);
-            } else if (doanhThu == minSoVe) {
+            } else if (doanhThu == minSoDDB) {
                 monthsWithMinRevenue.add(ngay);
             }
         }
 
         // Tính doanh thu trung bình
-        double averageDoanhThu = (double) totalVe / dsMap.size();
+        double averageDoanhThu = (double) totalDDB / dsMap.size();
 
         // Tính tăng trưởng doanh thu nếu có dữ liệu kỳ trước
         if (previousTotalDoanhThu > 0) {
-            revenueGrowth = ((double) (totalVe - previousTotalDoanhThu) / previousTotalDoanhThu) * 100;
+            revenueGrowth = ((double) (totalDDB - previousTotalDoanhThu) / previousTotalDoanhThu) * 100;
         }
 
         // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu cao nhất
@@ -988,13 +987,13 @@ public class ThongKeNVQL_Controller {
         // Cập nhật thông tin cho label
         String infoText = String.format(
                 "Số đơn đặt bàn cao nhất: %d (Tháng: %s)\nSố đơn đặt bàn thấp nhất: %d (Tháng: %s)\nSố đơn đặt bàn trung bình: %.0f\nTăng trưởng đơn đặt bàn với năm trước: %.2f%%",
-                maxSoVe, daysWithMaxText,
-                minSoVe, daysWithMinText,
+                maxSoDDB, daysWithMaxText,
+                minSoDDB, daysWithMinText,
                 averageDoanhThu,
                 revenueGrowth
         );
         lblThongTinDonDatBan.setText(infoText);
-        yAxis.setUpperBound(maxSoVe + 1);
+        yAxis.setUpperBound(maxSoDDB + 1);
     }
     
     private void updateChartBan(Map<LoaiBan, Integer> dsBan) {

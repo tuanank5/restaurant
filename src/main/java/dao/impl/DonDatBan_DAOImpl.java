@@ -124,7 +124,28 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 
         return dsDon;
 	}
+	
+	@Override
+	public List<DonDatBan> getAllDonDatBanNVTheoThang(int thang, int nam, String maNV) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
 
+        try {
+            String jpql = "SELECT HD.donDatBan FROM HoaDon HD WHERE FUNCTION('MONTH', HD.donDatBan.ngayGioLapDon) = :thang AND FUNCTION('YEAR', HD.donDatBan.ngayGioLapDon) = :nam and HD.nhanVien.maNV = :maNV";
+            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
+            query.setParameter("thang", thang);
+            query.setParameter("nam", nam);
+            query.setParameter("maNV", maNV);
+
+            dsDon = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsDon;
+	}
+	
 	@Override
 	public List<DonDatBan> getAllDonDatBanTheoThang(int thang, int nam) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -144,6 +165,29 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 
         return dsDon;
 	}
+	
+	@Override
+    public List<String> getKhachHangTheoThangNVCuThe(int thang, int nam, String maNV) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<String> dsKH = null;
+
+        try {
+            String jpql = "SELECT DISTINCT HD.khachHang.maKH " +
+                    "FROM HoaDon HD WHERE FUNCTION('MONTH', HD.donDatBan.ngayGioLapDon) = :thang AND FUNCTION('YEAR', HD.donDatBan.ngayGioLapDon) = :nam AND HD.nhanVien.maNV = :maNV";
+
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
+            query.setParameter("thang", thang);
+            query.setParameter("nam", nam);
+            query.setParameter("maNV", maNV);
+
+            dsKH = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsKH;
+    }
 	
 	@Override
     public List<String> getKhachHangTheoThang(int thang, int nam) {
@@ -168,6 +212,24 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
     } //
 	
 	@Override
+    public List<DonDatBan> getAllDonDatBanTheoNamNVCuThe(int nam, String maNV) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            String jpql = "SELECT HD.donDatBan FROM HoaDon HD WHERE FUNCTION('YEAR', HD.donDatBan.ngayGioLapDon) = :nam AND HD.nhanVien.maNV = :maNV";
+            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
+            query.setParameter("nam", nam);
+            query.setParameter("maNV", maNV);
+
+            dsDon = query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+        return dsDon;
+    }
+	
+	@Override
     public List<DonDatBan> getAllDonDatBanTheoNam(int nam) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<DonDatBan> dsDon = null;
@@ -182,6 +244,28 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
             entityManager.close();
         }
         return dsDon;
+    }
+	
+	@Override
+    public List<String> getKhachHangTheoNamNVCuThe(int nam, String maNV) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<String> dsKH = null;
+
+        try {
+        	String jpql = "SELECT DISTINCT HD.khachHang.maKH " +
+                    "FROM HoaDon HD WHERE FUNCTION('YEAR', HD.donDatBan.ngayGioLapDon) = :nam AND HD.nhanVien.maNV = :maNV";
+
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
+            query.setParameter("nam", nam);
+            query.setParameter("maNV", maNV);
+
+            dsKH = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsKH;
     }
 	
 	@Override
@@ -206,6 +290,31 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
     } //
 	
 	@Override
+    public List<DonDatBan> getAllDonDatBanTheoNgayNVCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV) {
+		LocalDateTime startDateTime = dateStart.atStartOfDay(); 
+		LocalDateTime endDateTime   = dateEnd.atTime(LocalTime.MAX);
+		
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<DonDatBan> dsDon = null;
+
+        try {
+            String jpql = "SELECT HD.donDatBan FROM HoaDon HD WHERE HD.donDatBan.ngayGioLapDon BETWEEN :dateStart AND :dateEnd AND HD.nhanVien.maNV = :maNV";
+            TypedQuery<DonDatBan> query = entityManager.createQuery(jpql, DonDatBan.class);
+
+            query.setParameter("dateStart", startDateTime);
+            query.setParameter("dateEnd", endDateTime);
+            query.setParameter("maNV", maNV);
+
+            dsDon = query.getResultList();
+
+        } finally {
+            entityManager.close();
+        }
+
+        return dsDon;
+    }
+	
+	@Override
     public List<DonDatBan> getAllDonDatBanTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
 		LocalDateTime startDateTime = dateStart.atStartOfDay(); 
 		LocalDateTime endDateTime   = dateEnd.atTime(LocalTime.MAX);
@@ -227,6 +336,31 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
         }
 
         return dsDon;
+    }
+	
+	@Override
+    public List<String> getKhachHangTheoNgayNVCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV) {
+		LocalDateTime startDateTime = dateStart.atStartOfDay(); 
+		LocalDateTime endDateTime   = dateEnd.atTime(LocalTime.MAX);
+		
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<String> dsKH = null;
+
+        try {
+        	String jpql = "SELECT DISTINCT HD.khachHang.maKH " +
+                    "FROM HoaDon HD WHERE HD.donDatBan.ngayGioLapDon BETWEEN :dateStart AND :dateEnd AND HD.nhanVien.maNV = :maNV";
+
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
+
+            query.setParameter("dateStart", startDateTime);
+            query.setParameter("dateEnd", endDateTime);
+            query.setParameter("maNV", maNV);
+
+            dsKH = query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+        return dsKH;
     }
 	
 	@Override

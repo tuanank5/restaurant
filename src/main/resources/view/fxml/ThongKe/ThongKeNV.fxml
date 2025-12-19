@@ -9,7 +9,6 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane_main" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThongKe.ThongKeNVQL_Controller">
+<AnchorPane fx:id="anchorPane_main" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThongKe.ThongKeNV_Controller">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
@@ -131,29 +130,22 @@
       </HBox>
       <HBox layoutY="770.0" prefHeight="350.0" prefWidth="1100.0">
          <children>
-            <VBox prefHeight="500.0" prefWidth="750.0">
+            <AnchorPane>
                <children>
-                  <AnchorPane>
-                     <children>
-                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="700.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
-                          <xAxis>
-                            <CategoryAxis label="Thời gian" side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis label="Số lượng" side="LEFT" />
-                          </yAxis>
-                        </BarChart>
-                     </children>
-                  </AnchorPane>
+                  <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
+                    <xAxis>
+                      <CategoryAxis label="Thời gian" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis label="Số lượng" side="LEFT" />
+                    </yAxis>
+                  </BarChart>
                </children>
-            </VBox>
+            </AnchorPane>
             <AnchorPane>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-               <children>
-                  <PieChart fx:id="pieChart_LoaiBan" prefHeight="350.0" prefWidth="350.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐƠN ĐẶT BÀN THEO LOẠI BÀN" />
-               </children>
             </AnchorPane>
          </children>
       </HBox>
