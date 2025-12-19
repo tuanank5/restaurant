@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Ban.QuanLyBan_Controller">
    <top>
       <BorderPane prefHeight="75.0">
          <center>
@@ -26,14 +26,14 @@
                   <Label layoutX="90.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã bàn: " />
                   <Label layoutX="90.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn:" />
                   <Label layoutX="450.0" layoutY="30.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Vị trí:" />
-                  <Button layoutX="90.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm" />
-                  <Button layoutX="240.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
-                  <Button layoutX="370.0" layoutY="145.0" mnemonicParsing="false" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
-                  <TextField editable="false" layoutX="170.0" layoutY="24.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                  <TextField layoutX="520.0" layoutY="24.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-                  <ComboBox layoutX="170.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <Button fx:id="btnThem" layoutX="90.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm" />
+                  <Button fx:id="btnXoa" layoutX="240.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
+                  <Button fx:id="btnSua" layoutX="370.0" layoutY="145.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa" />
+                  <TextField fx:id="txtMaBan" editable="false" layoutX="170.0" layoutY="24.0" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField fx:id="txtViTri" layoutX="520.0" layoutY="24.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox fx:id="comBoxLoaiBan" layoutX="170.0" layoutY="84.0" prefWidth="200.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                   <Button disable="true" layoutX="900.0" layoutY="24.0" mnemonicParsing="false" prefWidth="90.0" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
-                  <TextField fx:id="txtTimKiem" layoutX="990.0" layoutY="24.0" onAction="#controller" onMouseClicked="#mouseClicked" prefWidth="200.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField fx:id="txtTimKiem" layoutX="990.0" layoutY="24.0" onAction="#controller" prefWidth="200.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </AnchorPane>
          </top>

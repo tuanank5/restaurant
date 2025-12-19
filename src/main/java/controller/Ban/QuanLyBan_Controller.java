@@ -49,8 +49,8 @@ public class QuanLyBan_Controller {
     @FXML
     private TableColumn<Ban, String> colMaLoaiBan;
 
-    @FXML
-    private TableColumn<Ban, String> colTrangThai;
+//    @FXML
+//    private TableColumn<Ban, String> colTrangThai;
 
     @FXML
     private TableColumn<Ban, String> colViTri;
@@ -100,10 +100,10 @@ public class QuanLyBan_Controller {
         colMaBan.setCellValueFactory(new PropertyValueFactory<>("maBan"));
         colViTri.setCellValueFactory(new PropertyValueFactory<>("viTri"));
         
-        colTrangThai.setCellValueFactory(cellData -> {
-            String trangThai = cellData.getValue().getTrangThai();
-            return new SimpleStringProperty(trangThai != null ? trangThai : "Trống");
-        });
+//        colTrangThai.setCellValueFactory(cellData -> {
+//            String trangThai = cellData.getValue().getTrangThai();
+//            return new SimpleStringProperty(trangThai != null ? trangThai : "Trống");
+//        });
      // Chú ý: colMaLoaiBan phải là TableColumn<Ban, String>
         colMaLoaiBan.setCellValueFactory(cellData -> {
             LoaiBan loaiBan = cellData.getValue().getLoaiBan();
@@ -111,13 +111,13 @@ public class QuanLyBan_Controller {
             return new SimpleStringProperty(tenLoai);
         });
 
-     //Khởi tạo dữ liệu cho ComboBox trạng thái
-        comBoxTrangThai.setItems(FXCollections.observableArrayList(
-                "Trống",
-                "Đang sử dụng",
-                "Đặt trước"
-        ));
-        comBoxTrangThai.setValue("Trống"); // Giá trị mặc định
+//     //Khởi tạo dữ liệu cho ComboBox trạng thái
+//        comBoxTrangThai.setItems(FXCollections.observableArrayList(
+//                "Trống",
+//                "Đang sử dụng",
+//                "Đặt trước"
+//        ));
+//        comBoxTrangThai.setValue("Trống"); // Giá trị mặc định
 
      // Load dữ liệu loại bàn từ DB
         List<LoaiBan> listLoaiBan = RestaurantApplication.getInstance()
@@ -194,15 +194,18 @@ public class QuanLyBan_Controller {
     private void themBan() {
     	String maBan = txtMaBan.getText().trim();
         String viTri = txtViTri.getText().trim();
-        String trangThai = comBoxTrangThai.getValue();
+//        String trangThai = comBoxTrangThai.getValue();
         LoaiBan loaiBan = comBoxLoaiBan.getValue(); // Lấy trực tiếp đối tượng
 
-        if (maBan.isEmpty() || viTri.isEmpty() || trangThai == null || loaiBan == null) {
+        if (maBan.isEmpty() || viTri.isEmpty() || loaiBan == null) {
             showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
             return;
         }
 
-        Ban ban = new Ban(maBan, viTri, trangThai, 0, loaiBan);
+        String trangThaiMacDinh = "Trống";
+
+        Ban ban = new Ban(maBan, viTri, trangThaiMacDinh, 0, loaiBan);
+
 
         boolean check = RestaurantApplication.getInstance()
                 .getDatabaseContext()
@@ -233,17 +236,17 @@ public class QuanLyBan_Controller {
         }
 
         String viTri = txtViTri.getText().trim();
-        String trangThai = comBoxTrangThai.getValue();
+//        String trangThai = comBoxTrangThai.getValue();
         LoaiBan loaiBan = comBoxLoaiBan.getValue();
 
-        if (viTri.isEmpty() || trangThai == null || loaiBan == null) {
+        if (viTri.isEmpty() || loaiBan == null) {
             showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
             return;
         }
 
         // Cập nhật thông tin vào đối tượng
         banChon.setViTri(viTri);
-        banChon.setTrangThai(trangThai);
+//        banChon.setTrangThai(trangThai);
         banChon.setLoaiBan(loaiBan);
 
         // Cập nhật vào database
@@ -310,7 +313,7 @@ public class QuanLyBan_Controller {
         txtViTri.clear();
         
         // ComboBox trạng thái về mặc định
-        comBoxTrangThai.setValue("Trống");
+//        comBoxTrangThai.setValue("Trống");
         
         // ComboBox loại bàn chưa chọn
         comBoxLoaiBan.getSelectionModel().clearSelection();
