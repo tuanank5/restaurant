@@ -3,12 +3,16 @@ package controller.Menu;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import config.RestaurantApplication;
 import controller.Dashboard.DashboardNVQLScroll_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,9 +22,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MenuNVQL_Controller {
     @FXML
@@ -28,6 +34,9 @@ public class MenuNVQL_Controller {
 
     @FXML
     private TextField txtThongTin;
+    
+    @FXML
+    private Label lblClock;
     
     public static MenuNVQL_Controller instance;
     public static TaiKhoan taiKhoan;
@@ -71,6 +80,20 @@ public class MenuNVQL_Controller {
     @FXML
     public void initialize() {
         instance = this;
+        DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern("HH:mm:ss");
+        Timeline timeline = new Timeline(
+        	    new KeyFrame(Duration.seconds(1), e -> {
+        	        if (lblClock.getText().contains(":"))
+        	            lblClock.setText(LocalDateTime.now()
+        	                .format(DateTimeFormatter.ofPattern("HH mm ss")));
+        	        else
+        	            lblClock.setText(LocalDateTime.now()
+        	                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        	    })
+        	);
+        	timeline.setCycleCount(Timeline.INDEFINITE);
+        	timeline.play();
     }
     
     public static MenuNVQL_Controller getInstance() {

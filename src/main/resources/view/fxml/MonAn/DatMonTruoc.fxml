@@ -85,13 +85,13 @@
             <AnchorPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
                   <ComboBox fx:id="comBoxPhanLoai" layoutX="10.0" layoutY="10.0" promptText="Phân loại" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField fx:id="txtTim" layoutX="164.0" layoutY="10.0" prefHeight="29.0" prefWidth="236.0" promptText="Nhập tên món ăn để tìm" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </AnchorPane>
          </left>
          <right>
             <AnchorPane prefHeight="200.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="txtTim" layoutX="10.0" layoutY="10.0" prefWidth="300.0" promptText="Nhập tên món ăn để tìm" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                   <Button fx:id="btnTroLai" layoutX="700.0" layoutY="4.0" mnemonicParsing="false" onAction="#onTroLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại" />
                </children>
             </AnchorPane>

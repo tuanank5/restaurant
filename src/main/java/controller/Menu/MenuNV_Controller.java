@@ -3,6 +3,8 @@ package controller.Menu;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +20,8 @@ import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
 import entity.TaiKhoan;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,9 +33,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MenuNV_Controller {
 	
@@ -65,10 +71,30 @@ public class MenuNV_Controller {
     private TextField txtThongTin;
     
     @FXML
+    private Label lblClock;
+    
+    @FXML
     private void initialize() {
         instance = this; // Gán instance khi FXML được load
-       
+        DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern("HH:mm:ss");
+        Timeline timeline = new Timeline(
+        	    new KeyFrame(Duration.seconds(1), e -> {
+        	        if (lblClock.getText().contains(":"))
+        	            lblClock.setText(LocalDateTime.now()
+        	                .format(DateTimeFormatter.ofPattern("HH mm ss")));
+        	        else
+        	            lblClock.setText(LocalDateTime.now()
+        	                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        	    })
+        	);
+        	timeline.setCycleCount(Timeline.INDEFINITE);
+        	timeline.play();
+        
+
     }
+       
+    
     public static MenuNV_Controller getInstance() {
         return instance;
     }
