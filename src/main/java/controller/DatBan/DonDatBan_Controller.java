@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import config.RestaurantApplication;
@@ -160,7 +161,7 @@ public class DonDatBan_Controller implements Initializable{
 
     @FXML
     void btnHuyDon(ActionEvent event) {
-    	kiemTraKhachToiTreVaHuyDon();
+    	huyDonKhachGoiTruoc(donDangChon);
     }
     
     @FXML
@@ -412,6 +413,79 @@ public class DonDatBan_Controller implements Initializable{
         loadData();
     }
     
+    private void huyDonKhachGoiTruoc(DonDatBan don) {
+        if (don == null) {
+            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn đơn đặt bàn!");
+            return;
+        }
+
+        if (!"Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
+            showAlert(Alert.AlertType.WARNING, "Đơn này không thể hủy!");
+            return;
+        }
+
+        LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
+        LocalDateTime gioBatDau = LocalDateTime.of(
+                don.getNgayGioLapDon().toLocalDate(),
+                don.getGioBatDau()
+        );
+
+        if (hienTai.isAfter(gioBatDau.minusHours(1))) {
+            showAlert(
+                Alert.AlertType.WARNING,
+                "Khách chỉ được hủy trước giờ đến ít nhất 1 tiếng!"
+            );
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận hủy đơn");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Khách hàng xác nhận hủy đơn đặt bàn này?");
+        Optional<ButtonType> rs = confirm.showAndWait();
+
+        if (rs.isEmpty() || rs.get() != ButtonType.OK)
+            return;
+        try {
+            don.setTrangThai("Đã hủy");
+            donDatBanDAO.capNhat(don);
+
+            HoaDon hoaDon = RestaurantApplication.getInstance()
+                    .getDatabaseContext()
+                    .newEntity_DAO(HoaDon_DAO.class)
+                    .timHoaDonTheoDonDatBan(don);
+
+            if (hoaDon != null) {
+                hoaDon.setTrangThai("Đã hủy");
+                RestaurantApplication.getInstance()
+                        .getDatabaseContext()
+                        .newEntity_DAO(HoaDon_DAO.class)
+                        .capNhat(hoaDon);
+            }
+            
+            Ban ban = don.getBan();
+            if (ban != null) {
+                ban.setTrangThai("Trống");
+                RestaurantApplication.getInstance()
+                        .getDatabaseContext()
+                        .newEntity_DAO(Ban_DAO.class)
+                        .capNhat(ban);
+            }
+            KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+
+            showAlert(
+                Alert.AlertType.INFORMATION,
+                "Đã hủy đơn đặt bàn của khách "
+                + (kh != null ? kh.getTenKH() : "")
+                + " theo yêu cầu."
+            );
+            loadData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Không thể hủy đơn đặt bàn!");
+        }
+    }
+ 
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
