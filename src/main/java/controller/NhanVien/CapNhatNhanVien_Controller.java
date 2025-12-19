@@ -191,7 +191,7 @@ public class CapNhatNhanVien_Controller implements Initializable {
     }
 
     private void quayLai() {
-        MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+        MenuNVQL_Controller.instance.readyUI("NhanVien/ThongTinChiTietNV");
     }
 
     private void showAlert(String title, String content, Alert.AlertType type) {

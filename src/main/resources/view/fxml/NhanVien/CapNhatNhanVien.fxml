@@ -27,19 +27,29 @@
          <center>
             <Pane prefHeight="24.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="lblDanhSachNhanVien" layoutX="122.0" layoutY="13.0" text="Danh Sách Nhân Viên">
+                  <Label fx:id="lblDanhSachNhanVien" layoutX="131.0" layoutY="13.0" text="Danh Sách Nhân Viên">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="279.0" layoutY="13.0" text="Thông Tin Chi Tiết / Cập nhật Thông Tin">
+                  <Label layoutX="392.0" layoutY="13.0" text="Cập nhật Thông Tin">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="265.0" layoutY="10.0" prefHeight="17.0" prefWidth="0.0" text="/">
+                  <Label layoutX="266.0" layoutY="10.0" prefHeight="17.0" prefWidth="0.0" text="/">
                      <font>
                         <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="385.0" layoutY="10.0" prefHeight="17.0" prefWidth="0.0" text="/">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblThongTinChiTiet" layoutX="273.0" layoutY="13.0" text="Thông tin chi tiết">
+                     <font>
+                        <Font size="14.0" />
                      </font>
                   </Label>
                </children>

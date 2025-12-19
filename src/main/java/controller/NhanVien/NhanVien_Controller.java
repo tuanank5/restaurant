@@ -83,22 +83,22 @@ public class NhanVien_Controller {
         if (event.getSource() == txtTimKiem) {
             timKiem();
         }if (event.getSource() == tblNV) {
-            if (event.getClickCount() == 2) {
-            	NhanVien nv = tblNV.getSelectionModel().getSelectedItem();
-                if (nv == null) return;
-                FXMLLoader loader = new FXMLLoader(
-                	    getClass().getResource("/view/fxml/NhanVien/CapNhatNhanVien.fxml")
-                	);
-                BorderPane pane = loader.load();
-                CapNhatNhanVien_Controller controller = loader.getController();
-                if (controller == null) {
-                    System.out.println("❌ Controller is NULL – check fx:controller");
-                    return;
-                }
-                controller.setNhanVien(nv); 
-                MenuNVQL_Controller.instance.setCenterUI(pane);
-            }
-        }  else if (event.getSource() == borderPane) {
+        	if (event.getClickCount() == 2) {
+	        	    NhanVien nv = tblNV.getSelectionModel().getSelectedItem();
+	        	    if (nv == null) return;
+	
+	        	    FXMLLoader loader = new FXMLLoader(
+	        	        getClass().getResource("/view/fxml/NhanVien/ThongTinChiTietNV.fxml")
+	        	    );
+	
+	        	    BorderPane pane = loader.load();
+	
+	        	    ThongTinChiTietNV_Controller controller = loader.getController();
+	        	    controller.setNhanVien(nv);
+	
+	        	    MenuNVQL_Controller.instance.setCenterUI(pane);
+	        	}
+        } else if (event.getSource() == borderPane) {
             huyChonDong();
         }
     }

@@ -80,6 +80,8 @@ public class ThongTinKhachHang_Controller {
             showThongTin();
         } else if (source == btnTroLai) {
             troLai();
+        } else if(source == btnHuy) {
+        	MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
         }
     }
     @FXML
