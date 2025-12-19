@@ -119,7 +119,6 @@ public class CaLamViec_Controller {
       text_maNV.setText(taiKhoan.getNhanVien().getMaNV());
   }
 
-
   // ================== CẬP NHẬT DOANH THU ==================hihi
   private void capNhatDoanhThu() {
 	    try {
@@ -138,70 +137,64 @@ public class CaLamViec_Controller {
 	        label_TongDoanhThu.setText("0");
 	        label_TongHoaDon.setText("0");
 	    } finally {
-	        // ✅ luôn cập nhật lại tiền phải nộp theo doanh thu mới
 	        tinhTienPhaiNop();
 	    }
 	}
 
-
-
   // ================== TÍNH TIỀN PHẢI NỘP ==================
-//================== TÍNH TIỀN PHẢI NỘP ==================
-private void tinhTienPhaiNop() {
-   if (taiKhoan == null) return;
+	//================== TÍNH TIỀN PHẢI NỘP ==================
+	private void tinhTienPhaiNop() {
+	   if (taiKhoan == null) return;
+	
+	   try {
+	       // Tiền nhận đầu ca (user nhập)
+	       String text = textField_TienNhan.getText().replace(",", "").trim();
+	       long tienNhanDauCa = text.isEmpty() ? 0 : Long.parseLong(text);
+	
+	       // Tổng doanh thu (lấy từ label, không gọi DAO)
+	       String doanhThuText = label_TongDoanhThu.getText().replace(",", "").trim();
+	       double tongDoanhThu = doanhThuText.isEmpty() ? 0 : Double.parseDouble(doanhThuText);
+	
+	       // ✅ Tiền phải nộp lại = tổng doanh thu - tiền nhận đầu ca
+	       double tienPhaiNop = tongDoanhThu - tienNhanDauCa;
+	
+	       // nếu bạn không muốn âm (trường hợp nhập sai), thì chặn:
+	       // if (tienPhaiNop < 0) tienPhaiNop = 0;
+	
+	       label_TienPhaiNop.setText(decimalFormat.format(tienPhaiNop));
+	
+	   } catch (Exception e) {
+	       label_TienPhaiNop.setText("0");
+	       System.err.println("⚠️ Lỗi tính tiền phải nộp");
+	   }
+	}
 
-   try {
-       // Tiền nhận đầu ca (user nhập)
-       String text = textField_TienNhan.getText().replace(",", "").trim();
-       long tienNhanDauCa = text.isEmpty() ? 0 : Long.parseLong(text);
+	 // ================== NÚT TIỀN NHANH ==================
+	 private void chonTienMacDinh() {
+	      Btn_1000.setOnAction(e -> {
+	          textField_TienNhan.setText(decimalFormat.format(1000000));
+	          tinhTienPhaiNop();
+	      });
+	
+	      Btn_1500.setOnAction(e -> {
+	          textField_TienNhan.setText(decimalFormat.format(1500000));
+	          tinhTienPhaiNop();
+	      });
+	  }
 
-       // Tổng doanh thu (lấy từ label, không gọi DAO)
-       String doanhThuText = label_TongDoanhThu.getText().replace(",", "").trim();
-       double tongDoanhThu = doanhThuText.isEmpty() ? 0 : Double.parseDouble(doanhThuText);
-
-       // ✅ Tiền phải nộp lại = tổng doanh thu - tiền nhận đầu ca
-       double tienPhaiNop = tongDoanhThu - tienNhanDauCa;
-
-       // nếu bạn không muốn âm (trường hợp nhập sai), thì chặn:
-       // if (tienPhaiNop < 0) tienPhaiNop = 0;
-
-       label_TienPhaiNop.setText(decimalFormat.format(tienPhaiNop));
-
-   } catch (Exception e) {
-       label_TienPhaiNop.setText("0");
-       System.err.println("⚠️ Lỗi tính tiền phải nộp");
-   }
-}
-
-
-
-
-  // ================== NÚT TIỀN NHANH ==================
-  private void chonTienMacDinh() {
-      Btn_1000.setOnAction(e -> {
-          textField_TienNhan.setText(decimalFormat.format(1000000));
-          tinhTienPhaiNop();
-      });
-
-      Btn_1500.setOnAction(e -> {
-          textField_TienNhan.setText(decimalFormat.format(1500000));
-          tinhTienPhaiNop();
-      });
-  }
-
-  // ================== ENTER KEY ==================
-  private void setupEnterKeyHandler() {
-      textField_TienNhan.setOnAction(e -> onEnterPressed());
-  }
-
-  private void onEnterPressed() {
-      String text = textField_TienNhan.getText().replace(",", "");
-      try {
-          long value = Long.parseLong(text);
-          textField_TienNhan.setText(decimalFormat.format(value));
-          tinhTienPhaiNop();
-      } catch (NumberFormatException e) {
-          System.out.println("Invalid input");
-      }
-  }
-}
+	  // ================== ENTER KEY ==================
+	 private void setupEnterKeyHandler() {
+	      textField_TienNhan.setOnAction(e -> onEnterPressed());
+	  }
+	
+	 private void onEnterPressed() {
+	      String text = textField_TienNhan.getText().replace(",", "");
+	      try {
+	          long value = Long.parseLong(text);
+	          textField_TienNhan.setText(decimalFormat.format(value));
+	          tinhTienPhaiNop();
+	      } catch (NumberFormatException e) {
+	          System.out.println("Invalid input");
+	      }
+	   }
+	 }

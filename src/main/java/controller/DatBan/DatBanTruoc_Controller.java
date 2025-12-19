@@ -116,7 +116,7 @@ public class DatBanTruoc_Controller implements Initializable {
         cmbGioBatDau.setValue("08:00");
     }
     
-    // LOAD DANH SÁCH BÀN — CHUẨN HÓA LOGIC
+    // LOAD DANH SÁCH BÀN 
     private void loadDanhSachBan() {
         gridPaneBan.getChildren().clear();
         danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
@@ -245,8 +245,8 @@ public class DatBanTruoc_Controller implements Initializable {
         final int MAX_COLS = 5;
         LocalDate ngay = dpNgayDatBan.getValue();
         String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = gioStr == null ? null : LocalTime.of(Integer.parseInt(gioStr.substring(0,1)), 0);
-
+        LocalTime gio = gioStr != null ? LocalTime.parse(gioStr) : null;
+        
         for (Ban ban : danhSachBan) {
             String trangThai = getTrangThaiThucTe(ban, ngay, gio);
             if (!trangThaiChon.equals("Tất cả") && !trangThai.equals(trangThaiChon))
@@ -282,7 +282,7 @@ public class DatBanTruoc_Controller implements Initializable {
                 bgColor = "#00aa00"; // xanh
         }                          
 
-        Button btn = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getSoLuong() + " chỗ)");
+        Button btn = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
         btn.setPrefSize(170, 110);
         btn.setStyle(buildStyle(bgColor));
 
