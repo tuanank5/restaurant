@@ -49,25 +49,19 @@ public class DashboardNVQL_Controller {
 
     @FXML
     private BarChart<String, Number> barChart_DonDatBan;
-
-    @FXML
-    private Label lblThongTinDoanhThu;
-
-    @FXML
-    private Label lblThongTinDonDatBan;
-
+    
     @FXML
     private PieChart pieChart_LoaiBan;
+
+    private DatePicker txtDateEnd = new DatePicker();
+
+    private DatePicker txtDateStart = new DatePicker();
     
     @FXML
     private CategoryAxis axis;
     
     private final HoaDon_DAOImpl hoaDon_DAO;
     private final DonDatBan_DAOImpl donDatBan_DAO;
-    
-    private DatePicker txtDateStart = new DatePicker();
-
-    private DatePicker txtDateEnd = new DatePicker();
     
     public DashboardNVQL_Controller() {
     	this.hoaDon_DAO = new HoaDon_DAOImpl();
@@ -79,10 +73,7 @@ public class DashboardNVQL_Controller {
     @FXML
     public void initialize() {
     	txtDateEnd.setValue(LocalDate.now());
-
-        // Đặt ngày bắt đầu là 6 ngày trước
         txtDateStart.setValue(LocalDate.now().minusDays(6));
-        
         displayData();
         barChart_DoanhThuNam.setVisible(false);
         anchorPane_main.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -96,7 +87,7 @@ public class DashboardNVQL_Controller {
     }
     
     private void displayData() {
-            showCustomDateRangeData();
+    	showCustomDateRangeData();
     }
     
     private void showCustomDateRangeData() {
@@ -104,15 +95,13 @@ public class DashboardNVQL_Controller {
         areaChart_DoanhThu.setVisible(true);
         LocalDate dateStart = txtDateStart.getValue();
         LocalDate dateEnd = txtDateEnd.getValue();
-//        ============ UpDate 4 Ô TOP ==============
+        
+        //UpDate 4 Ô TOP
         List<HoaDon> dsHD = hoaDon_DAO.getHoaDonTheoNgayCuThe(dateStart, dateEnd);
         List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
-        List<String> dsKH = donDatBan_DAO.getKhachHangTheoNgayCuThe(dateStart, dateEnd);
-        Double tongDoanhThu = hoaDon_DAO.getTongDoanhThuTheoNgayCuThe(dateStart, dateEnd);
-        String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
-
-//        ============ END - UpDate 4 Ô TOP ==============
-//        ============ UpDate Chart ==============
+        //END - UpDate 4 Ô TOP
+        
+        //UpDate Chart
         Map<LoaiBan, Integer> countLoaiGhe = donDatBan_DAO.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
 
         updateChartDoanhThu(dsHD);
@@ -124,7 +113,6 @@ public class DashboardNVQL_Controller {
         areaChart_DoanhThu.getData().clear();
         axis.setAutoRanging(true);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
-        
         LocalDate dateStart = txtDateStart.getValue();
         LocalDate dateEnd = txtDateEnd.getValue();
         // Tạo danh sách các ngày trong khoảng thời gian đã chọn
@@ -153,7 +141,7 @@ public class DashboardNVQL_Controller {
         // Tạo Series cho biểu đồ
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Doanh thu theo ngày");
-        areaChart_DoanhThu.setTitle("DOANH THU THEO NGÀY TỪ " + txtDateStart.getValue().format(DateTimeFormatter.ofPattern("dd/MM")) + " ĐẾN " + txtDateEnd.getValue().format(DateTimeFormatter.ofPattern("dd/MM")));
+        areaChart_DoanhThu.setTitle("DOANH THU THEO TUẦN TỪ " + txtDateStart.getValue().format(DateTimeFormatter.ofPattern("dd/MM")) + " ĐẾN " + txtDateEnd.getValue().format(DateTimeFormatter.ofPattern("dd/MM")));
 
         for (Map.Entry<String, Double> entry : doanhThuTheoNgay.entrySet()) {
             XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
@@ -170,80 +158,6 @@ public class DashboardNVQL_Controller {
         }
         // Cập nhật biểu đồ
         areaChart_DoanhThu.getData().add(series);
-
-        // ========== Cập nhật thông tin Doanh Thu =============
-        double maxDoanhThu = 0;
-        double minDoanhThu = Double.MAX_VALUE;
-        double minDoanhThu2 = Double.MAX_VALUE;
-        double totalDoanhThu = 0;
-        int countDays = doanhThuTheoNgay.size();
-        List<String> daysWithMaxRevenue = new ArrayList<>();
-        List<String> daysWithMinRevenue = new ArrayList<>();
-        List<String> daysWithMinKhac0 = new ArrayList<>();
-
-        int daysWithRevenue = 0; // Biến đếm số ngày có doanh thu khác 0
-
-        // Duyệt qua từng ngày để tính các thông số
-        for (Map.Entry<String, Double> entry : doanhThuTheoNgay.entrySet()) {
-            String ngay = entry.getKey();
-            double doanhThu = entry.getValue();
-
-            // Cập nhật tổng doanh thu
-            totalDoanhThu += doanhThu;
-
-            // Kiểm tra và cập nhật mức doanh thu cao nhất
-            if (doanhThu > maxDoanhThu) {
-                maxDoanhThu = doanhThu;
-                daysWithMaxRevenue.clear(); // Xóa danh sách cũ nếu tìm thấy doanh thu cao hơn
-                daysWithMaxRevenue.add(ngay); // Thêm ngày hiện tại vào danh sách
-            } else if (doanhThu == maxDoanhThu) {
-                daysWithMaxRevenue.add(ngay); // Thêm ngày vào danh sách nếu doanh thu bằng mức cao nhất
-            }
-
-            // Kiểm tra và cập nhật mức doanh thu thấp nhất
-            if (doanhThu < minDoanhThu) {
-                minDoanhThu = doanhThu;
-                daysWithMinRevenue.clear();
-                daysWithMinRevenue.add(ngay);
-            } else if (doanhThu == minDoanhThu) {
-                daysWithMinRevenue.add(ngay);
-            }
-
-            // Kiểm tra và cập nhật mức doanh thu thấp nhất khác 0
-            if (doanhThu < minDoanhThu2 && doanhThu != 0) {
-                minDoanhThu2 = doanhThu;
-                daysWithMinKhac0.clear();
-                daysWithMinKhac0.add(ngay);
-            } else if (doanhThu == minDoanhThu2) {
-                daysWithMinKhac0.add(ngay);
-            }
-
-            // Đếm số ngày có doanh thu khác 0
-            if (doanhThu > 0) {
-                daysWithRevenue++;
-            }
-        }
-
-        // Tính doanh thu trung bình
-        double averageDoanhThu = totalDoanhThu / countDays;
-
-        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu cao nhất
-        String daysWithMaxText = String.join(", ", daysWithMaxRevenue);
-        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu thấp nhất
-        String daysWithMinText = String.join(", ", daysWithMinRevenue);
-        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu thấp nhất khác 0
-        String daysWithMinText2 = String.join(", ", daysWithMinKhac0);
-
-        // Cập nhật thông tin cho label
-        String infoText = String.format(
-                "Doanh thu cao nhất: %s (Ngày: %s)\nDoanh thu thấp nhất: %s (Ngày: %s)\nDoanh thu thấp nhất khác 0: %s (Ngày: %s)\nDoanh thu trung bình: %s\nSố ngày có doanh thu: %d/%d",
-                decimalFormat.format(maxDoanhThu), daysWithMaxText,
-                decimalFormat.format(minDoanhThu), daysWithMinText,
-                decimalFormat.format(minDoanhThu2), daysWithMinText2,
-                decimalFormat.format(averageDoanhThu),
-                daysWithRevenue, countDays
-        );
-        lblThongTinDoanhThu.setText(infoText);
     }
     
     //---
@@ -253,7 +167,6 @@ public class DashboardNVQL_Controller {
         NumberAxis yAxis = (NumberAxis) barChart_DonDatBan.getYAxis();
         axis.setAutoRanging(true);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
-
         LocalDate dateStart = txtDateStart.getValue();
         LocalDate dateEnd = txtDateEnd.getValue();
 
@@ -283,7 +196,7 @@ public class DashboardNVQL_Controller {
         // Tạo Series cho biểu đồ
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Số lượng đơn đặt bàn theo ngày");
-        barChart_DonDatBan.setTitle("SỐ LƯỢNG ĐƠN ĐẶT BÀN THEO NGÀY TỪ " + txtDateStart.getValue().format(DateTimeFormatter.ofPattern("dd/MM")) + " ĐẾN " + txtDateEnd.getValue().format(DateTimeFormatter.ofPattern("dd/MM")));
+        barChart_DonDatBan.setTitle("SỐ LƯỢNG ĐƠN ĐẶT BÀN THEO TUẦN TỪ " + txtDateStart.getValue().format(DateTimeFormatter.ofPattern("dd/MM")) + " ĐẾN " + txtDateEnd.getValue().format(DateTimeFormatter.ofPattern("dd/MM")));
 
         for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
             XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
@@ -302,77 +215,55 @@ public class DashboardNVQL_Controller {
         // Cập nhật biểu đồ
         barChart_DonDatBan.getData().add(series);
 
-        // ========== Cập nhật thông tin Doanh Thu =============
-        int maxSoVe = 0;
-        int minSoVe = Integer.MAX_VALUE;
-        int minSoVe2 = Integer.MAX_VALUE;
-        int totalSoVe = dsDon.size();
-        int countDays = donDatTheoNgay.size();
-        List<String> daysWithMaxRevenue = new ArrayList<>();
-        List<String> daysWithMinRevenue = new ArrayList<>();
-        List<String> daysWithMinKhac0 = new ArrayList<>();
-
-        int daysWithRevenue = 0; // Biến đếm số ngày có doanh thu khác 0
-
-        // Duyệt qua từng ngày để tính các thông số
-        for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
-            String ngay = entry.getKey();
-            double soVe = entry.getValue();
-
-            // Kiểm tra và cập nhật mức doanh thu cao nhất
-            if (soVe > maxSoVe) {
-                maxSoVe = (int) soVe;
-                daysWithMaxRevenue.clear(); // Xóa danh sách cũ nếu tìm thấy doanh thu cao hơn
-                daysWithMaxRevenue.add(ngay); // Thêm ngày hiện tại vào danh sách
-            } else if (soVe == maxSoVe) {
-                daysWithMaxRevenue.add(ngay); // Thêm ngày vào danh sách nếu doanh thu bằng mức cao nhất
-            }
-
-            // Kiểm tra và cập nhật mức doanh thu thấp nhất
-            if (soVe < minSoVe) {
-                minSoVe = (int) soVe;
-                daysWithMinRevenue.clear();
-                daysWithMinRevenue.add(ngay);
-            } else if (soVe == minSoVe) {
-                daysWithMinRevenue.add(ngay);
-            }
-
-            // Kiểm tra và cập nhật mức doanh thu thấp nhất khác 0
-            if (soVe < minSoVe2 && soVe != 0) {
-                minSoVe2 = (int) soVe;
-                daysWithMinKhac0.clear();
-                daysWithMinKhac0.add(ngay);
-            } else if (soVe == minSoVe2) {
-                daysWithMinKhac0.add(ngay);
-            }
-
-            // Đếm số ngày có doanh thu khác 0
-            if (soVe > 0) {
-                daysWithRevenue++;
-            }
-        }
-
-        // Tính doanh thu trung bình
-        double averageDoanhThu = (double) totalSoVe / countDays;
-
-        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu cao nhất
-        String daysWithMaxText = String.join(", ", daysWithMaxRevenue);
-        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu thấp nhất
-        String daysWithMinText = String.join(", ", daysWithMinRevenue);
-        // Chuẩn bị chuỗi văn bản cho các ngày có doanh thu thấp nhất khác 0
-        String daysWithMinText2 = String.join(", ", daysWithMinKhac0);
-
-        // Cập nhật thông tin cho label
-        String infoText = String.format(
-                "Số đơn đặt bàn cao nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất: %d (Ngày: %s)\nSố đơn đặt bàn thấp nhất khác 0: %s (Ngày: %s)\nSố đơn đặt bàn bán được trung bình: %.1f\nSố ngày có đơn đặt bàn: %d/%d",
-                maxSoVe, daysWithMaxText,
-                minSoVe, daysWithMinText,
-                minSoVe2, daysWithMinText2,
-                averageDoanhThu,
-                daysWithRevenue, countDays
-        );
-        lblThongTinDonDatBan.setText(infoText);
-        yAxis.setUpperBound(maxSoVe + 1);
+	    // ========== Cập nhật thông tin Doanh Thu =============
+	    int maxSoDDB = 0;
+	    int minSoDDB = Integer.MAX_VALUE;
+	    int minSoDDB2 = Integer.MAX_VALUE;
+	    List<String> daysWithMaxRevenue = new ArrayList<>();
+	    List<String> daysWithMinRevenue = new ArrayList<>();
+	    List<String> daysWithMinKhac0 = new ArrayList<>();
+	
+	    int daysWithRevenue = 0; // Biến đếm số ngày có doanh thu khác 0
+	
+	    // Duyệt qua từng ngày để tính các thông số
+	    for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
+	        String ngay = entry.getKey();
+	        double soDDB = entry.getValue();
+	
+	        // Kiểm tra và cập nhật mức doanh thu cao nhất
+	        if (soDDB > maxSoDDB) {
+	            maxSoDDB = (int) soDDB;
+	            daysWithMaxRevenue.clear(); // Xóa danh sách cũ nếu tìm thấy doanh thu cao hơn
+	            daysWithMaxRevenue.add(ngay); // Thêm ngày hiện tại vào danh sách
+	        } else if (soDDB == maxSoDDB) {
+	            daysWithMaxRevenue.add(ngay); // Thêm ngày vào danh sách nếu doanh thu bằng mức cao nhất
+	        }
+	
+	        // Kiểm tra và cập nhật mức doanh thu thấp nhất
+	        if (soDDB < minSoDDB) {
+	            minSoDDB = (int) soDDB;
+	            daysWithMinRevenue.clear();
+	            daysWithMinRevenue.add(ngay);
+	        } else if (soDDB == minSoDDB) {
+	            daysWithMinRevenue.add(ngay);
+	        }
+	
+	        // Kiểm tra và cập nhật mức doanh thu thấp nhất khác 0
+	        if (soDDB < minSoDDB2 && soDDB != 0) {
+	            minSoDDB2 = (int) soDDB;
+	            daysWithMinKhac0.clear();
+	            daysWithMinKhac0.add(ngay);
+	        } else if (soDDB == minSoDDB2) {
+	            daysWithMinKhac0.add(ngay);
+	        }
+	
+	        // Đếm số ngày có doanh thu khác 0
+	        if (soDDB > 0) {
+	            daysWithRevenue++;
+	        }
+	    }
+	    
+	    yAxis.setUpperBound(maxSoDDB + 1);
     }
     
     private void updateChartBan(Map<LoaiBan, Integer> dsBan) {
@@ -407,3 +298,4 @@ public class DashboardNVQL_Controller {
         }
     }
 }
+

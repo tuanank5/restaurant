@@ -20,13 +20,13 @@
    <children>
       <BorderPane prefHeight="100.0" prefWidth="1100.0">
          <center>
-            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Dashboard" BorderPane.alignment="CENTER" />
+            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Dashboard Nhân viên quản lý" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
             <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Tổng doanh thu" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
-      <VBox layoutY="100.0" prefHeight="420.0" prefWidth="1100.0">
+      <VBox layoutY="100.0" prefHeight="350.0" prefWidth="1100.0">
          <children>
             <AnchorPane prefHeight="350.0" prefWidth="1100.0">
                <children>
@@ -38,7 +38,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </AreaChart>
-                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="DOANH THU THEO THÁNG">
+                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="DOANH THU TUẦN">
                     <xAxis>
                       <CategoryAxis label="Tháng" side="BOTTOM" />
                     </xAxis>
@@ -48,10 +48,9 @@
                   </BarChart>
                </children>
             </AnchorPane>
-            <Label fx:id="lblThongTinDoanhThu" prefHeight="70.0" prefWidth="1100.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" />
          </children>
       </VBox>
-      <HBox layoutY="520.0" prefWidth="1100.0">
+      <HBox layoutY="480.0" prefHeight="30.0" prefWidth="1100.0">
          <children>
             <BorderPane prefWidth="1100.0">
                <center>
@@ -64,13 +63,13 @@
             </BorderPane>
          </children>
       </HBox>
-      <HBox layoutY="555.0" prefHeight="420.0" prefWidth="1100.0">
+      <HBox layoutY="510.0" prefHeight="350.0" prefWidth="1100.0">
          <children>
-            <VBox prefHeight="420.0" prefWidth="650.0">
+            <VBox prefHeight="500.0" prefWidth="750.0">
                <children>
-                  <AnchorPane prefHeight="350.0" prefWidth="650.0">
+                  <AnchorPane>
                      <children>
-                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="630.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
+                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="700.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
                           <xAxis>
                             <CategoryAxis label="Thời gian" side="BOTTOM" />
                           </xAxis>
@@ -80,13 +79,16 @@
                         </BarChart>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="lblThongTinDonDatBan" prefHeight="70.0" prefWidth="650.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </VBox>
-            <PieChart fx:id="pieChart_LoaiBan" prefWidth="420.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐƠN ĐẶT BÀN THEO LOẠI BÀN">
+            <AnchorPane>
                <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin></PieChart>
+                  <Insets />
+               </HBox.margin>
+               <children>
+                  <PieChart fx:id="pieChart_LoaiBan" prefHeight="350.0" prefWidth="350.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐƠN ĐẶT BÀN THEO LOẠI BÀN" />
+               </children>
+            </AnchorPane>
          </children>
       </HBox>
    </children>
