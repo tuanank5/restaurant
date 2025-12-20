@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" onKeyPressed="#keyPressed" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
+<BorderPane fx:id="borderPane" focusTraversable="true" onKeyPressed="#keyPressed" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.KhachHang_Controller">
 
     <!-- Top Header -->
     <top>
@@ -32,7 +32,7 @@
         <VBox prefHeight="600" spacing="10" style="-fx-background-color: white;">
             <!-- Action Buttons & Search -->
             <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="15">
-                <Button fx:id="btnThem" onAction="#btnThemKhachHang" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: green; -fx-text-fill: white;" text="Thêm khách hàng">
+                <Button fx:id="btnThem" onAction="#btnThemKhachHang" prefHeight="30.0" prefWidth="157.0" style="-fx-background-color: green; -fx-text-fill: white;" text="Thêm khách hàng">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
@@ -43,7 +43,7 @@
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Button>
-                <Button fx:id="btnTC" onAction="#btnTatCa" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả">
+                <Button fx:id="btnTC" onAction="#btnTatCa" prefHeight="30.0" prefWidth="83.0" style="-fx-background-color: #cc851d; -fx-text-fill: white;" text="Tất cả">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Button>

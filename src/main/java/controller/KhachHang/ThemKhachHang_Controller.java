@@ -140,11 +140,13 @@ public class ThemKhachHang_Controller {
     
     @FXML
     void keyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.ESCAPE) {
+		if (event.getCode() == KeyCode.ESCAPE) {
             dongDialog();
         } else if (event.isControlDown() && event.getCode() == KeyCode.S) {
             luuLai();
-        }
+        }else if (event.getCode() == KeyCode.X) {
+            resetAllField();
+    	}
     }
 
     

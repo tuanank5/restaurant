@@ -97,7 +97,7 @@ public class KhachHang_Controller {
         loadData();
         System.out.println("TableView items: " + tableView.getItems().size());
         phanTrang(danhSachKhachHangDB.size());
-        
+        borderPane.requestFocus();
         btnXuat.setTooltip(new Tooltip("Thông báo cho nút Xuất Excel!"));
         btnTC.setTooltip(new Tooltip("Thông báo cho nút Tất cả!"));
         btnThem.setTooltip(new Tooltip("Thông báo cho nút Thêm khách hàng!"));
@@ -159,11 +159,18 @@ public class KhachHang_Controller {
     }
 
     @FXML
-    void keyPressed(KeyEvent event) {
-        if (event.getSource() == borderPane) {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                huyChonDong();
-            }
+    void keyPressed(KeyEvent event) throws IOException {
+    	if (event.getCode() == KeyCode.ESCAPE) {
+            huyChonDong();
+        } else if (event.getCode() == KeyCode.F1) {
+            moDialogThemKhachHang();
+        } else if (event.getCode() == KeyCode.F2) {
+            btnXuatExcel(new ActionEvent());
+        } else if (event.getCode() == KeyCode.F3) {
+            status = "all";
+            hBoxPage.setVisible(true);
+            loadData();
+            phanTrang(danhSachKhachHangDB.size());
         }
     }
 

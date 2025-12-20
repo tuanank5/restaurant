@@ -93,12 +93,11 @@ public class ThongTinKhachHang_Controller {
     }
     @FXML
     void keyPressed(KeyEvent event) {
-        Object source = event.getSource();
-        if (source == borderPane) {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                troLai();
-            }
-        }
+        if (event.getCode() == KeyCode.ESCAPE) {
+            troLai();
+        }else if (event.getCode() == KeyCode.X) {
+            btnHuy.fire();
+    	}
     }
     
     private void showThongTin() {

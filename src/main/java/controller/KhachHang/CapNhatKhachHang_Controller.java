@@ -43,9 +43,6 @@ public class CapNhatKhachHang_Controller {
 
     @FXML
     private Button btnQuayLai;
-    
-    @FXML
-    private Button btnTaoLaiMK;
 
     @FXML
     private ComboBox<String> comBoxHangKH;
@@ -89,12 +86,8 @@ public class CapNhatKhachHang_Controller {
     	Object src = event.getSource();
         if (src == btnLuuLai) {
             luuLai();
-        } 
-        else if (src == btnHoanTac) {
+        } else if (src == btnHoanTac) {
             hoanTac();
-        } 
-        else if (src == btnTaoLaiMK) {
-            xacNhanLuu("KhachHang/ThongTinChiTietKhachHang");
         } else if(src == btnQuayLai) {
         	MenuNV_Controller.instance.readyUI("KhachHang/ThongTinChiTietKhachHang");
         }
@@ -116,20 +109,14 @@ public class CapNhatKhachHang_Controller {
     
     @FXML
     void keyPressed(KeyEvent event) {
-        Object source = event.getSource();
-        if (source == borderPane) {
-            // Ctrl + S
-            if (event.isControlDown() && event.getCode() == KeyCode.S) {
-                luuLai();
-            }
-            // ESC
-            else if (event.getCode() == KeyCode.ESCAPE) {
-                troLai("KhachHang/ThongTinChiTietKhachHang");
-            }
-            // Ctrl + Z
-            else if (event.isControlDown() && event.getCode() == KeyCode.Z) {
-                hoanTac();
-            }
+        if (event.isControlDown() && event.getCode() == KeyCode.S) {
+            luuLai();
+        }
+        else if (event.getCode() == KeyCode.ESCAPE) {
+            troLai("KhachHang/ThongTinChiTietKhachHang");
+        }
+        else if (event.isControlDown() && event.getCode() == KeyCode.Z) {
+            hoanTac();
         }
     }
     

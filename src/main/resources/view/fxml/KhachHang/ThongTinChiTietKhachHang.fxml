@@ -13,13 +13,6 @@
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhachHang.ThongTinKhachHang_Controller">
    <top>
       <BorderPane prefHeight="69.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <center>
-            <Label text="Thông tin chung" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Times New Roman Bold Italic" size="30.0" />
-               </font>
-            </Label>
-         </center>
          <top>
             <BorderPane prefHeight="63.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <left>
@@ -52,6 +45,13 @@
                </right>
             </BorderPane>
          </top>
+         <bottom>
+            <Label text="Thông tin chung" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Times New Roman Bold Italic" size="30.0" />
+               </font>
+            </Label>
+         </bottom>
       </BorderPane>
    </top>
   <center>
@@ -98,7 +98,7 @@
                <center>
                   <AnchorPane prefHeight="50.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnHuy" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: red;" text="Huỷ bỏ (X)" textFill="WHITE">
+                        <Button fx:id="btnHuy" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: red;" text="Huỷ bỏ (Ctrl+X)" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
