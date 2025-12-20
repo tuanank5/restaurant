@@ -238,7 +238,7 @@ public class MonAn_Controller implements Initializable{
 	                Alert alert = new Alert(Alert.AlertType.WARNING);
 	                alert.setTitle("Thông báo");
 	                alert.setHeaderText(null);
-	                alert.setContentText("Vui lòng nhập đầy đủ thông tin món ăn và chọn khuyến mãi!");
+	                alert.setContentText("Vui lòng nhập đầy đủ thông tin món ăn!");
 	                alert.showAndWait();
 	                return;
 	            }
