@@ -418,8 +418,10 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
                         donDatBanDuocChon.getNgayGioLapDon().toLocalDate() : LocalDate.now()
         );        
         ComboBox<String> cmbGioDat = new ComboBox<>();
-        for (int gio = 8; gio <= 23; gio++) {
-            cmbGioDat.getItems().add(String.format("%02d:00", gio));
+        for (int hour = 8; hour <= 23; hour++) {
+            for (int minute = 0; minute < 60; minute += 5) {
+            	cmbGioDat.getItems().add(String.format("%02d:%02d", hour, minute));
+            }
         }
         if (donDatBanDuocChon.getGioBatDau() != null) {
             cmbGioDat.setValue(String.format("%02d:00", donDatBanDuocChon.getGioBatDau().getHour()));

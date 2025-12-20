@@ -118,7 +118,7 @@ public class DonDatBan_Controller implements Initializable{
         txtKH.textProperty().addListener((obs, oldVal, newVal) -> timTheoTenKH());
 		khoiTaoComboBoxes();
 		setValueTable();
-		dpNgayDatBan.setValue(LocalDate.now());
+//		dpNgayDatBan.setValue(LocalDate.now());
         loadData();        
         tblView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             donDangChon = newVal;

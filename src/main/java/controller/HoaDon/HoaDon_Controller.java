@@ -93,8 +93,8 @@ public class HoaDon_Controller implements Initializable{
 	private void loadData() {
 	    HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 	    List<HoaDon> list = hoaDonDAO.getAllHoaDons();
-	    danhSachHoaDonDB.setAll(list);   // danh sách gốc
-	    danhSachHoaDon.setAll(list);     // danh sách hiển thị
+	    danhSachHoaDonDB.setAll(list);
+	    danhSachHoaDon.setAll(list); 
 	    tableView.setItems(danhSachHoaDon);
 	}
 	
@@ -161,11 +161,11 @@ public class HoaDon_Controller implements Initializable{
 	private void cauHinhLoc() {
 	    cmbLoc.setItems(FXCollections.observableArrayList(
 	        "Tất cả",
-	        "Đã thanh toán",
+	        "Tiền mặt",
+	        "Chuyển khoản",
 	        "Chưa thanh toán"
 	    ));
 	    cmbLoc.setValue("Tất cả");
-
 	    cmbLoc.setOnAction(e -> locDuLieu());
 	    AfterDay.setOnAction(e -> locDuLieu());
 	    BeforDay.setOnAction(e -> locDuLieu());
@@ -206,12 +206,21 @@ public class HoaDon_Controller implements Initializable{
 	
 	private boolean locTheoTrangThai(HoaDon hd) {
 	    String loc = cmbLoc.getValue();
-
 	    if (loc == null || loc.equals("Tất cả"))
 	        return true;
 
-	    return hd.getTrangThai() != null &&
-	           hd.getTrangThai().equalsIgnoreCase(loc);
+	    if (loc.equalsIgnoreCase("Tiền mặt") || loc.equalsIgnoreCase("Chuyển khoản")) {
+	        if (hd.getKieuThanhToan() == null)
+	            return false;
+	        return hd.getKieuThanhToan().equalsIgnoreCase(loc);
+	    }
+
+	    if (loc.equalsIgnoreCase("Chưa thanh toán")) {
+	        if (hd.getTrangThai() == null)
+	            return false;
+	        return hd.getTrangThai().equalsIgnoreCase("Chưa thanh toán");
+	    }
+	    return true;
 	}
 	
 	private void xuLyTimKiem() {
