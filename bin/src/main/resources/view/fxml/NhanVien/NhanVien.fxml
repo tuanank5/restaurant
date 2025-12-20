@@ -35,7 +35,7 @@
                         <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm nhân viên" />
-                              <Button fx:id="btnXuatPDF" layoutX="207.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất PDF" />
+                              <Button fx:id="btnXuatPDF" layoutX="206.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất excel" />
                            </children>
                         </AnchorPane>
                      </center>
@@ -48,7 +48,7 @@
                            <children>
                               <Button fx:id="btnTatCa" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="125.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tất cả" />
                               <Button fx:id="btnDangLamViec" layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="145.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đang làm việc" />
-                              <Button fx:id="btnDaNghi" layoutX="357.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đã nghĩ" />
+                              <Button fx:id="btnDaNghi" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="29.0" prefWidth="125.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Ngưng làm việc" />
                            </children>
                         </AnchorPane>
                      </left>

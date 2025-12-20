@@ -70,7 +70,6 @@
                       <TableColumn fx:id="colMaKM" prefWidth="75.0" text="Mã KM" />
                       <TableColumn fx:id="colTenKM" prefWidth="75.0" text="Tên KM" />
                         <TableColumn fx:id="colloaiKM" prefWidth="75.0" text="Loại KM" />
-                        <TableColumn fx:id="colSanPhamKM" prefWidth="75.0" text="Sản Phẩm KM" />
                         <TableColumn fx:id="colNgayBatDau" prefWidth="75.0" text="Ngày bắt đầu" />
                         <TableColumn fx:id="colNgayKetThuc" prefWidth="75.0" text="Ngày kết thúc" />
                         <TableColumn fx:id="colPhanTramGiamGia" prefWidth="75.0" text="Phần trăm giảm giá" />
@@ -96,10 +95,8 @@
                         <Label text="Mã khuyến mãi:" />
                         <Label text="Tên khuyến mãi:" GridPane.rowIndex="1" />
                         <Label text="Loại khuyến mãi:" GridPane.rowIndex="2" />
-                        <Label text="Sản phẩm khuyến mãi:" GridPane.rowIndex="3" />
                         <TextField fx:id="txtMaKM" editable="false" style="-fx-background-color: #dddddd;" GridPane.columnIndex="1" />
                         <TextField fx:id="txtTenKM" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="txtSanPhamKM" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <ComboBox fx:id="comBoxLoaiKM" prefHeight="26.0" prefWidth="446.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <BorderPane.margin>

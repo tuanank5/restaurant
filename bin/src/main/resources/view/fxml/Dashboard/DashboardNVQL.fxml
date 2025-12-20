@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXRadioButton?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -22,79 +18,19 @@
       <Insets />
    </opaqueInsets>
    <children>
-      <HBox prefHeight="80.0" prefWidth="1100.0">
-         <children>
-            <AnchorPane prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
-               <children>
-                  <JFXRadioButton fx:id="radThangNam" layoutX="14.0" layoutY="14.0" text="Thống kê theo tháng/năm" />
-                  <JFXComboBox fx:id="cmbThang" layoutX="14.0" layoutY="37.0" promptText="Tháng" />
-                  <JFXComboBox fx:id="cmbNam" layoutX="124.0" layoutY="37.0" promptText="Năm" />
-               </children>
-            </AnchorPane>
-            <AnchorPane prefWidth="550.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
-               <children>
-                  <JFXRadioButton fx:id="radNgay" layoutX="24.0" layoutY="14.0" text="Thống kê theo ngày" />
-                  <Label layoutX="24.0" layoutY="42.0" text="Từ ngày" />
-                  <DatePicker fx:id="txtDateStart" layoutX="84.0" layoutY="38.0" />
-                  <Label layoutX="279.0" layoutY="42.0" text="Đến ngày" />
-                  <DatePicker fx:id="txtDateEnd" layoutX="349.0" layoutY="38.0" />
-               </children>
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-            </AnchorPane>
-            <JFXButton fx:id="btnLoc" prefHeight="80.0" prefWidth="150.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" text="LỌC">
-               <HBox.margin>
-                  <Insets left="25.0" />
-               </HBox.margin></JFXButton>
-         </children>
-      </HBox>
-      <HBox layoutY="100.0" prefHeight="100.0" prefWidth="1100.0">
-         <children>
-            <VBox alignment="CENTER" prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
-               <children>
-                  <FontAwesomeIconView glyphName="BAR_CHART" size="30" />
-                  <Label fx:id="lblDoanhThu" text="0" />
-                  <Label text="Doanh Thu" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-               <children>
-                  <FontAwesomeIconView glyphName="FILE_TEXT" size="30" />
-                  <Label fx:id="lblHoaDon" text="0" />
-                  <Label text="Hóa Đơn" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-               <children>
-                  <FontAwesomeIconView glyphName="LIST_ALT" size="30" />
-                  <Label fx:id="lblDonDatBan" text="0" />
-                  <Label text="Đơn Đặt Bàn" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefWidth="237.5" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-               <children>
-                  <FontAwesomeIconView glyphName="USERS" size="30" />
-                  <Label fx:id="lblKhachHang" text="0" />
-                  <Label text="Khách Hàng" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <VBox layoutY="220.0" prefHeight="400.0" prefWidth="1100.0">
+      <BorderPane prefHeight="100.0" prefWidth="1100.0">
+         <center>
+            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Dashboard Nhân viên quản lý" BorderPane.alignment="CENTER" />
+         </center>
+         <bottom>
+            <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Tổng doanh thu" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+      <VBox layoutY="100.0" prefHeight="350.0" prefWidth="1100.0">
          <children>
             <AnchorPane prefHeight="350.0" prefWidth="1100.0">
                <children>
-                  <AreaChart fx:id="areaChart_DoanhThu" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css">
+                  <AreaChart fx:id="areaChart_DoanhThu" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css">
                     <xAxis>
                       <CategoryAxis fx:id="axis" side="BOTTOM" />
                     </xAxis>
@@ -102,51 +38,57 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </AreaChart>
-                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="DOANH THU THEO THÁNG">
+                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="DOANH THU TUẦN">
                     <xAxis>
                       <CategoryAxis label="Tháng" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis label="Doanh Thu" side="LEFT" />
+                      <NumberAxis label="Doanh thu" side="LEFT" />
                     </yAxis>
                   </BarChart>
                </children>
             </AnchorPane>
-            <Label fx:id="lblThongTinDoanhThu" prefHeight="50.0" prefWidth="1100.0" />
          </children>
       </VBox>
-      <HBox layoutX="1.0" layoutY="620.0" prefWidth="1100.0">
+      <HBox layoutY="480.0" prefHeight="30.0" prefWidth="1100.0">
          <children>
-            <Label text="ĐƠN ĐẶT BÀN">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
+            <BorderPane prefWidth="1100.0">
+               <center>
+                  <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Đơn đặt bàn">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </center>
+            </BorderPane>
          </children>
       </HBox>
-      <HBox layoutY="655.0" prefHeight="400.0" prefWidth="1100.0">
+      <HBox layoutY="510.0" prefHeight="350.0" prefWidth="1100.0">
          <children>
-            <VBox prefHeight="400.0" prefWidth="650.0">
+            <VBox prefHeight="500.0" prefWidth="750.0">
                <children>
-                  <AnchorPane prefHeight="350.0" prefWidth="650.0">
+                  <AnchorPane>
                      <children>
-                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="650.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
+                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="700.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
                           <xAxis>
-                            <CategoryAxis label="Thời Gian" side="BOTTOM" />
+                            <CategoryAxis label="Thời gian" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis label="Số Lượng" side="LEFT" />
+                            <NumberAxis label="Số lượng" side="LEFT" />
                           </yAxis>
                         </BarChart>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="lblThongTinDonDatBan" prefHeight="50.0" prefWidth="650.0" />
                </children>
             </VBox>
-            <PieChart fx:id="pieChart_LoaiBan" prefWidth="400.0" styleClass="my-card" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐẶT BÀN THEO LOẠI BÀN">
+            <AnchorPane>
                <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin></PieChart>
+                  <Insets />
+               </HBox.margin>
+               <children>
+                  <PieChart fx:id="pieChart_LoaiBan" prefHeight="350.0" prefWidth="350.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐƠN ĐẶT BÀN THEO LOẠI BÀN" />
+               </children>
+            </AnchorPane>
          </children>
       </HBox>
    </children>

@@ -12,11 +12,12 @@
    <left>
       <Pane prefHeight="700.0" prefWidth="300.0" style="-fx-background-color: #2C3E50;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="5.0" layoutY="75.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Main menu" />
+            <Label layoutX="5.0" layoutY="90.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Main menu" />
             <Button layoutX="80.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt bàn mới" />
             <Button layoutX="80.0" layoutY="225.0" mnemonicParsing="false" onAction="#btnDatBanTruoc" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Bàn đặt trước" />
-            <Label layoutX="50.0" layoutY="25.0" style="-fx-text-fill: #ffffff;" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Nhà hàng Út Bi" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="54.0" size="30" />
+            <Label layoutX="50.0" layoutY="15.0" style="-fx-text-fill: #ffffff;" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Nhà hàng Út Bi" />
+            
+            <FontAwesomeIconView fill="#f9c410" glyphName="HOME" layoutX="20.0" layoutY="45.0" size="30" />
             <Button layoutX="80.0" layoutY="375.0" mnemonicParsing="false" onAction="#btnKhachHang" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý khách hàng" />
             <Button layoutX="80.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnHoaDon" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tra cứu hóa đơn" />
             <Button layoutX="80.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnMonAn" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quản lý món ăn" />
@@ -25,7 +26,7 @@
             <FontAwesomeIconView fill="#f9c410" glyphName="GEAR" layoutX="20.0" layoutY="300.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="FILE_TEXT" layoutX="20.0" layoutY="350.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="400.0" size="25" />
-            <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Chốt Ca" />
+            <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnCaLam" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Chốt ca" />
             <Label layoutX="5.0" layoutY="465.0" style="-fx-text-fill: #ffffff; -fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Settings" />
             <FontAwesomeIconView fill="#f9c410" glyphName="LOCK" layoutX="20.0" layoutY="625.0" size="25" />
             <FontAwesomeIconView fill="#f9c410" glyphName="SIGN_OUT" layoutX="20.0" layoutY="675.0" size="25" />
@@ -41,6 +42,13 @@
             <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="575.0" size="25" text="" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="450.0" size="25" />
             <Button layoutX="80.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnThongKe" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thống kê" />
+            <Label fx:id="lblClock" layoutX="110.0" layoutY="60.0" styleClass="time" stylesheets="@../../css/SystemDesign.css" text="00:00:00" textFill="#f9c410">
+               <font>
+                  <Font name="System Bold Italic" size="16.0" />
+               </font>
+            </Label>
+            <FontAwesomeIconView layoutX="37.0" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="HOURGLASS" layoutX="75.0" layoutY="79.0" selectionFill="#f9c410" size="20" />
          </children>
       </Pane>
    </left>
