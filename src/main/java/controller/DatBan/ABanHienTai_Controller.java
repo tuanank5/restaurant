@@ -317,6 +317,7 @@ public class ABanHienTai_Controller {
                 }
             }
         }
+        txtTongDatBan.setText(tongDatBan + "");
     }
     
     private void capNhatTrangThaiBanTheoHD(HoaDon hd) {

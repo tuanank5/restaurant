@@ -24,7 +24,7 @@ public class App extends Application {
 		
 		Scene scene = new Scene(root);
 		
-		stage.setTitle("Đăng nhập");
+		stage.setTitle("Đăng Nhập");
 		stage.setScene(scene);
 		stage.show();
 	}
