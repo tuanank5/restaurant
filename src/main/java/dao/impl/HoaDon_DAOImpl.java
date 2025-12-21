@@ -234,13 +234,11 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
             Date start = Date.valueOf(localDate);
             Date end = Date.valueOf(localDate.plusDays(1));
 
-            String jpql = """
-                SELECT SUM(HD.tongTien)
-                FROM HoaDon HD
-                WHERE HD.ngayLap >= :start
-                  AND HD.ngayLap < :end
-                  AND HD.nhanVien.maNV = :maNV
-            """;
+            String jpql = "SELECT SUM(HD.tongTien) "
+            		+ "FROM HoaDon HD "
+            		+ "WHERE HD.ngayLap >= :start "
+            		+ "AND HD.ngayLap < :end "
+            		+ "AND HD.nhanVien.maNV = :maNV";
 
             TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
             query.setParameter("start", start);
@@ -268,13 +266,11 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
             Date start = Date.valueOf(localDate);
             Date end = Date.valueOf(localDate.plusDays(1));
             
-            String jpql = """
-                SELECT COUNT(HD)
-                FROM HoaDon HD
-                WHERE HD.ngayLap >= :start
-                  AND HD.ngayLap < :end
-                  AND HD.nhanVien.maNV = :maNV
-            """;
+            String jpql = "SELECT COUNT(HD) "
+            		+ "FROM HoaDon HD "
+            		+ "WHERE HD.ngayLap >= :start "
+            		+ "AND HD.ngayLap < :end "
+            		+ "AND HD.nhanVien.maNV = :maNV";
             TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
             query.setParameter("start", start);
             query.setParameter("end", end);
