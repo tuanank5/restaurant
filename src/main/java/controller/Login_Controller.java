@@ -27,7 +27,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import service.EmailService;
 
 public class Login_Controller implements Initializable{
@@ -217,7 +219,6 @@ public class Login_Controller implements Initializable{
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		btnLogin.setDefaultButton(true);
 	}
 
