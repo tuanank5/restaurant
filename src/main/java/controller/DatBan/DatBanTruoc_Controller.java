@@ -34,6 +34,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -64,7 +65,6 @@ public class DatBanTruoc_Controller implements Initializable {
     public static String gioBatDauStatic;
     private String loaiBanChon = "Tất cả";
 
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	dpNgayDatBan.setValue(LocalDate.now());
@@ -87,6 +87,12 @@ public class DatBanTruoc_Controller implements Initializable {
         btnTroLai.setOnAction(event -> onTroLai(event));
         dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> loadDanhSachBan());
         cmbGioBatDau.setOnAction(e -> loadDanhSachBan());
+        
+        cmbLoaiBan.setTooltip(new Tooltip("Hiển thị danh sách theo loại bàn"));
+        dpNgayDatBan.setTooltip(new Tooltip("Hiển thị danh sách theo ngày đặt bàn"));
+        cmbGioBatDau.setTooltip(new Tooltip("Hiển thị danh sách theo giờ sẽ đến"));
+        cmbTrangThai.setTooltip(new Tooltip("Hiển thị danh sách theo trạng thái"));
+        btnTroLai.setTooltip(new Tooltip("Quay lại danh sách đơn đặt bàn"));
     }
     
     private void khoiTaoLoaiBan() {
