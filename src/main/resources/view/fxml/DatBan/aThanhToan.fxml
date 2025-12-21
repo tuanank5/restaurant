@@ -21,12 +21,12 @@
                         <Label layoutX="10.0" layoutY="50.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số điện thoại:" />
                         <Label layoutX="10.0" layoutY="130.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số lượng KH:" />
                         <Label layoutX="10.0" layoutY="90.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng:" />
-                        <TextField fx:id="txtSDT" layoutX="110.0" layoutY="45.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField fx:id="txtKH" layoutX="110.0" layoutY="85.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
-                        <TextField fx:id="txtSL" layoutX="110.0" layoutY="125.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtSDT" editable="false" layoutX="110.0" layoutY="45.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtKH" editable="false" layoutX="110.0" layoutY="85.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtSL" editable="false" layoutX="110.0" layoutY="125.0" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
                         <Label layoutX="10.0" layoutY="5.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Thông tin khách hàng" />
                         <Label layoutX="180.0" layoutY="130.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Bàn:" />
-                        <TextField fx:id="txtBan" layoutX="230.0" layoutY="125.0" prefWidth="80.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
+                        <TextField fx:id="txtBan" editable="false" layoutX="230.0" layoutY="125.0" prefWidth="80.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" />
                         <Button fx:id="btnEdit" layoutX="320.0" layoutY="45.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css">
                            <graphic>
                               <FontAwesomeIconView glyphName="PENCIL" />
@@ -88,8 +88,8 @@
                <bottom>
                   <AnchorPane prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #dddddd;" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnTamTinh" layoutX="486.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="In tạm tính" AnchorPane.rightAnchor="221.0" AnchorPane.topAnchor="10.0" />
-                        <Button fx:id="btnThuTien" layoutX="595.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thu tiền" AnchorPane.rightAnchor="129.0" AnchorPane.topAnchor="10.0" />
+                        <Button fx:id="btnTamTinh" layoutX="486.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="In tạm tính" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="10.0" />
+                        <Button fx:id="btnThuTien" layoutX="595.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thu tiền" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </bottom>
@@ -98,6 +98,9 @@
       </BorderPane>
    </center>
    <top>
-      <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <BorderPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Thanh toán" BorderPane.alignment="CENTER" />
+         </center></BorderPane>
    </top>
 </BorderPane>
