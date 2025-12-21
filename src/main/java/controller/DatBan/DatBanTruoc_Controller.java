@@ -595,6 +595,7 @@ public class DatBanTruoc_Controller implements Initializable {
 				return;
 			}		
 			showAlert(Alert.AlertType.INFORMATION, "Đặt bàn thành công!");
+			MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
     }
 
     
