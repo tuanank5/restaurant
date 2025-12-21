@@ -47,6 +47,9 @@ public class TaiKhoan_Controller implements Initializable {
     	 xuLyTimKiem();
     	 xuLyLocTheoNgay();
     	 xuLyNutTatCa();
+    	 txtDate.setTooltip(new Tooltip("Lọc tài khoản theo thời gian"));
+    	 btnTatCa.setTooltip(new Tooltip("Hiện tất cả tài khoản"));
+    	 txtTimKiem.setTooltip(new Tooltip("Nhập từ khoá để tìm kiếm tài khoản"));
     }
     
     @FXML
