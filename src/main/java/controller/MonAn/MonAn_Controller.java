@@ -96,8 +96,37 @@ public class MonAn_Controller implements Initializable{
 	        txtDonGia.setTooltip(new Tooltip("Nhập đơn giá món!"));
 	        cmbLoaiMon.setTooltip(new Tooltip("Chọn loại món!"));
 	        txtMaMon.setTooltip(new Tooltip("Mã của món!"));
+	        txtTimKiem.textProperty().addListener((obs, oldValue, newValue) -> {
+	            timKiemMonAn(newValue);
+	        });
+
 	    }
 	    
+	    private void timKiemMonAn(String tuKhoa) {
+	        if (tuKhoa == null || tuKhoa.trim().isEmpty()) {
+	            loadTable();  // nếu ô tìm kiếm rỗng thì load lại toàn bộ
+	            return;
+	        }
+
+	        tuKhoa = tuKhoa.toLowerCase().trim();
+
+	        List<MonAn> danhSachGoc = monDAO.getDanhSachMonAn();
+	        List<MonAn> ketQua = new java.util.ArrayList<>();
+
+	        for (MonAn m : danhSachGoc) {
+	            boolean match =
+	                    m.getMaMon().toLowerCase().contains(tuKhoa) ||
+	                    m.getTenMon().toLowerCase().contains(tuKhoa) ||
+	                    (m.getLoaiMon() != null && m.getLoaiMon().toLowerCase().contains(tuKhoa));
+
+	            if (match) {
+	                ketQua.add(m);
+	            }
+	        }
+
+	        tblMon.setItems(FXCollections.observableArrayList(ketQua));
+	    }
+
 	    @FXML
 	    private void handleXoaMon() {
 	        try {
