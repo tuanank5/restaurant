@@ -42,13 +42,13 @@
             <FontAwesomeIconView fill="#f9c410" glyphName="CALENDAR" layoutX="20.0" layoutY="575.0" size="25" text="" />
             <FontAwesomeIconView fill="#f9c410" glyphName="USERS" layoutX="20.0" layoutY="450.0" size="25" />
             <Button layoutX="80.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnThongKe" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thống kê" />
-            <Label fx:id="lblClock" layoutX="110.0" layoutY="60.0" styleClass="time" stylesheets="@../../css/SystemDesign.css" text="00:00:00" textFill="#f9c410">
+            <Label fx:id="lblClock" layoutX="120.0" layoutY="60.0" styleClass="time" stylesheets="@../../css/SystemDesign.css" text="00:00:00" textFill="#f9c410">
                <font>
                   <Font name="System Bold Italic" size="16.0" />
                </font>
             </Label>
             <FontAwesomeIconView layoutX="37.0" />
-            <FontAwesomeIconView fill="#f9c410" glyphName="HOURGLASS" layoutX="75.0" layoutY="79.0" selectionFill="#f9c410" size="20" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="HOURGLASS" layoutX="90.0" layoutY="80.0" selectionFill="#f9c410" size="20" />
          </children>
       </Pane>
    </left>

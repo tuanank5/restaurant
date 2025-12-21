@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KhuyenMai.KhuyenMai_Controller">
    <center>
@@ -21,40 +20,24 @@
          <top>
             <BorderPane prefHeight="100.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                <top>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="357.0" text="Chính sách khuyến mãi" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="Times New Roman Bold" size="30.0" />
-                     </font>
-                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="357.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Chính sách khuyến mãi" BorderPane.alignment="CENTER" />
                </top>
                <center>
                   <BorderPane prefHeight="49.0" prefWidth="1202.0" BorderPane.alignment="CENTER">
                      <left>
                         <AnchorPane prefHeight="75.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnThemKM" layoutX="10.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: green;" text="Thêm khuyến mãi" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font></Button>
-                              <Button fx:id="btnXoaKM" layoutX="150.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #800000;" text="Xóa khuyến mãi" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font></Button>
-                              <Button fx:id="btnSuaKM" layoutX="310.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="115.0" style="-fx-background-color: blue;" text="Sửa khuyến mãi" textFill="WHITE">
-                                 <font>
-                                 <Font name="System Bold" size="12.0" />
-                                 </font></Button>
+                              <Button fx:id="btnThemKM" layoutX="10.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: green;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm KM" textFill="WHITE" />
+                              <Button fx:id="btnXoaKM" layoutX="150.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #800000;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa KM" textFill="WHITE" />
+                              <Button fx:id="btnSuaKM" layoutX="310.0" layoutY="15.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="115.0" style="-fx-background-color: blue;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa KM" textFill="WHITE" />
                            </children>
                         </AnchorPane>
                      </left>
                      <right>
                         <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutY="13.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #090579;" text="Tìm kiếm" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font></Button>
-                              <TextField fx:id="txtTimKiem" layoutX="135.0" layoutY="13.0" onAction="#controller" prefHeight="30.0" prefWidth="350.0" />
+                              <TextField fx:id="txtTimKiem" layoutX="135.0" layoutY="13.0" onAction="#controller" prefHeight="30.0" prefWidth="350.0" style="-fx-background-radius: 0 4px 4px 0;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                              <Button disable="true" layoutX="45.0" layoutY="13.0" mnemonicParsing="false" prefWidth="90.0" style="-fx-background-radius: 4px 0 0 4px; -fx-opacity: 1;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Tìm kiếm" />
                            </children>
                         </AnchorPane>
                      </right>
@@ -65,7 +48,7 @@
          <center>
             <BorderPane prefHeight="625.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <bottom>
-                  <TableView fx:id="tblKM" prefHeight="370.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                  <TableView fx:id="tblKM" prefHeight="370.0" prefWidth="1200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" BorderPane.alignment="CENTER">
                     <columns>
                       <TableColumn fx:id="colMaKM" prefWidth="75.0" text="Mã KM" />
                       <TableColumn fx:id="colTenKM" prefWidth="75.0" text="Tên KM" />
@@ -92,12 +75,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Mã khuyến mãi:" />
-                        <Label text="Tên khuyến mãi:" GridPane.rowIndex="1" />
-                        <Label text="Loại khuyến mãi:" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtMaKM" editable="false" style="-fx-background-color: #dddddd;" GridPane.columnIndex="1" />
-                        <TextField fx:id="txtTenKM" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="comBoxLoaiKM" prefHeight="26.0" prefWidth="446.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã khuyến mãi:" />
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên khuyến mãi:" GridPane.rowIndex="1" />
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại khuyến mãi:" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMaKM" editable="false" style="-fx-background-color: #dddddd;" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtTenKM" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="comBoxLoaiKM" prefHeight="26.0" prefWidth="446.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <BorderPane.margin>
                         <Insets left="50.0" />
@@ -117,12 +100,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Ngày bắt đầu:" />
-                        <Label text="Ngày kết thúc:" GridPane.rowIndex="1" />
-                        <Label text="Phần trăm giảm giá:" GridPane.rowIndex="2" />
-                        <DatePicker fx:id="dpNgayBatDau" prefHeight="26.0" prefWidth="371.0" GridPane.columnIndex="1" />
-                        <DatePicker fx:id="dpNgayKetThuc" prefHeight="26.0" prefWidth="404.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="comBoxPhanTram" prefHeight="26.0" prefWidth="363.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày bắt đầu:" />
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày kết thúc:" GridPane.rowIndex="1" />
+                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Phần trăm giảm giá:" GridPane.rowIndex="2" />
+                        <DatePicker fx:id="dpNgayBatDau" prefHeight="26.0" prefWidth="371.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="dpNgayKetThuc" prefHeight="26.0" prefWidth="404.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="comBoxPhanTram" prefHeight="26.0" prefWidth="363.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <BorderPane.margin>
                         <Insets left="20.0" right="30.0" />

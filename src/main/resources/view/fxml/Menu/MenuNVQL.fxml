@@ -34,12 +34,12 @@
             <Button layoutX="80.0" layoutY="550.0" mnemonicParsing="false" onAction="#btnDoiMatKhau" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đổi mật khẩu" />
             <Button layoutX="80.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnDangXuat" prefHeight="30.0" prefWidth="160.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đăng xuất" />
             <TextField fx:id="txtThongTin" editable="false" layoutX="80.0" layoutY="650.0" prefHeight="30.0" prefWidth="160.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
-            <Label fx:id="lblClock" layoutX="110.0" layoutY="60.0" styleClass="time" stylesheets="@../../css/SystemDesign.css" text="00:00:00" textFill="#f9c410">
+            <Label fx:id="lblClock" layoutX="120.0" layoutY="60.0" styleClass="time" stylesheets="@../../css/SystemDesign.css" text="00:00:00" textFill="#f9c410">
                <font>
                   <Font name="System Bold Italic" size="16.0" />
                </font>
             </Label>
-            <FontAwesomeIconView fill="#f9c410" glyphName="HOURGLASS" layoutX="75.0" layoutY="80.0" selectionFill="#f9c410" size="20" />
+            <FontAwesomeIconView fill="#f9c410" glyphName="HOURGLASS" layoutX="90.0" layoutY="80.0" selectionFill="#f9c410" size="20" />
          </children>
       </Pane>
    </left>

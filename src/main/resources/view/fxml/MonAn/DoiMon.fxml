@@ -82,7 +82,7 @@
             </AnchorPane>
          </right>
          <top>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="ĐỔI MÓN" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Đổi món" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>

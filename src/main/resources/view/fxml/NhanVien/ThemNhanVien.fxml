@@ -16,36 +16,19 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhanVien.ThemNhanVien_Controller">
    <top>
       <BorderPane prefHeight="69.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <center>
-            <Label text="Tạo mới nhân viên" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Times New Roman Bold" size="20.0" />
-               </font>
-            </Label>
+            <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Tạo mới nhân viên" BorderPane.alignment="CENTER" />
          </center>
          <top>
             <Pane prefHeight="35.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="lblDanhSachNhanVien" layoutX="371.0" layoutY="8.0" onMouseClicked="#mouseClicked" text="Danh Sách Nhân Viên ">
-                     <font>
-                        <Font name="Times New Roman" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="541.0" layoutY="8.0" text="Thêm nhân viên">
-                     <font>
-                        <Font name="Times New Roman Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="527.0" layoutY="4.0" text="/">
-                     <font>
-                        <Font name="Times New Roman Bold" size="24.0" />
-                     </font>
-                  </Label>
+                  <Label fx:id="lblDanhSachNhanVien" layoutX="371.0" layoutY="8.0" onMouseClicked="#mouseClicked" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Nhân Viên " />
+                  <Label layoutX="545.0" layoutY="8.0" style="-fx-font-weight: bold;" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thêm nhân viên" />
+                  <Label layoutX="525.0" layoutY="8.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="&lt;" />
                </children>
             </Pane>
          </top>
@@ -68,12 +51,8 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Mã Nhân viên:">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtMaNV" promptText="Nhập mã nhân viên">
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Mã nhân viên:" />
+                        <TextField fx:id="txtMaNV" promptText="Nhập mã nhân viên" styleClass="txt" stylesheets="@../../css/SystemDesign.css">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin>
@@ -82,12 +61,8 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                      <children>
-                        <Label text="Tên Nhân viên:">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtTenNV" promptText="Nhập tên nhân viên">
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Tên nhân viên:" />
+                        <TextField fx:id="txtTenNV" promptText="Nhập tên nhân viên" styleClass="txt" stylesheets="@../../css/SystemDesign.css">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin>
@@ -96,12 +71,8 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
                      <children>
-                        <Label text="Chức vụ">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cmbChucVu" prefWidth="360.0" promptText="--Chọn chức vụ--">
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Chức vụ:" />
+                        <ComboBox fx:id="cmbChucVu" prefWidth="360.0" promptText="Chọn chức vụ" styleClass="cmb" stylesheets="@../../css/SystemDesign.css">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin>
@@ -110,12 +81,8 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Email:">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtEmail" promptText="Email">
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Email:" />
+                        <TextField fx:id="txtEmail" promptText="Email" styleClass="txt" stylesheets="@../../css/SystemDesign.css">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin>
@@ -124,12 +91,8 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Năm sinh">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <DatePicker fx:id="txtNamSinh" prefWidth="360.0" promptText="DD/MM/YYYY">
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Năm sinh:" />
+                        <DatePicker fx:id="txtNamSinh" prefWidth="360.0" promptText="DD/MM/YYYY" styleClass="txt" stylesheets="@../../css/SystemDesign.css">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin>
@@ -138,12 +101,8 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Địa chỉ:">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtDiaChi" promptText="Địa chỉ">
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Địa chỉ:" />
+                        <TextField fx:id="txtDiaChi" promptText="Địa chỉ" styleClass="txt" stylesheets="@../../css/SystemDesign.css">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin>
@@ -152,12 +111,8 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                      <children>
-                        <Label text="Giới tính:">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cmbGioiTinh" prefWidth="360.0" promptText="--Chọn giới tính--">
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Giới tính:" />
+                        <ComboBox fx:id="cmbGioiTinh" prefWidth="360.0" promptText="Chọn giới tính" styleClass="cmb" stylesheets="@../../css/SystemDesign.css">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin>
@@ -166,19 +121,15 @@
                   </VBox>
                   <VBox layoutX="10.0" layoutY="136.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <Label text="Ngày vào làm :">
-                           <font>
-                              <Font name="Times New Roman Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <DatePicker fx:id="txtNgayVaoLam" prefWidth="360.0" promptText="DD/MM/YYYY" />
+                        <Label styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Ngày vào làm:" />
+                        <DatePicker fx:id="txtNgayVaoLam" prefWidth="360.0" promptText="DD/MM/YYYY" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                      </children>
                   </VBox>
                </children>
             </GridPane>
          </top>
          <center>
-            <TableView fx:id="tblThemNV" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="tblThemNV" prefHeight="200.0" prefWidth="200.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="tblMaNV" prefWidth="75.0" text="Mã NV" />
                 <TableColumn fx:id="tblTenNV" prefWidth="75.0" text="Tên NV" />
@@ -211,8 +162,8 @@
                <center>
                   <AnchorPane prefHeight="50.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnLuu" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#controller" text="Lưu lại  (Ctrl + S)" />
-                        <Button fx:id="btnHuy" layoutX="138.0" layoutY="13.0" mnemonicParsing="false" onAction="#controller" text="Hủy bỏ ( X )" />
+                        <Button fx:id="btnLuu" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Lưu lại  (Ctrl + S)" />
+                        <Button fx:id="btnHuy" layoutX="170.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy bỏ ( X )" />
                      </children>
                   </AnchorPane>
                </center>
@@ -223,7 +174,7 @@
                <center>
                   <AnchorPane prefHeight="50.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnQuayLai" layoutX="206.0" layoutY="13.0" mnemonicParsing="false" onAction="#controller" text="Trở lại (ESC)" />
+                        <Button fx:id="btnQuayLai" layoutX="180.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại (ESC)" />
                      </children>
                   </AnchorPane>
                </center>

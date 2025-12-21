@@ -12,36 +12,19 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NhanVien.ThongTinChiTietNV_Controller">
    <top>
       <BorderPane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <top>
-            <Label text="Cập nhật thông tin nhân viên" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Times New Roman Bold" size="18.0" />
-               </font>
-            </Label>
+            <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Thông tin chi tiết nhân viên" BorderPane.alignment="CENTER" />
          </top>
          <center>
             <Pane prefHeight="24.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="lblDanhSachNhanVien" layoutX="130.0" layoutY="13.0" text="Danh Sách Nhân Viên">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="279.0" layoutY="13.0" text="Thông Tin Chi Tiết ">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="270.0" layoutY="10.0" prefHeight="17.0" prefWidth="0.0" text="/">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
+                  <Label fx:id="lblDanhSachNhanVien" layoutX="130.0" layoutY="7.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Nhân Viên" />
+                  <Label layoutX="319.0" layoutY="7.0" style="-fx-font-weight: bold;" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thông Tin Chi Tiết " />
+                  <Label layoutX="290.0" layoutY="7.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="&lt;" />
                </children>
             </Pane>
          </center>
@@ -67,103 +50,76 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label text="Mã nhân viên: ">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Mã nhân viên: ">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="32.0" text="Tên nhân viên: " GridPane.rowIndex="1">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="32.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên nhân viên: " GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="92.0" text="Chức vụ: " GridPane.rowIndex="2">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="92.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chức vụ: " GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="152.0" text="Email" GridPane.rowIndex="3">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="152.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Email:" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="212.0" text="Ngày vào làm" GridPane.rowIndex="7">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="212.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày vào làm:" GridPane.rowIndex="7">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="272.0" text="Địa chỉ" GridPane.rowIndex="5">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="272.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Địa chỉ:" GridPane.rowIndex="5">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="32.0" text="Giới tính" GridPane.rowIndex="6">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="32.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Giới tính:" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="390.0" text="Năm sinh" GridPane.rowIndex="4">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="390.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Năm sinh:" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label layoutX="10.0" layoutY="449.0" text="Trạng thái" GridPane.rowIndex="8">
-                     <font>
-                        <Font name="Times New Roman Bold" size="14.0" />
-                     </font>
+                  <Label layoutX="10.0" layoutY="449.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng thái:" GridPane.rowIndex="8">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="txtMaNV" editable="false" GridPane.columnIndex="1">
+                  <TextField fx:id="txtMaNV" editable="false" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="txtTenNV" editable="false" layoutX="310.0" layoutY="28.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <TextField fx:id="txtTenNV" editable="false" layoutX="310.0" layoutY="28.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="txtEmail" editable="false" layoutX="310.0" layoutY="88.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <TextField fx:id="txtEmail" editable="false" layoutX="310.0" layoutY="88.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="txtDiaChi" editable="false" layoutX="310.0" layoutY="208.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                  <TextField fx:id="txtDiaChi" editable="false" layoutX="310.0" layoutY="208.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <ComboBox fx:id="cmbChucVu" prefWidth="150.0" promptText="--Chọn chức vụ--" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <DatePicker fx:id="txtNamSinh" promptText="DD / MM / YYYY" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <ComboBox fx:id="cmbGioiTinh" layoutX="310.0" layoutY="148.0" prefWidth="150.0" promptText="--Chọn giới tính--" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <DatePicker fx:id="txtNgayVaoLam" layoutX="310.0" layoutY="267.0" promptText="DD / MM / YYYY" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <ComboBox fx:id="cmbTrangThai" layoutX="310.0" layoutY="385.0" prefWidth="150.0" promptText="--Chọn trạng thái--" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <ComboBox fx:id="cmbChucVu" prefWidth="200.0" promptText="Chọn chức vụ" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="txtNamSinh" prefWidth="200.0" promptText="DD/MM/YYYY" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="cmbGioiTinh" layoutX="310.0" layoutY="148.0" prefWidth="200.0" promptText="Chọn giới tính" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <DatePicker fx:id="txtNgayVaoLam" layoutX="310.0" layoutY="267.0" prefWidth="200.0" promptText="DD/MM/YYYY" styleClass="txt" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <ComboBox fx:id="cmbTrangThai" layoutX="310.0" layoutY="385.0" prefWidth="200.0" promptText="Chọn trạng thái" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                </children>
             </GridPane>
          </center>
@@ -174,14 +130,14 @@
          <left>
             <AnchorPane prefHeight="50.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnHuy" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="67.0" text="Hủy bỏ" />
+                  <Button fx:id="btnHuy" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="80.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy bỏ" />
                </children>
             </AnchorPane>
          </left>
          <right>
             <AnchorPane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnSuaTT" layoutX="76.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" text="Sửa thông tin" />
+                  <Button fx:id="btnSuaTT" layoutX="80.0" layoutY="10.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="110.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Sửa thông tin" />
                </children>
             </AnchorPane>
          </right>

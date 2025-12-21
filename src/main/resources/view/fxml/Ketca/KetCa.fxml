@@ -23,7 +23,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="text_maNV" alignment="CENTER" layoutX="41.0" layoutY="386.0" prefHeight="42.0" prefWidth="287.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="NV24001" textFill="WHITE">
+            <Label fx:id="text_maNV" alignment="CENTER" layoutX="41.0" layoutY="386.0" prefHeight="42.0" prefWidth="287.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="NV00001" textFill="WHITE">
                <font>
                   <Font name="System Italic" size="18.0" />
                </font>
@@ -85,7 +85,7 @@
             <Font size="18.0" />
          </font>
       </JFXButton>
-      <Button layoutX="900.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnXacNhan" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: green;" text="Xác Nhận Chốt Ca" textFill="WHITE">
+      <Button layoutX="900.0" layoutY="600.0" mnemonicParsing="false" onAction="#btnXacNhan" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: green;" text="Xác nhận chốt ca" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

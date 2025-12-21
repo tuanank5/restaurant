@@ -16,9 +16,9 @@
    <top>
       <BorderPane prefHeight="69.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <center>
-            <Label text="Tạo mới khách hàng" BorderPane.alignment="CENTER">
+            <Label style="-fx-font-weight: bold;" text="Tạo mới khách hàng" BorderPane.alignment="CENTER">
                <font>
-                  <Font name="Times New Roman Bold Italic" size="30.0" />
+                  <Font name="Times New Roman" size="30.0" />
                </font>
             </Label>
          </center>
@@ -28,17 +28,9 @@
                <left>
                   <Pane prefHeight="63.0" prefWidth="399.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="lblDanhSachKhachHang" layoutX="14.0" layoutY="24.0" onMouseClicked="#mouseClicked" prefHeight="25.0" prefWidth="169.0" text="Danh sách khách hàng">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="179.0" layoutY="28.0" prefHeight="17.0" prefWidth="9.0" text="/" />
-                        <Label layoutX="188.0" layoutY="23.0" text="Thêm khách hàng">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
+                        <Label fx:id="lblDanhSachKhachHang" layoutX="14.0" layoutY="25.0" onMouseClicked="#mouseClicked" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh sách khách hàng" />
+                        <Label layoutX="169.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="&lt;" />
+                        <Label layoutX="190.0" layoutY="25.0" style="-fx-font-weight: bold;" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thêm khách hàng" />
                      </children>
                   </Pane>
                </left>
@@ -47,7 +39,7 @@
                   <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
                         <!-- ĐÃ SỬA: onAction trỏ đến hàm xử lý -->
-                        <Button fx:id="btnTroLai" layoutX="94.0" layoutY="19.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: #2C3E50;" text="Trở lại (ESC)" textFill="WHITE">
+                        <Button fx:id="btnTroLai" layoutX="80.0" layoutY="16.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: #2C3E50;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại (ESC)" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -66,12 +58,12 @@
          <left>
             <Pane prefHeight="514.0" prefWidth="223.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label layoutX="115.0" layoutY="40.0" text="Tên khách hàng:" />
-                  <Label layoutX="130.0" layoutY="110.0" text="Số điện thoại:" />
-                  <Label layoutX="170.0" layoutY="180.0" text="Email:" />
-                  <Label layoutX="170.0" layoutY="250.0" text="Địa chỉ:" />
-                  <Label layoutX="115.0" layoutY="325.0" text="Hạng khách hàng:" />
-                  <Label layoutX="140.0" layoutY="400.0" text="Điểm tích luỹ:" />
+                  <Label layoutX="115.0" layoutY="40.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tên khách hàng:" />
+                  <Label layoutX="133.0" layoutY="110.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Số điện thoại:" />
+                  <Label layoutX="177.0" layoutY="180.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Email:" />
+                  <Label layoutX="169.0" layoutY="250.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Địa chỉ:" />
+                  <Label layoutX="103.0" layoutY="325.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Hạng khách hàng:" />
+                  <Label layoutX="127.0" layoutY="400.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Điểm tích luỹ:" />
                </children>
                <BorderPane.margin>
                   <Insets left="50.0" />
@@ -82,12 +74,12 @@
          <right>
             <Pane prefHeight="514.0" prefWidth="374.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="txtKhachHang" layoutX="15.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" />
-                  <TextField fx:id="txtSDT" layoutX="15.0" layoutY="110.0" prefHeight="25.0" prefWidth="300.0" />
-                  <TextField fx:id="txtEmail" layoutX="15.0" layoutY="180.0" prefHeight="25.0" prefWidth="300.0" />
-                  <TextField fx:id="txtDiaChi" layoutX="15.0" layoutY="250.0" prefHeight="25.0" prefWidth="300.0" />
-                  <ComboBox fx:id="comBoxHangKH" layoutX="15.0" layoutY="325.0" prefWidth="300.0" />
-                  <TextField fx:id="txtDiemTichLuy" layoutX="15.0" layoutY="400.0" prefHeight="25.0" prefWidth="300.0" />
+                  <TextField fx:id="txtKhachHang" layoutX="15.0" layoutY="40.0" prefHeight="25.0" prefWidth="300.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField fx:id="txtSDT" layoutX="15.0" layoutY="110.0" prefHeight="25.0" prefWidth="300.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField fx:id="txtEmail" layoutX="15.0" layoutY="180.0" prefHeight="25.0" prefWidth="300.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField fx:id="txtDiaChi" layoutX="15.0" layoutY="250.0" prefHeight="25.0" prefWidth="300.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <ComboBox fx:id="comBoxHangKH" layoutX="15.0" layoutY="325.0" prefWidth="300.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <TextField fx:id="txtDiemTichLuy" layoutX="15.0" layoutY="400.0" prefHeight="25.0" prefWidth="300.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
                </children>
                <BorderPane.margin>
                   <Insets right="50.0" />
@@ -106,18 +98,10 @@
                   <AnchorPane prefHeight="50.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                      <children>
                         <!-- ĐÃ SỬA: onAction trỏ đúng hàm -->
-                        <Button fx:id="btnLuu" layoutX="23.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: green;" text="Lưu lại (Ctrl+S)" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
+                        <Button fx:id="btnLuu" layoutX="23.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: green;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Lưu lại (Ctrl+S)" textFill="WHITE" />
 
                         <!-- ĐÃ SỬA: onAction trỏ đúng hàm -->
-                        <Button fx:id="btnXoa" layoutX="150.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: red;" text="Huỷ bỏ" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
+                        <Button fx:id="btnXoa" layoutX="168.0" layoutY="12.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: red;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Huỷ bỏ" textFill="WHITE" />
                      </children>
                   </AnchorPane>
                </center>
