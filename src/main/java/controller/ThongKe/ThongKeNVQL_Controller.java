@@ -126,6 +126,12 @@ public class ThongKeNVQL_Controller {
             }
 
         });
+        
+        cmbNam.setTooltip(new Tooltip("Năm để lọc"));
+        cmbThang.setTooltip(new Tooltip("Tháng để lọc"));
+        txtDateStart.setTooltip(new Tooltip("Thống kê từ ngày"));
+        txtDateEnd.setTooltip(new Tooltip("Thống kê đến ngày"));
+        btnLoc.setTooltip(new Tooltip("Nhấn nút để lọc"));
     }
     
     private void btnGroup(){
