@@ -47,7 +47,7 @@
                <left>
                   <Button fx:id="btnHelp" mnemonicParsing="false" onAction="#controller" styleClass="btn-question-simple" stylesheets="@../../css/SystemDesign.css" text="Button" BorderPane.alignment="CENTER">
                      <graphic>
-                        <FontAwesomeIconView glyphName="QUESTION_CIRCLE" size="20" />
+                        <FontAwesomeIconView glyphName="QUESTION_CIRCLE" size="40" />
                      </graphic>
                      <BorderPane.margin>
                         <Insets left="5.0" />

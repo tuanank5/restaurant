@@ -62,10 +62,10 @@
 }
 .btn-question-simple {
     /* Size 20 */
-    -fx-min-width: 20;
-    -fx-min-height: 20;
-    -fx-max-width: 20;
-    -fx-max-height: 20;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
 
     /* Hình tròn */
     -fx-background-radius: 50;

@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import config.RestaurantApplication;
+import controller.Menu.MenuNVQL_Controller;
+import controller.Menu.MenuNV_Controller;
 import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
 import entity.KhachHang;
@@ -106,7 +108,7 @@ public class KhuyenMai_Controller {
         if (event.getSource() == btnThemKM) them();
         if (event.getSource() == btnSuaKM) sua();
         if (event.getSource() == btnXoaKM) xoa();
-        if (event.getSource() == btnHelp) xoa();
+        if (event.getSource() == btnHelp) MenuNVQL_Controller.instance.readyUI("Help/HelpScroll");
     }
 
     @FXML
