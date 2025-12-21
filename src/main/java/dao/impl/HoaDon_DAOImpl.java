@@ -8,6 +8,7 @@ import java.util.Map;
 
 import dao.HoaDon_DAO;
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
@@ -545,7 +546,25 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	    }
 	}
 	
-	
+	@Override
+	public List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        return em.createQuery(
+	            """
+	            SELECT ct
+	            FROM ChiTietHoaDon ct
+	            JOIN FETCH ct.monAn
+	            WHERE ct.hoaDon.maHD = :ma
+	            """,
+	            ChiTietHoaDon.class
+	        )
+	        .setParameter("ma", maHoaDon)
+	        .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
 
 	
 }

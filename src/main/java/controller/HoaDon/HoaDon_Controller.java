@@ -3,6 +3,7 @@ package controller.HoaDon;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -77,7 +78,18 @@ public class HoaDon_Controller implements Initializable{
 	    cauHinhLoc();
 	    loadData();
 	    xuLyTimKiem();
-	    
+	    tableView.setOnMouseClicked(e -> {
+	        if (e.getClickCount() == 2) {
+	            HoaDon hd = tableView.getSelectionModel().getSelectedItem();
+	            if (hd != null) {
+	                FXMLLoader loader =
+	                    MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
+	                ChiTietHoaDon_Controller controller =
+	                    loader.getController();
+	                controller.setHoaDon(hd);
+	            }
+	        }
+	    });
 	    BeforDay.setTooltip(new Tooltip("Lọc hoá đơn từ ngày!"));
 	    AfterDay.setTooltip(new Tooltip("Lọc hoá đơn đến ngày!"));
 	    cmbLoc.setTooltip(new Tooltip("Lọc theo trạng thái hoá đơn!"));

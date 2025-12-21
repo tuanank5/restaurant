@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
@@ -49,6 +50,6 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
     public KhachHang getKhachHangTheoMaDatBan(String maDatBan);
     HoaDon timHoaDonDangPhucVuTheoBan(Ban ban,LocalDate ngay);
     HoaDon timHoaDonTheoDonDatBan(DonDatBan donDatBan);
-
+    List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon);
     
 }

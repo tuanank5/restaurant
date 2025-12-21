@@ -98,12 +98,12 @@
 <Pane prefHeight="150.0" prefWidth="650.0" BorderPane.alignment="CENTER">
 <children>
 <Label layoutX="15.0" layoutY="5.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng thanh toán : " />
-<Label layoutX="15.0" layoutY="35.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tiền mặt : " />
+<Label layoutX="15.0" layoutY="35.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Kiểu thanh toán : " />
 <Label layoutX="15.0" layoutY="65.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trả lại khách :" />
 <Label layoutX="251.0" layoutY="128.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Trân trọng cảm ơn!" />
 <Label fx:id="lblTongThanhToan" layoutX="170.0" layoutY="5.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="--" />
 <Label fx:id="lblTienTra" layoutX="170.0" layoutY="65.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="--" />
-<TextField fx:id="txtTien" layoutX="170.0" layoutY="32.0" onAction="#controller" />
+<TextField fx:id="txtKieuThanhToan" editable="false" layoutX="170.0" layoutY="32.0" onAction="#controller" />
 </children>
 </Pane>
 </bottom>
