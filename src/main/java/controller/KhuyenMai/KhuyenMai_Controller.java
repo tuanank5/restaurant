@@ -79,7 +79,6 @@ public class KhuyenMai_Controller {
             }
         });
         
-
         btnSuaKM.setTooltip(new Tooltip("Sửa khuyến mãi đã chọn"));
         btnThemKM.setTooltip(new Tooltip("Thêm khuyến mãi mới"));
         btnXoaKM.setTooltip(new Tooltip("Xóa khuyến mãi đã chọn"));
