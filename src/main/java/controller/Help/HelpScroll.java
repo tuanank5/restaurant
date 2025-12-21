@@ -13,7 +13,7 @@ public class HelpScroll {
 	
 	@FXML
     public void initialize(){
-        loadTabContent(pane_Dashboard, "/view/fxml/Help/a.fxml");
+        loadTabContent(pane_Dashboard, "/view/fxml/Help/KhuyenMai.fxml");
     }
 
     private void loadTabContent(ScrollPane pane, String fxmlFile){

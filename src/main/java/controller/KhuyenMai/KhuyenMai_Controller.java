@@ -33,6 +33,7 @@ public class KhuyenMai_Controller {
     @FXML private Button btnThemKM;
     @FXML private Button btnSuaKM;
     @FXML private Button btnXoaKM;
+    @FXML private Button btnHelp;
 
     @FXML private TableColumn<KhuyenMai, String> colMaKM;
     @FXML private TableColumn<KhuyenMai, String> colTenKM;
@@ -105,6 +106,7 @@ public class KhuyenMai_Controller {
         if (event.getSource() == btnThemKM) them();
         if (event.getSource() == btnSuaKM) sua();
         if (event.getSource() == btnXoaKM) xoa();
+        if (event.getSource() == btnHelp) xoa();
     }
 
     @FXML
