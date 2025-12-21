@@ -78,6 +78,7 @@
                <children>
                   <Button fx:id="btnHuy" layoutX="355.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy bỏ" />
                   <Button fx:id="btnIn" layoutX="455.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="In và đóng" />
+                  <Button fx:id="btnInChuyenKhoan" layoutX="30.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Chuyển khoản" />
                </children>
             </AnchorPane>
          </center>

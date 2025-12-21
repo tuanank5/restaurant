@@ -74,6 +74,9 @@ public class AThuTien_Controller {
 
     @FXML
     private Button btnIn;
+    
+    @FXML
+    private Button btnInChuyenKhoan;
 
     @FXML
     private Label lblTienCanThu;
@@ -220,12 +223,7 @@ public class AThuTien_Controller {
                 Date dateNow = Date.valueOf(localDate);
             	hoaDonHienTai.setNgayLap(dateNow);
             	
-            	hoaDonHienTai.setTrangThai("Hiện tại");
             	hoaDonHienTai.setKieuThanhToan("Tiền mặt");
-//            	
-//            	KhachHang kh = new KhachHang();
-//            	hoaDonHienTai.setMaKH("KH0001");
-//            	hoaDonHienTai.setKhachHang(kh);
             	hoaDonHienTai.setKhuyenMai(kmDangChon);
             	hoaDonHienTai.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
             	hoaDonHienTai.setTongTien(tongThanhTienLamTron);
@@ -250,10 +248,140 @@ public class AThuTien_Controller {
             } else {
             	showAlert(Alert.AlertType.ERROR, "Số tiền khách đưa cho hóa đơn chưa đủ!");
             }
+        } else if (source == btnInChuyenKhoan) {
+        	LocalDate localDate = LocalDate.now();
+            Date dateNow = Date.valueOf(localDate);
+        	hoaDonHienTai.setNgayLap(dateNow);
+        	hoaDonHienTai.setKieuThanhToan("Chuyển khoản");
+        	hoaDonHienTai.setKhuyenMai(kmDangChon);
+        	hoaDonHienTai.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+        	hoaDonHienTai.setTongTien(tongThanhTienLamTron);
+        	hoaDonHienTai.setTienNhan(tongThanhTienLamTron);
+        	hoaDonHienTai.setTienThua(0);
+        	hoaDonHienTai.setThue(thueHD);
+        	boolean check = RestaurantApplication.getInstance()
+	                    .getDatabaseContext()
+	                    .newEntity_DAO(HoaDon_DAO.class)
+	                    .capNhat(hoaDonHienTai);
+	        //Kiểm tra kết quả thêm
+        	if (check) {
+            	capNhatDiemTichLuySauThanhToan();
+                xuatHDChuyenKhoan();
+	            Stage stage = (Stage) btnHuy.getScene().getWindow();
+	            stage.close();
+	            MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+            } else {
+                showAlert("Thông báo", "Thanh toán thất bại!", Alert.AlertType.WARNING);
+            }
+	            
         }
     }
     
-    private String formatTienVN(double tien) {
+    private void xuatHDChuyenKhoan() {
+    	try {
+            // Mở hộp thoại lưu file
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Chọn nơi lưu hóa đơn");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+            fileChooser.setInitialFileName("HoaDon_" + hoaDonHienTai.getMaHoaDon() + ".pdf");
+
+            Stage stage = (Stage) btnIn.getScene().getWindow();
+            File file = fileChooser.showSaveDialog(stage);
+            if (file == null) return;
+
+            // Khởi tạo tài liệu PDF
+            Document document = new Document(PageSize.A4, 40, 40, 40, 40);
+            PdfWriter.getInstance(document, new FileOutputStream(file));
+            document.open();
+
+            // Font Unicode (Arial hoặc font có tiếng Việt)
+            BaseFont bf = BaseFont.createFont("c:/windows/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font fontTitle = new Font(bf, 18, Font.BOLD);
+            Font fontHeader = new Font(bf, 12, Font.BOLD);
+            Font fontNormal = new Font(bf, 12, Font.NORMAL);
+
+            //TIÊU ĐỀ 
+            Paragraph title = new Paragraph("HÓA ĐƠN THANH TOÁN", fontTitle);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("Ngày lập: " + hoaDonHienTai.getNgayLap(), fontNormal));
+            document.add(new Paragraph("Mã hóa đơn: " + hoaDonHienTai.getMaHoaDon(), fontNormal));
+            document.add(Chunk.NEWLINE);
+
+            //THÔNG TIN KHÁCH HÀNG
+            document.add(new Paragraph("Khách hàng: " + hoaDonHienTai.getKhachHang().getTenKH(), fontNormal));
+            document.add(new Paragraph("SĐT: " + hoaDonHienTai.getKhachHang().getSdt(), fontNormal));
+            document.add(new Paragraph("Nhân viên: " + hoaDonHienTai.getNhanVien().getTenNV(), fontNormal));
+            document.add(Chunk.NEWLINE);
+
+            // BẢNG MÓN ĂN
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{2f, 5f, 2f, 3f, 3f});
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
+
+            // Tiêu đề bảng
+            String[] headers = {"Mã món", "Tên món", "SL", "Đơn giá", "Thành tiền"};
+            for (String h : headers) {
+                PdfPCell cell = new PdfPCell(new Phrase(h, fontHeader));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                table.addCell(cell);
+            }
+
+            // Dữ liệu bảng
+            NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+            for (MonAn mon : dsMonAn.keySet()) {
+                int sl = dsMonAn.get(mon);
+                double thanhTien = mon.getDonGia() * sl;
+
+                table.addCell(new PdfPCell(new Phrase(mon.getMaMon(), fontNormal)));
+                table.addCell(new PdfPCell(new Phrase(mon.getTenMon(), fontNormal)));
+
+                PdfPCell slCell = new PdfPCell(new Phrase(String.valueOf(sl), fontNormal));
+                slCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(slCell);
+
+                PdfPCell giaCell = new PdfPCell(new Phrase(currencyVN.format(mon.getDonGia()), fontNormal));
+                giaCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(giaCell);
+
+                PdfPCell ttCell = new PdfPCell(new Phrase(currencyVN.format(thanhTien), fontNormal));
+                ttCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(ttCell);
+            }
+
+            document.add(table);
+
+            // TỔNG KẾT 
+            document.add(new Paragraph("Tổng thanh toán: " + lblTienCanThu.getText(), fontNormal));
+
+            document.add(Chunk.NEWLINE);
+            Paragraph thanks = new Paragraph("Cảm ơn quý khách đã sử dụng dịch vụ!", fontNormal);
+            thanks.setAlignment(Element.ALIGN_CENTER);
+            document.add(thanks);
+
+            document.close();
+            
+            // THÔNG BÁO 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Xuất hóa đơn");
+            alert.setHeaderText("Thành công!");
+            alert.setContentText("Hóa đơn đã được lưu tại:\n" + file.getAbsolutePath());
+            alert.showAndWait();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Không thể xuất hóa đơn!");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+	}
+
+	private String formatTienVN(double tien) {
 		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 	    nf.setGroupingUsed(true);
 	    return nf.format(tien) + " VND";

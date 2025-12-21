@@ -152,8 +152,7 @@ public class ADoiBan_Controller implements Initializable {
 
             // 7. Cập nhật đơn đặt bàn
             don.setBan(banMoiDuocChon);
-            don.setSoLuong(soLuongMoi); // ⭐ CÀI LẠI SỐ LƯỢNG CHỖ
-            don.setTrangThai("Chưa nhận bàn");
+            don.setSoLuong(soLuongMoi); // CÀI LẠI SỐ LƯỢNG CHỖ
 
             donDAO.capNhat(don);
 
