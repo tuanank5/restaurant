@@ -54,9 +54,9 @@
                            <children>
 <Pane layoutY="2.0" prefHeight="40.0" prefWidth="450.0">
 <children>
-<Label layoutX="45.0" layoutY="12.0" text="Đã được đặt" />
-<Label layoutX="180.0" layoutY="12.0" text="Trống" />
-<Label layoutX="290.0" layoutY="12.0" text="Đang phục vụ" />
+<Label layoutX="45.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đã được đặt" />
+<Label layoutX="180.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trống" />
+<Label layoutX="290.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đang phục vụ" />
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="20.0" layoutX="14.0" layoutY="11.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GREEN" height="20.0" layoutX="151.0" layoutY="11.0" stroke="GREEN" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ec9407" height="20.0" layoutX="263.0" layoutY="11.0" stroke="#ec9407" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
@@ -77,48 +77,28 @@
 <center>
 <Pane prefHeight="200.0" prefWidth="200.0">
 <children>
-<DatePicker fx:id="dpNgayDatBan" layoutX="36.0" layoutY="22.0" />
-<Label layoutX="36.0" layoutY="6.0" text="NGÀY ĐẶT BÀN">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Label>
-<Label layoutX="441.0" layoutY="6.0" text="TRẠNG THÁI">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Label>
-<ComboBox fx:id="cmbGioBatDau" layoutX="250.0" layoutY="22.0" prefWidth="150.0" />
-                        <Label layoutX="250.0" layoutY="7.0" text="GIỜ ĐẾN">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cmbTrangThai" layoutX="439.0" layoutY="22.0" prefWidth="150.0" />
-                        <Button fx:id="btnTroLai" layoutX="862.0" layoutY="11.0" mnemonicParsing="false" onAction="#onTroLai" prefHeight="36.0" prefWidth="79.0" text="Trở lại">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
+<DatePicker fx:id="dpNgayDatBan" layoutX="36.0" layoutY="22.0" prefWidth="150.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+<Label layoutX="36.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đặt bàn" />
+<Label layoutX="441.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng thái" />
+<ComboBox fx:id="cmbGioBatDau" layoutX="250.0" layoutY="22.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <Label layoutX="250.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Giờ đến" />
+                        <ComboBox fx:id="cmbTrangThai" layoutX="439.0" layoutY="22.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <Button fx:id="btnTroLai" layoutX="862.0" layoutY="11.0" mnemonicParsing="false" onAction="#onTroLai" prefHeight="36.0" prefWidth="79.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại" />
 </children>
 </Pane>
 </center>
 <left>
 <Pane prefHeight="80.0" prefWidth="145.0" BorderPane.alignment="CENTER">
 <children>
-<ComboBox fx:id="cmbLoaiBan" layoutX="13.0" layoutY="23.0" prefWidth="120.0" />
-<Label layoutX="14.0" layoutY="6.0" text="LOẠI BÀN">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Label>
+<ComboBox fx:id="cmbLoaiBan" layoutX="13.0" layoutY="23.0" prefWidth="120.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+<Label layoutX="14.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn" />
 </children>
 </Pane>
 </left>
                <top>
                   <BorderPane prefHeight="52.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                      <center>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Bàn Đặt Trước" BorderPane.alignment="CENTER">
+                        <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh sách bàn đặt trước" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="16.0" />
                            </font>

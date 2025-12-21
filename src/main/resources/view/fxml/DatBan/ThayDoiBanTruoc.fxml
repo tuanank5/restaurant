@@ -49,7 +49,7 @@
                      <right>
                         <AnchorPane prefHeight="200.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnXacNhan" layoutX="376.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="50.0" prefWidth="110.0" style="-fx-background-color: linear-gradient(#4CAF50, #388E3C);" text="Xác nhận" textFill="WHITE">
+                              <Button fx:id="btnXacNhan" layoutX="376.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnDatBan" prefHeight="50.0" prefWidth="110.0" style="-fx-background-color: linear-gradient(#4CAF50, #388E3C);" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font></Button>
@@ -61,9 +61,9 @@
                            <children>
                               <Pane layoutY="8.0" prefHeight="40.0" prefWidth="450.0">
                                  <children>
-                                    <Label layoutX="45.0" layoutY="12.0" text="Đã được đặt" />
-                                    <Label layoutX="180.0" layoutY="12.0" text="Trống" />
-                                    <Label layoutX="290.0" layoutY="12.0" text="Đang phục vụ" />
+                                    <Label layoutX="45.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đã được đặt" />
+                                    <Label layoutX="180.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trống" />
+                                    <Label layoutX="290.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đang phục vụ" />
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="20.0" layoutX="14.0" layoutY="11.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GREEN" height="20.0" layoutX="151.0" layoutY="11.0" stroke="GREEN" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ec9407" height="20.0" layoutX="263.0" layoutY="11.0" stroke="#ec9407" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
@@ -85,52 +85,28 @@
 <center>
 <Pane prefHeight="200.0" prefWidth="950.0">
 <children>
-<DatePicker fx:id="dpNgayDatBan" layoutX="36.0" layoutY="34.0" />
-<Label layoutX="36.0" layoutY="15.0" text="NGÀY ĐẶT BÀN">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Label>
-<Label layoutX="250.0" layoutY="15.0" text="GIỜ BẮT ĐẦU">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Label>
-<ComboBox fx:id="cmbGioBatDau" layoutX="250.0" layoutY="34.0" prefWidth="150.0" />
-                        <Button fx:id="btnTroLai" layoutX="861.0" layoutY="22.0" mnemonicParsing="false" onAction="#onTroLai" prefHeight="36.0" prefWidth="79.0" text="Trở lại">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
-                        <Label layoutX="459.0" layoutY="15.0" text="TRẠNG THÁI">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cmbTrangThai" layoutX="459.0" layoutY="34.0" prefWidth="150.0" />
+<DatePicker fx:id="dpNgayDatBan" layoutX="35.0" layoutY="34.0" prefWidth="150.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+<Label layoutX="35.0" layoutY="9.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đặt bàn" />
+<Label layoutX="250.0" layoutY="9.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Giờ bắt đầu" />
+<ComboBox fx:id="cmbGioBatDau" layoutX="250.0" layoutY="34.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                        <Button fx:id="btnTroLai" layoutX="861.0" layoutY="22.0" mnemonicParsing="false" onAction="#onTroLai" prefHeight="36.0" prefWidth="79.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại" />
+                        <Label layoutX="459.0" layoutY="9.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng thái" />
+                        <ComboBox fx:id="cmbTrangThai" layoutX="459.0" layoutY="34.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
 </children>
 </Pane>
 </center>
 <left>
 <Pane prefHeight="80.0" prefWidth="150.0" BorderPane.alignment="CENTER">
 <children>
-<ComboBox fx:id="cmbLoaiBan" layoutX="15.0" layoutY="34.0" prefWidth="120.0" />
-<Label layoutX="14.0" layoutY="14.0" text="LOẠI BÀN">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Label>
+<ComboBox fx:id="cmbLoaiBan" layoutX="15.0" layoutY="34.0" prefWidth="120.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+<Label layoutX="14.0" layoutY="9.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn" />
 </children>
 </Pane>
 </left>
                <top>
                   <BorderPane prefHeight="42.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                      <center>
-                        <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thay Đổi Thông Tin Đơn Đặt Bàn" BorderPane.alignment="CENTER">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
+                        <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Đổi đơn đặt bàn trước" BorderPane.alignment="CENTER" />
                      </center>
                   </BorderPane>
                </top>

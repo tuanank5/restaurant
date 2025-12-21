@@ -54,7 +54,7 @@
                         <AnchorPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                            <children>
                               <Label layoutX="200.0" layoutY="24.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tống Đơn Đặt Bàn :" />
-                              <TextField fx:id="txtTongDonDat" layoutX="340.0" layoutY="21.0" prefHeight="25.0" prefWidth="46.0" />
+                              <TextField fx:id="txtTongDonDat" editable="false" layoutX="340.0" layoutY="21.0" prefHeight="25.0" prefWidth="35.0" />
                            </children>
                         </AnchorPane>
                      </right>
@@ -71,8 +71,8 @@
 <center>
 <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="txtKH" layoutX="83.0" layoutY="36.0" prefHeight="25.0" prefWidth="300.0" />
-                        <Label layoutX="84.0" layoutY="13.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách Hàng" />
+                        <TextField fx:id="txtKH" layoutX="83.0" layoutY="36.0" prefHeight="25.0" prefWidth="250.0" />
+                        <Label layoutX="84.0" layoutY="13.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng" />
                      </children>
 </Pane>
 </center>
@@ -80,9 +80,9 @@
 <Pane prefHeight="80.0" prefWidth="647.0" BorderPane.alignment="CENTER">
 <children>
 <DatePicker fx:id="dpNgayDatBan" layoutX="28.0" layoutY="34.0" />
-<Label layoutX="28.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày Đặt Bàn" />
+<Label layoutX="28.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đặt bàn" />
 <ComboBox fx:id="cmbTrangThai" layoutX="212.0" layoutY="34.0" prefWidth="150.0" />
-<Label layoutX="212.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng Thái" />
+<Label layoutX="212.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng thái" />
 </children>
 </Pane>
 </left>
@@ -91,11 +91,7 @@
          <top>
             <BorderPane prefHeight="42.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                <center>
-                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Đơn Đặt Bàn" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
+                  <Label styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh sách đơn đặt bàn" BorderPane.alignment="CENTER" />
                </center>
             </BorderPane>
          </top>

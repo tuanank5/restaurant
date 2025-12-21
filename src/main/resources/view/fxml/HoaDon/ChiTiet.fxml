@@ -15,28 +15,16 @@
 <left>
 <Pane prefHeight="106.0" prefWidth="478.0" BorderPane.alignment="CENTER">
 <children>
-<Label layoutX="22.0" layoutY="37.0" text="Danh sách hoá đơn">
-<font>
-<Font size="16.0" />
-</font>
-</Label>
-<Label layoutX="166.0" layoutY="41.0" text="/" />
-<Label layoutX="181.0" layoutY="36.0" prefHeight="27.0" prefWidth="153.0" text="Chi tiết hoá đơn">
-<font>
-<Font name="System Bold" size="18.0" />
-</font>
-</Label>
+<Label fx:id="lblTroLai" layoutX="22.0" layoutY="35.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh sách hoá đơn" />
+<Label layoutX="155.0" layoutY="35.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="&lt;" />
+<Label layoutX="177.0" layoutY="35.0" style="-fx-font-weight: bold;" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Chi tiết hoá đơn" />
 </children>
 </Pane>
 </left>
 <right>
 <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 <children>
-<Button fx:id="btnTroLai" alignment="CENTER" contentDisplay="CENTER" layoutX="71.0" layoutY="27.0" mnemonicParsing="false" onAction="#controller" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #2C3E50;" text="Trở lại (ESC)" textFill="WHITE">
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-</Button>
+<Button fx:id="btnTroLai" alignment="CENTER" contentDisplay="CENTER" layoutX="56.0" layoutY="27.0" mnemonicParsing="false" onAction="#controller" prefHeight="25.0" prefWidth="125.0" style="-fx-background-color: #2C3E50;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại (ESC)" textFill="WHITE" />
 </children>
 </Pane>
 </right>
@@ -45,39 +33,46 @@
 <center>
 <BorderPane prefHeight="510.0" prefWidth="650.0" BorderPane.alignment="CENTER">
 <top>
-<Label alignment="CENTER" contentDisplay="CENTER" prefHeight="46.0" prefWidth="253.0" text="Chi tiết hoá đơn" BorderPane.alignment="CENTER">
-<font>
-<Font name="System Bold Italic" size="30.0" />
-</font>
-</Label>
+<Label alignment="CENTER" contentDisplay="CENTER" prefHeight="46.0" prefWidth="253.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Chi tiết hoá đơn" BorderPane.alignment="CENTER" />
 </top>
 <center>
 <BorderPane prefHeight="414.0" prefWidth="650.0" BorderPane.alignment="CENTER">
 <top>
 <Pane prefHeight="150.0" prefWidth="650.0" BorderPane.alignment="CENTER">
 <children>
-<Label layoutX="15.0" layoutY="15.0" text="Mã hoá đơn:" />
+<Label layoutX="15.0" layoutY="15.0" text="Mã hoá đơn:">
+                           <font>
+                              <Font name="Times New Roman" size="14.0" />
+                           </font></Label>
 <TextField fx:id="txtMaHoaDon" editable="false" layoutX="111.0" layoutY="10.0" prefHeight="25.0" prefWidth="444.0" />
 <TextField fx:id="txtTenKH" editable="false" layoutX="111.0" layoutY="50.0" />
 <TextField fx:id="txtSDT" editable="false" layoutX="406.0" layoutY="50.0" />
-<Label layoutX="14.0" layoutY="54.0" text="Tên khách hàng :" />
-<Label layoutX="325.0" layoutY="54.0" text="Số điện thoại : " />
+<Label layoutX="14.0" layoutY="54.0" text="Tên khách hàng:">
+                           <font>
+                              <Font name="Times New Roman" size="14.0" />
+                           </font></Label>
+<Label layoutX="306.0" layoutY="54.0" text="Số điện thoại:">
+                           <font>
+                              <Font name="Times New Roman" size="14.0" />
+                           </font></Label>
 <TextField fx:id="txtNV" editable="false" layoutX="111.0" layoutY="94.0" />
-<Label layoutX="15.0" layoutY="98.0" text="Thu ngân :" />
-<Label layoutX="325.0" layoutY="98.0" text="Ngày :" />
+<Label layoutX="15.0" layoutY="98.0" text="Thu ngân:">
+                           <font>
+                              <Font name="Times New Roman" size="14.0" />
+                           </font></Label>
+<Label layoutX="306.0" layoutY="98.0" text="Ngày:">
+                           <font>
+                              <Font name="Times New Roman" size="14.0" />
+                           </font></Label>
 <TextField fx:id="txtNgay" editable="false" layoutX="406.0" layoutY="94.0" />
-<Button fx:id="btnXuatHD" layoutX="585.0" layoutY="115.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: green;" text="Xuất HD" textFill="WHITE">
-<font>
-<Font name="System Bold" size="11.0" />
-</font>
-</Button>
+<Button fx:id="btnXuatHD" layoutX="565.0" layoutY="115.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: green;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất HD" textFill="WHITE" />
 </children>
 </Pane>
 </top>
 <center>
 <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 <top>
-<Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="265.0" text="Danh sách món ăn" BorderPane.alignment="CENTER">
+<Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="265.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh sách món ăn" BorderPane.alignment="CENTER">
 <font>
 <Font name="System Bold" size="25.0" />
 </font>
@@ -102,28 +97,12 @@
 <bottom>
 <Pane prefHeight="150.0" prefWidth="650.0" BorderPane.alignment="CENTER">
 <children>
-<Label layoutX="15.0" layoutY="5.0" text="Tổng thanh toán : ">
-<font>
-<Font size="14.0" />
-</font>
-</Label>
-<Label layoutX="15.0" layoutY="35.0" text="Tiền mặt : ">
-<font>
-<Font size="14.0" />
-</font>
-</Label>
-<Label layoutX="15.0" layoutY="65.0" text="Trả lại khách :">
-<font>
-<Font size="14.0" />
-</font>
-</Label>
-<Label layoutX="251.0" layoutY="128.0" text="Trân trọng cảm ơn!">
-<font>
-<Font name="System Bold" size="13.0" />
-</font>
-</Label>
-<Label fx:id="lblTongThanhToan" layoutX="170.0" layoutY="5.0" text="--" />
-<Label fx:id="lblTienTra" layoutX="170.0" layoutY="65.0" text="--" />
+<Label layoutX="15.0" layoutY="5.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tổng thanh toán : " />
+<Label layoutX="15.0" layoutY="35.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Tiền mặt : " />
+<Label layoutX="15.0" layoutY="65.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trả lại khách :" />
+<Label layoutX="251.0" layoutY="128.0" styleClass="tbl" stylesheets="@../../css/SystemDesign.css" text="Trân trọng cảm ơn!" />
+<Label fx:id="lblTongThanhToan" layoutX="170.0" layoutY="5.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="--" />
+<Label fx:id="lblTienTra" layoutX="170.0" layoutY="65.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="--" />
 <TextField fx:id="txtTien" layoutX="170.0" layoutY="32.0" onAction="#controller" />
 </children>
 </Pane>
