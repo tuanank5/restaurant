@@ -2,7 +2,6 @@ package controller.NhanVien;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import dao.KhachHang_DAO;
 import dao.NhanVien_DAO;
 import entity.NhanVien;
 import javafx.event.ActionEvent;

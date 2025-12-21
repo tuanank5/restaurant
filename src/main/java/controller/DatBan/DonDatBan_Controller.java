@@ -3,11 +3,8 @@ package controller.DatBan;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -22,7 +19,6 @@ import dao.impl.DonDatBan_DAOImpl;
 import javafx.scene.control.ButtonBar;
 import entity.Ban;
 import entity.DonDatBan;
-import entity.HangKhachHang;
 import entity.HoaDon;
 import entity.KhachHang;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,7 +40,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
 public class DonDatBan_Controller implements Initializable{

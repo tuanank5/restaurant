@@ -1,36 +1,26 @@
 package controller.DatBan;
 
-import dao.KhuyenMai_DAO;
 import dao.KhachHang_DAO;
 import dao.Ban_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.HoaDon_DAO;
 import dao.impl.HoaDon_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.KhuyenMai_DAOImpl;
 import dao.DonDatBan_DAO;
 import dao.impl.DonDatBan_DAOImpl;
 import entity.Ban;
 import entity.KhachHang;
-import entity.KhuyenMai;
 import entity.DonDatBan;
-import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import util.AutoIDUitl;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -270,44 +260,6 @@ public class ADatBanHienTai_Controller implements Initializable {
 		return true;
 	}
 
-//    private void handleChonBan(Ban ban, Button btnBan) {
-//        Ban banCu = this.banDangChon;
-//        Button btnCu = this.buttonBanDangChonUI;
-//        
-//        // Cập nhật bàn đang chọn mới
-//        this.banDangChon = ban;
-//        // Xử lý nút Đặt bàn
-//        if ("Đã được đặt".equals(ban.getTrangThai()) || "Đang phục vụ".equals(ban.getTrangThai())) {
-//            btnDatBan.setDisable(true);
-//        } else {
-//            btnDatBan.setDisable(false);
-//        }
-//        // Gán thông tin bàn
-//        txtTrangThai.setText(ban.getTrangThai());
-//        txtViTri.setText(ban.getViTri());
-//        txtLoaiBan.setText(ban.getLoaiBan().getTenLoaiBan());
-//        List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-//        int soLuongHienThi = (dsDon != null && !dsDon.isEmpty())
-//                ? dsDon.get(dsDon.size() - 1).getSoLuong()
-//                : ban.getLoaiBan().getSoLuong();
-//        txtSoLuong.setText(String.valueOf(soLuongHienThi));
-//        txtSoLuongKH.setText(String.valueOf(soLuongHienThi));
-//        // Hoàn nguyên style cho bàn CU
-//        if (btnCu != null && banCu != null) {
-//            btnCu.setStyle(getStyleByStatusAndType(
-//                    banCu.getTrangThai(), banCu.getLoaiBan().getMaLoaiBan()
-//            ));
-//        }
-//        // Đặt style nổi bật cho bàn mới
-//        btnBan.setStyle(
-//            "-fx-background-color: yellow;" +
-//            "-fx-text-fill: black;" +
-//            "-fx-font-weight: bold;"
-//        );
-//        // Lưu lại tham chiếu UI của bàn mới
-//        this.buttonBanDangChonUI = btnBan;
-//    }
-
     private void handleChonBan(Ban ban, Button btnBan) {
         Ban banCu = this.banDangChon;
         Button btnCu = this.buttonBanDangChonUI;
@@ -360,19 +312,14 @@ public class ADatBanHienTai_Controller implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Lỗi khi thêm đơn đặt bàn!");
         }
     }
-
-
-
-
-
-
+    
     private void showAlert(Alert.AlertType type, String msg) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
     }
-//    ("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
+    //("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
 
         String backgroundColor = "white";
@@ -388,23 +335,7 @@ public class ADatBanHienTai_Controller implements Initializable {
                 	backgroundColor = "#f39c12";
             }
         }
-
-
-//        switch (trangThai != null && !trangThai.is) {
-//            case "Trống":
-//                backgroundColor = "GREEN";  // Xanh lá
-//                break;
-//            case "Đã được đặt":
-//                backgroundColor = "red";  // Đỏ
-//                break;
-//            case "Đang phục vụ":
-//                backgroundColor = "#f39c12";  // Cam
-//                break;
-//            default:
-//                backgroundColor = "#bdc3c7";  // Xám – trạng thái lạ → dễ nhận biết
-//                break;
-//        }
-
+        
         return String.format(
             "-fx-background-color: %s;" +
             "-fx-background-radius: 15;" +

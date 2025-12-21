@@ -1,7 +1,6 @@
 package dao.impl;
 
 import dao.MonAn_DAO;
-import entity.KhuyenMai;
 import entity.MonAn;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

@@ -9,7 +9,6 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
-import java.util.Map;
 
 public class ChiTietHoaDon_DAOImpl 
         extends Entity_DAOImpl<ChiTietHoaDon> 

@@ -44,6 +44,7 @@ public class DoiMatKhauQL_Controller {
     		btnLamMoi(event);
     	}
     }
+    
     @FXML
     void btnLuuLai(ActionEvent event) {
         TaiKhoan taiKhoan = MenuNVQL_Controller.taiKhoan;

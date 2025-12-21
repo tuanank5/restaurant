@@ -16,7 +16,6 @@ import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.LoaiBan_DAOImpl;
 import entity.Ban;
 import entity.DonDatBan;
-import entity.KhachHang;
 import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -282,7 +281,6 @@ public class ADoiBan_Controller implements Initializable {
             }
         }
     }
-
     
     private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
 
@@ -311,12 +309,11 @@ public class ADoiBan_Controller implements Initializable {
             backgroundColor
         );
     }
-
-        private void showAlert(Alert.AlertType type, String msg) {
-            Alert alert = new Alert(type);
-            alert.setHeaderText(null);
-            alert.setContentText(msg);
-            alert.showAndWait();
-        }
-
+    
+    private void showAlert(Alert.AlertType type, String msg) {
+        Alert alert = new Alert(type);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }

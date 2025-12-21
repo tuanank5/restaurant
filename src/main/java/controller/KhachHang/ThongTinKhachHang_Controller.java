@@ -1,11 +1,8 @@
 package controller.KhachHang;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
@@ -13,11 +10,8 @@ import dao.HangKhachHang_DAO;
 import entity.HangKhachHang;
 import entity.KhachHang;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -26,7 +20,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 
 public class ThongTinKhachHang_Controller {
 	@FXML
@@ -135,7 +128,6 @@ public class ThongTinKhachHang_Controller {
                 .newEntity_DAO(HangKhachHang_DAO.class)
                 .getDanhSach(HangKhachHang.class, filter);
         comBoxHangKH.getItems().clear();
-        //comBoxHangKH.getItems().add("Tất cả");
         for(HangKhachHang hang : danhSachHangKhachHangDB) {
             comBoxHangKH.getItems().add(hang.getTenHang());
         }

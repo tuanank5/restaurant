@@ -19,8 +19,6 @@ import jakarta.persistence.NamedQueries;
         query = "SELECT COUNT(maKM) FROM KhuyenMai"
     )
 })
-//@Entity
-//@Table(name = "KhuyenMai")
 public class KhuyenMai {
     @Id
     @Column(name = "maKM", nullable = false, length = 20)

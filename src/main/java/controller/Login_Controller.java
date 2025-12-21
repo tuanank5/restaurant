@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import Service.EmailService;
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
@@ -28,9 +27,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.sql.Timestamp;
+import service.EmailService;
 
 public class Login_Controller implements Initializable{
 	

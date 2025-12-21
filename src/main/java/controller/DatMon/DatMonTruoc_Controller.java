@@ -8,16 +8,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import dao.impl.Ban_DAOImpl;
 import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
 import controller.DatBan.DatBanTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
-import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
 import dao.MonAn_DAO;
@@ -30,7 +27,6 @@ import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
-import entity.NhanVien;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -382,7 +378,6 @@ public class DatMonTruoc_Controller implements Initializable{
                 	ddb.setNgayGioLapDon(LocalDateTime.of(date, time));
                 } catch (Exception ignore) {}
                 ddb.setSoLuong(soLuongKH);
-//                ddb.setKhachHang(kh);
                 try {
                     ddb.setBan(ban);
                 } catch (Exception ignore) {}

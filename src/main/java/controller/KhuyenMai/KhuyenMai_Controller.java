@@ -3,15 +3,13 @@ package controller.KhuyenMai;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import Service.EmailService;
+
 import config.RestaurantApplication;
 import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
-import dao.impl.KhachHang_DAOlmpl;
 import entity.KhachHang;
 import entity.KhuyenMai;
 import javafx.collections.FXCollections;
@@ -25,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import service.EmailService;
 import util.AutoIDUitl;
 
 public class KhuyenMai_Controller {

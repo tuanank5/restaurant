@@ -1,11 +1,8 @@
 package dao.impl;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +10,6 @@ import java.util.Map;
 import dao.DonDatBan_DAO;
 import entity.Ban;
 import entity.DonDatBan;
-import entity.HoaDon;
 import entity.KhachHang;
 import entity.LoaiBan;
 import jakarta.persistence.EntityManager;

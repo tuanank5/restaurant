@@ -1,15 +1,11 @@
 package controller.DatBan;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
@@ -27,22 +23,17 @@ import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
-import entity.KhachHang;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import util.AutoIDUitl;
 
 public class ABanHienTai_Controller {
 

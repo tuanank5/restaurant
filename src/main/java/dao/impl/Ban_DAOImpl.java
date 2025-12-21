@@ -1,12 +1,7 @@
 package dao.impl;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
 import dao.Ban_DAO;
 import entity.Ban;
-import entity.DonDatBan;
 import entity.LoaiBan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

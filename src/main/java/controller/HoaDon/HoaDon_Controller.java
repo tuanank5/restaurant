@@ -8,23 +8,17 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.BorderPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
-import entity.DonDatBan;
 import entity.HoaDon;
 import dao.impl.HoaDon_DAOImpl;
 

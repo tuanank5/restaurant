@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
@@ -440,11 +439,8 @@ public class ADoiMon_Controller implements Initializable{
             txtMaBan.setText(
                     donDatBanHienTai.getBan().getMaBan()
             );
-        
     }
-
-
-    }
+}
 
 
     

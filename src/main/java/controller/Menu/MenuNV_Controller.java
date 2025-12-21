@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import config.RestaurantApplication;
-import controller.Dashboard.DashboardNVScroll_Controller;
-import controller.Dashboard.DashboardNV_Controller;
-import dao.Ban_DAO;
 import dao.TaiKhoan_DAO;
 import entity.Ban;
 import entity.DonDatBan;
@@ -76,8 +73,6 @@ public class MenuNV_Controller {
     @FXML
     private void initialize() {
         instance = this; // Gán instance khi FXML được load
-        DateTimeFormatter formatter =
-        DateTimeFormatter.ofPattern("HH:mm:ss");
         Timeline timeline = new Timeline(
         	    new KeyFrame(Duration.seconds(1), e -> {
         	    	lblClock.setText(LocalDateTime.now()
@@ -124,7 +119,7 @@ public class MenuNV_Controller {
         	LocalDate localDate = LocalDate.now();
         	Date dateNow = Date.valueOf(localDate);
         	
-            this.taiKhoan.setNgayDangXuat(dateNow);
+            taiKhoan.setNgayDangXuat(dateNow);
             RestaurantApplication.getInstance()
                     .getDatabaseContext()
                     .newEntity_DAO(TaiKhoan_DAO.class)
@@ -161,9 +156,7 @@ public class MenuNV_Controller {
     }
 	
 	public void dashBoard() {
-		//		Dashboard_Controller dashBoardController = readyUI("Dashboard").getController();
-		//		dashBoardController.setThongTin(taiKhoan);
-		DashboardNVScroll_Controller dashboardNVScrollController = readyUI("Dashboard/DashboardNVScroll").getController();
+		readyUI("Dashboard/DashboardNVScroll");
 	}
 	
 	public void refreshBanUI() {

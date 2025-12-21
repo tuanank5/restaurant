@@ -3,7 +3,6 @@ package controller.NhanVien;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -17,15 +16,11 @@ import java.util.stream.Collectors;
 import dao.TaiKhoan_DAO;
 import dao.impl.TaiKhoan_DAOImpl;
 import entity.TaiKhoan;
-import Service.EmailService;
-
 import config.DatabaseContext;
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import controller.Menu.MenuNV_Controller;
 import dao.NhanVien_DAO;
 import entity.NhanVien;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,15 +36,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import service.EmailService;
 import util.AutoIDUitl;
 import util.ComponentUtil;
-import util.EmployeeCodeGeneratorUtil;
 
 public class ThemNhanVien_Controller implements Initializable{
 	@FXML
@@ -409,6 +403,7 @@ public class ThemNhanVien_Controller implements Initializable{
         alert.setHeaderText(content);
         alert.show();
     }
+    
     private Optional<ButtonType> showAlertConfirm(String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Thông báo");

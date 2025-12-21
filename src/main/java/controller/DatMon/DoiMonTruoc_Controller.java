@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
@@ -24,7 +23,6 @@ import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
-import entity.KhachHang;
 import entity.MonAn;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -195,7 +193,7 @@ public class DoiMonTruoc_Controller implements Initializable {
         tblMonCu.refresh();
     }
 
-    // lấy món cũ lên     
+    //Lấy món cũ lên     
     private void loadMonCu() {
         if (donDatBanDuocChon == null) return;
         if (donDatBanDuocChon == null) return;

@@ -2,11 +2,9 @@ package controller.KhachHang;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
@@ -15,8 +13,6 @@ import dao.KhachHang_DAO;
 import entity.HangKhachHang;
 import entity.KhachHang;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -311,7 +307,6 @@ public class CapNhatKhachHang_Controller {
                 .newEntity_DAO(HangKhachHang_DAO.class)
                 .getDanhSach(HangKhachHang.class, filter);
         comBoxHangKH.getItems().clear();
-        //comBoxHangKH.getItems().add("Tất cả");
         for(HangKhachHang hang : danhSachHangKhachHangDB) {
             comBoxHangKH.getItems().add(hang.getTenHang());
         }

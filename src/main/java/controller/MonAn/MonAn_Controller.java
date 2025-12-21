@@ -2,7 +2,6 @@ package controller.MonAn;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -35,7 +34,6 @@ public class MonAn_Controller implements Initializable{
 	    @FXML private TableView<MonAn> tblMon;
 	    @FXML private TableColumn<MonAn, String> colMa, colTen, colLoaiMon;
 	    @FXML private TableColumn<MonAn, Double> colDonGia;
-//	    @FXML private TableColumn<MonAn, KhuyenMai> colKM;
 	    @FXML private TextField txtMaMon, txtTenMon, txtDonGia;
 
 
@@ -195,7 +193,7 @@ public class MonAn_Controller implements Initializable{
 	                alert.setHeaderText(null);
 	                alert.setContentText("Sửa món ăn thành công!");
 	                alert.showAndWait();
-	             // Reload TableView
+	                // Reload TableView
 	                loadTable();
 	                tblMon.refresh();
 	                // Reset form
@@ -213,10 +211,9 @@ public class MonAn_Controller implements Initializable{
 	        }
 	    }
 
-	    // ------------------- Load dữ liệu từ DB lên TableView -------------------
+	    //------------------- Load dữ liệu từ DB lên TableView -------------------
 	    private void loadTable() {
 	        List<MonAn> danhSachMon = monDAO.getDanhSachMonAn(); // dùng phương thức DAO chuẩn
-//	        System.out.println("Số món trong DB: " + danhSachMon.size());
 	        if (danhSachMon != null && !danhSachMon.isEmpty()) {
 	            tblMon.setItems(FXCollections.observableArrayList(danhSachMon));
 	        } else {

@@ -1,27 +1,19 @@
 package controller.KhachHang;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.Set;
 
 import config.DatabaseContext;
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.HangKhachHang_DAO;
 import dao.KhachHang_DAO;
-import dao.impl.HangKhachHang_DAOImpl;
 import entity.HangKhachHang;
 import entity.KhachHang;
-import entity.LoaiBan;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +29,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import util.AutoIDUitl;
 
@@ -119,23 +110,6 @@ public class ThemKhachHang_Controller {
     private void dongDialog() {
         Stage stage = (Stage) borderPane.getScene().getWindow();
         stage.close();
-    }
-
-    @FXML
-    void mouseClicked(MouseEvent event) {
-//        Object source = event.getSource();
-//        // Kiểm tra nếu người dùng click vào label "Danh Sách Khách Hàng"
-//        if (source == lblDanhSachKhachHang) {
-//            if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {
-//                // Nếu không phải ở danh sách chính, xác nhận lưu và quay lại giao diện gọi đến
-//                //xacNhanLuu("DatBan/DatBan");
-//                MenuNV_Controller.instance.readyUI("DatBan/DatBan-test");
-//            } else {
-//                // Nếu đang ở trang danh sách khách hàng chính, quay lại danh sách khách hàng
-//                //xacNhanLuu("KhachHang/KhachHang");
-//                MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
-//            }
-//        }
     }
     
     @FXML

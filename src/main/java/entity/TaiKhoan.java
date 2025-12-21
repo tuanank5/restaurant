@@ -54,8 +54,6 @@ public class TaiKhoan {
 	public boolean kiemTraDangNhap(String tenTaiKhoan, String matKhau) {
 		return tenTaiKhoan.equalsIgnoreCase(this.tenTaiKhoan) &&
 		           matKhau.equals(this.matKhau);
-//        return tenTaiKhoan.equalsIgnoreCase(this.tenTaiKhoan) &&
-//                PasswordUtil.checkPassword(matKhau, this.matKhau);
     }
 	
     public boolean kiemTraDoiMatKhau(String matKhau) {

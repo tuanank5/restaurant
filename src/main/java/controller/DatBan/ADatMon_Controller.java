@@ -1,22 +1,18 @@
 package controller.DatBan;
 
-import dao.KhuyenMai_DAO;
 import dao.KhachHang_DAO;
 import dao.Ban_DAO;
 import dao.ChiTietHoaDon_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.KhuyenMai_DAOImpl;
 import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
 import dao.impl.DonDatBan_DAOImpl;
 import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.KhachHang;
-import entity.KhuyenMai;
 import entity.DonDatBan;
 import entity.HoaDon;
-import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,13 +21,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import util.AutoIDUitl;
-import dao.impl.DonDatBan_DAOImpl;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -41,19 +34,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import config.RestaurantApplication;
-import controller.HoaDon.ChiTietHoaDon_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.MonAn_DAO;
-import dao.NhanVien_DAO;
 import dao.impl.MonAn_DAOImpl;
-import dao.impl.NhanVien_DAOImpl;
 import entity.MonAn;
-import entity.NhanVien;
-import entity.TaiKhoan;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -250,7 +237,6 @@ public class ADatMon_Controller implements Initializable {
             //Cập nhật giao diện danh sách bàn trong MenuNV
             MenuNV_Controller.instance.refreshBanUI();
             //Mở UI hóa đơn
-//------------------Chuyển qua gdien ------------------------------
             MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
 
         } catch (Exception e) {
@@ -429,10 +415,7 @@ public class ADatMon_Controller implements Initializable {
         tblDS.refresh();
         capNhatTongTien();
     }
-
     
-
-// -------------------------Tăng giảm số lượng-----------------------    
     private void chonMon(MonAn mon) {
     	if (dsMonAnDat.containsKey(mon)) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

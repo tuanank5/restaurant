@@ -3,7 +3,6 @@ package controller.Dashboard;
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,10 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXRadioButton;
 
 import controller.Menu.MenuNV_Controller;
 import dao.impl.DonDatBan_DAOImpl;
@@ -28,9 +23,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -121,8 +114,6 @@ public class DashboardNV_Controller {
 
         // Cập nhật doanh thu cụ thể trong Map
         for (HoaDon hoaDon : dsHD) {
-//            LocalDate ngayLap = hoaDon.getNgayLap().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            
         	Instant instant = hoaDon.getNgayLap().toLocalDate()
                     .atStartOfDay(ZoneId.systemDefault())
                     .toInstant();
@@ -176,7 +167,6 @@ public class DashboardNV_Controller {
 
         // Cập nhật số lượng đơn bán cụ thể trong Map
         for (DonDatBan don : dsDon) {
-//            LocalDate ngayLap = don.getNgayGioLapDon().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             
             Instant instant = don.getNgayGioLapDon().toLocalDate()
                     .atStartOfDay(ZoneId.systemDefault())

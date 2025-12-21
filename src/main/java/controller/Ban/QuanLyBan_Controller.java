@@ -51,10 +51,7 @@ public class QuanLyBan_Controller {
 
     @FXML
     private TableColumn<Ban, String> colMaLoaiBan;
-
-//    @FXML
-//    private TableColumn<Ban, String> colTrangThai;
-
+    
     @FXML
     private TableColumn<Ban, String> colViTri;
 
@@ -67,9 +64,6 @@ public class QuanLyBan_Controller {
     @FXML
     private TextField txtViTri;
 
- //   @FXML
-//    private ComboBox<String> comBoxTrangThai; 
-    
     private ObservableList<Ban> dsBan; 
 
     @FXML
@@ -77,54 +71,19 @@ public class QuanLyBan_Controller {
 
 
     private ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
-
-//    private String sinhMaBan() {
-//        // Lấy danh sách bàn hiện có
-//        List<Ban> listBan = RestaurantApplication.getInstance()
-//                .getDatabaseContext()
-//                .newEntity_DAO(Ban_DAO.class)
-//                .getDanhSach(Ban.class, null);
-//
-//        int max = 0;
-//        for (Ban b : listBan) {
-//            try {
-//                // Giả sử mã bàn có dạng "B01", "B02", ...
-//                int so = Integer.parseInt(b.getMaBan().substring(1));
-//                if (so > max) max = so;
-//            } catch (Exception e) {
-//                // bỏ qua nếu format khác
-//            }
-//        }
-//        return String.format("B%02d", max + 1); // Tạo mã mới
-//    }
-
-
+    
     @FXML
     public void initialize() {
         // Thiết lập các cột TableView
         colMaBan.setCellValueFactory(new PropertyValueFactory<>("maBan"));
         colViTri.setCellValueFactory(new PropertyValueFactory<>("viTri"));
-        
-//        colTrangThai.setCellValueFactory(cellData -> {
-//            String trangThai = cellData.getValue().getTrangThai();
-//            return new SimpleStringProperty(trangThai != null ? trangThai : "Trống");
-//        });
-     // Chú ý: colMaLoaiBan phải là TableColumn<Ban, String>
         colMaLoaiBan.setCellValueFactory(cellData -> {
             LoaiBan loaiBan = cellData.getValue().getLoaiBan();
             String tenLoai = (loaiBan != null) ? loaiBan.getTenLoaiBan() : "";
             return new SimpleStringProperty(tenLoai);
         });
-
-//     //Khởi tạo dữ liệu cho ComboBox trạng thái
-//        comBoxTrangThai.setItems(FXCollections.observableArrayList(
-//                "Trống",
-//                "Đang sử dụng",
-//                "Đặt trước"
-//        ));
-//        comBoxTrangThai.setValue("Trống"); // Giá trị mặc định
-
-     // Load dữ liệu loại bàn từ DB
+        
+        // Load dữ liệu loại bàn từ DB
         List<LoaiBan> listLoaiBan = RestaurantApplication.getInstance()
                 .getDatabaseContext()
                 .newEntity_DAO(LoaiBan_DAO.class)
@@ -147,7 +106,7 @@ public class QuanLyBan_Controller {
                 setText(empty || item == null ? "" : item.getTenLoaiBan());
             }
         });
-     // Mặc định disable nút Sửa/Xóa
+        // Mặc định disable nút Sửa/Xóa
         btnSua.setDisable(true);
         btnXoa.setDisable(true);
         //Sửa
@@ -159,7 +118,6 @@ public class QuanLyBan_Controller {
                 // Điền dữ liệu vào các TextField và ComboBox
                 txtMaBan.setText(newSelection.getMaBan()); // Mã bàn vẫn giữ, không sửa
                 txtViTri.setText(newSelection.getViTri());
-//                comBoxTrangThai.setValue(newSelection.getTrangThai());
                 
                 if (newSelection.getLoaiBan() != null) {
                     // tìm loại bàn trong comboBox
@@ -195,9 +153,6 @@ public class QuanLyBan_Controller {
             String keyword = txtTimKiem.getText().trim();
             timKiemBan(keyword);
         });
-
-
-
     }
     
     private void timKiemBan(String keyword) {
@@ -220,12 +175,9 @@ public class QuanLyBan_Controller {
                 kq.add(b);
             }
         }
-
         tblBan.setItems(kq);
     }
-
-
-
+    
     @FXML
     void controller(ActionEvent event) {
         if (event.getSource() == btnThem) {
@@ -240,7 +192,6 @@ public class QuanLyBan_Controller {
     private void themBan() {
     	String maBan = txtMaBan.getText().trim();
         String viTri = txtViTri.getText().trim();
-//        String trangThai = comBoxTrangThai.getValue();
         LoaiBan loaiBan = comBoxLoaiBan.getValue(); // Lấy trực tiếp đối tượng
 
         if (maBan.isEmpty() || viTri.isEmpty() || loaiBan == null) {
@@ -267,12 +218,7 @@ public class QuanLyBan_Controller {
         } else {
             showAlert("Lỗi", "Không thể thêm bàn. Mã bàn có thể đã tồn tại!", Alert.AlertType.ERROR);
         }
-
-
     }
-
-
-
 
     private void suaBan() {
         Ban banChon = tblBan.getSelectionModel().getSelectedItem();
@@ -282,7 +228,6 @@ public class QuanLyBan_Controller {
         }
 
         String viTri = txtViTri.getText().trim();
-//        String trangThai = comBoxTrangThai.getValue();
         LoaiBan loaiBan = comBoxLoaiBan.getValue();
 
         if (viTri.isEmpty() || loaiBan == null) {
@@ -292,7 +237,6 @@ public class QuanLyBan_Controller {
 
         // Cập nhật thông tin vào đối tượng
         banChon.setViTri(viTri);
-//        banChon.setTrangThai(trangThai);
         banChon.setLoaiBan(loaiBan);
 
         // Cập nhật vào database
@@ -357,9 +301,6 @@ public class QuanLyBan_Controller {
         
         // Xóa textField vị trí
         txtViTri.clear();
-        
-        // ComboBox trạng thái về mặc định
-//        comBoxTrangThai.setValue("Trống");
         
         // ComboBox loại bàn chưa chọn
         comBoxLoaiBan.getSelectionModel().clearSelection();
