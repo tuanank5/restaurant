@@ -3,7 +3,9 @@ package controller.DatBan;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
+import entity.KhachHang;
 import entity.MonAn;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -309,7 +312,50 @@ public class ABanHienTai_Controller {
                 btnKhac.setStyle(getButtonStyle()); // Cách định dạng cho nút
                 paneEast.setRight(btnKhac);
                 btnKhac.setOnMouseClicked(event -> {
-//                	showAlert(null, loaiBanLoc);
+
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Xác nhận hủy đơn");
+                    confirm.setHeaderText(null);
+                    confirm.setContentText("Khách hàng xác nhận hủy đơn đặt bàn này?");
+                    Optional<ButtonType> rs = confirm.showAndWait();
+
+                    if (rs.isEmpty() || rs.get() != ButtonType.OK)
+                        return;
+                    try {
+                    	DonDatBan ddb = hoaDon.getDonDatBan(); 
+                    	ddb.setTrangThai("Đã hủy");
+                    	donDatBanDao.capNhat(ddb);
+
+                        if (hoaDon != null) {
+                            hoaDon.setTrangThai("Đã hủy");
+                            RestaurantApplication.getInstance()
+                                    .getDatabaseContext()
+                                    .newEntity_DAO(HoaDon_DAO.class)
+                                    .capNhat(hoaDon);
+                        }
+                        
+                        Ban ban = ddb.getBan();
+                        if (ban != null) {
+                            ban.setTrangThai("Trống");
+                            RestaurantApplication.getInstance()
+                                    .getDatabaseContext()
+                                    .newEntity_DAO(Ban_DAO.class)
+                                    .capNhat(ban);
+                        }
+                        
+                        KhachHang kh = donDatBanDao.getKhachHangTheoMaDatBan(ddb.getMaDatBan());
+
+                        showAlert(
+                            Alert.AlertType.INFORMATION,
+                            "Đã hủy đơn đặt bàn của khách "
+                            + (kh != null ? kh.getTenKH() : "")
+                            + " theo yêu cầu."
+                        );
+                        loadDanhSachHoaDon();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showAlert(Alert.AlertType.ERROR, "Không thể hủy đơn đặt bàn!");
+                    }
                 });
             	
 

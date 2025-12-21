@@ -15,6 +15,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -73,7 +74,6 @@ public class HoaDon_Controller implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		cauHinhCot();
 	    cauHinhLoc();
 	    loadData();
@@ -99,8 +99,15 @@ public class HoaDon_Controller implements Initializable{
 	private void loadData() {
 	    HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 	    List<HoaDon> list = hoaDonDAO.getAllHoaDons();
-	    danhSachHoaDonDB.setAll(list);
-	    danhSachHoaDon.setAll(list); 
+	    List<HoaDon> hdHT = new ArrayList<HoaDon>();
+	    for (HoaDon hd : list) {
+	    	if (!hd.getKieuThanhToan().equals("Chưa thanh toán")) {
+	    		hdHT.add(hd);
+	    	}
+	    }
+	    
+	    danhSachHoaDonDB.setAll(hdHT);
+	    danhSachHoaDon.setAll(hdHT); 
 	    tableView.setItems(danhSachHoaDon);
 	}
 	
@@ -168,8 +175,7 @@ public class HoaDon_Controller implements Initializable{
 	    cmbLoc.setItems(FXCollections.observableArrayList(
 	        "Tất cả",
 	        "Tiền mặt",
-	        "Chuyển khoản",
-	        "Chưa thanh toán"
+	        "Chuyển khoản"
 	    ));
 	    cmbLoc.setValue("Tất cả");
 	    cmbLoc.setOnAction(e -> locDuLieu());

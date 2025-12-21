@@ -53,5 +53,25 @@
 	-fx-font-size: 16px;
 }
 
+.btn-question-simple {
+    /* Size 20 */
+    -fx-min-width: 20;
+    -fx-min-height: 20;
+    -fx-max-width: 20;
+    -fx-max-height: 20;
 
+    /* Hình tròn */
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
 
+    /* Giữ nền mặc định của Button */
+    -fx-background-color: -fx-background;
+
+    /* Dấu hỏi */
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0;
+    -fx-alignment: center;
+}
