@@ -167,6 +167,8 @@ public class ADoiBan_Controller implements Initializable {
         }
     }
 
+    @FXML
+    private Button btnQuayLai;
 
     @FXML
     void btnQuayLai(ActionEvent event) {
@@ -193,7 +195,7 @@ public class ADoiBan_Controller implements Initializable {
         cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
 		
         Tooltip toolTipQL = new Tooltip("Quay lại danh sách đặt bàn");
-		btnTroLai.setTooltip(toolTipQL);
+        btnQuayLai.setTooltip(toolTipQL);
 		
 		Tooltip toolTipLB = new Tooltip("Lọc danh sách theo loại bàn");
 		cmbLoaiBan.setTooltip(toolTipLB);

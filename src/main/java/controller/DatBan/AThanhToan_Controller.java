@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -207,7 +208,26 @@ public class AThanhToan_Controller {
     }
     
     private void loadCmbKM() {
-    	List<KhuyenMai> dsKM = kmDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
+    	List<KhuyenMai> dsKMFull = kmDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
+    	List<KhuyenMai> dsKM = new ArrayList<KhuyenMai>();
+    	Date currentDate = new Date();
+
+    	for (KhuyenMai khuyenMai : dsKMFull) {
+    	    if (khuyenMai.getNgayBatDau().compareTo(currentDate) <= 0 && 
+    	        khuyenMai.getNgayKetThuc().compareTo(currentDate) >= 0) {
+    	    	dsKM.add(khuyenMai);
+    	    }
+    	}
+    	
+    	KhuyenMai kmMacDinh = new KhuyenMai();
+    	kmMacDinh.setMaKM("KM000");
+    	kmMacDinh.setPhanTramGiamGia(0);
+    	kmMacDinh.setTenKM("Không khuyến mãi");
+    	kmMacDinh.setLoaiKM("Khuyến mãi trên tổng hóa đơn");
+    	kmMacDinh.setNgayBatDau(new java.sql.Date(System.currentTimeMillis()));
+    	kmMacDinh.setNgayKetThuc(new java.sql.Date(System.currentTimeMillis()));
+    	
+    	dsKM.add(kmMacDinh);
     	dsKM = dsKM.stream()
                 .sorted(Comparator.comparingDouble(KhuyenMai::getPhanTramGiamGia).reversed())
                 .collect(Collectors.toList());

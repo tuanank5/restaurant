@@ -124,13 +124,20 @@ public class ADatMon_Controller implements Initializable {
         this.donDatBanHienTai = don;
     }
     
+    private boolean checkTTbangKo = ABanHienTai_Controller.aBHT.checkTTbangKo;
+    private Map<MonAn, Integer> dsMonAnTA = ABanHienTai_Controller.aBHT.dsMonAnTA;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	 // Lấy danh sách món ăn từ DB
         dsMonAn = monAnDAO.getDanhSachMonAn();
         loadTenKhachHang();
         // lấy sluong khách
-        txtSoLuong.setText(String.valueOf(MenuNV_Controller.soLuongKhach));
+        if (checkTTbangKo == true) {
+            txtSoLuong.setText(MenuNV_Controller.aBanHienTai_HD.getDonDatBan().getSoLuong() + "");
+        } else {
+            txtSoLuong.setText(String.valueOf(MenuNV_Controller.soLuongKhach));       	
+        }
         // Khởi tạo ComboBox phân loại (dùng dsMonAn)
         khoiTaoComboBoxPhanLoai();
 
@@ -160,24 +167,37 @@ public class ADatMon_Controller implements Initializable {
         });
         tblDS.setItems(FXCollections.observableArrayList());
         // --- Nhận dữ liệu bàn và KH từ MenuNV_Controller ---
-        if (MenuNV_Controller.banDangChon != null) {
+        if (checkTTbangKo == true) {
+        	txtMaBan.setText(MenuNV_Controller.aBanHienTai_HD.getDonDatBan().getBan().getMaBan());	
+        } else if (MenuNV_Controller.banDangChon != null) {
             this.banDangChon = MenuNV_Controller.banDangChon;
             txtMaBan.setText(banDangChon.getMaBan());
             loadMonCuaBan();
         }
         tblDS.setOnMouseClicked(e -> capNhatTongTien());
         
-        Tooltip toolTipQL = new Tooltip("Quay lại danh sách bàn");
-		btnQuayLai.setTooltip(toolTipQL);
-		
-		Tooltip toolTipLM = new Tooltip("Lọc danh sách theo loại món");
-		cmbLoaiMon.setTooltip(toolTipLM);
-		
-		Tooltip toolTipHuy = new Tooltip("Hủy đặt bàn và đặt món");
-		btnHuy.setTooltip(toolTipHuy);
-		
-		Tooltip toolTipXN = new Tooltip("Xác nhận đặt bàn và đặt món");
-		btnXacNhan.setTooltip(toolTipXN);
+        if (checkTTbangKo == false) {
+            Tooltip toolTipQL = new Tooltip("Quay lại danh sách bàn");
+    		btnQuayLai.setTooltip(toolTipQL);
+    		
+    		Tooltip toolTipLM = new Tooltip("Lọc danh sách theo loại món");
+    		cmbLoaiMon.setTooltip(toolTipLM);
+
+    		Tooltip toolTipHuy = new Tooltip("Hủy đặt bàn và đặt món");
+    		btnHuy.setTooltip(toolTipHuy);
+
+    		Tooltip toolTipXN = new Tooltip("Xác nhận đặt bàn và đặt món");
+    		btnXacNhan.setTooltip(toolTipXN);
+		} else {
+			Tooltip toolTipQL2 = new Tooltip("Quay lại danh sách bàn");
+    		btnQuayLai.setTooltip(toolTipQL2);
+			
+			Tooltip toolTipHuy2 = new Tooltip("Hủy đặt món");
+			btnHuy.setTooltip(toolTipHuy2);
+			
+			Tooltip toolTipXN = new Tooltip("Xác nhận đặt món");
+    		btnXacNhan.setTooltip(toolTipXN);
+		}
 		
 		btnHuy.setOnAction(e -> quayLaiGD());
     }
@@ -187,7 +207,11 @@ public class ADatMon_Controller implements Initializable {
 
 	@FXML
     void btnQuayLai(ActionEvent event) {
-    	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
+		if (checkTTbangKo == true) {
+			MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+		} else {
+	    	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");			
+		}
     }
     
     // cài khách hàng
@@ -201,10 +225,10 @@ public class ADatMon_Controller implements Initializable {
     }
     
     private void loadTenKhachHang() {
-        if (MenuNV_Controller.khachHangDangChon != null) {
+        if (checkTTbangKo == false) {
             txtKhachHang.setText(MenuNV_Controller.khachHangDangChon.getTenKH());
         } else {
-            txtKhachHang.setText("Khách lẻ");
+        	txtKhachHang.setText(MenuNV_Controller.aBanHienTai_HD.getKhachHang().getTenKH());
         }
     }
 
@@ -267,8 +291,14 @@ public class ADatMon_Controller implements Initializable {
     	if (dsMonAnDat.isEmpty()) {
            	showAlert("Thông báo", "Vui lòng chọn món ăn", Alert.AlertType.INFORMATION);
         } else {
-        	DonDatBan ddb = themDDB();
-        	themHD(ddb);
+        	if (checkTTbangKo == true) {
+        		showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
+        		themChiTietHoaDon(MenuNV_Controller.aBanHienTai_HD, dsMonAnDat);
+                MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+        	} else {
+        		DonDatBan ddb = themDDB();
+            	themHD(ddb);
+        	}
     	}
     }
     

@@ -225,12 +225,14 @@ public class AThuTien_Controller {
         } else if (source == btnIn) {
         	int tienNhan = Integer.parseInt(txtTienKH.getText());
             if (tienTra >= 0) {
+            	KhuyenMai km = kmDangChon.getMaKM().equals("KM000") ? null : kmDangChon; 
+            	
             	LocalDate localDate = LocalDate.now();
                 Date dateNow = Date.valueOf(localDate);
             	hoaDonHienTai.setNgayLap(dateNow);
             	
             	hoaDonHienTai.setKieuThanhToan("Tiền mặt");
-            	hoaDonHienTai.setKhuyenMai(kmDangChon);
+            	hoaDonHienTai.setKhuyenMai(km);
             	hoaDonHienTai.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
             	hoaDonHienTai.setTongTien(tongThanhTienLamTron);
             	hoaDonHienTai.setTienNhan((double) tienNhan);
@@ -255,11 +257,13 @@ public class AThuTien_Controller {
             	showAlert(Alert.AlertType.ERROR, "Số tiền khách đưa cho hóa đơn chưa đủ!");
             }
         } else if (source == btnInChuyenKhoan) {
+        	KhuyenMai km = kmDangChon.getMaKM().equals("KM000") ? null : kmDangChon;
+        	
         	LocalDate localDate = LocalDate.now();
             Date dateNow = Date.valueOf(localDate);
         	hoaDonHienTai.setNgayLap(dateNow);
         	hoaDonHienTai.setKieuThanhToan("Chuyển khoản");
-        	hoaDonHienTai.setKhuyenMai(kmDangChon);
+        	hoaDonHienTai.setKhuyenMai(km);
         	hoaDonHienTai.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
         	hoaDonHienTai.setTongTien(tongThanhTienLamTron);
         	hoaDonHienTai.setTienNhan(tongThanhTienLamTron);

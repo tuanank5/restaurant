@@ -129,7 +129,7 @@ public class KhuyenMai {
 
 	@Override
 	public String toString() {
-		return phanTramGiamGia < 10 ? "0" + phanTramGiamGia + "% - " + tenKM : phanTramGiamGia + "% - " + tenKM;
+		return phanTramGiamGia + "% - " + tenKM;
 	}
 	
 	

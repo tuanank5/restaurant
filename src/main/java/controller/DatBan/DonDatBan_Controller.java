@@ -147,10 +147,7 @@ public class DonDatBan_Controller implements Initializable{
         btnDoiMon.setTooltip(new Tooltip("Thông báo cho nút Đổi Món!"));
         btnThayDoi.setTooltip(new Tooltip("Thông báo cho nút Đổi Bàn!"));
         btnHuyDon.setTooltip(new Tooltip("Thông báo cho nút Huỷ Đơn Bàn!"));
-        dpNgayDatBan.setTooltip(new Tooltip("Lọc danh sách theo ngày đặt bàn"));
-        cmbTrangThai.setTooltip(new Tooltip("Lọc danh sách theo trạng thái"));
-        txtKH.setTooltip(new Tooltip("Hiển thị danh sách theo tên khách hàng"));
-    }
+	}
     
     @FXML
     void btnDatBan(ActionEvent event) {
