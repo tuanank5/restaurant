@@ -16,16 +16,14 @@
    <top>
       <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
-            <AnchorPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="200.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
                   <Button fx:id="btnDatBan" layoutX="35.0" layoutY="35.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Đặt bàn" />
                   <ComboBox fx:id="cmbLoaiBan" layoutX="210.0" layoutY="35.0" prefWidth="150.0" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                   <Label layoutX="135.0" layoutY="40.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Loại bàn:" />
+                  <Label layoutX="510.0" layoutY="30.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh sách đặt bàn" />
                </children></AnchorPane>
          </left>
-         <right>
-            <AnchorPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER" />
-         </right>
       </BorderPane>
    </top>
    <center>

@@ -41,7 +41,7 @@
          <top>
             <AnchorPane prefHeight="46.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" layoutX="520.0" layoutY="1.0" prefHeight="46.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Bàn" />
+                  <Label alignment="CENTER" layoutX="410.0" prefHeight="50.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Danh sách bàn có thể đổi" />
                   <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnQuayLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quay Lại" />
                </children>
             </AnchorPane>
