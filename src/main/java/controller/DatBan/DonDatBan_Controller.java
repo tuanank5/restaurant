@@ -314,7 +314,6 @@ public class DonDatBan_Controller implements Initializable{
 
     private void timTheoTenKH() {
         String key = txtKH.getText() != null ? txtKH.getText().trim().toLowerCase() : "";
-
         if (key.isEmpty()) {
             tblView.setItems(danhSachDonDatBan);
             capNhatTongDon();
