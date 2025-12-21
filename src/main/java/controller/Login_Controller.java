@@ -103,7 +103,7 @@ public class Login_Controller implements Initializable{
                             fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
                             root = fxmlLoader.load();
                             scene = new Scene(root);
-
+                            stage.setTitle("Nhà hàng Út Bi - Nhân viên quản lý"+ taiKhoan.getNhanVien().getTenNV());
                             MenuNVQL_Controller menuNVQLController = fxmlLoader.getController();
                             menuNVQLController.setThongTin(taiKhoan);
                         } else {
@@ -111,7 +111,7 @@ public class Login_Controller implements Initializable{
                             fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
                             root = fxmlLoader.load();
                             scene = new Scene(root);
-
+                            stage.setTitle("Nhà hàng Út Bi - Nhân viên: " + taiKhoan.getNhanVien().getTenNV());
                             MenuNV_Controller menuNhanVienController = fxmlLoader.getController();
                             menuNhanVienController.setThongTin(taiKhoan);
                         }

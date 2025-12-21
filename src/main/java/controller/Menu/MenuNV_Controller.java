@@ -134,7 +134,8 @@ public class MenuNV_Controller {
                 Parent root = fxmlLoader.load();
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
-
+                
+                stage.setTitle("Đăng Nhập");
                 stage.setScene(scene);
                 stage.setMaximized(true);
                 stage.show();

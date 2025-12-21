@@ -69,6 +69,7 @@ public class MenuNVQL_Controller {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.setTitle("Đăng Nhập");
             stage.setMaximized(true);
             stage.show();
 
