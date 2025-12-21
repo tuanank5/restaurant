@@ -64,18 +64,12 @@ public class ADatBanHienTai_Controller implements Initializable {
         cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
         
         Tooltip toolTipQL = new Tooltip("Quay lại danh sách đặt bàn");
-        toolTipQL.setShowDelay(Duration.millis(100));
-        toolTipQL.setHideDelay(Duration.millis(200));
 		btnQuayLai.setTooltip(toolTipQL);
 		
 		Tooltip toolTipLB = new Tooltip("Lọc danh sách theo loại bàn");
-		toolTipLB.setShowDelay(Duration.millis(100));
-		toolTipLB.setHideDelay(Duration.millis(200));
 		cmbLoaiBan.setTooltip(toolTipLB);
 		
 		Tooltip toolTipTT = new Tooltip("Lọc danh sách theo trạng thái");
-		toolTipTT.setShowDelay(Duration.millis(100));
-		toolTipTT.setHideDelay(Duration.millis(200));
 		cmbTrangThai.setTooltip(toolTipTT);
     }
     @FXML

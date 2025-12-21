@@ -168,23 +168,15 @@ public class ADatMon_Controller implements Initializable {
         tblDS.setOnMouseClicked(e -> capNhatTongTien());
         
         Tooltip toolTipQL = new Tooltip("Quay lại danh sách bàn");
-        toolTipQL.setShowDelay(Duration.millis(100));
-        toolTipQL.setHideDelay(Duration.millis(200));
 		btnQuayLai.setTooltip(toolTipQL);
 		
 		Tooltip toolTipLM = new Tooltip("Lọc danh sách theo loại món");
-		toolTipLM.setShowDelay(Duration.millis(100));
-		toolTipLM.setHideDelay(Duration.millis(200));
 		cmbLoaiMon.setTooltip(toolTipLM);
 		
 		Tooltip toolTipHuy = new Tooltip("Hủy đặt bàn và đặt món");
-		toolTipHuy.setShowDelay(Duration.millis(100));
-		toolTipHuy.setHideDelay(Duration.millis(200));
-		btnQuayLai.setTooltip(toolTipHuy);
+		btnHuy.setTooltip(toolTipHuy);
 		
 		Tooltip toolTipXN = new Tooltip("Xác nhận đặt bàn và đặt món");
-		toolTipXN.setShowDelay(Duration.millis(100));
-		toolTipXN.setHideDelay(Duration.millis(200));
 		btnXacNhan.setTooltip(toolTipXN);
 		
 		btnHuy.setOnAction(e -> quayLaiGD());

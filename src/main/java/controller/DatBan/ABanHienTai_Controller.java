@@ -133,13 +133,9 @@ public class ABanHienTai_Controller {
         txtTongDatBan.setText(tongDatBan + "");      
 
 		Tooltip toolTipLB = new Tooltip("Lọc danh sách theo loại bàn");
-		toolTipLB.setShowDelay(Duration.millis(100));
-		toolTipLB.setHideDelay(Duration.millis(200));
 		cmbLoaiBan.setTooltip(toolTipLB);
 		
 		Tooltip toolTipDB = new Tooltip("Đặt bàn mới");
-		toolTipDB.setShowDelay(Duration.millis(100));
-		toolTipDB.setHideDelay(Duration.millis(200));
 		btnDatBan.setTooltip(toolTipDB);
 
   }
