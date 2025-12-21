@@ -55,6 +55,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -183,6 +184,12 @@ public class AThanhToan_Controller {
         
         lblTichLuy.setText(formatTienVN(Double.parseDouble("0")));
         lblThanhTien.setText(formatTienVN(thanhTien));
+        
+        cmbKM.setTooltip(new Tooltip("Khuyến mãi áp dụng cho hóa đơn"));
+        btnDiemTichLuy.setTooltip(new Tooltip("Sử dụng điểm tích lũy của khách hàng"));
+        
+        btnTamTinh.setTooltip(new Tooltip("In hóa đơn tạm tính"));
+        btnThuTien.setTooltip(new Tooltip("Thanh toán hóa đơn"));
     }
     
     @FXML

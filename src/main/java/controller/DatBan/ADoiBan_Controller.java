@@ -28,6 +28,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 
 public class ADoiBan_Controller implements Initializable {
@@ -191,6 +192,16 @@ public class ADoiBan_Controller implements Initializable {
         cmbTrangThai.setOnAction(e -> loadDanhSachBan());
         cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
 		
+        Tooltip toolTipQL = new Tooltip("Quay lại danh sách đặt bàn");
+		btnTroLai.setTooltip(toolTipQL);
+		
+		Tooltip toolTipLB = new Tooltip("Lọc danh sách theo loại bàn");
+		cmbLoaiBan.setTooltip(toolTipLB);
+		
+		Tooltip toolTipTT = new Tooltip("Lọc danh sách theo trạng thái");
+		cmbTrangThai.setTooltip(toolTipTT);
+		
+		btnXacNhan.setTooltip(new Tooltip("Xác nhận đổi bàn"));
 	}
 	
     private void khoiTaoComboBoxes() {
