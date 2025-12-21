@@ -551,12 +551,10 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	    EntityManager em = emf.createEntityManager();
 	    try {
 	        return em.createQuery(
-	            """
-	            SELECT ct
-	            FROM ChiTietHoaDon ct
-	            JOIN FETCH ct.monAn
-	            WHERE ct.hoaDon.maHD = :ma
-	            """,
+	            "SELECT ct "
+	            + "FROM ChiTietHoaDon ct "
+	            + "JOIN FETCH ct.monAn "
+	            + "WHERE ct.hoaDon.maHD = :ma",
 	            ChiTietHoaDon.class
 	        )
 	        .setParameter("ma", maHoaDon)
