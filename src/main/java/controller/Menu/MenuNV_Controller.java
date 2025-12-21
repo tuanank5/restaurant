@@ -80,20 +80,13 @@ public class MenuNV_Controller {
         DateTimeFormatter.ofPattern("HH:mm:ss");
         Timeline timeline = new Timeline(
         	    new KeyFrame(Duration.seconds(1), e -> {
-        	        if (lblClock.getText().contains(":"))
-        	            lblClock.setText(LocalDateTime.now()
-        	                .format(DateTimeFormatter.ofPattern("HH mm ss")));
-        	        else
-        	            lblClock.setText(LocalDateTime.now()
+        	    	lblClock.setText(LocalDateTime.now()
         	                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         	    })
         	);
         	timeline.setCycleCount(Timeline.INDEFINITE);
         	timeline.play();
-        
-
-    }
-       
+    }   
     
     public static MenuNV_Controller getInstance() {
         return instance;
