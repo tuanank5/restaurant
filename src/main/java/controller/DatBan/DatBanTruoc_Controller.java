@@ -204,8 +204,7 @@ public class DatBanTruoc_Controller implements Initializable {
         }
         return false;
     }
-    
-    // CHỌN BÀN — CHỈ CHO CHỌN 1 BÀN
+
     private void handleChonBan(Ban ban, Button btnBan) {
         if (!danhSachBanDangChon.isEmpty() && !danhSachBanDangChon.contains(ban)) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
@@ -242,7 +241,7 @@ public class DatBanTruoc_Controller implements Initializable {
                 color);
     }
 
-    // LỌC BÀN THEO TRẠNG THÁI MENU
+    // LỌC BÀN THEO TRẠNG THÁI
     private void filterBanTheoTrangThai() {
         String trangThaiChon = cmbTrangThai.getValue();
         gridPaneBan.getChildren().clear();
