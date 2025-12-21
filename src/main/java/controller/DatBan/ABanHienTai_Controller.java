@@ -41,6 +41,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
@@ -248,9 +249,9 @@ public class ABanHienTai_Controller {
                 paneBan.setCenter(new Label(hoaDon.getDonDatBan().getBan().getMaBan() + "\n" + hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan()));
                 paneBan.setStyle(getBorderStyle()); // Thêm viền cho paneBan
 
-                Button btnThanhToan = new Button("TT");
-                btnThanhToan.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                Button btnThanhToan = taoButtonIcon("TT", "/img/pay.png");
                 paneWest.setLeft(btnThanhToan);
+                BorderPane.setMargin(btnThanhToan, new Insets(5, 10, 5, 10));
                 btnThanhToan.setOnMouseClicked(event -> {
                 	double tongTien = tinhTongTienMon(hoaDon);
                 	if (tongTien > 0) {
@@ -276,9 +277,9 @@ public class ABanHienTai_Controller {
                 	}
                 });
 
-                Button btnBan = new Button("B");
-                btnBan.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                Button btnBan = taoButtonIcon("B", "/img/table.png");
                 paneWest.setRight(btnBan);
+                BorderPane.setMargin(btnBan, new Insets(5, 10, 5, 10));
                 btnBan.setOnMouseClicked(event -> {
 //                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
                 	MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
@@ -297,20 +298,18 @@ public class ABanHienTai_Controller {
 
                 paneTien.setCenter(lblTien);
 
-
-                Button btnMonAn = new Button("MA");
-                btnMonAn.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                Button btnMonAn = taoButtonIcon("MA", "/img/food.png");
                 paneEast.setLeft(btnMonAn);
+                BorderPane.setMargin(btnMonAn, new Insets(5, 10, 5, 10));
                 btnMonAn.setOnMouseClicked(event -> {
                     MenuNV_Controller.aBanHienTai_HD = hoaDon;
                     MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
                     MenuNV_Controller.instance.readyUI("DatBan/aDoiMon");
                 });
 
-
-                Button btnKhac = new Button("K");
-                btnKhac.setStyle(getButtonStyle()); // Cách định dạng cho nút
+                Button btnKhac = taoButtonIcon("K", "/img/cancel.png");
                 paneEast.setRight(btnKhac);
+                BorderPane.setMargin(btnKhac, new Insets(5, 10, 5, 10));
                 btnKhac.setOnMouseClicked(event -> {
 
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
@@ -441,9 +440,22 @@ public class ABanHienTai_Controller {
         }
         return tong;
     }
-
     
-   
+    private Button taoButtonIcon(String text, String iconPath) {
+        ImageView icon = new ImageView(
+                getClass().getResource(iconPath).toExternalForm()
+        );
+        icon.setFitWidth(30);
+        icon.setFitHeight(30);
 
+        Button btn = new Button();
+        btn.setGraphic(icon); 
+        btn.setStyle(getButtonStyle());
+        btn.setContentDisplay(javafx.scene.control.ContentDisplay.LEFT);
+        btn.setGraphicTextGap(5);
+
+        return btn;
+    }
+    
 }
 
