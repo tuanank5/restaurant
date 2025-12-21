@@ -37,6 +37,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -142,6 +143,11 @@ public class AThuTien_Controller {
     	
     	hienThiGoiY();
     	hienThiTienTra();
+    	
+    	btnLamMoi.setTooltip(new Tooltip("Làm mới số tiền khách đưa"));
+    	btnInChuyenKhoan.setTooltip(new Tooltip("Thanh toán bằng chuyển khoản"));
+    	btnIn.setTooltip(new Tooltip("Thanh toán bằng tiền mặt"));
+    	btnHuy.setTooltip(new Tooltip("Hủy bỏ thanh toán"));
 	}
     
 	private void hienThiTienTra() {
