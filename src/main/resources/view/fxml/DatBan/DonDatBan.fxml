@@ -71,18 +71,18 @@
 <center>
 <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="txtKH" layoutX="83.0" layoutY="36.0" prefHeight="25.0" prefWidth="250.0" />
-                        <Label layoutX="84.0" layoutY="13.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng" />
+                        <TextField fx:id="txtKH" layoutX="200.0" layoutY="35.0" prefHeight="25.0" prefWidth="250.0" />
+                        <Label layoutX="200.0" layoutY="10.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng" />
                      </children>
 </Pane>
 </center>
 <left>
 <Pane prefHeight="80.0" prefWidth="647.0" BorderPane.alignment="CENTER">
 <children>
-<DatePicker fx:id="dpNgayDatBan" layoutX="28.0" layoutY="34.0" />
-<Label layoutX="28.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đặt bàn" />
-<ComboBox fx:id="cmbTrangThai" layoutX="212.0" layoutY="34.0" prefWidth="150.0" />
-<Label layoutX="212.0" layoutY="12.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng thái" />
+<DatePicker fx:id="dpNgayDatBan" layoutY="35.0" />
+<Label layoutY="10.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Ngày đặt bàn" />
+<ComboBox fx:id="cmbTrangThai" layoutX="210.0" layoutY="35.0" prefWidth="150.0" />
+<Label layoutX="210.0" layoutY="10.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Trạng thái" />
 </children>
 </Pane>
 </left>

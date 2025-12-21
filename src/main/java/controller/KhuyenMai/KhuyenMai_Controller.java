@@ -78,6 +78,17 @@ public class KhuyenMai_Controller {
                 btnXoaKM.setDisable(false);
             }
         });
+        
+        btnSuaKM.setTooltip(new Tooltip("Sửa khuyến mãi đã chọn"));
+        btnThemKM.setTooltip(new Tooltip("Thêm khuyến mãi mới"));
+        btnXoaKM.setTooltip(new Tooltip("Xóa khuyến mãi đã chọn"));
+        txtTimKiem.setTooltip(new Tooltip("Nhập tên hoặc mã khuyến mãi để tìm kiếm"));
+        txtMaKM.setTooltip(new Tooltip("Mã khuyến mãi"));
+        txtTenKM.setTooltip(new Tooltip("Tên khuyến mãi"));
+        dpNgayBatDau.setTooltip(new Tooltip("Chọn ngày bắt đầu"));
+        dpNgayKetThuc.setTooltip(new Tooltip("Chọn ngày kết thúc"));
+        comBoxLoaiKM.setTooltip(new Tooltip("Chọn loại khuyến mãi"));
+        comBoxPhanTram.setTooltip(new Tooltip("Chọn phần trăm giảm giá"));
 
     }
 

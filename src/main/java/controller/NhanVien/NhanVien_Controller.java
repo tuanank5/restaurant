@@ -48,6 +48,13 @@ public class NhanVien_Controller {
         setValueTable();
         loadData();
         phanTrang(danhSachNhanVienDB.size());
+        btnThemNV.setTooltip(new Tooltip("Thêm nhân viên mới"));
+        btnXoa.setTooltip(new Tooltip("Đổi thành nhân viên ngừng làm việc"));
+        btnXuatPDF.setTooltip(new Tooltip("Xuất danh sách nhân viên ra file"));
+        btnTatCa.setTooltip(new Tooltip("Hiển thị tất cả nhân viên"));
+        btnDaNghi.setTooltip(new Tooltip("Lọc danh sách nhân viên đã nghỉ việc"));
+        btnDangLamViec.setTooltip(new Tooltip("Lọc danh sách nhân viên đang làm việc"));
+        txtTimKiem.setTooltip(new Tooltip("Nhập tên hoặc mã nhân viên để tìm kiếm"));
     }
 
     @FXML

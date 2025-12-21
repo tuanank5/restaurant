@@ -1,7 +1,8 @@
 package controller.Ban;
 
 import java.util.List;
-import javafx.scene.control.TextField; 
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
@@ -153,6 +154,15 @@ public class QuanLyBan_Controller {
             String keyword = txtTimKiem.getText().trim();
             timKiemBan(keyword);
         });
+        
+        btnSua.setTooltip(new Tooltip("Sửa thông tin bàn đã chọn"));
+        btnThem.setTooltip(new Tooltip("Thêm bàn mới vào danh sách"));
+        btnXoa.setTooltip(new Tooltip("Xóa bàn đã chọn"));
+        txtMaBan.setTooltip(new Tooltip("Nhập mã bàn"));
+        txtTimKiem.setTooltip(new Tooltip("Nhập mã bàn hoặc vị trí để tìm kiếm"));
+        txtViTri.setTooltip(new Tooltip("Nhập vị trí của bàn trong nhà hàng"));
+        comBoxLoaiBan.setTooltip(new Tooltip("Chọn loại bàn (nhỏ, thường, lớn)"));
+
     }
     
     private void timKiemBan(String keyword) {
