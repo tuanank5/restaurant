@@ -81,8 +81,6 @@ public class ABanHienTai_Controller {
 
     @FXML
     private BorderPane paneWest;
-    @FXML
-    private TextField txtTimKiem;
 
     @FXML
     private TextField txtTongDatBan;
@@ -133,12 +131,8 @@ public class ABanHienTai_Controller {
         txtTongDatBan.setEditable(false);
         txtTongDatBan.setText(tongDatBan + "");
         
-//      btnBan.setTooltip(new Tooltip("Thông báo cho nút Bàn!"));
-//      btnThanhToan.setTooltip(new Tooltip("Thông báo cho nút Thanh toán!"));
         btnDatBan.setTooltip(new Tooltip("Thông báo cho nút Đặt bàn!"));
-//      btnKhac.setTooltip(new Tooltip("Thông báo cho nút Khác!"));
         cmbLoaiBan.setTooltip(new Tooltip("Lọc cho loại bàn!"));
-        txtTimKiem.setTooltip(new Tooltip("Nhập để tìm kiếm hoá đơn!"));
   }
 
     private void capNhatTrangThaiBanMacDinh() {
