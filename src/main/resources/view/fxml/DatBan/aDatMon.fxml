@@ -51,7 +51,7 @@
                      <bottom>
                         <AnchorPane prefHeight="52.0" prefWidth="500.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
                            <children>
-                              <Label layoutX="8.0" layoutY="16.0" style="-fx-font-weight: bold; -fx-text-fill: white;" text="Tổng tiền : ">
+                              <Label layoutX="14.0" layoutY="16.0" style="-fx-font-weight: bold; -fx-text-fill: white;" text="Tổng tiền : ">
                                  <font>
                                     <Font name="Times New Roman" size="16.0" />
                                  </font>
@@ -80,8 +80,8 @@
                <bottom>
                   <AnchorPane prefHeight="64.0" prefWidth="500.0" style="-fx-border-width: 2px 1px 0 0;" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="btnXacNhan" layoutX="386.0" mnemonicParsing="false" onAction="#handleXacNhan" prefHeight="60.0" prefWidth="100.0" styleClass="btnXacNhan" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="7.200000000000003" AnchorPane.rightAnchor="14.0" />
-                        <Button fx:id="btnHuy" layoutX="274.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="btnXacNhan" stylesheets="@../../css/SystemDesign.css" text="Hủy" />
+                        <Button fx:id="btnXacNhan" layoutX="386.0" mnemonicParsing="false" onAction="#handleXacNhan" prefHeight="60.0" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="7.200000000000003" AnchorPane.rightAnchor="14.0" />
+                        <Button fx:id="btnHuy" layoutX="274.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Hủy" />
                      </children>
                   </AnchorPane>
                </bottom>
@@ -118,7 +118,7 @@
          <left>
             <AnchorPane prefHeight="58.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnQuayLai" styleClass="btnQuayLai" stylesheets="@../../css/SystemDesign.css" text="Quay lại" />
+                  <Button fx:id="btnQuayLai" layoutX="9.0" layoutY="9.0" mnemonicParsing="false" onAction="#btnQuayLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Quay lại" />
                   <Label layoutX="200.0" layoutY="15.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Chi tiết hóa đơn" />
                </children>
             </AnchorPane>
@@ -127,7 +127,7 @@
             <AnchorPane prefHeight="50.0" prefWidth="692.0" BorderPane.alignment="CENTER">
                <children>
                   <Label layoutX="308.0" layoutY="6.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Món Ăn" />
-                  <ComboBox fx:id="cmbLoaiMon" layoutY="24.0" prefWidth="150.0" promptText="Tất cả" />
+                  <ComboBox fx:id="cmbLoaiMon" layoutY="9.0" prefWidth="150.0" promptText="Tất cả" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
                </children>
             </AnchorPane>
          </right></BorderPane>
