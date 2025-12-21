@@ -34,7 +34,7 @@ public class MonAn_Controller implements Initializable{
 	    @FXML private TableView<MonAn> tblMon;
 	    @FXML private TableColumn<MonAn, String> colMa, colTen, colLoaiMon;
 	    @FXML private TableColumn<MonAn, Double> colDonGia;
-	    @FXML private TextField txtMaMon, txtTenMon, txtDonGia;
+	    @FXML private TextField txtMaMon, txtTenMon, txtDonGia, txtTimKiem;
 
 
 	    private String duongDanAnh;
