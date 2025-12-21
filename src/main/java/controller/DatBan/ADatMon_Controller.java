@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import util.AutoIDUitl;
 
 import java.net.URL;
@@ -165,9 +166,34 @@ public class ADatMon_Controller implements Initializable {
             loadMonCuaBan();
         }
         tblDS.setOnMouseClicked(e -> capNhatTongTien());
-
+        
+        Tooltip toolTipQL = new Tooltip("Quay lại danh sách bàn");
+        toolTipQL.setShowDelay(Duration.millis(100));
+        toolTipQL.setHideDelay(Duration.millis(200));
+		btnQuayLai.setTooltip(toolTipQL);
+		
+		Tooltip toolTipLM = new Tooltip("Lọc danh sách theo loại món");
+		toolTipLM.setShowDelay(Duration.millis(100));
+		toolTipLM.setHideDelay(Duration.millis(200));
+		cmbLoaiMon.setTooltip(toolTipLM);
+		
+		Tooltip toolTipHuy = new Tooltip("Hủy đặt bàn và đặt món");
+		toolTipHuy.setShowDelay(Duration.millis(100));
+		toolTipHuy.setHideDelay(Duration.millis(200));
+		btnQuayLai.setTooltip(toolTipHuy);
+		
+		Tooltip toolTipXN = new Tooltip("Xác nhận đặt bàn và đặt món");
+		toolTipXN.setShowDelay(Duration.millis(100));
+		toolTipXN.setHideDelay(Duration.millis(200));
+		btnXacNhan.setTooltip(toolTipXN);
+		
+		btnHuy.setOnAction(e -> quayLaiGD());
     }
-    @FXML
+    private void quayLaiGD() {
+		MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+	}
+
+	@FXML
     void btnQuayLai(ActionEvent event) {
     	MenuNV_Controller.instance.readyUI("DatBan/aDatBanHienTai");
     }

@@ -34,6 +34,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 
 public class ABanHienTai_Controller {
 
@@ -129,10 +130,18 @@ public class ABanHienTai_Controller {
         loadDanhSachHoaDon();
         cmbLoaiBan.setOnAction(e -> loadDanhSachHoaDon());
         txtTongDatBan.setEditable(false);
-        txtTongDatBan.setText(tongDatBan + "");
-        
-        btnDatBan.setTooltip(new Tooltip("Thông báo cho nút Đặt bàn!"));
-        cmbLoaiBan.setTooltip(new Tooltip("Lọc cho loại bàn!"));
+        txtTongDatBan.setText(tongDatBan + "");      
+
+		Tooltip toolTipLB = new Tooltip("Lọc danh sách theo loại bàn");
+		toolTipLB.setShowDelay(Duration.millis(100));
+		toolTipLB.setHideDelay(Duration.millis(200));
+		cmbLoaiBan.setTooltip(toolTipLB);
+		
+		Tooltip toolTipDB = new Tooltip("Đặt bàn mới");
+		toolTipDB.setShowDelay(Duration.millis(100));
+		toolTipDB.setHideDelay(Duration.millis(200));
+		btnDatBan.setTooltip(toolTipDB);
+
   }
 
     private void capNhatTrangThaiBanMacDinh() {
