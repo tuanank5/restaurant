@@ -106,14 +106,13 @@ public class DonDatBan_Controller implements Initializable{
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
-    	donDatBanDAO = new DonDatBan_DAOImpl();
 		// TODO Auto-generated method stub
+    	donDatBanDAO = new DonDatBan_DAOImpl();
     	dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> timTheoNgayDatBan());
     	cmbTrangThai.valueProperty().addListener((obs, oldVal, newVal) -> timTheoTrangThai());
         txtKH.textProperty().addListener((obs, oldVal, newVal) -> timTheoTenKH());
 		khoiTaoComboBoxes();
 		setValueTable();
-//		dpNgayDatBan.setValue(LocalDate.now());
         loadData();        
         tblView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             donDangChon = newVal;
@@ -138,8 +137,8 @@ public class DonDatBan_Controller implements Initializable{
         donDatBanDAO = RestaurantApplication.getInstance()
                 .getDatabaseContext()
                 .newEntity_DAO(DonDatBan_DAO.class);
-        kiemTraKhachToiTreVaHuyDon();
         
+        kiemTraKhachToiTreVaHuyDon();      
         cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái đơn đặt bàn!"));
         dpNgayDatBan.setTooltip(new Tooltip("Chọn ngày đặt bàn để lọc theo đơn đặt bàn!"));
         txtKH.setTooltip(new Tooltip("Nhập tên khách hàng để tìm kiếm trong đơn đặt bàn!"));
