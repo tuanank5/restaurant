@@ -118,6 +118,11 @@ public class ADatMon_Controller implements Initializable {
         loadMonCuaBan();
     }
     
+    @FXML
+    private void controller(ActionEvent event) {
+    	
+    }
+    
     private DonDatBan donDatBanHienTai;
 
     public void setDonDatBanHienTai(DonDatBan don) {

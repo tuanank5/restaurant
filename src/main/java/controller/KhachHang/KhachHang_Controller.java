@@ -118,6 +118,11 @@ public class KhachHang_Controller {
         moDialogThemKhachHang();
     }
 
+    @FXML
+    private void controller(ActionEvent event) {
+    	
+    }
+    
     private void moDialogThemKhachHang() {
         try {
             FXMLLoader loader = new FXMLLoader(

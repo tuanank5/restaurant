@@ -55,6 +55,11 @@ public class ADatBanHienTai_Controller implements Initializable {
     private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
     
     private KhachHang aBanHienTai_KH;
+    
+    @FXML
+    private void controller(ActionEvent event) {
+    	
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

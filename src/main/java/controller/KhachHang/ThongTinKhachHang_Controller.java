@@ -33,6 +33,9 @@ public class ThongTinKhachHang_Controller {
 
     @FXML
     private Button btnTroLai;
+    
+    @FXML
+    private Button btnHelp;
 
     @FXML
     private ComboBox<String> comBoxHangKH;
@@ -66,6 +69,7 @@ public class ThongTinKhachHang_Controller {
         Platform.runLater(() -> btnTroLai.requestFocus());
         loadData();
     }
+    
     @FXML
     private void controller(ActionEvent event) {
     	Object source = event.getSource();
@@ -75,6 +79,8 @@ public class ThongTinKhachHang_Controller {
             troLai();
         } else if(source == btnHuy) {
         	MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
+        } else if (source == btnHelp) {
+        	MenuNV_Controller.instance.readyUI("Help/HelpScroll");
         }
     }
     @FXML
