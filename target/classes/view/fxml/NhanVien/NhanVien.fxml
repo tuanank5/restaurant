@@ -34,8 +34,8 @@
                      <center>
                         <AnchorPane prefHeight="75.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm nhân viên" />
-                              <Button fx:id="btnXuatPDF" layoutX="206.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất excel" />
+                              <Button fx:id="btnThemNV" layoutX="50.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" style="-fx-background-color: green;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Thêm nhân viên" textFill="WHITE" />
+                              <Button fx:id="btnXuatPDF" layoutX="206.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="100.0" style="-fx-background-color: blue;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xuất excel" textFill="WHITE" />
                            </children>
                         </AnchorPane>
                      </center>
@@ -55,7 +55,7 @@
                      <right>
                         <AnchorPane prefHeight="75.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnXoa" layoutX="80.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefWidth="50.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" />
+                              <Button fx:id="btnXoa" layoutX="34.0" layoutY="25.0" mnemonicParsing="false" onAction="#controller" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: red;" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xóa" textFill="WHITE" />
                            </children>
                         </AnchorPane>
                      </right>
