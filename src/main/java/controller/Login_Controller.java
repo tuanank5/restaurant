@@ -100,7 +100,7 @@ public class Login_Controller implements Initializable{
                         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         Scene scene;
 
-                        if (chucVu != null && chucVu.equalsIgnoreCase("QL")) {
+                        if (chucVu != null && chucVu.equalsIgnoreCase("Quản lý")) {
                             //Giao diện nhân viên quản lý
                             fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
                             root = fxmlLoader.load();

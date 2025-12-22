@@ -294,7 +294,7 @@ public class ABanHienTai_Controller {
                 BorderPane paneTien = new BorderPane();
                 paneEast.setTop(paneTien);
                 double tongTien = tinhTongTienMon(hoaDon);
-                Label lblTien = new Label(String.format(" %,.0f VND ", tongTien));
+                Label lblTien = new Label(String.format(" %,.0f VND \n", tongTien));
 
                 paneTien.setCenter(lblTien);
 

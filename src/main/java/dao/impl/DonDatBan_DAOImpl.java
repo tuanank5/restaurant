@@ -384,6 +384,32 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
     } //
 	
 	@Override
+    public Map<String, Integer> countDonDatBanTheoNamNVCuThe(int year, String maNV) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Map<String, Integer> demDonDatBan = new HashMap<>();
+        try {
+            String jpql = "SELECT MONTH(HD.donDatBan.ngayGioLapDon), count(HD.donDatBan.maDatBan) " +
+                    "FROM HoaDon HD " +
+                    "WHERE YEAR(HD.donDatBan.ngayGioLapDon) = :year AND HD.nhanVien.maNV = :maNV " +
+                    "GROUP BY MONTH(HD.donDatBan.ngayGioLapDon) " +
+                    "ORDER BY MONTH(HD.donDatBan.ngayGioLapDon)";
+            ;
+            TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+            query.setParameter("year", year);
+            query.setParameter("maNV", maNV);
+
+            for (Object[] result : query.getResultList()) {
+                int thang = (Integer) result[0];
+                Long dem = (Long) result[1];
+                demDonDatBan.put("Tháng " + thang, dem.intValue());
+            }
+        } finally {
+            entityManager.close();
+        }
+        return demDonDatBan;
+    }
+	
+	@Override
     public Map<String, Integer> countDonDatBanTheoNam(int year) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Map<String, Integer> demDonDatBan = new HashMap<>();

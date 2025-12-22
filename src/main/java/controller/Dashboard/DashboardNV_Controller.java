@@ -91,7 +91,7 @@ public class DashboardNV_Controller {
         //UpDate 4 Ô TOP
         List<HoaDon> dsHD = hoaDon_DAO.getHoaDonNVTheoNgayCuThe(dateStart, dateEnd, nhanVien.getMaNV());
         
-        List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
+        List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayNVCuThe(dateStart, dateEnd, nhanVien.getMaNV());
         //END - UpDate 4 Ô TOP
         
         //UpDate Chart

@@ -30,6 +30,8 @@ public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
     
     public Map<String, Integer> countDonDatBanTheoNam(int year);
     
+    Map<String, Integer> countDonDatBanTheoNamNVCuThe(int year, String maNV);
+    
     public Map<LoaiBan, Integer> countLoaiBanTheoThang(int month, int year);
     
     public Map<LoaiBan, Integer> countLoaiBanTheoNam(int year);

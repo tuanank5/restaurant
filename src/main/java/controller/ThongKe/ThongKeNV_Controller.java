@@ -217,7 +217,7 @@ public class ThongKeNV_Controller {
         barChart_DoanhThuNam.setVisible(true);
         areaChart_DoanhThu.setVisible(false);
 
-        Map<String, Double> doanhThuTungThang = hoaDon_DAO.getDoanhThuTheoNam(nam);
+        Map<String, Double> doanhThuTungThang = hoaDon_DAO.getDoanhThuNVTheoNam(nam, nhanVien.getMaNV());
         //UpDate 4 Ô TOP
         List<HoaDon> dsHD = hoaDon_DAO.getHoaDonNVTheoNam(nam, nhanVien.getMaNV());
         List<DonDatBan> dsDDB = donDatBan_DAO.getAllDonDatBanTheoNamNVCuThe(nam, nhanVien.getMaNV());
@@ -231,7 +231,7 @@ public class ThongKeNV_Controller {
         //END - UpDate 4 Ô TOP
         
         //UpDate Chart
-        Map<String, Integer> countDonDatBan = donDatBan_DAO.countDonDatBanTheoNam(nam);
+        Map<String, Integer> countDonDatBan = donDatBan_DAO.countDonDatBanTheoNamNVCuThe(nam, nhanVien.getMaNV());
 
         updateChartDoanhThuTheoNam(doanhThuTungThang);
         updateChartDonDatBanTheoNam(countDonDatBan);
