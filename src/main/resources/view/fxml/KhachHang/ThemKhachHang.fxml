@@ -28,7 +28,7 @@
                <left>
                   <Pane prefHeight="63.0" prefWidth="399.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="lblDanhSachKhachHang" layoutX="14.0" layoutY="25.0" onMouseClicked="#mouseClicked" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh sách khách hàng" />
+                        <Label fx:id="lblDanhSachKhachHang" layoutX="14.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Danh sách khách hàng" />
                         <Label layoutX="169.0" layoutY="25.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="&lt;" />
                         <Label layoutX="190.0" layoutY="25.0" style="-fx-font-weight: bold;" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Thêm khách hàng" />
                      </children>
