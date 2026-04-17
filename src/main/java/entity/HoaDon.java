@@ -11,219 +11,209 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "HoaDon.list",
-        query = "SELECT HD FROM HoaDon HD"
-    ),
-    @NamedQuery(
-        name = "HoaDon.count",
-        query = "SELECT COUNT(HD.maHD) FROM HoaDon HD"
-    ),
-    @NamedQuery(
-        name = "HoaDon.trangThai",
-        query = "SELECT HD FROM HoaDon HD WHERE HD.trangThai = :status"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "HoaDon.list", query = "SELECT HD FROM HoaDon HD"),
+		@NamedQuery(name = "HoaDon.count", query = "SELECT COUNT(HD.maHD) FROM HoaDon HD"),
+		@NamedQuery(name = "HoaDon.trangThai", query = "SELECT HD FROM HoaDon HD WHERE HD.trangThai = :status") })
 public class HoaDon {
 
-    @Id
-    @Column(name = "maHD", nullable = false, length = 20)
-    private String maHD;
+	@Id
+	@Column(name = "maHD", nullable = false, length = 20)
+	private String maHD;
 
-    @Column(name = "ngayLap", nullable = false)
-    private Date ngayLap;
+	@Column(name = "ngayLap", nullable = false)
+	private Date ngayLap;
 
-    @Column(name = "tongTien", nullable = false)
-    private double tongTien;
+	@Column(name = "tongTien", nullable = false)
+	private double tongTien;
 
-    @Column(name = "thue", nullable = false)
-    private double thue;
+	@Column(name = "thue", nullable = false)
+	private double thue;
 
-    @Column(name = "trangThai", nullable = false, length = 50)
-    private String trangThai;
+	@Column(name = "trangThai", nullable = false, length = 50)
+	private String trangThai;
 
-    @Column(name = "kieuThanhToan", nullable = false, length = 50)
-    private String kieuThanhToan;
+	@Column(name = "kieuThanhToan", nullable = false, length = 50)
+	private String kieuThanhToan;
 
-    @Column(name = "tienNhan", nullable = false)
-    private double tienNhan;
+	@Column(name = "tienNhan", nullable = false)
+	private double tienNhan;
 
-    @Column(name = "tienThua", nullable = false)
-    private double tienThua;
+	@Column(name = "tienThua", nullable = false)
+	private double tienThua;
 
-    @ManyToOne
-    @JoinColumn(name = "maKH", referencedColumnName = "maKH", nullable = false)
-    private KhachHang khachHang;
+	@ManyToOne
+	@JoinColumn(name = "maKH", referencedColumnName = "maKH", nullable = false)
+	private KhachHang khachHang;
 
-    @ManyToOne
-    @JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = true)
-    private KhuyenMai khuyenMai;
+	@ManyToOne
+	@JoinColumn(name = "maKM", referencedColumnName = "maKM", nullable = true)
+	private KhuyenMai khuyenMai;
 
-    @ManyToOne
-    @JoinColumn(name = "maNV", referencedColumnName = "maNV", nullable = false)
-    private NhanVien nhanVien;
-    
-    @ManyToOne
-    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
-    private DonDatBan donDatBan;
+	@ManyToOne
+	@JoinColumn(name = "maNV", referencedColumnName = "maNV", nullable = false)
+	private NhanVien nhanVien;
 
-    @ManyToOne
-    @JoinColumn(name = "maCoc", referencedColumnName = "maCoc", nullable = true)
-    private Coc coc;
+	@ManyToOne
+	@JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
+	private DonDatBan donDatBan;
 
-    public HoaDon() {}
+	@ManyToOne
+	@JoinColumn(name = "maCoc", referencedColumnName = "maCoc", nullable = true)
+	private Coc coc;
 
-    public HoaDon(String maHD, Date ngayLap, double tongTien, double thue, String trangThai, String kieuThanhToan,
-                  double tienNhan, double tienThua, KhachHang khachHang, KhuyenMai khuyenMai,
-                  NhanVien nhanVien, DonDatBan donDatBan, Coc coc) {
-        this.maHD = maHD;
-        this.ngayLap = ngayLap;
-        this.tongTien = tongTien;
-        this.thue = thue;
-        this.trangThai = trangThai;
-        this.kieuThanhToan = kieuThanhToan;
-        this.tienNhan = tienNhan;
-        this.tienThua = tienThua;
-        this.khachHang = khachHang;
-        this.khuyenMai = khuyenMai;
-        this.nhanVien = nhanVien;
-        this.donDatBan = donDatBan;
-        this.coc = coc;
-    }
+	public HoaDon() {
+	}
 
-    public String getMaHoaDon() {
-        return maHD;
-    }
+	public HoaDon(String maHD, Date ngayLap, double tongTien, double thue, String trangThai, String kieuThanhToan,
+			double tienNhan, double tienThua, KhachHang khachHang, KhuyenMai khuyenMai, NhanVien nhanVien,
+			DonDatBan donDatBan, Coc coc) {
+		this.maHD = maHD;
+		this.ngayLap = ngayLap;
+		this.tongTien = tongTien;
+		this.thue = thue;
+		this.trangThai = trangThai;
+		this.kieuThanhToan = kieuThanhToan;
+		this.tienNhan = tienNhan;
+		this.tienThua = tienThua;
+		this.khachHang = khachHang;
+		this.khuyenMai = khuyenMai;
+		this.nhanVien = nhanVien;
+		this.donDatBan = donDatBan;
+		this.coc = coc;
+	}
 
-    public void setMaHoaDon(String maHD) {
-        this.maHD = maHD;
-    }
+	public String getMaHoaDon() {
+		return maHD;
+	}
 
-    public Date getNgayLap() {
-        return ngayLap;
-    }
+	public void setMaHoaDon(String maHD) {
+		this.maHD = maHD;
+	}
 
-    public void setNgayLap(Date ngayLap) {
-        this.ngayLap = ngayLap;
-    }
+	public Date getNgayLap() {
+		return ngayLap;
+	}
 
-    public double getTongTien() {
-        return tongTien;
-    }
+	public void setNgayLap(Date ngayLap) {
+		this.ngayLap = ngayLap;
+	}
 
-    public void setTongTien(double tongTien) {
-        this.tongTien = tongTien;
-    }
+	public double getTongTien() {
+		return tongTien;
+	}
 
-    public double getThue() {
-        return thue;
-    }
+	public void setTongTien(double tongTien) {
+		this.tongTien = tongTien;
+	}
 
-    public void setThue(double thue) {
-        this.thue = thue;
-    }
+	public double getThue() {
+		return thue;
+	}
 
-    public String getTrangThai() {
-        return trangThai;
-    }
+	public void setThue(double thue) {
+		this.thue = thue;
+	}
 
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
+	public String getTrangThai() {
+		return trangThai;
+	}
 
-    public String getKieuThanhToan() {
-        return kieuThanhToan;
-    }
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
+	}
 
-    public void setKieuThanhToan(String kieuThanhToan) {
-        this.kieuThanhToan = kieuThanhToan;
-    }
+	public String getKieuThanhToan() {
+		return kieuThanhToan;
+	}
 
-    public double getTienNhan() {
-        return tienNhan;
-    }
+	public void setKieuThanhToan(String kieuThanhToan) {
+		this.kieuThanhToan = kieuThanhToan;
+	}
 
-    public void setTienNhan(double tienNhan) {
-        this.tienNhan = tienNhan;
-    }
+	public double getTienNhan() {
+		return tienNhan;
+	}
 
-    public double getTienThua() {
-        return tienThua;
-    }
+	public void setTienNhan(double tienNhan) {
+		this.tienNhan = tienNhan;
+	}
 
-    public void setTienThua(double tienThua) {
-        this.tienThua = tienThua;
-    }
+	public double getTienThua() {
+		return tienThua;
+	}
 
-    public KhachHang getKhachHang() {
-        return khachHang;
-    }
+	public void setTienThua(double tienThua) {
+		this.tienThua = tienThua;
+	}
 
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
-    }
+	public KhachHang getKhachHang() {
+		return khachHang;
+	}
 
-    public KhuyenMai getKhuyenMai() {
-        return khuyenMai;
-    }
+	public void setKhachHang(KhachHang khachHang) {
+		this.khachHang = khachHang;
+	}
 
-    public void setKhuyenMai(KhuyenMai khuyenMai) {
-        this.khuyenMai = khuyenMai;
-    }
+	public KhuyenMai getKhuyenMai() {
+		return khuyenMai;
+	}
 
-    public NhanVien getNhanVien() {
-        return nhanVien;
-    }
+	public void setKhuyenMai(KhuyenMai khuyenMai) {
+		this.khuyenMai = khuyenMai;
+	}
 
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
-    }
+	public NhanVien getNhanVien() {
+		return nhanVien;
+	}
 
-    public DonDatBan getDonDatBan() {
-        return donDatBan;
-    }
+	public void setNhanVien(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
+	}
 
-    public void setDonDatBan(DonDatBan donDatBan) {
-        this.donDatBan = donDatBan;
-    }
+	public DonDatBan getDonDatBan() {
+		return donDatBan;
+	}
 
-    public Coc getCoc() {
-        return coc;
-    }
+	public void setDonDatBan(DonDatBan donDatBan) {
+		this.donDatBan = donDatBan;
+	}
 
-    public void setCoc(Coc coc) {
-        this.coc = coc;
-    }
+	public Coc getCoc() {
+		return coc;
+	}
 
-    // ======================
-    // HASHCODE, EQUALS, TO_STRING
-    // ======================
+	public void setCoc(Coc coc) {
+		this.coc = coc;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((maHD == null) ? 0 : maHD.hashCode());
-        return result;
-    }
+	// ======================
+	// HASHCODE, EQUALS, TO_STRING
+	// ======================
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        HoaDon other = (HoaDon) obj;
-        if (maHD == null) {
-            if (other.maHD != null)
-                return false;
-        } else if (!maHD.equals(other.maHD))
-            return false;
-        return true;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((maHD == null) ? 0 : maHD.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HoaDon other = (HoaDon) obj;
+		if (maHD == null) {
+			if (other.maHD != null)
+				return false;
+		} else if (!maHD.equals(other.maHD))
+			return false;
+		return true;
+	}
 
 	@Override
 	public String toString() {
@@ -232,5 +222,5 @@ public class HoaDon {
 				+ ", tienThua=" + tienThua + ", khachHang=" + khachHang + ", khuyenMai=" + khuyenMai + ", nhanVien="
 				+ nhanVien + ", donDatBan=" + donDatBan + ", coc=" + coc + "]";
 	}
-    
+
 }

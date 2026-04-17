@@ -37,16 +37,19 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class MenuNV_Controller {
-	
+
 	public static HoaDon aBanHienTai_HD;
+
 	public static int getSoLuongKhach() {
 		return soLuongKhach;
 	}
+
 	public static void setSoLuongKhach(int soLuongKhach) {
 		MenuNV_Controller.soLuongKhach = soLuongKhach;
 	}
+
 	public static int soLuongKhach = 0;
-	
+
 	public static MenuNV_Controller instance;
 	public static Map<entity.MonAn, Integer> dsMonAnDangChon;
 	public static String tongTienSauVAT;
@@ -55,166 +58,159 @@ public class MenuNV_Controller {
 	public static KhachHang khachHangDangChon;
 	public static DonDatBan donDatBanDangDoi;
 	public static ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
-	
+
 	// Lưu món ăn tạm theo từng bàn
 	public static Map<String, Map<MonAn, Integer>> dsMonTheoBan = new HashMap<>();
 
 	public static TaiKhoan taiKhoan;
 
 	@FXML
-    private BorderPane borderPane;
+	private BorderPane borderPane;
 
-    @FXML
-    private TextField txtThongTin;
-    
-    @FXML
-    private Label lblClock;
-    
-    @FXML
-    private void initialize() {
-        instance = this; // Gán instance khi FXML được load
-        Timeline timeline = new Timeline(
-        	    new KeyFrame(Duration.seconds(1), e -> {
-        	    	lblClock.setText(LocalDateTime.now()
-        	                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        	    })
-        	);
-        	timeline.setCycleCount(Timeline.INDEFINITE);
-        	timeline.play();
-    }   
-    
-    public static MenuNV_Controller getInstance() {
-        return instance;
-    }
+	@FXML
+	private TextField txtThongTin;
 
-    
-	public FXMLLoader readyUI(String ui) {
-        Parent root = null;
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        try {
-            fxmlLoader.setLocation(getClass().getResource("/view/fxml/" + ui + ".fxml"));
-            root = fxmlLoader.load();
-            borderPane.setCenter(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return fxmlLoader;
-    }
-	
-	public void setThongTin(TaiKhoan taiKhoan) {
-	    this.taiKhoan = taiKhoan;
-        String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
-        txtThongTin.setText(hoTen);
-        dashBoard();
+	@FXML
+	private Label lblClock;
+
+	@FXML
+	private void initialize() {
+		instance = this; // Gán instance khi FXML được load
+		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+			lblClock.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+		}));
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.play();
 	}
-	
+
+	public static MenuNV_Controller getInstance() {
+		return instance;
+	}
+
+	public FXMLLoader readyUI(String ui) {
+		Parent root = null;
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		try {
+			fxmlLoader.setLocation(getClass().getResource("/view/fxml/" + ui + ".fxml"));
+			root = fxmlLoader.load();
+			borderPane.setCenter(root);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return fxmlLoader;
+	}
+
+	public void setThongTin(TaiKhoan taiKhoan) {
+		this.taiKhoan = taiKhoan;
+		String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
+		txtThongTin.setText(hoTen);
+		dashBoard();
+	}
+
 	@FXML
 	private void btnDangXuat(ActionEvent event) {
-        Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
-            return;
-        }
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
-            // Cập nhật lại ngày giờ đăng nhập
-        	LocalDate localDate = LocalDate.now();
-        	Date dateNow = Date.valueOf(localDate);
-        	
-            taiKhoan.setNgayDangXuat(dateNow);
-            RestaurantApplication.getInstance()
-                    .getDatabaseContext()
-                    .newEntity_DAO(TaiKhoan_DAO.class)
-                    .capNhat(taiKhoan);
-            
-            try {
-                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                currentStage.close();
-                
-                FXMLLoader fxmlLoader = new FXMLLoader(
-            			getClass().getResource("/view/fxml/Login.fxml"));
-                Parent root = fxmlLoader.load();
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
-                
-                stage.setTitle("Đăng Nhập");
-                stage.setScene(scene);
-                stage.setMaximized(true);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-	
+		Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn đăng xuất?");
+		if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+			return;
+		}
+		if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
+			// Cập nhật lại ngày giờ đăng nhập
+			LocalDate localDate = LocalDate.now();
+			Date dateNow = Date.valueOf(localDate);
+
+			taiKhoan.setNgayDangXuat(dateNow);
+			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
+					.capNhat(taiKhoan);
+
+			try {
+				Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+				currentStage.close();
+
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Login.fxml"));
+				Parent root = fxmlLoader.load();
+				Stage stage = new Stage();
+				Scene scene = new Scene(root);
+
+				stage.setTitle("Đăng Nhập");
+				stage.setScene(scene);
+				stage.setMaximized(true);
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private Optional<ButtonType> showAlertConfirm(String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(content);
-        ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-        ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-        ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-        return alert.showAndWait();
-    }
-	
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(content);
+		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
+		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
+		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
+		return alert.showAndWait();
+	}
+
 	public void dashBoard() {
 		readyUI("Dashboard/DashboardNVScroll");
 	}
-	
+
 	public void refreshBanUI() {
 		if (banDangChon != null) {
-	        for (Ban b : danhSachBan) {
-	            if (b.getMaBan().equals(banDangChon.getMaBan())) {
-	                b.setTrangThai("Trống");
-	                break;
-	            }
-	        }
-	    }
-	    // Nếu DatBan đang hiển thị, reload UI để cập nhật trạng thái bàn
-	    readyUI("DatBan/aBanHienTai");
+			for (Ban b : danhSachBan) {
+				if (b.getMaBan().equals(banDangChon.getMaBan())) {
+					b.setTrangThai("Trống");
+					break;
+				}
+			}
+		}
+		// Nếu DatBan đang hiển thị, reload UI để cập nhật trạng thái bàn
+		readyUI("DatBan/aBanHienTai");
 	}
-	
+
 	@FXML
-    void btnDashboard(ActionEvent event) {
+	void btnDashboard(ActionEvent event) {
 		readyUI("Dashboard/DashboardNVScroll");
-    }
-	
+	}
+
 	@FXML
-    void btnCaLam(ActionEvent event) {
+	void btnCaLam(ActionEvent event) {
 		readyUI("KetCa/KetCa");
-    }
+	}
 
-    @FXML
-    void btnDatBan(ActionEvent event) {
-    	readyUI("DatBan/aBanHienTai");
-    }
+	@FXML
+	void btnDatBan(ActionEvent event) {
+		readyUI("DatBan/aBanHienTai");
+	}
 
-    @FXML
-    void btnDatBanTruoc(ActionEvent event) {
-    	readyUI("DatBan/DonDatBan");
-    }
+	@FXML
+	void btnDatBanTruoc(ActionEvent event) {
+		readyUI("DatBan/DonDatBan");
+	}
 
-    @FXML
-    void btnDoiMatKhau(ActionEvent event) {
-    	readyUI("DoiMatKhauTA");
-    }
+	@FXML
+	void btnDoiMatKhau(ActionEvent event) {
+		readyUI("DoiMatKhauTA");
+	}
 
-    @FXML
-    void btnHoaDon(ActionEvent event) {
-    	readyUI("HoaDon/HoaDonTA");
-    }
+	@FXML
+	void btnHoaDon(ActionEvent event) {
+		readyUI("HoaDon/HoaDonTA");
+	}
 
-    @FXML
-    void btnKhachHang(ActionEvent event) {
-    	readyUI("KhachHang/KhachHang");
-    }
+	@FXML
+	void btnKhachHang(ActionEvent event) {
+		readyUI("KhachHang/KhachHang");
+	}
 
-    @FXML
-    void btnMonAn(ActionEvent event) {
-    	readyUI("MonAn/MonAn");
-    }
-    
-    @FXML
-    void btnThongKe(ActionEvent event) {
-    	readyUI("ThongKe/ThongKeNVScroll");
-    }
+	@FXML
+	void btnMonAn(ActionEvent event) {
+		readyUI("MonAn/MonAn");
+	}
+
+	@FXML
+	void btnThongKe(ActionEvent event) {
+		readyUI("ThongKe/ThongKeNVScroll");
+	}
 }

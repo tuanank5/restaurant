@@ -45,374 +45,363 @@ import service.EmailService;
 import util.AutoIDUitl;
 import util.ComponentUtil;
 
-public class ThemNhanVien_Controller implements Initializable{
+public class ThemNhanVien_Controller implements Initializable {
 	@FXML
-    private BorderPane borderPane;
-	
+	private BorderPane borderPane;
+
 	@FXML
-    private Button btnHuy;
+	private Button btnHuy;
 
-    @FXML
-    private Button btnLuu;
+	@FXML
+	private Button btnLuu;
 
-    @FXML
-    private TextField txtMaNV;
+	@FXML
+	private TextField txtMaNV;
 
-    @FXML
-    private Button btnQuayLai;
+	@FXML
+	private Button btnQuayLai;
 
-    @FXML
-    private ComboBox<String> cmbChucVu;
-    
-    @FXML
-    private Label lblDanhSachNhanVien;
+	@FXML
+	private ComboBox<String> cmbChucVu;
 
-    @FXML
-    private ComboBox<String> cmbGioiTinh;
+	@FXML
+	private Label lblDanhSachNhanVien;
 
-    @FXML
-    private TableColumn<NhanVien, String> tblChucVu;
+	@FXML
+	private ComboBox<String> cmbGioiTinh;
 
-    @FXML
-    private TableColumn<NhanVien, String> tblDiaChi;
+	@FXML
+	private TableColumn<NhanVien, String> tblChucVu;
 
-    @FXML
-    private TableColumn<NhanVien, String> tblEmail;
+	@FXML
+	private TableColumn<NhanVien, String> tblDiaChi;
 
-    @FXML
-    private TableColumn<NhanVien, String> tblGioiTinh;
+	@FXML
+	private TableColumn<NhanVien, String> tblEmail;
 
-    @FXML
-    private TableColumn<NhanVien, String> tblMaNV;
+	@FXML
+	private TableColumn<NhanVien, String> tblGioiTinh;
 
-    @FXML
-    private TableColumn<NhanVien, Date> tblNamSinh;
-    
-    @FXML
-    private DatePicker txtNgayVaoLam;
+	@FXML
+	private TableColumn<NhanVien, String> tblMaNV;
 
-    @FXML
-    private TableColumn<NhanVien, String> tblTenNV;
+	@FXML
+	private TableColumn<NhanVien, Date> tblNamSinh;
 
-    @FXML
-    private TableView<NhanVien> tblThemNV;
+	@FXML
+	private DatePicker txtNgayVaoLam;
 
-    @FXML
-    private TableColumn<NhanVien, String> tblTrangThai;
+	@FXML
+	private TableColumn<NhanVien, String> tblTenNV;
 
-    @FXML
-    private TextField txtDiaChi;
+	@FXML
+	private TableView<NhanVien> tblThemNV;
 
-    @FXML
-    private TextField txtEmail;
+	@FXML
+	private TableColumn<NhanVien, String> tblTrangThai;
 
-    @FXML
-    private DatePicker txtNamSinh;
+	@FXML
+	private TextField txtDiaChi;
 
-    @FXML
-    private TextField txtTenNV;
-    
-    @FXML
-    private HBox hBox;
-    
-    private NhanVien nhanVien;
-    private ObservableList<NhanVien> danhSachNhanVien = FXCollections.observableArrayList();
-    private List<NhanVien> danhSachNhanVienDB;
-    private final int LIMIT = 15;
-    private String status = "all";
-    
-    @Override
+	@FXML
+	private TextField txtEmail;
+
+	@FXML
+	private DatePicker txtNamSinh;
+
+	@FXML
+	private TextField txtTenNV;
+
+	@FXML
+	private HBox hBox;
+
+	private NhanVien nhanVien;
+	private ObservableList<NhanVien> danhSachNhanVien = FXCollections.observableArrayList();
+	private List<NhanVien> danhSachNhanVienDB;
+	private final int LIMIT = 15;
+	private String status = "all";
+
+	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-    	setValueTable();
+		setValueTable();
 		loadData();
 		loadDataNV();
 		hienThiMaNhanVienMoi();
 		resetAllField();
 		phanTrang(danhSachNhanVienDB.size());
 		borderPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
-	        if (newScene != null) {
-	            newScene.setOnKeyPressed(event -> {
-	                if (event.getCode() == KeyCode.ESCAPE) {
-	                    MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
-	                } else if (event.isControlDown() && event.getCode() == KeyCode.S) {
-	                    luuLai();
-	                }
-	            });
-	        }
-	    });
+			if (newScene != null) {
+				newScene.setOnKeyPressed(event -> {
+					if (event.getCode() == KeyCode.ESCAPE) {
+						MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+					} else if (event.isControlDown() && event.getCode() == KeyCode.S) {
+						luuLai();
+					}
+				});
+			}
+		});
 	}
-    @FXML
-    void controller(ActionEvent event) {
-    	Object src = event.getSource();
-    	if (src == btnQuayLai) {
-    	    MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
-    	}else if(src ==  btnLuu) {
-    		luuLai();
-    	} else if(src == btnHuy) {
-    		resetAllField();
-    	}
-    }
-    
-    @FXML
-    void mouseClicked(MouseEvent event) {
-        Object source = event.getSource();
-        if (event.getSource() == lblDanhSachNhanVien) {
-            MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
-        }
-    }
-    
-    @FXML
-    void keyPressed(KeyEvent event) throws IOException {
-        Object src = event.getSource();
-        if (src == borderPane) {
-            if (event.isControlDown() && event.getCode() == KeyCode.S) {
-                luuLai();
-            } else if (event.getCode() == KeyCode.ESCAPE) {
-            	if (event.getSource() == lblDanhSachNhanVien) {
-                    MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
-                }
-            }
-        }
-    }
-    
-    private NhanVien getNhanVienNew() {
-        String tenNV = txtTenNV.getText().trim();
-        String email = txtEmail.getText().trim();
-        LocalDate namSinh = txtNamSinh.getValue();
-        String diaChi = txtDiaChi.getText().trim();
-        String gioiTinhStr = cmbGioiTinh.getValue();
-        String chucVu = cmbChucVu.getValue();
-        LocalDate ngayVaoLam = txtNgayVaoLam.getValue();
 
-        DatabaseContext db = RestaurantApplication
-        		.getInstance()
-        		.getDatabaseContext();
+	@FXML
+	void controller(ActionEvent event) {
+		Object src = event.getSource();
+		if (src == btnQuayLai) {
+			MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+		} else if (src == btnLuu) {
+			luuLai();
+		} else if (src == btnHuy) {
+			resetAllField();
+		}
+	}
 
-        if (tenNV.isEmpty()) {
-            showAlert("Cảnh báo", "Vui lòng nhập tên nhân viên!", Alert.AlertType.WARNING);
-            txtTenNV.requestFocus();
-            return null;
-        }
+	@FXML
+	void mouseClicked(MouseEvent event) {
+		Object source = event.getSource();
+		if (event.getSource() == lblDanhSachNhanVien) {
+			MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+		}
+	}
 
-        if (email.isEmpty() ||
-            !email.matches("^[a-zA-Z][a-zA-Z0-9]+@[a-zA-Z]+(\\.[a-zA-Z]+)+$")) {
-            showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
-            txtEmail.requestFocus();
-            return null;
-        }
+	@FXML
+	void keyPressed(KeyEvent event) throws IOException {
+		Object src = event.getSource();
+		if (src == borderPane) {
+			if (event.isControlDown() && event.getCode() == KeyCode.S) {
+				luuLai();
+			} else if (event.getCode() == KeyCode.ESCAPE) {
+				if (event.getSource() == lblDanhSachNhanVien) {
+					MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+				}
+			}
+		}
+	}
 
-        Map<String, Object> filter = new HashMap<>();
-        filter.put("email", email);
-        if (!db.newEntity_DAO(NhanVien_DAO.class)
-                .getDanhSach(NhanVien.class, filter).isEmpty()) {
-            showAlert("Cảnh báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
-            return null;
-        }
+	private NhanVien getNhanVienNew() {
+		String tenNV = txtTenNV.getText().trim();
+		String email = txtEmail.getText().trim();
+		LocalDate namSinh = txtNamSinh.getValue();
+		String diaChi = txtDiaChi.getText().trim();
+		String gioiTinhStr = cmbGioiTinh.getValue();
+		String chucVu = cmbChucVu.getValue();
+		LocalDate ngayVaoLam = txtNgayVaoLam.getValue();
 
-        if (namSinh == null || Period.between(namSinh, LocalDate.now()).getYears() < 18) {
-            showAlert("Cảnh báo", "Nhân viên phải đủ 18 tuổi!", Alert.AlertType.WARNING);
-            return null;
-        }
+		DatabaseContext db = RestaurantApplication.getInstance().getDatabaseContext();
 
-        if (diaChi.isEmpty()) {
-            showAlert("Cảnh báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
-            return null;
-        }
+		if (tenNV.isEmpty()) {
+			showAlert("Cảnh báo", "Vui lòng nhập tên nhân viên!", Alert.AlertType.WARNING);
+			txtTenNV.requestFocus();
+			return null;
+		}
 
-        if (gioiTinhStr == null || chucVu == null) {
-            showAlert("Cảnh báo", "Vui lòng chọn giới tính và chức vụ!", Alert.AlertType.WARNING);
-            return null;
-        }
-        
-        if (ngayVaoLam == null) {
-            showAlert("Cảnh báo", "Vui lòng chọn ngày vào làm!", Alert.AlertType.WARNING);
-            return null;
-        }
+		if (email.isEmpty() || !email.matches("^[a-zA-Z][a-zA-Z0-9]+@[a-zA-Z]+(\\.[a-zA-Z]+)+$")) {
+			showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
+			txtEmail.requestFocus();
+			return null;
+		}
 
-        NhanVien nv = new NhanVien();
-        nv.setMaNV(txtMaNV.getText());
-        nv.setTenNV(tenNV);
-        nv.setNamSinh(Date.valueOf(namSinh));
-        nv.setGioiTinh(gioiTinhStr.equals("Nữ"));
-        nv.setEmail(email);
-        nv.setDiaChi(diaChi);
-        nv.setChucVu(chucVu);
-        nv.setTrangThai(true);
-        nv.setNgayVaoLam(Date.valueOf(ngayVaoLam));
-        return nv;
-    }
-    
-    public void luuLai(){
-        NhanVien nvNew = getNhanVienNew();
-        try {
-            if (nvNew != null) {
-                DatabaseContext db = RestaurantApplication.getInstance().getDatabaseContext();
+		Map<String, Object> filter = new HashMap<>();
+		filter.put("email", email);
+		if (!db.newEntity_DAO(NhanVien_DAO.class).getDanhSach(NhanVien.class, filter).isEmpty()) {
+			showAlert("Cảnh báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
+			return null;
+		}
 
-                boolean check = db
-                        .newEntity_DAO(NhanVien_DAO.class)
-                        .them(nvNew);
+		if (namSinh == null || Period.between(namSinh, LocalDate.now()).getYears() < 18) {
+			showAlert("Cảnh báo", "Nhân viên phải đủ 18 tuổi!", Alert.AlertType.WARNING);
+			return null;
+		}
 
-                if (check) {
-                    TaiKhoan_DAO tkDAO = new TaiKhoan_DAOImpl();
+		if (diaChi.isEmpty()) {
+			showAlert("Cảnh báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
+			return null;
+		}
 
-                    String chucVu = nvNew.getChucVu();
-                    int soThuTu = tkDAO.demSoTaiKhoanTheoChucVu(chucVu) + 1;
+		if (gioiTinhStr == null || chucVu == null) {
+			showAlert("Cảnh báo", "Vui lòng chọn giới tính và chức vụ!", Alert.AlertType.WARNING);
+			return null;
+		}
 
-                    String username;
-                    String password;
+		if (ngayVaoLam == null) {
+			showAlert("Cảnh báo", "Vui lòng chọn ngày vào làm!", Alert.AlertType.WARNING);
+			return null;
+		}
 
-                    if (chucVu.equalsIgnoreCase("Quản lý")) {
-                        username = String.format("QL%04d", soThuTu);
-                        password = "ql_pass" + String.format("%02d", soThuTu);
-                    } else {
-                        username = String.format("NV%04d", soThuTu);
-                        password = "nv_pass" + String.format("%02d", soThuTu);
-                    }
+		NhanVien nv = new NhanVien();
+		nv.setMaNV(txtMaNV.getText());
+		nv.setTenNV(tenNV);
+		nv.setNamSinh(Date.valueOf(namSinh));
+		nv.setGioiTinh(gioiTinhStr.equals("Nữ"));
+		nv.setEmail(email);
+		nv.setDiaChi(diaChi);
+		nv.setChucVu(chucVu);
+		nv.setTrangThai(true);
+		nv.setNgayVaoLam(Date.valueOf(ngayVaoLam));
+		return nv;
+	}
 
-                    TaiKhoan tk = new TaiKhoan();
-                    tk.setMaTaiKhoan(AutoIDUitl.sinhMaTaiKhoan());
-                    tk.setTenTaiKhoan(username);
-                    tk.setMatKhau(password);
-                    tk.setNhanVien(nvNew);
-                    tkDAO.themTaiKhoan(tk);
+	public void luuLai() {
+		NhanVien nvNew = getNhanVienNew();
+		try {
+			if (nvNew != null) {
+				DatabaseContext db = RestaurantApplication.getInstance().getDatabaseContext();
 
-                    String noiDungMail =
-                            "Chào " + nvNew.getTenNV() + ",\n\n"
-                            + "Tài khoản đăng nhập hệ thống của bạn:\n"
-                            + "Tên đăng nhập: " + username + "\n"
-                            + "Mật khẩu: " + password + "\n\n"
-                            + "Vui lòng đổi mật khẩu sau khi đăng nhập.";
+				boolean check = db.newEntity_DAO(NhanVien_DAO.class).them(nvNew);
 
-                    EmailService.sendEmail(nvNew.getEmail(),"Thông tin tài khoản nhân viên", noiDungMail);
-                    showAlert("Thông báo",
-                            "Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.", Alert.AlertType.INFORMATION);
+				if (check) {
+					TaiKhoan_DAO tkDAO = new TaiKhoan_DAOImpl();
 
-                    this.nhanVien = nvNew;
-                    if (!lblDanhSachNhanVien.getText().equalsIgnoreCase("Danh Sách Nhân Viên")) {
-                        MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
-                    }
-                    resetAllField();
-                } else {
-                    showAlert("Thông báo", "Thêm nhân viên thất bại!", Alert.AlertType.WARNING);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Lỗi", "Xảy ra lỗi khi thêm nhân viên!", Alert.AlertType.ERROR);
-        }
-    }
-    
-    private void hienThiMaNhanVienMoi() {
-        String maNV = util.AutoIDUitl.sinhMaNhanVien();
-        txtMaNV.setText(maNV);
-        txtMaNV.setEditable(false);
-    }
+					String chucVu = nvNew.getChucVu();
+					int soThuTu = tkDAO.demSoTaiKhoanTheoChucVu(chucVu) + 1;
 
-    
-    private void resetAllField() {
-        txtTenNV.setText("");
-        txtEmail.setText("");
-        txtNamSinh.setValue(null);
-        txtDiaChi.setText("");
-        cmbGioiTinh.getSelectionModel().selectFirst();
-        cmbChucVu.getSelectionModel().selectFirst();
-    }
-    
-    private void loadDataNV() {
-        cmbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ"));
-        cmbGioiTinh.getSelectionModel().selectFirst();
-        cmbChucVu.setItems(FXCollections.observableArrayList("Nhân viên", "Quản lý"));
-        cmbChucVu.getSelectionModel().selectFirst();
-    }
+					String username;
+					String password;
 
-    private void loadData() {
-        Map<String, Object> filter = new HashMap<>();
-        filter.put("trangThai", true);
-        danhSachNhanVienDB = RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(NhanVien_DAO.class)
-                .getDanhSach(NhanVien.class, filter);
-        List<NhanVien> topLimitNhanVien = danhSachNhanVienDB.subList(0, Math.min(danhSachNhanVienDB.size(), LIMIT));
-        danhSachNhanVien.addAll(topLimitNhanVien);
-        tblThemNV.setItems(danhSachNhanVien);
-    }
-    
-    private void setValueTable() {
-    	tblMaNV.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getMaNV()));
-	    tblTenNV.setCellValueFactory(cell ->  new javafx.beans.property.SimpleStringProperty(cell.getValue().getTenNV()));
-	    tblEmail.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmail()));
-	    tblDiaChi.setCellValueFactory(cell ->  new javafx.beans.property.SimpleStringProperty(cell.getValue().getDiaChi()));
-	    tblChucVu.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getChucVu()));
-	    
-	    tblGioiTinh.setCellValueFactory(cell -> 
-	        new javafx.beans.property.SimpleStringProperty(
-	            cell.getValue().isGioiTinh() ? "Nữ" : "Nam"
-	        )
-	    );
-	    
-	    tblTrangThai.setCellValueFactory(cell -> 
-	        new javafx.beans.property.SimpleStringProperty(
-	            cell.getValue().isTrangThai() ? "Đang làm" : "Nghỉ"
-	        ));
-	    tblNamSinh.setCellValueFactory(cell ->new javafx.beans.property.SimpleObjectProperty<>(cell.getValue().getNamSinh()));
-    }
-    
+					if (chucVu.equalsIgnoreCase("Quản lý")) {
+						username = String.format("QL%04d", soThuTu);
+						password = "ql_pass" + String.format("%02d", soThuTu);
+					} else {
+						username = String.format("NV%04d", soThuTu);
+						password = "nv_pass" + String.format("%02d", soThuTu);
+					}
+
+					TaiKhoan tk = new TaiKhoan();
+					tk.setMaTaiKhoan(AutoIDUitl.sinhMaTaiKhoan());
+					tk.setTenTaiKhoan(username);
+					tk.setMatKhau(password);
+					tk.setNhanVien(nvNew);
+					tkDAO.themTaiKhoan(tk);
+
+					String noiDungMail = "Chào " + nvNew.getTenNV() + ",\n\n"
+							+ "Tài khoản đăng nhập hệ thống của bạn:\n" + "Tên đăng nhập: " + username + "\n"
+							+ "Mật khẩu: " + password + "\n\n" + "Vui lòng đổi mật khẩu sau khi đăng nhập.";
+
+					EmailService.sendEmail(nvNew.getEmail(), "Thông tin tài khoản nhân viên", noiDungMail);
+					showAlert("Thông báo", "Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.",
+							Alert.AlertType.INFORMATION);
+
+					this.nhanVien = nvNew;
+					if (!lblDanhSachNhanVien.getText().equalsIgnoreCase("Danh Sách Nhân Viên")) {
+						MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
+					}
+					resetAllField();
+				} else {
+					showAlert("Thông báo", "Thêm nhân viên thất bại!", Alert.AlertType.WARNING);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			showAlert("Lỗi", "Xảy ra lỗi khi thêm nhân viên!", Alert.AlertType.ERROR);
+		}
+	}
+
+	private void hienThiMaNhanVienMoi() {
+		String maNV = util.AutoIDUitl.sinhMaNhanVien();
+		txtMaNV.setText(maNV);
+		txtMaNV.setEditable(false);
+	}
+
+	private void resetAllField() {
+		txtTenNV.setText("");
+		txtEmail.setText("");
+		txtNamSinh.setValue(null);
+		txtDiaChi.setText("");
+		cmbGioiTinh.getSelectionModel().selectFirst();
+		cmbChucVu.getSelectionModel().selectFirst();
+	}
+
+	private void loadDataNV() {
+		cmbGioiTinh.setItems(FXCollections.observableArrayList("Nam", "Nữ"));
+		cmbGioiTinh.getSelectionModel().selectFirst();
+		cmbChucVu.setItems(FXCollections.observableArrayList("Nhân viên", "Quản lý"));
+		cmbChucVu.getSelectionModel().selectFirst();
+	}
+
+	private void loadData() {
+		Map<String, Object> filter = new HashMap<>();
+		filter.put("trangThai", true);
+		danhSachNhanVienDB = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class)
+				.getDanhSach(NhanVien.class, filter);
+		List<NhanVien> topLimitNhanVien = danhSachNhanVienDB.subList(0, Math.min(danhSachNhanVienDB.size(), LIMIT));
+		danhSachNhanVien.addAll(topLimitNhanVien);
+		tblThemNV.setItems(danhSachNhanVien);
+	}
+
+	private void setValueTable() {
+		tblMaNV.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getMaNV()));
+		tblTenNV.setCellValueFactory(
+				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getTenNV()));
+		tblEmail.setCellValueFactory(
+				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmail()));
+		tblDiaChi.setCellValueFactory(
+				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getDiaChi()));
+		tblChucVu.setCellValueFactory(
+				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getChucVu()));
+
+		tblGioiTinh.setCellValueFactory(
+				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().isGioiTinh() ? "Nữ" : "Nam"));
+
+		tblTrangThai.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
+				cell.getValue().isTrangThai() ? "Đang làm" : "Nghỉ"));
+		tblNamSinh.setCellValueFactory(
+				cell -> new javafx.beans.property.SimpleObjectProperty<>(cell.getValue().getNamSinh()));
+	}
+
 	private void loadData(List<NhanVien> nhanViens) {
-        danhSachNhanVien.clear();
-        danhSachNhanVien.addAll(nhanViens);
-        tblThemNV.setItems(danhSachNhanVien);
-    }
-	
+		danhSachNhanVien.clear();
+		danhSachNhanVien.addAll(nhanViens);
+		tblThemNV.setItems(danhSachNhanVien);
+	}
+
 	private void phanTrang(int soLuongBanGhi) {
-    	hBox.getChildren().clear();
-        loadCountPage(soLuongBanGhi);
-        // Code bắt sự kiện
-        hBox.getChildren().forEach(button -> {
-            ((Button)button).setOnAction(event -> {
-                String value = ((Button) button).getText();
-                int skip = (Integer.parseInt(value) - 1) * LIMIT;
-                // Giới hạn phần tử cuối cùng để tránh vượt quá kích thước của danh sách
-                if (status.equalsIgnoreCase("all")) {
-                    int endIndex = Math.min(skip + LIMIT, danhSachNhanVienDB.size());
-                    List<NhanVien> nhanViens = danhSachNhanVienDB.subList(skip, endIndex);
-                    loadData(nhanViens);
-                } else {
-                    List<NhanVien> nhanViens = danhSachNhanVienDB.stream()
-                            .filter(nhanVien -> nhanVien.isTrangThai() == (status.equalsIgnoreCase("active")))
-                            .collect(Collectors.toCollection(ArrayList::new));
-                    int endIndex = Math.min(skip + LIMIT, nhanViens.size());
-                    nhanViens = nhanViens.subList(skip, endIndex);
-                    loadData(nhanViens);
-                }
-            });
-        });
-    }
-	
+		hBox.getChildren().clear();
+		loadCountPage(soLuongBanGhi);
+		// Code bắt sự kiện
+		hBox.getChildren().forEach(button -> {
+			((Button) button).setOnAction(event -> {
+				String value = ((Button) button).getText();
+				int skip = (Integer.parseInt(value) - 1) * LIMIT;
+				// Giới hạn phần tử cuối cùng để tránh vượt quá kích thước của danh sách
+				if (status.equalsIgnoreCase("all")) {
+					int endIndex = Math.min(skip + LIMIT, danhSachNhanVienDB.size());
+					List<NhanVien> nhanViens = danhSachNhanVienDB.subList(skip, endIndex);
+					loadData(nhanViens);
+				} else {
+					List<NhanVien> nhanViens = danhSachNhanVienDB.stream()
+							.filter(nhanVien -> nhanVien.isTrangThai() == (status.equalsIgnoreCase("active")))
+							.collect(Collectors.toCollection(ArrayList::new));
+					int endIndex = Math.min(skip + LIMIT, nhanViens.size());
+					nhanViens = nhanViens.subList(skip, endIndex);
+					loadData(nhanViens);
+				}
+			});
+		});
+	}
+
 	private void loadCountPage(int soLuongBanGhi) {
-        int soLuongTrang = (int) Math.ceil((double) soLuongBanGhi / LIMIT);
-        for (int i = 0; i < soLuongTrang; i++) {
-            Button button = ComponentUtil.createButton(String.valueOf(i + 1), 14);
-            hBox.getChildren().add(button);
-        }
-    }
-    
-    private void showAlert(String title, String content, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(content);
-        alert.show();
-    }
-    
-    private Optional<ButtonType> showAlertConfirm(String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(content);
-        ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-        ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-        ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-        return alert.showAndWait();
-    }
+		int soLuongTrang = (int) Math.ceil((double) soLuongBanGhi / LIMIT);
+		for (int i = 0; i < soLuongTrang; i++) {
+			Button button = ComponentUtil.createButton(String.valueOf(i + 1), 14);
+			hBox.getChildren().add(button);
+		}
+	}
+
+	private void showAlert(String title, String content, Alert.AlertType alertType) {
+		Alert alert = new Alert(alertType);
+		alert.setTitle(title);
+		alert.setHeaderText(content);
+		alert.show();
+	}
+
+	private Optional<ButtonType> showAlertConfirm(String content) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(content);
+		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
+		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
+		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
+		return alert.showAndWait();
+	}
 
 }

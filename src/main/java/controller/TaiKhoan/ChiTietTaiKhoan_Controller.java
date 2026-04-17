@@ -11,83 +11,67 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class ChiTietTaiKhoan_Controller implements Initializable{
+public class ChiTietTaiKhoan_Controller implements Initializable {
 	@FXML
-    private Label lblDanhSachTaiKhoan;
+	private Label lblDanhSachTaiKhoan;
 
-    @FXML
-    private TextField txtChucVu;
+	@FXML
+	private TextField txtChucVu;
 
-    @FXML
-    private TextField txtMaNV;
+	@FXML
+	private TextField txtMaNV;
 
-    @FXML
-    private TextField txtMaTK;
+	@FXML
+	private TextField txtMaTK;
 
-    @FXML
-    private TextField txtNgayDN;
+	@FXML
+	private TextField txtNgayDN;
 
-    @FXML
-    private TextField txtNgayDX;
+	@FXML
+	private TextField txtNgayDX;
 
-    @FXML
-    private TextField txtNgaySuaDoi;
+	@FXML
+	private TextField txtNgaySuaDoi;
 
-    @FXML
-    private TextField txtTenNV;
+	@FXML
+	private TextField txtTenNV;
 
-    @FXML
-    private TextField txtTenTK;
-    
-    private TaiKhoan taiKhoan;
+	@FXML
+	private TextField txtTenTK;
 
+	private TaiKhoan taiKhoan;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 	}
-	
+
 	@FXML
-    void btnQuayLai(ActionEvent event) {
+	void btnQuayLai(ActionEvent event) {
 		MenuNVQL_Controller.instance.readyUI("TaiKhoan/TaiKhoanTA");
-    }
-	
-	public void setTaiKhoan(TaiKhoan taiKhoan) {
-	    this.taiKhoan = taiKhoan;
-	    hienThiThongTin();
 	}
-	
+
+	public void setTaiKhoan(TaiKhoan taiKhoan) {
+		this.taiKhoan = taiKhoan;
+		hienThiThongTin();
+	}
+
 	private void hienThiThongTin() {
-	    if (taiKhoan == null) return;
-	    txtMaTK.setText(taiKhoan.getMaTaiKhoan());
-	    txtTenTK.setText(taiKhoan.getTenTaiKhoan());
+		if (taiKhoan == null)
+			return;
+		txtMaTK.setText(taiKhoan.getMaTaiKhoan());
+		txtTenTK.setText(taiKhoan.getTenTaiKhoan());
 
-	    txtNgayDN.setText(
-	        taiKhoan.getNgayDangNhap() != null
-	            ? taiKhoan.getNgayDangNhap().toString()
-	            : ""
-	    );
+		txtNgayDN.setText(taiKhoan.getNgayDangNhap() != null ? taiKhoan.getNgayDangNhap().toString() : "");
 
-	    txtNgayDX.setText(
-	        taiKhoan.getNgayDangXuat() != null
-	            ? taiKhoan.getNgayDangXuat().toString()
-	            : ""
-	    );
+		txtNgayDX.setText(taiKhoan.getNgayDangXuat() != null ? taiKhoan.getNgayDangXuat().toString() : "");
 
-	    txtNgaySuaDoi.setText(
-	        taiKhoan.getNgaySuaDoi() != null
-	            ? taiKhoan.getNgaySuaDoi().toString()
-	            : ""
-	    );
+		txtNgaySuaDoi.setText(taiKhoan.getNgaySuaDoi() != null ? taiKhoan.getNgaySuaDoi().toString() : "");
 
-	    if (taiKhoan.getNhanVien() != null) {
-	        txtMaNV.setText(taiKhoan.getNhanVien().getMaNV());
-	        txtTenNV.setText(taiKhoan.getNhanVien().getTenNV());
-	        txtChucVu.setText(
-	            taiKhoan.getNhanVien().getChucVu() != null
-	                ? taiKhoan.getNhanVien().getChucVu()
-	                : ""
-	        );
-	    }
+		if (taiKhoan.getNhanVien() != null) {
+			txtMaNV.setText(taiKhoan.getNhanVien().getMaNV());
+			txtTenNV.setText(taiKhoan.getNhanVien().getTenNV());
+			txtChucVu.setText(taiKhoan.getNhanVien().getChucVu() != null ? taiKhoan.getNhanVien().getChucVu() : "");
+		}
 	}
 }

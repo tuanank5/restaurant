@@ -9,91 +9,92 @@ import jakarta.persistence.Table;
 @Table(name = "MonAn")
 public class MonAn {
 
-    @Id
-    @Column(name = "maMon", nullable = false, length = 20)
-    private String maMon;
+	@Id
+	@Column(name = "maMon", nullable = false, length = 20)
+	private String maMon;
 
-    @Column(name = "tenMon", nullable = false, length = 100)
-    private String tenMon;
+	@Column(name = "tenMon", nullable = false, length = 100)
+	private String tenMon;
 
-    @Column(name = "donGia", nullable = false)
-    private double donGia;
+	@Column(name = "donGia", nullable = false)
+	private double donGia;
 
-    @Column(name = "duongDanAnh", length = 255) // Thêm cột lưu đường dẫn ảnh
-    private String duongDanAnh;
+	@Column(name = "duongDanAnh", length = 255) // Thêm cột lưu đường dẫn ảnh
+	private String duongDanAnh;
 
-    @Column(name = "loaiMon", length = 100)
-    private String loaiMon;
- 
-    public MonAn() {
-        // constructor rỗng cho JPA
-    }
+	@Column(name = "loaiMon", length = 100)
+	private String loaiMon;
 
-    public MonAn(String maMon, String tenMon, double donGia, String duongDanAnh, String loaiMon) {
-	   this.maMon = maMon;
-	   this.tenMon = tenMon;
-	   this.donGia = donGia;
-	   this.duongDanAnh = duongDanAnh;
-	   this.loaiMon = loaiMon;
+	public MonAn() {
+		// constructor rỗng cho JPA
 	}
 
-    public String getMaMon() {
-        return maMon;
-    }
+	public MonAn(String maMon, String tenMon, double donGia, String duongDanAnh, String loaiMon) {
+		this.maMon = maMon;
+		this.tenMon = tenMon;
+		this.donGia = donGia;
+		this.duongDanAnh = duongDanAnh;
+		this.loaiMon = loaiMon;
+	}
 
-    public void setMaMon(String maMon) {
-        this.maMon = maMon;
-    }
+	public String getMaMon() {
+		return maMon;
+	}
 
-    public String getTenMon() {
-        return tenMon;
-    }
+	public void setMaMon(String maMon) {
+		this.maMon = maMon;
+	}
 
-    public void setTenMon(String tenMon) {
-        this.tenMon = tenMon;
-    }
+	public String getTenMon() {
+		return tenMon;
+	}
 
-    public double getDonGia() {
-        return donGia;
-    }
+	public void setTenMon(String tenMon) {
+		this.tenMon = tenMon;
+	}
 
-    public void setDonGia(double donGia) {
-        this.donGia = donGia;
-    }
+	public double getDonGia() {
+		return donGia;
+	}
 
-    public String getDuongDanAnh() {
-        return duongDanAnh;
-    }
+	public void setDonGia(double donGia) {
+		this.donGia = donGia;
+	}
 
-    public void setDuongDanAnh(String duongDanAnh) {
-        this.duongDanAnh = duongDanAnh;
-    }
-    
-    public String getLoaiMon() {
-        return loaiMon;
-    }
+	public String getDuongDanAnh() {
+		return duongDanAnh;
+	}
 
-    public void setLoaiMon(String loaiMon) {
-        this.loaiMon = loaiMon;
-    }
+	public void setDuongDanAnh(String duongDanAnh) {
+		this.duongDanAnh = duongDanAnh;
+	}
 
+	public String getLoaiMon() {
+		return loaiMon;
+	}
 
-    @Override
-    public int hashCode() {
-        return maMon == null ? 0 : maMon.hashCode();
-    }
+	public void setLoaiMon(String loaiMon) {
+		this.loaiMon = loaiMon;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof MonAn)) return false;
-        MonAn other = (MonAn) obj;
-        return maMon != null && maMon.equals(other.maMon);
-    }
+	@Override
+	public int hashCode() {
+		return maMon == null ? 0 : maMon.hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return "MonAn [maMon=" + maMon + ", tenMon=" + tenMon + ", donGia=" + donGia + ", duongDanAnh=" + duongDanAnh +
-                ", loaiMon=" + loaiMon + "]";
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof MonAn))
+			return false;
+		MonAn other = (MonAn) obj;
+		return maMon != null && maMon.equals(other.maMon);
+	}
+
+	@Override
+	public String toString() {
+		return "MonAn [maMon=" + maMon + ", tenMon=" + tenMon + ", donGia=" + donGia + ", duongDanAnh=" + duongDanAnh
+				+ ", loaiMon=" + loaiMon + "]";
+	}
 }

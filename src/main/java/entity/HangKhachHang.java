@@ -7,84 +7,76 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "HangKhachHang.findAll",
-        query = "SELECT H FROM HangKhachHang H"
-    ),
-    @NamedQuery(
-        name = "HangKhachHang.findByMaHang",
-        query = "SELECT H FROM HangKhachHang H WHERE H.maHang = :maHang"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "HangKhachHang.findAll", query = "SELECT H FROM HangKhachHang H"),
+		@NamedQuery(name = "HangKhachHang.findByMaHang", query = "SELECT H FROM HangKhachHang H WHERE H.maHang = :maHang") })
 public class HangKhachHang {
-    @Id
-    @Column(name = "maHang", nullable = false, length = 20)
-    private String maHang;
+	@Id
+	@Column(name = "maHang", nullable = false, length = 20)
+	private String maHang;
 
-    @Column(name = "tenHang", nullable = false, length = 100)
-    private String tenHang;
+	@Column(name = "tenHang", nullable = false, length = 100)
+	private String tenHang;
 
-    @Column(name = "diemHang", nullable = false)
-    private int diemHang;
+	@Column(name = "diemHang", nullable = false)
+	private int diemHang;
 
-    @Column(name = "giamGia", nullable = false)
-    private double giamGia;
+	@Column(name = "giamGia", nullable = false)
+	private double giamGia;
 
-    @Column(name = "moTa", length = 200)
-    private String moTa;
+	@Column(name = "moTa", length = 200)
+	private String moTa;
 
-    public HangKhachHang() {
-    	
-    }
+	public HangKhachHang() {
 
-    public HangKhachHang(String maHang, String tenHang, int diemHang, double giamGia, String moTa) {
-        this.maHang = maHang;
-        this.tenHang = tenHang;
-        this.diemHang = diemHang;
-        this.giamGia = giamGia;
-        this.moTa = moTa;
-    }
+	}
 
-    public String getMaHang() {
-        return maHang;
-    }
+	public HangKhachHang(String maHang, String tenHang, int diemHang, double giamGia, String moTa) {
+		this.maHang = maHang;
+		this.tenHang = tenHang;
+		this.diemHang = diemHang;
+		this.giamGia = giamGia;
+		this.moTa = moTa;
+	}
 
-    public void setMaHang(String maHang) {
-        this.maHang = maHang;
-    }
+	public String getMaHang() {
+		return maHang;
+	}
 
-    public String getTenHang() {
-        return tenHang;
-    }
+	public void setMaHang(String maHang) {
+		this.maHang = maHang;
+	}
 
-    public void setTenHang(String tenHang) {
-        this.tenHang = tenHang;
-    }
+	public String getTenHang() {
+		return tenHang;
+	}
 
-    public int getDiemHang() {
-        return diemHang;
-    }
+	public void setTenHang(String tenHang) {
+		this.tenHang = tenHang;
+	}
 
-    public void setDiemHang(int diemHang) {
-        this.diemHang = diemHang;
-    }
+	public int getDiemHang() {
+		return diemHang;
+	}
 
-    public double getGiamGia() {
-        return giamGia;
-    }
+	public void setDiemHang(int diemHang) {
+		this.diemHang = diemHang;
+	}
 
-    public void setGiamGia(double giamGia) {
-        this.giamGia = giamGia;
-    }
+	public double getGiamGia() {
+		return giamGia;
+	}
 
-    public String getMoTa() {
-        return moTa;
-    }
+	public void setGiamGia(double giamGia) {
+		this.giamGia = giamGia;
+	}
 
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
+	public String getMoTa() {
+		return moTa;
+	}
+
+	public void setMoTa(String moTa) {
+		this.moTa = moTa;
+	}
 
 	@Override
 	public int hashCode() {
@@ -131,10 +123,9 @@ public class HangKhachHang {
 		return true;
 	}
 
-    @Override
-    public String toString() {
-        return this.tenHang;
-    }
-    
-    
+	@Override
+	public String toString() {
+		return this.tenHang;
+	}
+
 }

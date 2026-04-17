@@ -13,99 +13,96 @@ import javafx.scene.layout.BorderPane;
 
 public class DoiMatKhauQL_Controller {
 	@FXML
-    private BorderPane borderPane;
+	private BorderPane borderPane;
 
-    @FXML
-    private Button btnLamMoi;
+	@FXML
+	private Button btnLamMoi;
 
-    @FXML
-    private Button btnLuuLai;
+	@FXML
+	private Button btnLuuLai;
 
-    @FXML
-    private Button btnQuayLai;
+	@FXML
+	private Button btnQuayLai;
 
-    @FXML
-    private PasswordField mkCuTextField;
+	@FXML
+	private PasswordField mkCuTextField;
 
-    @FXML
-    private PasswordField mkMoiTextField;
+	@FXML
+	private PasswordField mkMoiTextField;
 
-    @FXML
-    private PasswordField mkNhapLaiTextField;
+	@FXML
+	private PasswordField mkNhapLaiTextField;
 
-    @FXML
-    void controller(ActionEvent event) {
-    	Object src = event.getSource();
-    	if(src == btnQuayLai) {
-    		btnQuayLai(event);
-    	} else if(src == btnLuuLai) {
-    		btnLuuLai(event);
-    	} else if(src == btnLamMoi) {
-    		btnLamMoi(event);
-    	}
-    }
-    
-    @FXML
-    void btnLuuLai(ActionEvent event) {
-        TaiKhoan taiKhoan = MenuNVQL_Controller.taiKhoan;
-        String mkCu = mkCuTextField.getText();
-        String mkMoi = mkMoiTextField.getText();
-        String mkNhapLai = mkNhapLaiTextField.getText();
+	@FXML
+	void controller(ActionEvent event) {
+		Object src = event.getSource();
+		if (src == btnQuayLai) {
+			btnQuayLai(event);
+		} else if (src == btnLuuLai) {
+			btnLuuLai(event);
+		} else if (src == btnLamMoi) {
+			btnLamMoi(event);
+		}
+	}
 
-        if (mkCu.isEmpty() || mkMoi.isEmpty() || mkNhapLai.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
-            return;
-        }
+	@FXML
+	void btnLuuLai(ActionEvent event) {
+		TaiKhoan taiKhoan = MenuNVQL_Controller.taiKhoan;
+		String mkCu = mkCuTextField.getText();
+		String mkMoi = mkMoiTextField.getText();
+		String mkNhapLai = mkNhapLaiTextField.getText();
 
-        if (!taiKhoan.getMatKhau().equals(mkCu)) {
-            showAlert(Alert.AlertType.ERROR, "Mật khẩu cũ không đúng");
-            lamMoi();
-            return;
-        }
+		if (mkCu.isEmpty() || mkMoi.isEmpty() || mkNhapLai.isEmpty()) {
+			showAlert(Alert.AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
+			return;
+		}
 
-        if (!mkMoi.equals(mkNhapLai)) {
-            showAlert(Alert.AlertType.ERROR, "Mật khẩu mới không khớp");
-            lamMoi();
-            return;
-        }
+		if (!taiKhoan.getMatKhau().equals(mkCu)) {
+			showAlert(Alert.AlertType.ERROR, "Mật khẩu cũ không đúng");
+			lamMoi();
+			return;
+		}
 
-        if (mkMoi.equals(mkCu)) {
-            showAlert(Alert.AlertType.WARNING, "Mật khẩu mới phải khác mật khẩu cũ");
-            lamMoi();
-            return;
-        }
+		if (!mkMoi.equals(mkNhapLai)) {
+			showAlert(Alert.AlertType.ERROR, "Mật khẩu mới không khớp");
+			lamMoi();
+			return;
+		}
 
-        taiKhoan.setMatKhau(mkMoi);
-        RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(TaiKhoan_DAO.class)
-                .capNhat(taiKhoan);
+		if (mkMoi.equals(mkCu)) {
+			showAlert(Alert.AlertType.WARNING, "Mật khẩu mới phải khác mật khẩu cũ");
+			lamMoi();
+			return;
+		}
 
-        showAlert(Alert.AlertType.INFORMATION, "Đổi mật khẩu thành công");
-        lamMoi();
-    }
+		taiKhoan.setMatKhau(mkMoi);
+		RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class).capNhat(taiKhoan);
 
-    @FXML
-    void btnLamMoi(ActionEvent event) {
-        lamMoi();
-    }
+		showAlert(Alert.AlertType.INFORMATION, "Đổi mật khẩu thành công");
+		lamMoi();
+	}
 
-    private void lamMoi() {
-        mkCuTextField.clear();
-        mkMoiTextField.clear();
-        mkNhapLaiTextField.clear();
-    }
+	@FXML
+	void btnLamMoi(ActionEvent event) {
+		lamMoi();
+	}
 
-    @FXML
-    void btnQuayLai(ActionEvent event) {
-        MenuNVQL_Controller.getInstance().dashBoard();
-    }
+	private void lamMoi() {
+		mkCuTextField.clear();
+		mkMoiTextField.clear();
+		mkNhapLaiTextField.clear();
+	}
 
-    private void showAlert(Alert.AlertType type, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.show();
-    }
+	@FXML
+	void btnQuayLai(ActionEvent event) {
+		MenuNVQL_Controller.getInstance().dashBoard();
+	}
+
+	private void showAlert(Alert.AlertType type, String content) {
+		Alert alert = new Alert(type);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(null);
+		alert.setContentText(content);
+		alert.show();
+	}
 }

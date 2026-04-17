@@ -15,20 +15,20 @@ public class App extends Application {
 
 	private double x = 0;
 	private double y = 0;
-	
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Login.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
-		
+
 		Scene scene = new Scene(root);
-		
+
 		stage.setTitle("Đăng Nhập");
 		stage.setScene(scene);
 		stage.show();
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}

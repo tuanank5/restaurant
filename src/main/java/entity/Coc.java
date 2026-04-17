@@ -9,20 +9,20 @@ import jakarta.persistence.Table;
 @Table(name = "Coc")
 public class Coc {
 	@Id
-    @Column(name = "maCoc", nullable = false, length = 20)
-    private String maCoc;
-	
-	@Column(name = "loaiCoc", nullable = false)
-    private boolean loaiCoc;
+	@Column(name = "maCoc", nullable = false, length = 20)
+	private String maCoc;
 
-    @Column(name = "phanTramCoc", nullable = false)
-    private int phanTramCoc;
-    
-    @Column(name = "soTienCoc", nullable = false)
-    private double soTienCoc;
+	@Column(name = "loaiCoc", nullable = false)
+	private boolean loaiCoc;
+
+	@Column(name = "phanTramCoc", nullable = false)
+	private int phanTramCoc;
+
+	@Column(name = "soTienCoc", nullable = false)
+	private double soTienCoc;
 
 	public Coc() {
-		
+
 	}
 
 	public Coc(String maCoc, boolean loaiCoc, int phanTramCoc, double soTienCoc) {
@@ -94,6 +94,5 @@ public class Coc {
 		return "Coc [maCoc=" + maCoc + ", loaiCoc=" + loaiCoc + ", phanTramCoc=" + phanTramCoc + ", soTienCoc="
 				+ soTienCoc + "]";
 	}
-    
-    
+
 }

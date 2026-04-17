@@ -9,42 +9,33 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.NamedQueries;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "KhuyenMai.list",
-        query = "SELECT KM FROM KhuyenMai KM"
-    ),
-    @NamedQuery(
-        name = "KhuyenMai.count",
-        query = "SELECT COUNT(maKM) FROM KhuyenMai"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "KhuyenMai.list", query = "SELECT KM FROM KhuyenMai KM"),
+		@NamedQuery(name = "KhuyenMai.count", query = "SELECT COUNT(maKM) FROM KhuyenMai") })
 public class KhuyenMai {
-    @Id
-    @Column(name = "maKM", nullable = false, length = 20)
-    private String maKM;
+	@Id
+	@Column(name = "maKM", nullable = false, length = 20)
+	private String maKM;
 
-    @Column(name = "tenKM", nullable = false, length = 100)
-    private String tenKM;
+	@Column(name = "tenKM", nullable = false, length = 100)
+	private String tenKM;
 
-    @Column(name = "loaiKM", nullable = false, length = 50)
-    private String loaiKM;
+	@Column(name = "loaiKM", nullable = false, length = 50)
+	private String loaiKM;
 
-    @Column(name = "ngayBatDau", nullable = false)
-    private Date ngayBatDau;
+	@Column(name = "ngayBatDau", nullable = false)
+	private Date ngayBatDau;
 
-    @Column(name = "ngayKetThuc", nullable = false)
-    private Date ngayKetThuc;
+	@Column(name = "ngayKetThuc", nullable = false)
+	private Date ngayKetThuc;
 
-    @Column(name = "phanTramGiamGia", nullable = false)
-    private int phanTramGiamGia;
+	@Column(name = "phanTramGiamGia", nullable = false)
+	private int phanTramGiamGia;
 
 	public KhuyenMai() {
-		
+
 	}
 
-	public KhuyenMai(String maKM, String tenKM, String loaiKM, Date ngayBatDau, Date ngayKetThuc,
-			int phanTramGiamGia) {
+	public KhuyenMai(String maKM, String tenKM, String loaiKM, Date ngayBatDau, Date ngayKetThuc, int phanTramGiamGia) {
 		super();
 		this.maKM = maKM;
 		this.tenKM = tenKM;
@@ -131,8 +122,5 @@ public class KhuyenMai {
 	public String toString() {
 		return phanTramGiamGia + "% - " + tenKM;
 	}
-	
-	
+
 }
-
-

@@ -9,54 +9,43 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "NhanVien.list",
-        query = "SELECT NV FROM NhanVien NV"
-    ),
-    @NamedQuery(
-        name = "NhanVien.count",
-        query = "SELECT COUNT(maNV) FROM NhanVien"
-    ),
-    //
-    @NamedQuery(
-    	name = "NhanVien.state",
-    	query = "SELECT NV FROM NhanVien NV WHERE trangThai = :status"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "NhanVien.list", query = "SELECT NV FROM NhanVien NV"),
+		@NamedQuery(name = "NhanVien.count", query = "SELECT COUNT(maNV) FROM NhanVien"),
+		//
+		@NamedQuery(name = "NhanVien.state", query = "SELECT NV FROM NhanVien NV WHERE trangThai = :status") })
 public class NhanVien {
 	@Id
 	@Column(name = "maNV", nullable = false, length = 20)
-    private String maNV;
+	private String maNV;
 
-    @Column(name = "tenNV", nullable = false, length = 100)
-    private String tenNV;
+	@Column(name = "tenNV", nullable = false, length = 100)
+	private String tenNV;
 
-    @Column(name = "chucVu", nullable = false, length = 50)
-    private String chucVu;
+	@Column(name = "chucVu", nullable = false, length = 50)
+	private String chucVu;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
-    private String email;
+	@Column(name = "email", unique = true, nullable = false, length = 100)
+	private String email;
 
-    @Column(name = "namSinh", nullable = false)
-    private Date namSinh;
+	@Column(name = "namSinh", nullable = false)
+	private Date namSinh;
 
-    @Column(name = "diaChi", nullable = false, length = 200)
-    private String diaChi;
+	@Column(name = "diaChi", nullable = false, length = 200)
+	private String diaChi;
 
-    @Column(name = "gioiTinh", nullable = false)
-    private boolean gioiTinh; 
+	@Column(name = "gioiTinh", nullable = false)
+	private boolean gioiTinh;
 
-    @Column(name = "ngayVaoLam", nullable = false)
-    private Date ngayVaoLam;
+	@Column(name = "ngayVaoLam", nullable = false)
+	private Date ngayVaoLam;
 
-    @Column(name = "trangThai", nullable = false, columnDefinition = "BIT DEFAULT 1")
-    private boolean trangThai;
+	@Column(name = "trangThai", nullable = false, columnDefinition = "BIT DEFAULT 1")
+	private boolean trangThai;
 
 	public NhanVien() {
-		
+
 	}
-	
+
 	public NhanVien(String maNV, String tenNV, String chucVu, String email, Date namSinh, String diaChi,
 			boolean gioiTinh, Date ngayVaoLam, boolean trangThai) {
 		this.maNV = maNV;
@@ -214,7 +203,6 @@ public class NhanVien {
 		return "NhanVien [maNV=" + maNV + ", tenNV=" + tenNV + ", chucVu=" + chucVu + ", email=" + email + ", namSinh="
 				+ namSinh + ", diaChi=" + diaChi + ", gioiTinh=" + gioiTinh + ", ngayVaoLam=" + ngayVaoLam
 				+ ", trangThai=" + trangThai + "]";
-	} 
-	
-	
+	}
+
 }

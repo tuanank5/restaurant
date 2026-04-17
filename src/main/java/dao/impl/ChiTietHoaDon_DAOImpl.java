@@ -10,89 +10,79 @@ import jakarta.persistence.Persistence;
 
 import java.util.List;
 
-public class ChiTietHoaDon_DAOImpl 
-        extends Entity_DAOImpl<ChiTietHoaDon> 
-        implements ChiTietHoaDon_DAO {
+public class ChiTietHoaDon_DAOImpl extends Entity_DAOImpl<ChiTietHoaDon> implements ChiTietHoaDon_DAO {
 
-    private EntityManagerFactory emf = 
-            Persistence.createEntityManagerFactory("default");
-    @Override
-    public void deleteByMaHoaDon(String maHD) {
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
+	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
 
-        try {
-            tx.begin();
-            em.createQuery(
-                "DELETE FROM ChiTietHoaDon ct WHERE ct.hoaDon.maHD = :ma"
-            )
-            .setParameter("ma", maHD)
-            .executeUpdate();
-            tx.commit();
-        } finally {
-            em.close();
-        }
-    }
+	@Override
+	public void deleteByMaHoaDon(String maHD) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
-    @Override
-    public List<ChiTietHoaDon> getChiTietTheoMaHoaDon(String maHD) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return em.createQuery(
-                "SELECT ct FROM ChiTietHoaDon ct " +
-                "JOIN FETCH ct.monAn " +
-                "WHERE ct.hoaDon.maHD = :maHD",
-                ChiTietHoaDon.class
-            )
-            .setParameter("maHD", maHD)
-            .getResultList();
-        } finally {
-            em.close();
-        }
-    }
+		try {
+			tx.begin();
+			em.createQuery("DELETE FROM ChiTietHoaDon ct WHERE ct.hoaDon.maHD = :ma").setParameter("ma", maHD)
+					.executeUpdate();
+			tx.commit();
+		} finally {
+			em.close();
+		}
+	}
 
+	@Override
+	public List<ChiTietHoaDon> getChiTietTheoMaHoaDon(String maHD) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em
+					.createQuery("SELECT ct FROM ChiTietHoaDon ct " + "JOIN FETCH ct.monAn "
+							+ "WHERE ct.hoaDon.maHD = :maHD", ChiTietHoaDon.class)
+					.setParameter("maHD", maHD).getResultList();
+		} finally {
+			em.close();
+		}
+	}
 
-    @Override
-    public boolean themChiTiet(ChiTietHoaDon cthd) {
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
+	@Override
+	public boolean themChiTiet(ChiTietHoaDon cthd) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
-        try {
-            tx.begin();
-            em.persist(cthd);
-            tx.commit();
-            return true;
+		try {
+			tx.begin();
+			em.persist(cthd);
+			tx.commit();
+			return true;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (tx.isActive()) tx.rollback();
-            return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx.isActive())
+				tx.rollback();
+			return false;
 
-        } finally {
-            em.close();
-        }
-    }
+		} finally {
+			em.close();
+		}
+	}
 
+	@Override
+	public boolean them(ChiTietHoaDon entity) {
+		return themChiTiet(entity);
+	}
 
-    @Override
-    public boolean them(ChiTietHoaDon entity) {
-        return themChiTiet(entity);
-    }
+	@Override
+	public boolean themNhieu(List<ChiTietHoaDon> listEntity) {
+		return false;
+	}
 
-    @Override
-    public boolean themNhieu(List<ChiTietHoaDon> listEntity) {
-        return false;
-    }
+	@Override
+	public boolean capNhat(ChiTietHoaDon entity) {
+		return false;
+	}
 
-    @Override
-    public boolean capNhat(ChiTietHoaDon entity) {
-        return false;
-    }
-
-    @Override
-    public boolean xoa(ChiTietHoaDon entity) {
-        return false;
-    }
+	@Override
+	public boolean xoa(ChiTietHoaDon entity) {
+		return false;
+	}
 
 //    @Override
 //    public List<ChiTietHoaDon> getDanhSach(String namedQuery, 

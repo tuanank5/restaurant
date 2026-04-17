@@ -30,186 +30,186 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class CaLamViec_Controller {
-	
-    @FXML
-    private JFXButton Btn_1000;
 
-    @FXML
-    private JFXButton Btn_1500;
+	@FXML
+	private JFXButton Btn_1000;
 
-    @FXML
-    private Label label_TienPhaiNop;
+	@FXML
+	private JFXButton Btn_1500;
 
-    @FXML
-    private Label label_TongDoanhThu;
+	@FXML
+	private Label label_TienPhaiNop;
 
-    @FXML
-    private Label label_TongHoaDon;
+	@FXML
+	private Label label_TongDoanhThu;
 
-    @FXML
-    private Label label_TongSoVe;
+	@FXML
+	private Label label_TongHoaDon;
 
-    @FXML
-    private TextField textField_TienNhan;
+	@FXML
+	private Label label_TongSoVe;
 
-    @FXML
-    private Label text_TenNhanVien;
+	@FXML
+	private TextField textField_TienNhan;
 
-    @FXML
-    private Label text_maNV;
+	@FXML
+	private Label text_TenNhanVien;
 
-    @FXML
-    private ImageView userImage;
+	@FXML
+	private Label text_maNV;
 
-    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-    private TaiKhoan taiKhoan;
+	@FXML
+	private ImageView userImage;
 
-    private DecimalFormat decimalFormat = new DecimalFormat("#,###");
+	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
+	private TaiKhoan taiKhoan;
 
-    // ================== INITIALIZE ==================
-    @FXML
-    public void initialize() {
-        chonTienMacDinh();
-        setupEnterKeyHandler();
-        taiKhoan = MenuNV_Controller.taiKhoan;
+	private DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
-        if (taiKhoan == null) {
-            System.out.println("❌ CaLamViec: taiKhoan = null");
-            return;
-        }
+	// ================== INITIALIZE ==================
+	@FXML
+	public void initialize() {
+		chonTienMacDinh();
+		setupEnterKeyHandler();
+		taiKhoan = MenuNV_Controller.taiKhoan;
 
-        System.out.println("✅ CaLamViec nhận NV: " + taiKhoan.getNhanVien().getMaNV());
-        capNhatThongTinNhanVien();
-        capNhatDoanhThu();
-        tinhTienPhaiNop();
-    }
+		if (taiKhoan == null) {
+			System.out.println("❌ CaLamViec: taiKhoan = null");
+			return;
+		}
 
-    // ================== CẬP NHẬT NHÂN VIÊN ==================
-    private void capNhatThongTinNhanVien() {
-        if (taiKhoan == null) return;
+		System.out.println("✅ CaLamViec nhận NV: " + taiKhoan.getNhanVien().getMaNV());
+		capNhatThongTinNhanVien();
+		capNhatDoanhThu();
+		tinhTienPhaiNop();
+	}
 
-        text_TenNhanVien.setText(taiKhoan.getNhanVien().getTenNV());
-        text_maNV.setText(taiKhoan.getNhanVien().getMaNV());
-    }
+	// ================== CẬP NHẬT NHÂN VIÊN ==================
+	private void capNhatThongTinNhanVien() {
+		if (taiKhoan == null)
+			return;
 
-    // ================== CẬP NHẬT DOANH THU ==================
-    private void capNhatDoanhThu() {
-        try {
-            LocalDate today = LocalDate.now();
-            Date homNay = Date.valueOf(today);
-            String maNV = taiKhoan.getNhanVien().getMaNV();
+		text_TenNhanVien.setText(taiKhoan.getNhanVien().getTenNV());
+		text_maNV.setText(taiKhoan.getNhanVien().getMaNV());
+	}
 
-            Double doanhThu = hoaDonDAO.getTongDoanhThuTheoNgayVaNhanVien(homNay, maNV);
-            Long soHoaDon = hoaDonDAO.countHoaDonTheoNgayVaNhanVien(homNay, maNV);
+	// ================== CẬP NHẬT DOANH THU ==================
+	private void capNhatDoanhThu() {
+		try {
+			LocalDate today = LocalDate.now();
+			Date homNay = Date.valueOf(today);
+			String maNV = taiKhoan.getNhanVien().getMaNV();
 
-            label_TongDoanhThu.setText(decimalFormat.format(doanhThu != null ? doanhThu : 0));
-            label_TongHoaDon.setText(String.valueOf(soHoaDon != null ? soHoaDon : 0));
-        } catch (Exception e) {
-            System.err.println("⚠️ Không lấy được doanh thu ca làm");
-            label_TongDoanhThu.setText("0");
-            label_TongHoaDon.setText("0");
-        } finally {
-            tinhTienPhaiNop();
-        }
-    }
+			Double doanhThu = hoaDonDAO.getTongDoanhThuTheoNgayVaNhanVien(homNay, maNV);
+			Long soHoaDon = hoaDonDAO.countHoaDonTheoNgayVaNhanVien(homNay, maNV);
 
-    // ================== TÍNH TIỀN PHẢI NỘP ==================
-    private void tinhTienPhaiNop() {
-        if (taiKhoan == null) return;
-        try {
-            // Tiền đầu ca
-            String text = textField_TienNhan.getText().replaceAll("[^0-9]", "");
-            long tienDauCa = text.isEmpty() ? 0 : Long.parseLong(text);
+			label_TongDoanhThu.setText(decimalFormat.format(doanhThu != null ? doanhThu : 0));
+			label_TongHoaDon.setText(String.valueOf(soHoaDon != null ? soHoaDon : 0));
+		} catch (Exception e) {
+			System.err.println("⚠️ Không lấy được doanh thu ca làm");
+			label_TongDoanhThu.setText("0");
+			label_TongHoaDon.setText("0");
+		} finally {
+			tinhTienPhaiNop();
+		}
+	}
 
-            // Tổng doanh thu trong ngày
-            String doanhThuText = label_TongDoanhThu.getText().replaceAll("[^0-9]", "");
-            long tongDoanhThu = doanhThuText.isEmpty() ? 0 : Long.parseLong(doanhThuText);
+	// ================== TÍNH TIỀN PHẢI NỘP ==================
+	private void tinhTienPhaiNop() {
+		if (taiKhoan == null)
+			return;
+		try {
+			// Tiền đầu ca
+			String text = textField_TienNhan.getText().replaceAll("[^0-9]", "");
+			long tienDauCa = text.isEmpty() ? 0 : Long.parseLong(text);
 
-            // Tiền phải nộp
-            long tienPhaiNop = tienDauCa + tongDoanhThu;
-            label_TienPhaiNop.setText(decimalFormat.format(tienPhaiNop));
-        } catch (Exception e) {
-            label_TienPhaiNop.setText("0");
-            System.err.println("⚠️ Lỗi tính tiền phải nộp");
-        }
-    }
+			// Tổng doanh thu trong ngày
+			String doanhThuText = label_TongDoanhThu.getText().replaceAll("[^0-9]", "");
+			long tongDoanhThu = doanhThuText.isEmpty() ? 0 : Long.parseLong(doanhThuText);
 
-    // ================== NÚT TIỀN NHANH ==================
-    private void chonTienMacDinh() {
-        Btn_1000.setOnAction(e -> {
-            textField_TienNhan.setText(decimalFormat.format(1000000));
-            tinhTienPhaiNop();
-        });
+			// Tiền phải nộp
+			long tienPhaiNop = tienDauCa + tongDoanhThu;
+			label_TienPhaiNop.setText(decimalFormat.format(tienPhaiNop));
+		} catch (Exception e) {
+			label_TienPhaiNop.setText("0");
+			System.err.println("⚠️ Lỗi tính tiền phải nộp");
+		}
+	}
 
-        Btn_1500.setOnAction(e -> {
-            textField_TienNhan.setText(decimalFormat.format(1500000));
-            tinhTienPhaiNop();
-        });
-    }
+	// ================== NÚT TIỀN NHANH ==================
+	private void chonTienMacDinh() {
+		Btn_1000.setOnAction(e -> {
+			textField_TienNhan.setText(decimalFormat.format(1000000));
+			tinhTienPhaiNop();
+		});
 
-    // ================== ENTER KEY ==================
-    private void setupEnterKeyHandler() {
-        textField_TienNhan.setOnAction(e -> onEnterPressed());
-    }
+		Btn_1500.setOnAction(e -> {
+			textField_TienNhan.setText(decimalFormat.format(1500000));
+			tinhTienPhaiNop();
+		});
+	}
 
-    @FXML
-    void btnXacNhan(ActionEvent event) {
-        btnDangXuat(event);
-    }
+	// ================== ENTER KEY ==================
+	private void setupEnterKeyHandler() {
+		textField_TienNhan.setOnAction(e -> onEnterPressed());
+	}
 
-    @FXML
-    private void btnDangXuat(ActionEvent event) {
-        Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn kết ca?");
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
-            return;
-        }
-        if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
-            // Cập nhật lại ngày giờ đăng nhập
-            LocalDate localDate = LocalDate.now();
-            Date dateNow = Date.valueOf(localDate);
-            this.taiKhoan.setNgayDangXuat(dateNow);
-            RestaurantApplication.getInstance()
-                    .getDatabaseContext()
-                    .newEntity_DAO(TaiKhoan_DAO.class)
-                    .capNhat(taiKhoan);
+	@FXML
+	void btnXacNhan(ActionEvent event) {
+		btnDangXuat(event);
+	}
 
-            try {
-                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                currentStage.close();
+	@FXML
+	private void btnDangXuat(ActionEvent event) {
+		Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn kết ca?");
+		if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
+			return;
+		}
+		if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
+			// Cập nhật lại ngày giờ đăng nhập
+			LocalDate localDate = LocalDate.now();
+			Date dateNow = Date.valueOf(localDate);
+			this.taiKhoan.setNgayDangXuat(dateNow);
+			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
+					.capNhat(taiKhoan);
 
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Login.fxml"));
-                Parent root = fxmlLoader.load();
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
+			try {
+				Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+				currentStage.close();
 
-                stage.setScene(scene);
-                stage.setMaximized(true);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Login.fxml"));
+				Parent root = fxmlLoader.load();
+				Stage stage = new Stage();
+				Scene scene = new Scene(root);
 
-    private void onEnterPressed() {
-        String text = textField_TienNhan.getText().replace(",", "");
-        try {
-            long value = Long.parseLong(text);
-            textField_TienNhan.setText(decimalFormat.format(value));
-            tinhTienPhaiNop();
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input");
-        }
-    }
+				stage.setScene(scene);
+				stage.setMaximized(true);
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    private Optional<ButtonType> showAlertConfirm(String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(content);
-        ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-        ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-        ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-        return alert.showAndWait();            
-    }
+	private void onEnterPressed() {
+		String text = textField_TienNhan.getText().replace(",", "");
+		try {
+			long value = Long.parseLong(text);
+			textField_TienNhan.setText(decimalFormat.format(value));
+			tinhTienPhaiNop();
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid input");
+		}
+	}
+
+	private Optional<ButtonType> showAlertConfirm(String content) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Thông báo");
+		alert.setHeaderText(content);
+		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
+		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
+		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
+		return alert.showAndWait();
+	}
 }

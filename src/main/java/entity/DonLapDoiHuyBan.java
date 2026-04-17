@@ -13,21 +13,21 @@ import jakarta.persistence.Table;
 @Table(name = "DonLapDoiHuyBan")
 public class DonLapDoiHuyBan {
 	@Id
-    @ManyToOne
-    @JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
-    private DonDatBan donDatBan;
+	@ManyToOne
+	@JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
+	private DonDatBan donDatBan;
 
-    @Column(name = "lyDo", nullable = false, length = 200)
-    private String lyDo;
-    
-    @Column(name = "ngayGioLapDon", nullable = false)
-    private Date ngayGioLapDon;
-    
-    @Column(name = "tienHoanTra", nullable = false)
-    private double tienHoanTra;
+	@Column(name = "lyDo", nullable = false, length = 200)
+	private String lyDo;
+
+	@Column(name = "ngayGioLapDon", nullable = false)
+	private Date ngayGioLapDon;
+
+	@Column(name = "tienHoanTra", nullable = false)
+	private double tienHoanTra;
 
 	public DonLapDoiHuyBan() {
-		
+
 	}
 
 	public DonLapDoiHuyBan(DonDatBan donDatBan, String lyDo, Date ngayGioLapDon, double tienHoanTra) {
@@ -100,5 +100,4 @@ public class DonLapDoiHuyBan {
 				+ ", tienHoanTra=" + tienHoanTra + "]";
 	}
 
-	
 }

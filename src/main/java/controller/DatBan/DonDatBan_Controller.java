@@ -42,447 +42,405 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 
-public class DonDatBan_Controller implements Initializable{
+public class DonDatBan_Controller implements Initializable {
 	@FXML
-    private ComboBox<String> cmbTrangThai;
+	private ComboBox<String> cmbTrangThai;
 
-    @FXML
-    private DatePicker dpNgayDatBan;
+	@FXML
+	private DatePicker dpNgayDatBan;
 
-    @FXML
-    private TableColumn<DonDatBan, String> tblGioDen;
+	@FXML
+	private TableColumn<DonDatBan, String> tblGioDen;
 
-    @FXML
-    private TableColumn<DonDatBan, String> tblKhachHang;
+	@FXML
+	private TableColumn<DonDatBan, String> tblKhachHang;
 
-    @FXML
-    private TableColumn<DonDatBan, String> tblSoBan;
+	@FXML
+	private TableColumn<DonDatBan, String> tblSoBan;
 
-    @FXML
-    private TableColumn<DonDatBan, String> tblSoNguoi;
+	@FXML
+	private TableColumn<DonDatBan, String> tblSoNguoi;
 
-    @FXML
-    private TableColumn<DonDatBan, String> tblTienCoc;
+	@FXML
+	private TableColumn<DonDatBan, String> tblTienCoc;
 
-    @FXML
-    private TableColumn<DonDatBan, String> tblTrangThai;
+	@FXML
+	private TableColumn<DonDatBan, String> tblTrangThai;
 
-    @FXML
-    private TableView<DonDatBan> tblView;
+	@FXML
+	private TableView<DonDatBan> tblView;
 
-    @FXML
-    private TextField txtKH;
-    
-    @FXML
-    private TextField txtTongDonDat;
-    
-    @FXML
-    private Button btnDatBan;
+	@FXML
+	private TextField txtKH;
 
-    @FXML
-    private Button btnDoiMon;
+	@FXML
+	private TextField txtTongDonDat;
 
-    @FXML
-    private Button btnHuyDon;
+	@FXML
+	private Button btnDatBan;
 
-    @FXML
-    private Button btnThayDoi;
+	@FXML
+	private Button btnDoiMon;
 
-    
-    private DonDatBan donDangChon;
+	@FXML
+	private Button btnHuyDon;
 
-    private KhachHang_DAO khachHangDAO;
-    private DonDatBan_DAO donDatBanDAO;
+	@FXML
+	private Button btnThayDoi;
 
-    private ObservableList<DonDatBan> danhSachDonDatBan = FXCollections.observableArrayList();
-    private List<DonDatBan> danhSachDonDatBanDB;
-    private final int LIMIT = 15;
-    private String status = "all";
-    
-    private void capNhatTongDon() {
-        txtTongDonDat.setText(String.valueOf(tblView.getItems().size()));
-    }
+	private DonDatBan donDangChon;
 
-    
-    @Override
+	private KhachHang_DAO khachHangDAO;
+	private DonDatBan_DAO donDatBanDAO;
+
+	private ObservableList<DonDatBan> danhSachDonDatBan = FXCollections.observableArrayList();
+	private List<DonDatBan> danhSachDonDatBanDB;
+	private final int LIMIT = 15;
+	private String status = "all";
+
+	private void capNhatTongDon() {
+		txtTongDonDat.setText(String.valueOf(tblView.getItems().size()));
+	}
+
+	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-    	donDatBanDAO = new DonDatBan_DAOImpl();
-    	dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> timTheoNgayDatBan());
-    	cmbTrangThai.valueProperty().addListener((obs, oldVal, newVal) -> timTheoTrangThai());
-        txtKH.textProperty().addListener((obs, oldVal, newVal) -> timTheoTenKH());
+		donDatBanDAO = new DonDatBan_DAOImpl();
+		dpNgayDatBan.valueProperty().addListener((obs, oldVal, newVal) -> timTheoNgayDatBan());
+		cmbTrangThai.valueProperty().addListener((obs, oldVal, newVal) -> timTheoTrangThai());
+		txtKH.textProperty().addListener((obs, oldVal, newVal) -> timTheoTenKH());
 		khoiTaoComboBoxes();
 		setValueTable();
-        loadData();        
-        tblView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            donDangChon = newVal;
-        });        
-        tblView.getItems().addListener((javafx.collections.ListChangeListener.Change<? extends DonDatBan> change) -> {
-            capNhatTongDon();
-        });
-        // cập nhật lần đầu
-        capNhatTongDon();
-        tblView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                DonDatBan don = tblView.getSelectionModel().getSelectedItem();
-                if (don != null) {
-                    hienThiDialogThongTin(don);
-                }
-            }
-        });
-        khachHangDAO = RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(KhachHang_DAO.class);
+		loadData();
+		tblView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+			donDangChon = newVal;
+		});
+		tblView.getItems().addListener((javafx.collections.ListChangeListener.Change<? extends DonDatBan> change) -> {
+			capNhatTongDon();
+		});
+		// cập nhật lần đầu
+		capNhatTongDon();
+		tblView.setOnMouseClicked(event -> {
+			if (event.getClickCount() == 2) {
+				DonDatBan don = tblView.getSelectionModel().getSelectedItem();
+				if (don != null) {
+					hienThiDialogThongTin(don);
+				}
+			}
+		});
+		khachHangDAO = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(KhachHang_DAO.class);
 
-        donDatBanDAO = RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(DonDatBan_DAO.class);
-        
-        kiemTraKhachToiTreVaHuyDon();      
-        cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái đơn đặt bàn!"));
-        dpNgayDatBan.setTooltip(new Tooltip("Chọn ngày đặt bàn để lọc theo đơn đặt bàn!"));
-        txtKH.setTooltip(new Tooltip("Nhập tên khách hàng để tìm kiếm trong đơn đặt bàn!"));
-        btnDatBan.setTooltip(new Tooltip("Thông báo cho nút Đặt Bàn!"));
-        btnDoiMon.setTooltip(new Tooltip("Thông báo cho nút Đổi Món!"));
-        btnThayDoi.setTooltip(new Tooltip("Thông báo cho nút Đổi Bàn!"));
-        btnHuyDon.setTooltip(new Tooltip("Thông báo cho nút Huỷ Đơn Bàn!"));
+		donDatBanDAO = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(DonDatBan_DAO.class);
+
+		kiemTraKhachToiTreVaHuyDon();
+		cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái đơn đặt bàn!"));
+		dpNgayDatBan.setTooltip(new Tooltip("Chọn ngày đặt bàn để lọc theo đơn đặt bàn!"));
+		txtKH.setTooltip(new Tooltip("Nhập tên khách hàng để tìm kiếm trong đơn đặt bàn!"));
+		btnDatBan.setTooltip(new Tooltip("Thông báo cho nút Đặt Bàn!"));
+		btnDoiMon.setTooltip(new Tooltip("Thông báo cho nút Đổi Món!"));
+		btnThayDoi.setTooltip(new Tooltip("Thông báo cho nút Đổi Bàn!"));
+		btnHuyDon.setTooltip(new Tooltip("Thông báo cho nút Huỷ Đơn Bàn!"));
 	}
-    
-    @FXML
-    void btnDatBan(ActionEvent event) {
-    	MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
-    }
 
-    @FXML
-    void btnHuyDon(ActionEvent event) {
-    	huyDonKhachGoiTruoc(donDangChon);
-    }
-    
-    @FXML
-    void btnDoiMon(ActionEvent event) {
-        if (donDangChon == null) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn một đơn đặt bàn!");
-            return;
-        }
+	@FXML
+	void btnDatBan(ActionEvent event) {
+		MenuNV_Controller.instance.readyUI("DatBan/DatBanTruoc");
+	}
 
-        DoiMonTruoc_Controller.donDatBanDuocChon = donDangChon;
-        MenuNV_Controller.instance.readyUI("MonAn/DoiMon");
-    }
+	@FXML
+	void btnHuyDon(ActionEvent event) {
+		huyDonKhachGoiTruoc(donDangChon);
+	}
 
-    @FXML
-    void btnThayDoi(ActionEvent event) {
-        if (donDangChon == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Cảnh báo");
-            alert.setHeaderText(null);
-            alert.setContentText("Vui lòng chọn một đơn đặt bàn trước khi thay đổi!");
-            alert.showAndWait();
-            return;
-        }
-        // Lưu tạm dữ liệu chuyển màn hình
-        ThayDoiBanTruoc_Controller.donDatBanDuocChon = donDangChon;
-        MenuNV_Controller.instance.readyUI("DatBan/ThayDoiBanTruoc");
-    }
+	@FXML
+	void btnDoiMon(ActionEvent event) {
+		if (donDangChon == null) {
+			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn một đơn đặt bàn!");
+			return;
+		}
 
-    
-    private void khoiTaoComboBoxes() {
-        cmbTrangThai.getItems().clear();
-        cmbTrangThai.getItems().addAll("Tất cả","Đã nhận bàn","Chưa nhận bàn");
-        cmbTrangThai.getSelectionModel().select("Tất cả");
-    }
-    
-    private void loadData() {
-        danhSachDonDatBanDB = donDatBanDAO.getAllDDBTruoc();
-        danhSachDonDatBan.clear();
-        danhSachDonDatBan.addAll(danhSachDonDatBanDB);
+		DoiMonTruoc_Controller.donDatBanDuocChon = donDangChon;
+		MenuNV_Controller.instance.readyUI("MonAn/DoiMon");
+	}
 
-        tblView.setItems(danhSachDonDatBan);
-        capNhatTongDon();
-    }
+	@FXML
+	void btnThayDoi(ActionEvent event) {
+		if (donDangChon == null) {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Cảnh báo");
+			alert.setHeaderText(null);
+			alert.setContentText("Vui lòng chọn một đơn đặt bàn trước khi thay đổi!");
+			alert.showAndWait();
+			return;
+		}
+		// Lưu tạm dữ liệu chuyển màn hình
+		ThayDoiBanTruoc_Controller.donDatBanDuocChon = donDangChon;
+		MenuNV_Controller.instance.readyUI("DatBan/ThayDoiBanTruoc");
+	}
 
-    private void loadData(List<DonDatBan> list) {
-        danhSachDonDatBan.clear();
-        danhSachDonDatBan.addAll(list);
-        tblView.setItems(danhSachDonDatBan);
-    }
+	private void khoiTaoComboBoxes() {
+		cmbTrangThai.getItems().clear();
+		cmbTrangThai.getItems().addAll("Tất cả", "Đã nhận bàn", "Chưa nhận bàn");
+		cmbTrangThai.getSelectionModel().select("Tất cả");
+	}
 
-    private void setValueTable() {
-    	tblKhachHang.setCellValueFactory(cellData -> {
-    	    DonDatBan don = cellData.getValue();
-    	    if (don == null) return new SimpleStringProperty("");
-    	    KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
-    	    return new SimpleStringProperty(kh != null ? kh.getTenKH() : "");
-    	});
+	private void loadData() {
+		danhSachDonDatBanDB = donDatBanDAO.getAllDDBTruoc();
+		danhSachDonDatBan.clear();
+		danhSachDonDatBan.addAll(danhSachDonDatBanDB);
 
+		tblView.setItems(danhSachDonDatBan);
+		capNhatTongDon();
+	}
 
-        tblSoBan.setCellValueFactory(cellData ->new SimpleStringProperty(cellData.getValue().getBan() 
-        		!= null ?cellData.getValue().getBan().getMaBan() : "")
-        );
+	private void loadData(List<DonDatBan> list) {
+		danhSachDonDatBan.clear();
+		danhSachDonDatBan.addAll(list);
+		tblView.setItems(danhSachDonDatBan);
+	}
 
-        tblSoNguoi.setCellValueFactory(cellData ->new SimpleStringProperty(String.valueOf(cellData.getValue().getSoLuong()))
-        );
+	private void setValueTable() {
+		tblKhachHang.setCellValueFactory(cellData -> {
+			DonDatBan don = cellData.getValue();
+			if (don == null)
+				return new SimpleStringProperty("");
+			KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+			return new SimpleStringProperty(kh != null ? kh.getTenKH() : "");
+		});
 
-        tblGioDen.setCellValueFactory(cellData ->new SimpleStringProperty(cellData.getValue().getGioBatDau() 
-        		!= null ?cellData.getValue().getGioBatDau().toString() : "")
-        );
+		tblSoBan.setCellValueFactory(cellData -> new SimpleStringProperty(
+				cellData.getValue().getBan() != null ? cellData.getValue().getBan().getMaBan() : ""));
 
-        tblTienCoc.setCellValueFactory(cellData ->new SimpleStringProperty("0")); // nếu có tiền cọc thực tế thì thay
+		tblSoNguoi.setCellValueFactory(
+				cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getSoLuong())));
 
-        tblTrangThai.setCellValueFactory(cellData ->new SimpleStringProperty(cellData.getValue().getTrangThai() != 
-        		null ?cellData.getValue().getTrangThai() : ""));
-    }
-    
-    private void hienThiDialogThongTin(DonDatBan don) {
-    	Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Thông tin khách hàng");
-        dialog.setHeaderText("Chi tiết đơn đặt bàn");
+		tblGioDen.setCellValueFactory(cellData -> new SimpleStringProperty(
+				cellData.getValue().getGioBatDau() != null ? cellData.getValue().getGioBatDau().toString() : ""));
 
-        // Nút Xác nhận và Hủy
-        ButtonType btnXacNhan = new ButtonType("Cập nhật trạng thái", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, ButtonType.CANCEL);
+		tblTienCoc.setCellValueFactory(cellData -> new SimpleStringProperty("0")); // nếu có tiền cọc thực tế thì thay
 
-        KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
-        // Các thông tin khác chỉ xem, không được chỉnh sửa
-        TextField txtTen = new TextField(kh != null ? kh.getTenKH() : "");
-        txtTen.setDisable(true);
-        TextField txtSDTDialog = new TextField(kh != null ? kh.getSdt() : "");
-        txtSDTDialog.setDisable(true);
-        TextField txtSoLuong = new TextField(String.valueOf(don.getSoLuong()));
-        txtSoLuong.setDisable(true);
+		tblTrangThai.setCellValueFactory(cellData -> new SimpleStringProperty(
+				cellData.getValue().getTrangThai() != null ? cellData.getValue().getTrangThai() : ""));
+	}
 
-        // Chỉ cho phép thay đổi trạng thái
-        ComboBox<String> cmbTrangThaiDialog = new ComboBox<>();
-        cmbTrangThaiDialog.getItems().addAll("Đã nhận bàn", "Chưa nhận bàn");
-        cmbTrangThaiDialog.setValue(
-            don.getTrangThai() != null ? don.getTrangThai() : "Chưa nhận bàn"
-        );
+	private void hienThiDialogThongTin(DonDatBan don) {
+		Dialog<Void> dialog = new Dialog<>();
+		dialog.setTitle("Thông tin khách hàng");
+		dialog.setHeaderText("Chi tiết đơn đặt bàn");
 
-        GridPane grid = new GridPane();
-        grid.setHgap(15);
-        grid.setVgap(15);
-        grid.setPadding(new Insets(15));
-        
-        grid.addRow(0, new Label("Tên khách hàng:"), txtTen);
-        grid.addRow(1, new Label("Số điện thoại:"), txtSDTDialog);
-        grid.addRow(2, new Label("Số lượng:"), txtSoLuong);
-        grid.addRow(3, new Label("Trạng thái:"), cmbTrangThaiDialog);
-        dialog.getDialogPane().setContent(grid);
-        // Xử lý khi nhấn XÁC NHẬN
-        dialog.setResultConverter(button -> {
-            if (button == btnXacNhan) {
-                try {
-                    // Chỉ cập nhật trạng thái
-                    don.setTrangThai(cmbTrangThaiDialog.getValue());
+		// Nút Xác nhận và Hủy
+		ButtonType btnXacNhan = new ButtonType("Cập nhật trạng thái", ButtonBar.ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(btnXacNhan, ButtonType.CANCEL);
 
-                    RestaurantApplication.getInstance()
-                            .getDatabaseContext()
-                            .newEntity_DAO(DonDatBan_DAO.class)
-                            .capNhat(don);
-                    tblView.refresh();
-                    showAlert(Alert.AlertType.INFORMATION, "Cập nhật trạng thái thành công!");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Không thể cập nhật trạng thái!");
-                }
-            }
-            return null;
-        });
-        dialog.showAndWait();
-    }
-    
-    @FXML
-    private void timTheoNgayDatBan() {
-        LocalDate ngayChon = dpNgayDatBan.getValue();
-        if (ngayChon == null) {
-            tblView.setItems(danhSachDonDatBan); // hiển thị tất cả
-            capNhatTongDon();
-            return;
-        }
+		KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+		// Các thông tin khác chỉ xem, không được chỉnh sửa
+		TextField txtTen = new TextField(kh != null ? kh.getTenKH() : "");
+		txtTen.setDisable(true);
+		TextField txtSDTDialog = new TextField(kh != null ? kh.getSdt() : "");
+		txtSDTDialog.setDisable(true);
+		TextField txtSoLuong = new TextField(String.valueOf(don.getSoLuong()));
+		txtSoLuong.setDisable(true);
 
-        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
-        filtered.setPredicate(don -> {
-            LocalDate ngayDon = don.getNgayGioLapDon().toLocalDate();
-            return ngayDon.equals(ngayChon);
-        });
+		// Chỉ cho phép thay đổi trạng thái
+		ComboBox<String> cmbTrangThaiDialog = new ComboBox<>();
+		cmbTrangThaiDialog.getItems().addAll("Đã nhận bàn", "Chưa nhận bàn");
+		cmbTrangThaiDialog.setValue(don.getTrangThai() != null ? don.getTrangThai() : "Chưa nhận bàn");
 
-        tblView.setItems(filtered);
-        capNhatTongDon();
-    }
+		GridPane grid = new GridPane();
+		grid.setHgap(15);
+		grid.setVgap(15);
+		grid.setPadding(new Insets(15));
 
-    private void timTheoTenKH() {
-        String key = txtKH.getText() != null ? txtKH.getText().trim().toLowerCase() : "";
-        if (key.isEmpty()) {
-            tblView.setItems(danhSachDonDatBan);
-            capNhatTongDon();
-            return;
-        }
+		grid.addRow(0, new Label("Tên khách hàng:"), txtTen);
+		grid.addRow(1, new Label("Số điện thoại:"), txtSDTDialog);
+		grid.addRow(2, new Label("Số lượng:"), txtSoLuong);
+		grid.addRow(3, new Label("Trạng thái:"), cmbTrangThaiDialog);
+		dialog.getDialogPane().setContent(grid);
+		// Xử lý khi nhấn XÁC NHẬN
+		dialog.setResultConverter(button -> {
+			if (button == btnXacNhan) {
+				try {
+					// Chỉ cập nhật trạng thái
+					don.setTrangThai(cmbTrangThaiDialog.getValue());
 
-        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
-        filtered.setPredicate(don -> {
-            if (don == null) return false;
+					RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(DonDatBan_DAO.class)
+							.capNhat(don);
+					tblView.refresh();
+					showAlert(Alert.AlertType.INFORMATION, "Cập nhật trạng thái thành công!");
+				} catch (Exception e) {
+					e.printStackTrace();
+					showAlert(Alert.AlertType.ERROR, "Không thể cập nhật trạng thái!");
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
 
-            KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
-            if (kh == null || kh.getTenKH() == null) return false;
+	@FXML
+	private void timTheoNgayDatBan() {
+		LocalDate ngayChon = dpNgayDatBan.getValue();
+		if (ngayChon == null) {
+			tblView.setItems(danhSachDonDatBan); // hiển thị tất cả
+			capNhatTongDon();
+			return;
+		}
 
-            // So khớp tên khách (không phân biệt hoa/thường)
-            return kh.getTenKH().toLowerCase().contains(key);
-        });
+		FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+		filtered.setPredicate(don -> {
+			LocalDate ngayDon = don.getNgayGioLapDon().toLocalDate();
+			return ngayDon.equals(ngayChon);
+		});
 
-        tblView.setItems(filtered);
-        capNhatTongDon();
-    }
+		tblView.setItems(filtered);
+		capNhatTongDon();
+	}
 
-    @FXML
-    private void timTheoTrangThai() {
-        String trangThaiChon = cmbTrangThai.getValue(); // giá trị hiện tại
-        if (trangThaiChon == null || "Tất cả".equals(trangThaiChon)) {
-            tblView.setItems(danhSachDonDatBan);
-            capNhatTongDon();
-            return;
-        }
+	private void timTheoTenKH() {
+		String key = txtKH.getText() != null ? txtKH.getText().trim().toLowerCase() : "";
+		if (key.isEmpty()) {
+			tblView.setItems(danhSachDonDatBan);
+			capNhatTongDon();
+			return;
+		}
 
-        FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
-        filtered.setPredicate(don -> {
-            String tt = don.getTrangThai();
-            if (tt == null) return false;
-            return tt.trim().equalsIgnoreCase(trangThaiChon.trim());
-        });
+		FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+		filtered.setPredicate(don -> {
+			if (don == null)
+				return false;
 
-        tblView.setItems(filtered);
-        capNhatTongDon();
-    }
-    
-    private void kiemTraKhachToiTreVaHuyDon() {
-        LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
-        for (DonDatBan don : danhSachDonDatBan) {
-            if (!"Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai()))
-                continue;
+			KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+			if (kh == null || kh.getTenKH() == null)
+				return false;
 
-            LocalDateTime gioBatDau = LocalDateTime.of(
-                    don.getNgayGioLapDon().toLocalDate(),
-                    don.getGioBatDau()
-            );
+			// So khớp tên khách (không phân biệt hoa/thường)
+			return kh.getTenKH().toLowerCase().contains(key);
+		});
 
-            if (hienTai.isBefore(gioBatDau.plusHours(1)))
-                continue;
+		tblView.setItems(filtered);
+		capNhatTongDon();
+	}
 
-            HoaDon hoaDon = RestaurantApplication.getInstance()
-                    .getDatabaseContext()
-                    .newEntity_DAO(HoaDon_DAO.class)
-                    .timHoaDonTheoDonDatBan(don);
+	@FXML
+	private void timTheoTrangThai() {
+		String trangThaiChon = cmbTrangThai.getValue(); // giá trị hiện tại
+		if (trangThaiChon == null || "Tất cả".equals(trangThaiChon)) {
+			tblView.setItems(danhSachDonDatBan);
+			capNhatTongDon();
+			return;
+		}
 
-            if (hoaDon == null)
-                continue;
+		FilteredList<DonDatBan> filtered = new FilteredList<>(danhSachDonDatBan, d -> true);
+		filtered.setPredicate(don -> {
+			String tt = don.getTrangThai();
+			if (tt == null)
+				return false;
+			return tt.trim().equalsIgnoreCase(trangThaiChon.trim());
+		});
 
-            if (!"Đặt trước".equalsIgnoreCase(hoaDon.getTrangThai())
-                    || !"Chưa thanh toán".equalsIgnoreCase(hoaDon.getKieuThanhToan()))
-                continue;
+		tblView.setItems(filtered);
+		capNhatTongDon();
+	}
 
-            don.setTrangThai("Đã hủy");
-            donDatBanDAO.capNhat(don);
+	private void kiemTraKhachToiTreVaHuyDon() {
+		LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
+		for (DonDatBan don : danhSachDonDatBan) {
+			if (!"Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai()))
+				continue;
 
-            hoaDon.setTrangThai("Đã hủy");
-            RestaurantApplication.getInstance()
-                    .getDatabaseContext()
-                    .newEntity_DAO(HoaDon_DAO.class)
-                    .capNhat(hoaDon);
+			LocalDateTime gioBatDau = LocalDateTime.of(don.getNgayGioLapDon().toLocalDate(), don.getGioBatDau());
 
-            Ban ban = don.getBan();
-            if (ban != null) {
-                ban.setTrangThai("Trống");
-                RestaurantApplication.getInstance()
-                        .getDatabaseContext()
-                        .newEntity_DAO(Ban_DAO.class)
-                        .capNhat(ban);
-            }
-            KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
-            showAlert(
-                Alert.AlertType.WARNING,
-                "Đơn đặt bàn của khách "
-                + (kh != null ? kh.getTenKH() : "")
-                + " đã bị hủy do đến trễ quá 1 tiếng!"
-            );
-        }
-        loadData();
-    }
-    
-    private void huyDonKhachGoiTruoc(DonDatBan don) {
-        if (don == null) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn đơn đặt bàn!");
-            return;
-        }
+			if (hienTai.isBefore(gioBatDau.plusHours(1)))
+				continue;
 
-        if (!"Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
-            showAlert(Alert.AlertType.WARNING, "Đơn này không thể hủy!");
-            return;
-        }
+			HoaDon hoaDon = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
+					.timHoaDonTheoDonDatBan(don);
 
-        LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
-        LocalDateTime gioBatDau = LocalDateTime.of(
-                don.getNgayGioLapDon().toLocalDate(),
-                don.getGioBatDau()
-        );
+			if (hoaDon == null)
+				continue;
 
-        if (hienTai.isAfter(gioBatDau.minusHours(1))) {
-            showAlert(
-                Alert.AlertType.WARNING,
-                "Khách chỉ được hủy trước giờ đến ít nhất 1 tiếng!"
-            );
-            return;
-        }
+			if (!"Đặt trước".equalsIgnoreCase(hoaDon.getTrangThai())
+					|| !"Chưa thanh toán".equalsIgnoreCase(hoaDon.getKieuThanhToan()))
+				continue;
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Xác nhận hủy đơn");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Khách hàng xác nhận hủy đơn đặt bàn này?");
-        Optional<ButtonType> rs = confirm.showAndWait();
+			don.setTrangThai("Đã hủy");
+			donDatBanDAO.capNhat(don);
 
-        if (rs.isEmpty() || rs.get() != ButtonType.OK)
-            return;
-        try {
-            don.setTrangThai("Đã hủy");
-            donDatBanDAO.capNhat(don);
+			hoaDon.setTrangThai("Đã hủy");
+			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class).capNhat(hoaDon);
 
-            HoaDon hoaDon = RestaurantApplication.getInstance()
-                    .getDatabaseContext()
-                    .newEntity_DAO(HoaDon_DAO.class)
-                    .timHoaDonTheoDonDatBan(don);
+			Ban ban = don.getBan();
+			if (ban != null) {
+				ban.setTrangThai("Trống");
+				RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+			}
+			KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+			showAlert(Alert.AlertType.WARNING, "Đơn đặt bàn của khách " + (kh != null ? kh.getTenKH() : "")
+					+ " đã bị hủy do đến trễ quá 1 tiếng!");
+		}
+		loadData();
+	}
 
-            if (hoaDon != null) {
-                hoaDon.setTrangThai("Đã hủy");
-                RestaurantApplication.getInstance()
-                        .getDatabaseContext()
-                        .newEntity_DAO(HoaDon_DAO.class)
-                        .capNhat(hoaDon);
-            }
-            
-            Ban ban = don.getBan();
-            if (ban != null) {
-                ban.setTrangThai("Trống");
-                RestaurantApplication.getInstance()
-                        .getDatabaseContext()
-                        .newEntity_DAO(Ban_DAO.class)
-                        .capNhat(ban);
-            }
-            KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+	private void huyDonKhachGoiTruoc(DonDatBan don) {
+		if (don == null) {
+			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn đơn đặt bàn!");
+			return;
+		}
 
-            showAlert(
-                Alert.AlertType.INFORMATION,
-                "Đã hủy đơn đặt bàn của khách "
-                + (kh != null ? kh.getTenKH() : "")
-                + " theo yêu cầu."
-            );
-            loadData();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Không thể hủy đơn đặt bàn!");
-        }
-    }
- 
-    private void showAlert(Alert.AlertType type, String msg) {
-        Alert alert = new Alert(type);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
+		if (!"Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
+			showAlert(Alert.AlertType.WARNING, "Đơn này không thể hủy!");
+			return;
+		}
+
+		LocalDateTime hienTai = LocalDateTime.now(ZoneId.systemDefault());
+		LocalDateTime gioBatDau = LocalDateTime.of(don.getNgayGioLapDon().toLocalDate(), don.getGioBatDau());
+
+		if (hienTai.isAfter(gioBatDau.minusHours(1))) {
+			showAlert(Alert.AlertType.WARNING, "Khách chỉ được hủy trước giờ đến ít nhất 1 tiếng!");
+			return;
+		}
+
+		Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+		confirm.setTitle("Xác nhận hủy đơn");
+		confirm.setHeaderText(null);
+		confirm.setContentText("Khách hàng xác nhận hủy đơn đặt bàn này?");
+		Optional<ButtonType> rs = confirm.showAndWait();
+
+		if (rs.isEmpty() || rs.get() != ButtonType.OK)
+			return;
+		try {
+			don.setTrangThai("Đã hủy");
+			donDatBanDAO.capNhat(don);
+
+			HoaDon hoaDon = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
+					.timHoaDonTheoDonDatBan(don);
+
+			if (hoaDon != null) {
+				hoaDon.setTrangThai("Đã hủy");
+				RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
+						.capNhat(hoaDon);
+			}
+
+			Ban ban = don.getBan();
+			if (ban != null) {
+				ban.setTrangThai("Trống");
+				RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+			}
+			KhachHang kh = donDatBanDAO.getKhachHangTheoMaDatBan(don.getMaDatBan());
+
+			showAlert(Alert.AlertType.INFORMATION,
+					"Đã hủy đơn đặt bàn của khách " + (kh != null ? kh.getTenKH() : "") + " theo yêu cầu.");
+			loadData();
+		} catch (Exception e) {
+			e.printStackTrace();
+			showAlert(Alert.AlertType.ERROR, "Không thể hủy đơn đặt bàn!");
+		}
+	}
+
+	private void showAlert(Alert.AlertType type, String msg) {
+		Alert alert = new Alert(type);
+		alert.setHeaderText(null);
+		alert.setContentText(msg);
+		alert.showAndWait();
+	}
 }

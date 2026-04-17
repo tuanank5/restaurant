@@ -20,549 +20,505 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
 public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO {
-	
+
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
-	
+
 	private EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
-	
+		return emf.createEntityManager();
+	}
+
 	@Override
 	public boolean themHoaDon(HoaDon hoaDon) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
-			try {
-	            tx.begin();
-	            em.persist(hoaDon);
-	            tx.commit();
-	            return true;
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            if (tx.isActive()) tx.rollback();
-	            return false;
-	        } finally {
-	            em.close();
-	        }
-	    }
-	 
-    @Override
-    public long tongSoHoaDon() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        long count = 0;
-        try {
-            String jpql = "SELECT COUNT(HD) FROM HoaDon HD";
-            count = entityManager.createQuery(jpql, Long.class).getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+		try {
+			tx.begin();
+			em.persist(hoaDon);
+			tx.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx.isActive())
+				tx.rollback();
+			return false;
+		} finally {
+			em.close();
+		}
+	}
 
-        return count;
-    }
+	@Override
+	public long tongSoHoaDon() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		long count = 0;
+		try {
+			String jpql = "SELECT COUNT(HD) FROM HoaDon HD";
+			count = entityManager.createQuery(jpql, Long.class).getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+		}
 
-    @Override
-    public List<HoaDon> getAllHoaDons() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<HoaDon> danhSachHoaDon = null;
-        try {
-            // Truy vấn để lấy tất cả hóa đơn
-            danhSachHoaDon = entityManager.createQuery("SELECT HD FROM HoaDon HD", HoaDon.class).getResultList();
-        } finally {
-            entityManager.close(); // Đóng EntityManager
-        }
-        return danhSachHoaDon;
-    }
+		return count;
+	}
 
-    @Override
-    public List<HoaDon> getAllHoaDonTheoThang(int thang, int nam) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<HoaDon> danhSachHoaDon = null;
+	@Override
+	public List<HoaDon> getAllHoaDons() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<HoaDon> danhSachHoaDon = null;
+		try {
+			// Truy vấn để lấy tất cả hóa đơn
+			danhSachHoaDon = entityManager.createQuery("SELECT HD FROM HoaDon HD", HoaDon.class).getResultList();
+		} finally {
+			entityManager.close(); // Đóng EntityManager
+		}
+		return danhSachHoaDon;
+	}
 
-        try {
-            String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam";
-            TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
-            query.setParameter("thang", thang);
-            query.setParameter("nam", nam);
+	@Override
+	public List<HoaDon> getAllHoaDonTheoThang(int thang, int nam) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<HoaDon> danhSachHoaDon = null;
 
-            danhSachHoaDon = query.getResultList();
+		try {
+			String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam";
+			TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
+			query.setParameter("thang", thang);
+			query.setParameter("nam", nam);
 
-        } finally {
-            entityManager.close();
-        }
+			danhSachHoaDon = query.getResultList();
 
-        return danhSachHoaDon;
-    }
+		} finally {
+			entityManager.close();
+		}
 
-    @Override
-    public List<HoaDon> getHoaDonTheoNam(int nam) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<HoaDon> danhSachHD = null;
-        try {
-            String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam";
-            TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
-            query.setParameter("nam", nam);
+		return danhSachHoaDon;
+	}
 
-            danhSachHD = query.getResultList();
+	@Override
+	public List<HoaDon> getHoaDonTheoNam(int nam) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<HoaDon> danhSachHD = null;
+		try {
+			String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam";
+			TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
+			query.setParameter("nam", nam);
 
-        } finally {
-            entityManager.close();
-        }
+			danhSachHD = query.getResultList();
 
-        return danhSachHD;
-    }
+		} finally {
+			entityManager.close();
+		}
 
-    @Override
-    public Double getTongDoanhThuTheoThang(int thang, int nam) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Double tongDoanhThu = 0.0;
+		return danhSachHD;
+	}
 
-        try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam";
-            TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
-            query.setParameter("thang", thang);
-            query.setParameter("nam", nam);
+	@Override
+	public Double getTongDoanhThuTheoThang(int thang, int nam) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Double tongDoanhThu = 0.0;
 
-            tongDoanhThu = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
-            tongDoanhThu = 0.0;
-        } finally {
-            entityManager.close();
-        }
+		try {
+			String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam";
+			TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
+			query.setParameter("thang", thang);
+			query.setParameter("nam", nam);
 
-        return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
-    }
+			tongDoanhThu = query.getSingleResult();
+		} catch (NoResultException e) {
+			// Nếu không có hóa đơn, trả về 0
+			tongDoanhThu = 0.0;
+		} finally {
+			entityManager.close();
+		}
 
-    @Override
-    public Double getTongDoanhThuTheoNam(int nam) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Double tongDoanhThu = 0.0;
+		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
+	}
 
-        try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam";
-            TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
-            query.setParameter("nam", nam);
+	@Override
+	public Double getTongDoanhThuTheoNam(int nam) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Double tongDoanhThu = 0.0;
 
-            tongDoanhThu = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
-            tongDoanhThu = 0.0;
-        } finally {
-            entityManager.close();
-        }
-        return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
-    }
+		try {
+			String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam";
+			TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
+			query.setParameter("nam", nam);
 
-    @Override
-    public List<HoaDon> getHoaDonTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<HoaDon> danhSachHoaDon = null;
-        try {
-            String jpql = "SELECT HD FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd";
-            TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
+			tongDoanhThu = query.getSingleResult();
+		} catch (NoResultException e) {
+			// Nếu không có hóa đơn, trả về 0
+			tongDoanhThu = 0.0;
+		} finally {
+			entityManager.close();
+		}
+		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
+	}
 
-            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
-            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
+	@Override
+	public List<HoaDon> getHoaDonTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<HoaDon> danhSachHoaDon = null;
+		try {
+			String jpql = "SELECT HD FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd";
+			TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
 
-            danhSachHoaDon = query.getResultList();
+			query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
+			query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
 
-        } finally {
-            entityManager.close();
-        }
+			danhSachHoaDon = query.getResultList();
 
-        return danhSachHoaDon;
-    }
+		} finally {
+			entityManager.close();
+		}
 
-    @Override
-    public Double getTongDoanhThuTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Double tongDoanhThu = 0.0;
+		return danhSachHoaDon;
+	}
 
-        try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd";
-            TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
+	@Override
+	public Double getTongDoanhThuTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Double tongDoanhThu = 0.0;
 
-            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
-            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
-            
-            tongDoanhThu = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
-            tongDoanhThu = 0.0;
-        } finally {
-            entityManager.close();
-        }
+		try {
+			String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd";
+			TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
 
-        return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
-    }
+			query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
+			query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
 
-    public Map<String, Double> getDoanhThuTheoNam(int nam) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Map<String, Double> doanhThuTheoThang = new HashMap<>();
+			tongDoanhThu = query.getSingleResult();
+		} catch (NoResultException e) {
+			// Nếu không có hóa đơn, trả về 0
+			tongDoanhThu = 0.0;
+		} finally {
+			entityManager.close();
+		}
 
-        try {
-            // Truy vấn tính tổng doanh thu theo tháng trong năm
-            String jpql = "SELECT MONTH(HD.ngayLap), SUM(HD.tongTien) " +
-                    "FROM HoaDon HD " +
-                    "WHERE YEAR(HD.ngayLap) = :nam " +
-                    "GROUP BY MONTH(HD.ngayLap)" +
-                    "ORDER BY MONTH(HD.ngayLap)";
-            TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
-            query.setParameter("nam", nam);
+		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
+	}
 
-            // Lấy kết quả và chuyển thành Map (Tháng -> Doanh thu)
-            for (Object[] result : query.getResultList()) {
-                int thang = (Integer) result[0];
-                double doanhThu = (Double) result[1];
-                doanhThuTheoThang.put("Tháng " + thang, doanhThu);
-            }
+	public Map<String, Double> getDoanhThuTheoNam(int nam) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Map<String, Double> doanhThuTheoThang = new HashMap<>();
 
-        } finally {
-            entityManager.close();
-        }
+		try {
+			// Truy vấn tính tổng doanh thu theo tháng trong năm
+			String jpql = "SELECT MONTH(HD.ngayLap), SUM(HD.tongTien) " + "FROM HoaDon HD "
+					+ "WHERE YEAR(HD.ngayLap) = :nam " + "GROUP BY MONTH(HD.ngayLap)" + "ORDER BY MONTH(HD.ngayLap)";
+			TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+			query.setParameter("nam", nam);
 
-        return doanhThuTheoThang;
-    }
+			// Lấy kết quả và chuyển thành Map (Tháng -> Doanh thu)
+			for (Object[] result : query.getResultList()) {
+				int thang = (Integer) result[0];
+				double doanhThu = (Double) result[1];
+				doanhThuTheoThang.put("Tháng " + thang, doanhThu);
+			}
 
-    @Override
-    public Double getTongDoanhThuTheoNgayVaNhanVien(Date ngayLap, String maNV) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Double tongDoanhThu = 0.0;
-        try {
-            LocalDate localDate = ngayLap.toLocalDate();
+		} finally {
+			entityManager.close();
+		}
 
-            Date start = Date.valueOf(localDate);
-            Date end = Date.valueOf(localDate.plusDays(1));
+		return doanhThuTheoThang;
+	}
 
-            String jpql = "SELECT SUM(HD.tongTien) "
-            		+ "FROM HoaDon HD "
-            		+ "WHERE HD.ngayLap >= :start "
-            		+ "AND HD.ngayLap < :end "
-            		+ "AND HD.nhanVien.maNV = :maNV";
+	@Override
+	public Double getTongDoanhThuTheoNgayVaNhanVien(Date ngayLap, String maNV) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Double tongDoanhThu = 0.0;
+		try {
+			LocalDate localDate = ngayLap.toLocalDate();
 
-            TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
-            query.setParameter("start", start);
-            query.setParameter("end", end);
-            query.setParameter("maNV", maNV);
+			Date start = Date.valueOf(localDate);
+			Date end = Date.valueOf(localDate.plusDays(1));
 
-            tongDoanhThu = query.getSingleResult();
+			String jpql = "SELECT SUM(HD.tongTien) " + "FROM HoaDon HD " + "WHERE HD.ngayLap >= :start "
+					+ "AND HD.ngayLap < :end " + "AND HD.nhanVien.maNV = :maNV";
 
-        } catch (Exception e) {
-            e.printStackTrace(); // ⚠️ rất quan trọng
-            tongDoanhThu = 0.0;
-        } finally {
-            entityManager.close();
-        }
+			TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
+			query.setParameter("start", start);
+			query.setParameter("end", end);
+			query.setParameter("maNV", maNV);
 
-        return tongDoanhThu != null ? tongDoanhThu : 0.0;
-    }
+			tongDoanhThu = query.getSingleResult();
 
-    @Override
-    public Long countHoaDonTheoNgayVaNhanVien(Date ngayLap, String maNV) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Long soLuongHoaDon = 0L;
-        try {
-            LocalDate localDate = ngayLap.toLocalDate();
-            Date start = Date.valueOf(localDate);
-            Date end = Date.valueOf(localDate.plusDays(1));
-            
-            String jpql = "SELECT COUNT(HD) "
-            		+ "FROM HoaDon HD "
-            		+ "WHERE HD.ngayLap >= :start "
-            		+ "AND HD.ngayLap < :end "
-            		+ "AND HD.nhanVien.maNV = :maNV";
-            TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
-            query.setParameter("start", start);
-            query.setParameter("end", end);
-            query.setParameter("maNV", maNV);
+		} catch (Exception e) {
+			e.printStackTrace(); // ⚠️ rất quan trọng
+			tongDoanhThu = 0.0;
+		} finally {
+			entityManager.close();
+		}
 
-            soLuongHoaDon = query.getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            soLuongHoaDon = 0L;
-        } finally {
-            entityManager.close();
-        }
-        return soLuongHoaDon != null ? soLuongHoaDon : 0L;
-    }
+		return tongDoanhThu != null ? tongDoanhThu : 0.0;
+	}
+
+	@Override
+	public Long countHoaDonTheoNgayVaNhanVien(Date ngayLap, String maNV) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Long soLuongHoaDon = 0L;
+		try {
+			LocalDate localDate = ngayLap.toLocalDate();
+			Date start = Date.valueOf(localDate);
+			Date end = Date.valueOf(localDate.plusDays(1));
+
+			String jpql = "SELECT COUNT(HD) " + "FROM HoaDon HD " + "WHERE HD.ngayLap >= :start "
+					+ "AND HD.ngayLap < :end " + "AND HD.nhanVien.maNV = :maNV";
+			TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+			query.setParameter("start", start);
+			query.setParameter("end", end);
+			query.setParameter("maNV", maNV);
+
+			soLuongHoaDon = query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			soLuongHoaDon = 0L;
+		} finally {
+			entityManager.close();
+		}
+		return soLuongHoaDon != null ? soLuongHoaDon : 0L;
+	}
 
 	@Override
 	public List<HoaDon> getAllHoaDonNVTheoThang(int thang, int nam, String maNV) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<HoaDon> danhSachHoaDon = null;
+		List<HoaDon> danhSachHoaDon = null;
 
-        try {
-            String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
-            TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
-            query.setParameter("thang", thang);
-            query.setParameter("nam", nam);
-            query.setParameter("maNV", maNV);
+		try {
+			String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
+			TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
+			query.setParameter("thang", thang);
+			query.setParameter("nam", nam);
+			query.setParameter("maNV", maNV);
 
-            danhSachHoaDon = query.getResultList();
+			danhSachHoaDon = query.getResultList();
 
-        } finally {
-            entityManager.close();
-        }
+		} finally {
+			entityManager.close();
+		}
 
-        return danhSachHoaDon;
+		return danhSachHoaDon;
 	}
 
 	@Override
 	public List<HoaDon> getHoaDonNVTheoNam(int nam, String maNV) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<HoaDon> danhSachHD = null;
-        try {
-            String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
-            TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
-            query.setParameter("nam", nam);
-            query.setParameter("maNV", maNV);
+		List<HoaDon> danhSachHD = null;
+		try {
+			String jpql = "SELECT HD FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
+			TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
+			query.setParameter("nam", nam);
+			query.setParameter("maNV", maNV);
 
-            danhSachHD = query.getResultList();
+			danhSachHD = query.getResultList();
 
-        } finally {
-            entityManager.close();
-        }
+		} finally {
+			entityManager.close();
+		}
 
-        return danhSachHD;
+		return danhSachHD;
 	}
 
 	@Override
 	public Double getTongDoanhThuNVTheoThang(int thang, int nam, String maNV) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Double tongDoanhThu = 0.0;
+		Double tongDoanhThu = 0.0;
 
-        try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
-            TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
-            query.setParameter("thang", thang);
-            query.setParameter("nam", nam);
-            query.setParameter("maNV", maNV);
+		try {
+			String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('MONTH', HD.ngayLap) = :thang AND FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
+			TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
+			query.setParameter("thang", thang);
+			query.setParameter("nam", nam);
+			query.setParameter("maNV", maNV);
 
-            tongDoanhThu = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
-            tongDoanhThu = 0.0;
-        } finally {
-            entityManager.close();
-        }
+			tongDoanhThu = query.getSingleResult();
+		} catch (NoResultException e) {
+			// Nếu không có hóa đơn, trả về 0
+			tongDoanhThu = 0.0;
+		} finally {
+			entityManager.close();
+		}
 
-        return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
+		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
 	}
 
 	@Override
 	public Double getTongDoanhThuNVTheoNam(int nam, String maNV) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Double tongDoanhThu = 0.0;
+		Double tongDoanhThu = 0.0;
 
-        try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
-            TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
-            query.setParameter("nam", nam);
-            query.setParameter("maNV", maNV);
+		try {
+			String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE FUNCTION('YEAR', HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV";
+			TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
+			query.setParameter("nam", nam);
+			query.setParameter("maNV", maNV);
 
-            tongDoanhThu = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
-            tongDoanhThu = 0.0;
-        } finally {
-            entityManager.close();
-        }
-        return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
+			tongDoanhThu = query.getSingleResult();
+		} catch (NoResultException e) {
+			// Nếu không có hóa đơn, trả về 0
+			tongDoanhThu = 0.0;
+		} finally {
+			entityManager.close();
+		}
+		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
 	}
 
 	@Override
 	public List<HoaDon> getHoaDonNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<HoaDon> danhSachHoaDon = null;
-        try {
-            String jpql = "SELECT HD FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd AND HD.nhanVien.maNV = :maNV";
-            TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
+		List<HoaDon> danhSachHoaDon = null;
+		try {
+			String jpql = "SELECT HD FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd AND HD.nhanVien.maNV = :maNV";
+			TypedQuery<HoaDon> query = entityManager.createQuery(jpql, HoaDon.class);
 
-            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
-            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
-            query.setParameter("maNV", maNV);
+			query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
+			query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
+			query.setParameter("maNV", maNV);
 
-            danhSachHoaDon = query.getResultList();
+			danhSachHoaDon = query.getResultList();
 
-        } finally {
-            entityManager.close();
-        }
+		} finally {
+			entityManager.close();
+		}
 
-        return danhSachHoaDon;
+		return danhSachHoaDon;
 	}
 
 	@Override
 	public Double getTongDoanhThuNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Double tongDoanhThu = 0.0;
+		Double tongDoanhThu = 0.0;
 
-        try {
-            String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd AND HD.nhanVien.maNV = :maNV";
-            TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
+		try {
+			String jpql = "SELECT SUM(HD.tongTien) FROM HoaDon HD WHERE HD.ngayLap BETWEEN :dateStart AND :dateEnd AND HD.nhanVien.maNV = :maNV";
+			TypedQuery<Double> query = entityManager.createQuery(jpql, Double.class);
 
-            query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
-            query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
-            query.setParameter("maNV", maNV);
-            
-            tongDoanhThu = query.getSingleResult();
-        } catch (NoResultException e) {
-            // Nếu không có hóa đơn, trả về 0
-            tongDoanhThu = 0.0;
-        } finally {
-            entityManager.close();
-        }
+			query.setParameter("dateStart", java.sql.Date.valueOf(dateStart));
+			query.setParameter("dateEnd", java.sql.Date.valueOf(dateEnd));
+			query.setParameter("maNV", maNV);
 
-        return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
+			tongDoanhThu = query.getSingleResult();
+		} catch (NoResultException e) {
+			// Nếu không có hóa đơn, trả về 0
+			tongDoanhThu = 0.0;
+		} finally {
+			entityManager.close();
+		}
+
+		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
 	}
-	
+
 	public Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Map<String, Double> doanhThuTheoThang = new HashMap<>();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Map<String, Double> doanhThuTheoThang = new HashMap<>();
 
-        try {
-            // Truy vấn tính tổng doanh thu theo tháng trong năm
-            String jpql = "SELECT MONTH(HD.ngayLap), SUM(HD.tongTien) " +
-                    "FROM HoaDon HD " +
-                    "WHERE YEAR(HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV " +
-                    "GROUP BY MONTH(HD.ngayLap)" +
-                    "ORDER BY MONTH(HD.ngayLap)";
-            TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
-            query.setParameter("nam", nam);
-            query.setParameter("maNV", maNV);
+		try {
+			// Truy vấn tính tổng doanh thu theo tháng trong năm
+			String jpql = "SELECT MONTH(HD.ngayLap), SUM(HD.tongTien) " + "FROM HoaDon HD "
+					+ "WHERE YEAR(HD.ngayLap) = :nam AND HD.nhanVien.maNV = :maNV " + "GROUP BY MONTH(HD.ngayLap)"
+					+ "ORDER BY MONTH(HD.ngayLap)";
+			TypedQuery<Object[]> query = entityManager.createQuery(jpql, Object[].class);
+			query.setParameter("nam", nam);
+			query.setParameter("maNV", maNV);
 
-            // Lấy kết quả và chuyển thành Map (Tháng -> Doanh thu)
-            for (Object[] result : query.getResultList()) {
-                int thang = (Integer) result[0];
-                double doanhThu = (Double) result[1];
-                doanhThuTheoThang.put("Tháng " + thang, doanhThu);
-            }
+			// Lấy kết quả và chuyển thành Map (Tháng -> Doanh thu)
+			for (Object[] result : query.getResultList()) {
+				int thang = (Integer) result[0];
+				double doanhThu = (Double) result[1];
+				doanhThuTheoThang.put("Tháng " + thang, doanhThu);
+			}
 
-        } finally {
-            entityManager.close();
-        }
+		} finally {
+			entityManager.close();
+		}
 
-        return doanhThuTheoThang;
-    }
-	
+		return doanhThuTheoThang;
+	}
+
 	@Override
 	public String getMaxMaHoaDon() {
 		EntityManager em = entityManagerFactory.createEntityManager();
-	    try {
-	        String jpql = "SELECT hd.maHD FROM HoaDon hd "
-	                     + "ORDER BY CAST(SUBSTRING(hd.maHD, 3) AS int) DESC";
+		try {
+			String jpql = "SELECT hd.maHD FROM HoaDon hd " + "ORDER BY CAST(SUBSTRING(hd.maHD, 3) AS int) DESC";
 
-	        return em.createQuery(jpql, String.class)
-	                 .setMaxResults(1)
-	                 .getSingleResult();
-	    } catch (NoResultException e) {
-	        return null;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return null;
-	    } finally {
-	        em.close();
-	    }
+			return em.createQuery(jpql, String.class).setMaxResults(1).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			em.close();
+		}
 	}
-	
+
 	@Override
 	public HoaDon getHoaDonTheoMaDatBan(String maDatBan) {
-	    EntityManager em = emf.createEntityManager();
-	    try {
-	        return em.createQuery(
-	            "SELECT hd FROM HoaDon hd " +
-	            "WHERE hd.donDatBan.maDatBan = :ma",
-	            HoaDon.class
-	        )
-	        .setParameter("ma", maDatBan)
-	        .getResultStream()
-	        .findFirst()
-	        .orElse(null);
-	    } finally {
-	        em.close();
-	    }
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT hd FROM HoaDon hd " + "WHERE hd.donDatBan.maDatBan = :ma", HoaDon.class)
+					.setParameter("ma", maDatBan).getResultStream().findFirst().orElse(null);
+		} finally {
+			em.close();
+		}
 	}
-	
+
 	@Override
 	public KhachHang getKhachHangTheoMaDatBan(String maDatBan) {
-	    EntityManager em = emf.createEntityManager();
-	    try {
-	        return em.createQuery(
-	            "SELECT hd.khachHang FROM HoaDon hd WHERE hd.donDatBan.maDatBan = :ma",
-	            KhachHang.class
-	        )
-	        .setParameter("ma", maDatBan)
-	        .getSingleResult();
-	    } catch (Exception e) {
-	        return null;
-	    } finally {
-	        em.close();
-	    }
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT hd.khachHang FROM HoaDon hd WHERE hd.donDatBan.maDatBan = :ma",
+					KhachHang.class).setParameter("ma", maDatBan).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
 	}
-	
+
 	@Override
-	public HoaDon timHoaDonDangPhucVuTheoBan(Ban ban,LocalDate ngay) {
-	    EntityManager em = emf.createEntityManager();
-	    try {
-	        String jpql =
-	            "SELECT hd FROM HoaDon hd " +
-	            "WHERE hd.donDatBan.ban = :ban " +
-	            "AND hd.trangThai = :trangThai " +
-	            "AND hd.ngayLap = :homNay";
+	public HoaDon timHoaDonDangPhucVuTheoBan(Ban ban, LocalDate ngay) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			String jpql = "SELECT hd FROM HoaDon hd " + "WHERE hd.donDatBan.ban = :ban "
+					+ "AND hd.trangThai = :trangThai " + "AND hd.ngayLap = :homNay";
 
-	        return em.createQuery(jpql, HoaDon.class)
-	                .setParameter("ban", ban)
-	                .setParameter("trangThai", "Đang phục vụ")
-	                .setParameter("homNay", java.sql.Date.valueOf(LocalDate.now()))
-	                .setMaxResults(1)
-	                .getResultStream()
-	                .findFirst()
-	                .orElse(null);
+			return em.createQuery(jpql, HoaDon.class).setParameter("ban", ban).setParameter("trangThai", "Đang phục vụ")
+					.setParameter("homNay", java.sql.Date.valueOf(LocalDate.now())).setMaxResults(1).getResultStream()
+					.findFirst().orElse(null);
 
-	    } finally {
-	        em.close();
-	    }
+		} finally {
+			em.close();
+		}
 	}
-	
+
 	@Override
 	public HoaDon timHoaDonTheoDonDatBan(DonDatBan donDatBan) {
-	    if (donDatBan == null || donDatBan.getMaDatBan() == null)
-	        return null;
+		if (donDatBan == null || donDatBan.getMaDatBan() == null)
+			return null;
 
-	    EntityManager em = emf.createEntityManager();
-	    try {
-	        String jpql =
-	            "SELECT hd FROM HoaDon hd " +
-	            "WHERE hd.donDatBan.maDatBan = :maDatBan";
+		EntityManager em = emf.createEntityManager();
+		try {
+			String jpql = "SELECT hd FROM HoaDon hd " + "WHERE hd.donDatBan.maDatBan = :maDatBan";
 
-	        return em.createQuery(jpql, HoaDon.class)
-	                .setParameter("maDatBan", donDatBan.getMaDatBan())
-	                .setMaxResults(1)
-	                .getResultStream()
-	                .findFirst()
-	                .orElse(null);
-	    } finally {
-	        em.close();
-	    }
+			return em.createQuery(jpql, HoaDon.class).setParameter("maDatBan", donDatBan.getMaDatBan()).setMaxResults(1)
+					.getResultStream().findFirst().orElse(null);
+		} finally {
+			em.close();
+		}
 	}
-	
+
 	@Override
 	public List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon) {
-	    EntityManager em = emf.createEntityManager();
-	    try {
-	        return em.createQuery(
-	            "SELECT ct "
-	            + "FROM ChiTietHoaDon ct "
-	            + "JOIN FETCH ct.monAn "
-	            + "WHERE ct.hoaDon.maHD = :ma",
-	            ChiTietHoaDon.class
-	        )
-	        .setParameter("ma", maHoaDon)
-	        .getResultList();
-	    } finally {
-	        em.close();
-	    }
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em
+					.createQuery("SELECT ct " + "FROM ChiTietHoaDon ct " + "JOIN FETCH ct.monAn "
+							+ "WHERE ct.hoaDon.maHD = :ma", ChiTietHoaDon.class)
+					.setParameter("ma", maHoaDon).getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
-	
 }

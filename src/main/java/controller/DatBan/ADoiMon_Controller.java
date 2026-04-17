@@ -54,404 +54,387 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
-public class ADoiMon_Controller implements Initializable{
+public class ADoiMon_Controller implements Initializable {
 
-    @FXML
-    private Button btnQuayLai;
+	@FXML
+	private Button btnQuayLai;
 
-    @FXML
-    private Button btnXacNhan;
-    
-    @FXML
-    private ComboBox<String> cmbLoaiMon;
+	@FXML
+	private Button btnXacNhan;
 
-    @FXML
-    private TableColumn<MonAn, Double> colDonGia;
+	@FXML
+	private ComboBox<String> cmbLoaiMon;
 
-    @FXML
-    private TableColumn<MonAn, Integer> colSTT;
+	@FXML
+	private TableColumn<MonAn, Double> colDonGia;
 
-    @FXML
-    private TableColumn<MonAn, Integer> colSoLuong;
+	@FXML
+	private TableColumn<MonAn, Integer> colSTT;
 
-    @FXML
-    private TableColumn<MonAn, Integer> colSoLuong1;
+	@FXML
+	private TableColumn<MonAn, Integer> colSoLuong;
 
-    @FXML
-    private TableColumn<MonAn, String> colTenMon;
+	@FXML
+	private TableColumn<MonAn, Integer> colSoLuong1;
 
-    @FXML
-    private GridPane gridPaneMon;
+	@FXML
+	private TableColumn<MonAn, String> colTenMon;
 
+	@FXML
+	private GridPane gridPaneMon;
 
-    @FXML
-    private Label lblTongTien;
-    
-    @FXML
-    private ScrollPane scrollPaneMon;
+	@FXML
+	private Label lblTongTien;
 
-    @FXML
-    private TableView<MonAn> tblDS;
+	@FXML
+	private ScrollPane scrollPaneMon;
 
-    @FXML
-    private TextField txtKhachHang;
+	@FXML
+	private TableView<MonAn> tblDS;
 
-    @FXML
-    private TextField txtMaBan;
+	@FXML
+	private TextField txtKhachHang;
 
-    @FXML
-    private TextField txtSoLuongKhach;
-    
-    //-----Bàn---------
-    private Ban banDangChon;
+	@FXML
+	private TextField txtMaBan;
 
-    
-    private NhanVien_DAO nhanVienDAO = new NhanVien_DAOImpl();
-    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-    private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-    private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-    private List<MonAn> dsMonAn;
-    private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
-    private DonDatBan donDatBanHienTai;
-    private HoaDon hoaDonHienTai;
+	@FXML
+	private TextField txtSoLuongKhach;
 
+	// -----Bàn---------
+	private Ban banDangChon;
 
-    @FXML
-    void btnQuayLai(ActionEvent event) {
-    	MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
-    }
+	private NhanVien_DAO nhanVienDAO = new NhanVien_DAOImpl();
+	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
+	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
+	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+	private List<MonAn> dsMonAn;
+	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+	private DonDatBan donDatBanHienTai;
+	private HoaDon hoaDonHienTai;
 
-    @FXML
-    void btnXacNhan(ActionEvent event) {
-        if (hoaDonHienTai == null) {
-            showAlert("Lỗi", "Không tìm thấy hóa đơn!", Alert.AlertType.ERROR);
-            return;
-        }
+	@FXML
+	void btnQuayLai(ActionEvent event) {
+		MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+	}
 
-        ChiTietHoaDon_DAO ctDAO = RestaurantApplication.getInstance()
-                .getDatabaseContext()
-                .newEntity_DAO(ChiTietHoaDon_DAO.class);
+	@FXML
+	void btnXacNhan(ActionEvent event) {
+		if (hoaDonHienTai == null) {
+			showAlert("Lỗi", "Không tìm thấy hóa đơn!", Alert.AlertType.ERROR);
+			return;
+		}
 
-        // 1️⃣ Xóa chi tiết cũ
-        ctDAO.deleteByMaHoaDon(hoaDonHienTai.getMaHoaDon());
+		ChiTietHoaDon_DAO ctDAO = RestaurantApplication.getInstance().getDatabaseContext()
+				.newEntity_DAO(ChiTietHoaDon_DAO.class);
 
-        // 2️⃣ Lưu chi tiết mới
-        for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
-            ChiTietHoaDon ct = new ChiTietHoaDon();
-            ct.setHoaDon(hoaDonHienTai);
-            ct.setMonAn(entry.getKey());
-            ct.setSoLuong(entry.getValue());
-            ctDAO.them(ct);
-        }
+		// 1️⃣ Xóa chi tiết cũ
+		ctDAO.deleteByMaHoaDon(hoaDonHienTai.getMaHoaDon());
 
-        showAlert("Thành công", "Cập nhật món ăn thành công!", Alert.AlertType.INFORMATION);
+		// 2️⃣ Lưu chi tiết mới
+		for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
+			ChiTietHoaDon ct = new ChiTietHoaDon();
+			ct.setHoaDon(hoaDonHienTai);
+			ct.setMonAn(entry.getKey());
+			ct.setSoLuong(entry.getValue());
+			ctDAO.them(ct);
+		}
 
-        MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
-    }
+		showAlert("Thành công", "Cập nhật món ăn thành công!", Alert.AlertType.INFORMATION);
 
-    
+		MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		hoaDonHienTai = MenuNV_Controller.aBanHienTai_HD;
 		donDatBanHienTai = MenuNV_Controller.donDatBanDangDoi;
-        dsMonAn = monAnDAO.getDanhSachMonAn();
-        // Khởi tạo ComboBox phân loại (dùng dsMonAn)
-        khoiTaoComboBoxPhanLoai();
-        loadThongTinKhachVaSoLuong();
-        loadMonAnToGrid(dsMonAn);
-        colSTT.setCellValueFactory(col -> {
-            int index = tblDS.getItems().indexOf(col.getValue());
-            return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
-            });
-        colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
-        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-        colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(dinhDangTien(item));
-                }
-            }
-        });
-        colSoLuong.setCellValueFactory(col -> {
-            Integer soLuong = dsMonAnDat.get(col.getValue());
-            return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
-        });
-        tblDS.setItems(FXCollections.observableArrayList());
-        // --- Nhận dữ liệu bàn và KH từ MenuNV_Controller ---
-        if (MenuNV_Controller.banDangChon != null) {
-            this.banDangChon = MenuNV_Controller.banDangChon;
-            txtMaBan.setText(banDangChon.getMaBan());
-            loadMonCuaBan();
-        }
-        tblDS.setOnMouseClicked(e -> capNhatTongTien());
-        this.donDatBanHienTai = MenuNV_Controller.donDatBanDangDoi;
-        loadMonDaDatTuHoaDon();
+		dsMonAn = monAnDAO.getDanhSachMonAn();
+		// Khởi tạo ComboBox phân loại (dùng dsMonAn)
+		khoiTaoComboBoxPhanLoai();
+		loadThongTinKhachVaSoLuong();
+		loadMonAnToGrid(dsMonAn);
+		colSTT.setCellValueFactory(col -> {
+			int index = tblDS.getItems().indexOf(col.getValue());
+			return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
+		});
+		colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
+		colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
+		colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
+			@Override
+			protected void updateItem(Double item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+				} else {
+					setText(dinhDangTien(item));
+				}
+			}
+		});
+		colSoLuong.setCellValueFactory(col -> {
+			Integer soLuong = dsMonAnDat.get(col.getValue());
+			return new ReadOnlyObjectWrapper<>(soLuong != null ? soLuong : 0);
+		});
+		tblDS.setItems(FXCollections.observableArrayList());
+		// --- Nhận dữ liệu bàn và KH từ MenuNV_Controller ---
+		if (MenuNV_Controller.banDangChon != null) {
+			this.banDangChon = MenuNV_Controller.banDangChon;
+			txtMaBan.setText(banDangChon.getMaBan());
+			loadMonCuaBan();
+		}
+		tblDS.setOnMouseClicked(e -> capNhatTongTien());
+		this.donDatBanHienTai = MenuNV_Controller.donDatBanDangDoi;
+		loadMonDaDatTuHoaDon();
 
-        Tooltip toolTipQL = new Tooltip("Quay lại danh sách bàn");
+		Tooltip toolTipQL = new Tooltip("Quay lại danh sách bàn");
 		btnQuayLai.setTooltip(toolTipQL);
-		
+
 		Tooltip toolTipLM = new Tooltip("Lọc danh sách theo loại món");
 		cmbLoaiMon.setTooltip(toolTipLM);
-		
+
 		Tooltip toolTipXN = new Tooltip("Xác nhận đổi món ăn");
 		btnXacNhan.setTooltip(toolTipXN);
 	}
-	
-    public void setBanDangChon(Ban ban) {
-        this.banDangChon = ban;
-        loadMonCuaBan();
-    }
-    
-    
-    private void khoiTaoComboBoxPhanLoai() {
-        // Lấy danh sách loại món duy nhất
-        List<String> danhSachLoai = new ArrayList<>();
-        danhSachLoai.add("Tất cả"); // để hiển thị toàn bộ món
-        for (MonAn mon : dsMonAn) {
-            String loai = mon.getLoaiMon();
-            if (loai != null && !danhSachLoai.contains(loai)) {
-                danhSachLoai.add(loai);
-            }
-        }
-        cmbLoaiMon.getItems().setAll(danhSachLoai);
 
-        // Thêm sự kiện chọn
-        cmbLoaiMon.setOnAction(e -> locMonTheoLoai());
-    }
-    private void locMonTheoLoai() {
-        String loaiChon = cmbLoaiMon.getValue();
+	public void setBanDangChon(Ban ban) {
+		this.banDangChon = ban;
+		loadMonCuaBan();
+	}
 
-        // FIX NULL
-        if (loaiChon == null || loaiChon.equals("Tất cả")) {
-            loadMonAnToGrid(dsMonAn);
-            return;
-        }
+	private void khoiTaoComboBoxPhanLoai() {
+		// Lấy danh sách loại món duy nhất
+		List<String> danhSachLoai = new ArrayList<>();
+		danhSachLoai.add("Tất cả"); // để hiển thị toàn bộ món
+		for (MonAn mon : dsMonAn) {
+			String loai = mon.getLoaiMon();
+			if (loai != null && !danhSachLoai.contains(loai)) {
+				danhSachLoai.add(loai);
+			}
+		}
+		cmbLoaiMon.getItems().setAll(danhSachLoai);
 
-        List<MonAn> dsLoc = new ArrayList<>();
-        for (MonAn mon : dsMonAn) {
-            if (loaiChon.equals(mon.getLoaiMon())) {
-                dsLoc.add(mon);
-            }
-        }
+		// Thêm sự kiện chọn
+		cmbLoaiMon.setOnAction(e -> locMonTheoLoai());
+	}
 
-        loadMonAnToGrid(dsLoc);
-    }
+	private void locMonTheoLoai() {
+		String loaiChon = cmbLoaiMon.getValue();
 
-    
-    private void loadMonAnToGrid(List<MonAn> danhSach) {
-        gridPaneMon.getChildren().clear();
-        gridPaneMon.getColumnConstraints().clear();
-        gridPaneMon.getRowConstraints().clear();
-        gridPaneMon.setHgap(15);
-        gridPaneMon.setVgap(30);
-        gridPaneMon.setPadding(new Insets(15));
+		// FIX NULL
+		if (loaiChon == null || loaiChon.equals("Tất cả")) {
+			loadMonAnToGrid(dsMonAn);
+			return;
+		}
 
-        scrollPaneMon.setFitToWidth(true);
-        gridPaneMon.prefWidthProperty().bind(scrollPaneMon.widthProperty());
+		List<MonAn> dsLoc = new ArrayList<>();
+		for (MonAn mon : dsMonAn) {
+			if (loaiChon.equals(mon.getLoaiMon())) {
+				dsLoc.add(mon);
+			}
+		}
 
-        int columns = 4;
-        int col = 0;
-        int row = 0;
+		loadMonAnToGrid(dsLoc);
+	}
 
-        // Chia đều cột
-        for (int i = 0; i < columns; i++) {
-            ColumnConstraints cc = new ColumnConstraints();
-            cc.setPercentWidth(100.0 / columns);
-            gridPaneMon.getColumnConstraints().add(cc);
-        }
+	private void loadMonAnToGrid(List<MonAn> danhSach) {
+		gridPaneMon.getChildren().clear();
+		gridPaneMon.getColumnConstraints().clear();
+		gridPaneMon.getRowConstraints().clear();
+		gridPaneMon.setHgap(15);
+		gridPaneMon.setVgap(30);
+		gridPaneMon.setPadding(new Insets(15));
 
-        // TÍNH SỐ ROW THEO DANH SÁCH HIỆN TẠI
-        int totalRows = (int) Math.ceil(danhSach.size() / (double) columns);
-        for (int i = 0; i < totalRows; i++) {
-            RowConstraints rc = new RowConstraints();
-            rc.setPrefHeight(220);
-            rc.setVgrow(Priority.NEVER);
-            gridPaneMon.getRowConstraints().add(rc);
-        }
+		scrollPaneMon.setFitToWidth(true);
+		gridPaneMon.prefWidthProperty().bind(scrollPaneMon.widthProperty());
 
-        // HIỂN THỊ MÓN ĂN ĐÚNG DANH SÁCH ĐANG LOAD
-        for (MonAn mon : danhSach) {
-            ImageView img = new ImageView();
-            String path = mon.getDuongDanAnh();
-            if (path != null && !path.isEmpty()) {
-                try {
-                    img.setImage(new Image("file:" + path));
-                } catch (Exception e) {
-                    System.out.println("Không load được ảnh: " + path);
-                }
-            }
-            img.setFitWidth(120);
-            img.setFitHeight(120);
-            img.setPreserveRatio(true);
+		int columns = 4;
+		int col = 0;
+		int row = 0;
 
-            Label lblTen = new Label(mon.getTenMon());
-            lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+		// Chia đều cột
+		for (int i = 0; i < columns; i++) {
+			ColumnConstraints cc = new ColumnConstraints();
+			cc.setPercentWidth(100.0 / columns);
+			gridPaneMon.getColumnConstraints().add(cc);
+		}
 
-            Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
+		// TÍNH SỐ ROW THEO DANH SÁCH HIỆN TẠI
+		int totalRows = (int) Math.ceil(danhSach.size() / (double) columns);
+		for (int i = 0; i < totalRows; i++) {
+			RowConstraints rc = new RowConstraints();
+			rc.setPrefHeight(220);
+			rc.setVgrow(Priority.NEVER);
+			gridPaneMon.getRowConstraints().add(rc);
+		}
 
-            Button btnChon = new Button("Chọn");
-            btnChon.setOnAction(e -> chonMon(mon));
+		// HIỂN THỊ MÓN ĂN ĐÚNG DANH SÁCH ĐANG LOAD
+		for (MonAn mon : danhSach) {
+			ImageView img = new ImageView();
+			String path = mon.getDuongDanAnh();
+			if (path != null && !path.isEmpty()) {
+				try {
+					img.setImage(new Image("file:" + path));
+				} catch (Exception e) {
+					System.out.println("Không load được ảnh: " + path);
+				}
+			}
+			img.setFitWidth(120);
+			img.setFitHeight(120);
+			img.setPreserveRatio(true);
 
-            VBox box = new VBox(img, lblTen, lblGia, btnChon);
-            box.setSpacing(6);
-            box.setPadding(new Insets(8));
-            box.setPrefWidth(150);
-            box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; " + "-fx-alignment:center; -fx-border-radius:10; -fx-background-radius:10;");
-            gridPaneMon.add(box, col, row);
-            col++;
-            if (col == columns) {
-                col = 0;
-                row++;
-            }
-        }
+			Label lblTen = new Label(mon.getTenMon());
+			lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
-        gridPaneMon.requestLayout();
-    }
-    
-    private void loadMonCuaBan() {
-        if (banDangChon == null) return;
+			Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
 
-        // Nếu bàn đã từng đặt món → lấy lại
-        if (MenuNV_Controller.dsMonTheoBan.containsKey(banDangChon.getMaBan())) {
-            dsMonAnDat = MenuNV_Controller.dsMonTheoBan.get(banDangChon.getMaBan());
-        }
+			Button btnChon = new Button("Chọn");
+			btnChon.setOnAction(e -> chonMon(mon));
 
-        // Cập nhật bảng
-        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-        tblDS.refresh();
-        capNhatTongTien();
-    }
+			VBox box = new VBox(img, lblTen, lblGia, btnChon);
+			box.setSpacing(6);
+			box.setPadding(new Insets(8));
+			box.setPrefWidth(150);
+			box.setStyle("-fx-border-color: #CFCFCF; -fx-background-color:#FFFFFF; "
+					+ "-fx-alignment:center; -fx-border-radius:10; -fx-background-radius:10;");
+			gridPaneMon.add(box, col, row);
+			col++;
+			if (col == columns) {
+				col = 0;
+				row++;
+			}
+		}
 
-    
-    private void chonMon(MonAn mon) {
-    	if (dsMonAnDat.containsKey(mon)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Món đã chọn");
-            alert.setHeaderText("Món '" + mon.getTenMon() + "' đã có trong danh sách.");
-            alert.setContentText("Bạn muốn làm gì?");
+		gridPaneMon.requestLayout();
+	}
 
-            ButtonType btnTang = new ButtonType("➕ Tăng số lượng");
-            ButtonType btnGiam = new ButtonType("➖ Giảm số lượng");
-            ButtonType btnXoa = new ButtonType("❌ Xóa món");
-            ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
+	private void loadMonCuaBan() {
+		if (banDangChon == null)
+			return;
 
-            Button btnTangNode = (Button) alert.getDialogPane().lookupButton(btnTang);
-            Button btnGiamNode = (Button) alert.getDialogPane().lookupButton(btnGiam);
-            Button btnXoaNode  = (Button) alert.getDialogPane().lookupButton(btnXoa);
+		// Nếu bàn đã từng đặt món → lấy lại
+		if (MenuNV_Controller.dsMonTheoBan.containsKey(banDangChon.getMaBan())) {
+			dsMonAnDat = MenuNV_Controller.dsMonTheoBan.get(banDangChon.getMaBan());
+		}
 
-            btnTangNode.addEventFilter(ActionEvent.ACTION, e -> {
-                dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
-                tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-                tblDS.refresh();
-                e.consume();
-            });
+		// Cập nhật bảng
+		tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+		tblDS.refresh();
+		capNhatTongTien();
+	}
 
-            btnGiamNode.addEventFilter(ActionEvent.ACTION, e -> {
-                int soLuong = dsMonAnDat.get(mon) - 1;
-                if (soLuong <= 0) {
-                    dsMonAnDat.remove(mon);
-                    alert.close();
-                } else {
-                    dsMonAnDat.put(mon, soLuong);
-                }
-                tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-                tblDS.refresh();
-                e.consume();
-            });
-         
-            btnXoaNode.addEventHandler(ActionEvent.ACTION, e -> {
-                dsMonAnDat.remove(mon);
-                tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-                tblDS.refresh();
-            });
-            alert.show();
-    	}else {
-            // Thêm món mới
-            dsMonAnDat.put(mon, 1);
-        }
-        // Cập nhật bảng
-        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-        tblDS.refresh();
-        capNhatTongTien();
-    }
-    
-    private void capNhatTongTien() {
-        double tongTruocVAT = dsMonAnDat.entrySet().stream().mapToDouble(e -> e.getKey().getDonGia() * e.getValue()).sum();
-        lblTongTien.setText(dinhDangTien(tongTruocVAT));
-    }
-    
-    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
+	private void chonMon(MonAn mon) {
+		if (dsMonAnDat.containsKey(mon)) {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.setTitle("Món đã chọn");
+			alert.setHeaderText("Món '" + mon.getTenMon() + "' đã có trong danh sách.");
+			alert.setContentText("Bạn muốn làm gì?");
 
-    private String dinhDangTien(double soTien) {
-    	NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-        return nf.format(soTien);
-    }
-    private void loadMonDaDatTuHoaDon() {
-        if (hoaDonHienTai == null) {
-            System.out.println("❌ hoaDonHienTai = null");
-            return;
-        }
+			ButtonType btnTang = new ButtonType("➕ Tăng số lượng");
+			ButtonType btnGiam = new ButtonType("➖ Giảm số lượng");
+			ButtonType btnXoa = new ButtonType("❌ Xóa món");
+			ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
 
-        dsMonAnDat.clear();
+			Button btnTangNode = (Button) alert.getDialogPane().lookupButton(btnTang);
+			Button btnGiamNode = (Button) alert.getDialogPane().lookupButton(btnGiam);
+			Button btnXoaNode = (Button) alert.getDialogPane().lookupButton(btnXoa);
 
-        List<ChiTietHoaDon> dsCT =
-                RestaurantApplication.getInstance()
-                        .getDatabaseContext()
-                        .newEntity_DAO(ChiTietHoaDon_DAO.class)
-                        .getChiTietTheoMaHoaDon(hoaDonHienTai.getMaHoaDon());
+			btnTangNode.addEventFilter(ActionEvent.ACTION, e -> {
+				dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+				tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+				tblDS.refresh();
+				e.consume();
+			});
 
-        for (ChiTietHoaDon ct : dsCT) {
-            dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
-        }
+			btnGiamNode.addEventFilter(ActionEvent.ACTION, e -> {
+				int soLuong = dsMonAnDat.get(mon) - 1;
+				if (soLuong <= 0) {
+					dsMonAnDat.remove(mon);
+					alert.close();
+				} else {
+					dsMonAnDat.put(mon, soLuong);
+				}
+				tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+				tblDS.refresh();
+				e.consume();
+			});
 
-        tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
-        tblDS.refresh();
-        capNhatTongTien();
-    }
+			btnXoaNode.addEventHandler(ActionEvent.ACTION, e -> {
+				dsMonAnDat.remove(mon);
+				tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+				tblDS.refresh();
+			});
+			alert.show();
+		} else {
+			// Thêm món mới
+			dsMonAnDat.put(mon, 1);
+		}
+		// Cập nhật bảng
+		tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+		tblDS.refresh();
+		capNhatTongTien();
+	}
 
+	private void capNhatTongTien() {
+		double tongTruocVAT = dsMonAnDat.entrySet().stream().mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
+				.sum();
+		lblTongTien.setText(dinhDangTien(tongTruocVAT));
+	}
 
-    public void setDonDatBanHienTai(DonDatBan don) {
-        this.donDatBanHienTai = don;
-        loadMonDaDatTuHoaDon();
-    }
+	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 
-    private void showAlert(String title, String content, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(content);
-        alert.show();
-    }
-    
-    private void loadThongTinKhachVaSoLuong() {
+	private String dinhDangTien(double soTien) {
+		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+		return nf.format(soTien);
+	}
 
-        // ===== TÊN KHÁCH =====
-        if (hoaDonHienTai != null && hoaDonHienTai.getKhachHang() != null) {
-            txtKhachHang.setText(hoaDonHienTai.getKhachHang().getTenKH());
-        } else {
-            txtKhachHang.setText("Khách lẻ");
-        }
+	private void loadMonDaDatTuHoaDon() {
+		if (hoaDonHienTai == null) {
+			System.out.println("❌ hoaDonHienTai = null");
+			return;
+		}
 
-        // ===== SỐ LƯỢNG KHÁCH =====
-        if (donDatBanHienTai != null) {
-            txtSoLuongKhach.setText(
-                    String.valueOf(donDatBanHienTai.getSoLuong())
-            );
-        }
+		dsMonAnDat.clear();
 
-        // ===== MÃ BÀN =====
-            txtMaBan.setText(
-                    donDatBanHienTai.getBan().getMaBan()
-            );
-    }
+		List<ChiTietHoaDon> dsCT = RestaurantApplication.getInstance().getDatabaseContext()
+				.newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDonHienTai.getMaHoaDon());
+
+		for (ChiTietHoaDon ct : dsCT) {
+			dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
+		}
+
+		tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
+		tblDS.refresh();
+		capNhatTongTien();
+	}
+
+	public void setDonDatBanHienTai(DonDatBan don) {
+		this.donDatBanHienTai = don;
+		loadMonDaDatTuHoaDon();
+	}
+
+	private void showAlert(String title, String content, Alert.AlertType alertType) {
+		Alert alert = new Alert(alertType);
+		alert.setTitle(title);
+		alert.setHeaderText(content);
+		alert.show();
+	}
+
+	private void loadThongTinKhachVaSoLuong() {
+
+		// ===== TÊN KHÁCH =====
+		if (hoaDonHienTai != null && hoaDonHienTai.getKhachHang() != null) {
+			txtKhachHang.setText(hoaDonHienTai.getKhachHang().getTenKH());
+		} else {
+			txtKhachHang.setText("Khách lẻ");
+		}
+
+		// ===== SỐ LƯỢNG KHÁCH =====
+		if (donDatBanHienTai != null) {
+			txtSoLuongKhach.setText(String.valueOf(donDatBanHienTai.getSoLuong()));
+		}
+
+		// ===== MÃ BÀN =====
+		txtMaBan.setText(donDatBanHienTai.getBan().getMaBan());
+	}
 }
-
-
-    
-    
-
-

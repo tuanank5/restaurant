@@ -6,22 +6,23 @@ import jakarta.persistence.Persistence;
 
 public class RestaurantApplication {
 	private final EntityManagerFactory entityManagerFactory;
-    private final DatabaseContext databaseContext;
-    private static final RestaurantApplication instance = new RestaurantApplication();
-    
-    public RestaurantApplication() {
-        this.entityManagerFactory = Persistence.createEntityManagerFactory("default");
-        this.databaseContext = new DatabaseContextImpl();
-    }
-    public static RestaurantApplication getInstance() {
-        return instance;
-    }
+	private final DatabaseContext databaseContext;
+	private static final RestaurantApplication instance = new RestaurantApplication();
 
-    public DatabaseContext getDatabaseContext() {
-        return databaseContext;
-    }
+	public RestaurantApplication() {
+		this.entityManagerFactory = Persistence.createEntityManagerFactory("default");
+		this.databaseContext = new DatabaseContextImpl();
+	}
 
-    public EntityManagerFactory getEntityManagerFactory() {
-        return entityManagerFactory;
-    }
+	public static RestaurantApplication getInstance() {
+		return instance;
+	}
+
+	public DatabaseContext getDatabaseContext() {
+		return databaseContext;
+	}
+
+	public EntityManagerFactory getEntityManagerFactory() {
+		return entityManagerFactory;
+	}
 }

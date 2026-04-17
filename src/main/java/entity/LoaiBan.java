@@ -7,61 +7,53 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "LoaiBan.list",
-        query = "SELECT LB FROM LoaiBan LB"
-    ),
-    @NamedQuery(
-        name = "LoaiBan.count",
-        query = "SELECT COUNT(LB.maLoaiBan) FROM LoaiBan LB"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "LoaiBan.list", query = "SELECT LB FROM LoaiBan LB"),
+		@NamedQuery(name = "LoaiBan.count", query = "SELECT COUNT(LB.maLoaiBan) FROM LoaiBan LB") })
 public class LoaiBan {
 
-    @Id
-    @Column(name = "maLoaiBan", nullable = false, length = 20)
-    private String maLoaiBan;
+	@Id
+	@Column(name = "maLoaiBan", nullable = false, length = 20)
+	private String maLoaiBan;
 
-    @Column(name = "tenLoaiBan", nullable = false, length = 50)
-    private String tenLoaiBan;
+	@Column(name = "tenLoaiBan", nullable = false, length = 50)
+	private String tenLoaiBan;
 
-    @Column(name = "soLuong", nullable = false)
-    private int soLuong;
+	@Column(name = "soLuong", nullable = false)
+	private int soLuong;
 
-    public LoaiBan() {
-    	
-    }
+	public LoaiBan() {
 
-    public LoaiBan(String maLoaiBan, String tenLoaiBan, int soLuong) {
-        this.maLoaiBan = maLoaiBan;
-        this.tenLoaiBan = tenLoaiBan;
-        this.soLuong = soLuong;
-    }
+	}
 
-    public String getMaLoaiBan() {
-        return maLoaiBan;
-    }
+	public LoaiBan(String maLoaiBan, String tenLoaiBan, int soLuong) {
+		this.maLoaiBan = maLoaiBan;
+		this.tenLoaiBan = tenLoaiBan;
+		this.soLuong = soLuong;
+	}
 
-    public void setMaLoaiBan(String maLoaiBan) {
-        this.maLoaiBan = maLoaiBan;
-    }
+	public String getMaLoaiBan() {
+		return maLoaiBan;
+	}
 
-    public String getTenLoaiBan() {
-        return tenLoaiBan;
-    }
+	public void setMaLoaiBan(String maLoaiBan) {
+		this.maLoaiBan = maLoaiBan;
+	}
 
-    public void setTenLoaiBan(String tenLoaiBan) {
-        this.tenLoaiBan = tenLoaiBan;
-    }
+	public String getTenLoaiBan() {
+		return tenLoaiBan;
+	}
 
-    public int getSoLuong() {
-        return soLuong;
-    }
+	public void setTenLoaiBan(String tenLoaiBan) {
+		this.tenLoaiBan = tenLoaiBan;
+	}
 
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
-    }
+	public int getSoLuong() {
+		return soLuong;
+	}
+
+	public void setSoLuong(int soLuong) {
+		this.soLuong = soLuong;
+	}
 
 	@Override
 	public int hashCode() {
@@ -93,5 +85,4 @@ public class LoaiBan {
 		return "LoaiBan [maLoaiBan=" + maLoaiBan + ", tenLoaiBan=" + tenLoaiBan + ", soLuong=" + soLuong + "]";
 	}
 
-    
 }

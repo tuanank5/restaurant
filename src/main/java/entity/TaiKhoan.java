@@ -14,30 +14,30 @@ import util.PasswordUtil;
 @Table(name = "TaiKhoan")
 public class TaiKhoan {
 	@Id
-    @Column(name = "maTaiKhoan", nullable = false, length = 20)
-    private String maTaiKhoan;
-	
-    @Column(name = "tenTaiKhoan", nullable = false, length = 20)
-    private String tenTaiKhoan;
+	@Column(name = "maTaiKhoan", nullable = false, length = 20)
+	private String maTaiKhoan;
 
-    @Column(name = "matKhau", nullable = false, length = 100)
-    private String matKhau;
+	@Column(name = "tenTaiKhoan", nullable = false, length = 20)
+	private String tenTaiKhoan;
 
-    @Column(name = "ngayDangNhap")
-    private Date ngayDangNhap;
+	@Column(name = "matKhau", nullable = false, length = 100)
+	private String matKhau;
 
-    @Column(name = "ngayDangXuat")
-    private Date ngayDangXuat;
+	@Column(name = "ngayDangNhap")
+	private Date ngayDangNhap;
 
-    @Column(name = "ngaySuaDoi")
-    private Date ngaySuaDoi;
+	@Column(name = "ngayDangXuat")
+	private Date ngayDangXuat;
 
-    @ManyToOne
-    @JoinColumn(name = "maNV", referencedColumnName = "maNV", nullable = false)
-    private NhanVien nhanVien;
+	@Column(name = "ngaySuaDoi")
+	private Date ngaySuaDoi;
+
+	@ManyToOne
+	@JoinColumn(name = "maNV", referencedColumnName = "maNV", nullable = false)
+	private NhanVien nhanVien;
 
 	public TaiKhoan() {
-		
+
 	}
 
 	public TaiKhoan(String maTaiKhoan, String tenTaiKhoan, String matKhau, Date ngayDangNhap, Date ngayDangXuat,
@@ -50,15 +50,14 @@ public class TaiKhoan {
 		this.ngaySuaDoi = ngaySuaDoi;
 		this.nhanVien = nhanVien;
 	}
-	
+
 	public boolean kiemTraDangNhap(String tenTaiKhoan, String matKhau) {
-		return tenTaiKhoan.equalsIgnoreCase(this.tenTaiKhoan) &&
-		           matKhau.equals(this.matKhau);
-    }
-	
-    public boolean kiemTraDoiMatKhau(String matKhau) {
-        return PasswordUtil.checkPassword(matKhau, this.matKhau);
-    }
+		return tenTaiKhoan.equalsIgnoreCase(this.tenTaiKhoan) && matKhau.equals(this.matKhau);
+	}
+
+	public boolean kiemTraDoiMatKhau(String matKhau) {
+		return PasswordUtil.checkPassword(matKhau, this.matKhau);
+	}
 
 	public String getMaTaiKhoan() {
 		return maTaiKhoan;
@@ -147,6 +146,5 @@ public class TaiKhoan {
 				+ ", ngayDangNhap=" + ngayDangNhap + ", ngayDangXuat=" + ngayDangXuat + ", ngaySuaDoi=" + ngaySuaDoi
 				+ ", nhanVien=" + nhanVien + "]";
 	}
-    
-    
+
 }

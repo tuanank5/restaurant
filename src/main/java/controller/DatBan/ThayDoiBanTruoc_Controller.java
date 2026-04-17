@@ -34,532 +34,528 @@ import java.util.ResourceBundle;
 
 public class ThayDoiBanTruoc_Controller implements Initializable {
 
-    @FXML private Button btnBan;
-    @FXML private Button btnTroLai;
-    @FXML private Button btnXacNhan;
-    @FXML private ComboBox<String> cmbGioBatDau;
-    @FXML private ComboBox<String> cmbTrangThai;
-    @FXML private ComboBox<String> cmbLoaiBan;
-    @FXML private DatePicker dpNgayDatBan;
-    @FXML private GridPane gridPaneBan;
+	@FXML
+	private Button btnBan;
+	@FXML
+	private Button btnTroLai;
+	@FXML
+	private Button btnXacNhan;
+	@FXML
+	private ComboBox<String> cmbGioBatDau;
+	@FXML
+	private ComboBox<String> cmbTrangThai;
+	@FXML
+	private ComboBox<String> cmbLoaiBan;
+	@FXML
+	private DatePicker dpNgayDatBan;
+	@FXML
+	private GridPane gridPaneBan;
 
-    public static DonDatBan donDatBanDuocChon;
-    private String loaiBanCu;
+	public static DonDatBan donDatBanDuocChon;
+	private String loaiBanCu;
 
-    private Ban_DAO banDAO = new Ban_DAOImpl();
-    private DonDatBan_DAO donDAO = new DonDatBan_DAOImpl();
-    private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-    private LoaiBan_DAO loaiBanDAO = new LoaiBan_DAOImpl();
+	private Ban_DAO banDAO = new Ban_DAOImpl();
+	private DonDatBan_DAO donDAO = new DonDatBan_DAOImpl();
+	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
+	private LoaiBan_DAO loaiBanDAO = new LoaiBan_DAOImpl();
 
-    private List<Ban> danhSachBan = new ArrayList<>();
-    private List<LoaiBan> dsLoaiBan;
-    private List<Ban> danhSachBanDangChon = new ArrayList<>();
-    private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
+	private List<Ban> danhSachBan = new ArrayList<>();
+	private List<LoaiBan> dsLoaiBan;
+	private List<Ban> danhSachBanDangChon = new ArrayList<>();
+	private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
-        cmbTrangThai.setValue("Tất cả");
-        cmbTrangThai.setOnAction(e -> filterBanTheoTrangThai());
-        loadGioBatDau();
-        
-        if (donDatBanDuocChon != null) {
-            loadThongTinBan(donDatBanDuocChon.getBan(), donDatBanDuocChon);
-        }
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
+		cmbTrangThai.setValue("Tất cả");
+		cmbTrangThai.setOnAction(e -> filterBanTheoTrangThai());
+		loadGioBatDau();
 
-        loadDanhSachBan();
-        if (donDatBanDuocChon != null) {
-            danhDauBanDangDat(donDatBanDuocChon.getBan());
-        }
-        btnTroLai.setOnAction(event -> onTroLai(event));
-        dpNgayDatBan.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
-        cmbGioBatDau.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
-        khoiTaoLoaiBan();
-        
-        btnTroLai.setTooltip(new Tooltip("Thông báo cho nút Trở lại!"));
-        cmbLoaiBan.setTooltip(new Tooltip("Lọc theo loại bàn!"));
-        cmbGioBatDau.setTooltip(new Tooltip("Lọc theo giờ bắt đầu!"));
-        cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái của bàn!"));
-        dpNgayDatBan.setTooltip(new Tooltip("Lọc theo ngày đặt bàn!"));
-        btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
-    }
+		if (donDatBanDuocChon != null) {
+			loadThongTinBan(donDatBanDuocChon.getBan(), donDatBanDuocChon);
+		}
 
-    private void khoiTaoLoaiBan() {
-        cmbLoaiBan.getItems().clear();
-        cmbLoaiBan.getItems().add("Tất cả");
+		loadDanhSachBan();
+		if (donDatBanDuocChon != null) {
+			danhDauBanDangDat(donDatBanDuocChon.getBan());
+		}
+		btnTroLai.setOnAction(event -> onTroLai(event));
+		dpNgayDatBan.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
+		cmbGioBatDau.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
+		khoiTaoLoaiBan();
 
-        List<LoaiBan> dsLoaiBan = loaiBanDAO.getDanhSach("LoaiBan.list", LoaiBan.class);
-        for (LoaiBan lb : dsLoaiBan) {
-            cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
-        }
-        cmbLoaiBan.setValue("Tất cả");
+		btnTroLai.setTooltip(new Tooltip("Thông báo cho nút Trở lại!"));
+		cmbLoaiBan.setTooltip(new Tooltip("Lọc theo loại bàn!"));
+		cmbGioBatDau.setTooltip(new Tooltip("Lọc theo giờ bắt đầu!"));
+		cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái của bàn!"));
+		dpNgayDatBan.setTooltip(new Tooltip("Lọc theo ngày đặt bàn!"));
+		btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
+	}
 
-        cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
-    }
+	private void khoiTaoLoaiBan() {
+		cmbLoaiBan.getItems().clear();
+		cmbLoaiBan.getItems().add("Tất cả");
 
+		List<LoaiBan> dsLoaiBan = loaiBanDAO.getDanhSach("LoaiBan.list", LoaiBan.class);
+		for (LoaiBan lb : dsLoaiBan) {
+			cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
+		}
+		cmbLoaiBan.setValue("Tất cả");
 
-    private void loadGioBatDau() {
-        cmbGioBatDau.getItems().clear();
-        for (int hour = 8; hour <= 23; hour++) {
-            for (int minute = 0; minute < 60; minute += 5) {
-                cmbGioBatDau.getItems().add(String.format("%02d:%02d", hour, minute));
-            }
-        }
-        cmbGioBatDau.setValue("08:00");
-    }
+		cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
+	}
 
-    @FXML
-    void btnDatBan(ActionEvent event) {
-        if (danhSachBanDangChon.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn trước khi đổi!");
-            return;
-        }
-        Ban banMoi = danhSachBanDangChon.get(0);
-        LocalDate ngayDat = dpNgayDatBan.getValue();
-        if (ngayDat == null) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn ngày đổi bàn!");
-            return;
-        }
-        if (!ngayDat.isAfter(LocalDate.now())) {
-            showAlert(Alert.AlertType.ERROR, "Ngày đổi bàn phải lớn hơn ngày hiện tại!");
-            return;
-        }
-        String gioDat = cmbGioBatDau.getValue();
-        if (gioDat == null) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng chọn giờ đổi bàn!");
-            return;
-        }
-        try {
-            DonDatBan don = donDatBanDuocChon;
-            Ban banCu = don.getBan();
-            banCu.setTrangThai("Trống");
-            banDAO.capNhat(banCu);
-            banMoi.setTrangThai("Đã được đặt");
-            banDAO.capNhat(banMoi);
-            
-            int hour = Integer.parseInt(gioDat.substring(0, 2));
-            don.setBan(banMoi);
-            don.setNgayGioLapDon(ngayDat.atTime(hour, 0));
-            don.setGioBatDau(LocalTime.of(hour, 0));
-            don.setTrangThai("Chưa nhận bàn");
-            donDAO.capNhat(don);
-            
-            showAlert(Alert.AlertType.INFORMATION, "Đổi bàn thành công!");
-            MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
+	private void loadGioBatDau() {
+		cmbGioBatDau.getItems().clear();
+		for (int hour = 8; hour <= 23; hour++) {
+			for (int minute = 0; minute < 60; minute += 5) {
+				cmbGioBatDau.getItems().add(String.format("%02d:%02d", hour, minute));
+			}
+		}
+		cmbGioBatDau.setValue("08:00");
+	}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	@FXML
+	void btnDatBan(ActionEvent event) {
+		if (danhSachBanDangChon.isEmpty()) {
+			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn trước khi đổi!");
+			return;
+		}
+		Ban banMoi = danhSachBanDangChon.get(0);
+		LocalDate ngayDat = dpNgayDatBan.getValue();
+		if (ngayDat == null) {
+			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn ngày đổi bàn!");
+			return;
+		}
+		if (!ngayDat.isAfter(LocalDate.now())) {
+			showAlert(Alert.AlertType.ERROR, "Ngày đổi bàn phải lớn hơn ngày hiện tại!");
+			return;
+		}
+		String gioDat = cmbGioBatDau.getValue();
+		if (gioDat == null) {
+			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn giờ đổi bàn!");
+			return;
+		}
+		try {
+			DonDatBan don = donDatBanDuocChon;
+			Ban banCu = don.getBan();
+			banCu.setTrangThai("Trống");
+			banDAO.capNhat(banCu);
+			banMoi.setTrangThai("Đã được đặt");
+			banDAO.capNhat(banMoi);
 
-    @FXML
-    private void onTroLai(ActionEvent event) {
-        try {
-            MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			int hour = Integer.parseInt(gioDat.substring(0, 2));
+			don.setBan(banMoi);
+			don.setNgayGioLapDon(ngayDat.atTime(hour, 0));
+			don.setGioBatDau(LocalTime.of(hour, 0));
+			don.setTrangThai("Chưa nhận bàn");
+			donDAO.capNhat(don);
 
-    private void loadDanhSachBan() {
-        gridPaneBan.getChildren().clear();
-        danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
-        int col = 0, row = 0;
-        final int MAX_COLS = 5;
-        String loaiBanChon = cmbLoaiBan.getValue();
-        LocalDate ngay = dpNgayDatBan.getValue();
-        String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = parseGio(gioStr);
-        
-        for (Ban ban : danhSachBan) {
-        	String trangThaiThucTe = getTrangThaiThucTe(ban, ngay, gio);
-        	String trangThaiChon = cmbTrangThai.getValue();
-        	if (!"Tất cả".equals(trangThaiChon) &&
-        	    !trangThaiThucTe.equals(trangThaiChon))
-        	    continue;     	
-            // Lọc theo loại bàn
-            boolean matchLoai = "Tất cả".equals(loaiBanChon) || 
-                                ban.getLoaiBan().getTenLoaiBan().equals(loaiBanChon);
+			showAlert(Alert.AlertType.INFORMATION, "Đổi bàn thành công!");
+			MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
 
-            if (!matchLoai) continue;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-            Button btnBan = taoNutBan(ban);
-            gridPaneBan.add(btnBan, col, row);
-            col++;
-            if (col >= MAX_COLS) {
-                col = 0;
-                row++;
-            }
-        }      
-    }
+	@FXML
+	private void onTroLai(ActionEvent event) {
+		try {
+			MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    private Button taoNutBan(Ban ban) {
-    	Button btnBan = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
-        btnBan.setPrefSize(170, 110);
-        LocalDate ngay = dpNgayDatBan.getValue();
-        String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = parseGio(gioStr);
-        String trangThai = getTrangThaiThucTe(ban, ngay, gio);
-        btnBan.setStyle(getStyleByStatusAndType(trangThai, ban.getLoaiBan().getMaLoaiBan()));
-        
-        btnBan.setOnMouseClicked(event -> {
-            String trangThaiThucTe = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(),
-            		parseGio(cmbGioBatDau.getValue()));
-            if (event.getClickCount() == 1) {
-                handleChonBan(ban, btnBan);
-            }
-            else if (event.getClickCount() == 2) {
-                if (trangThaiThucTe.equals("Trống")) {
-                    moFormThongTinKhachHang();
-                } else {
-                    showAlert(Alert.AlertType.WARNING, 
-                        "Chỉ có thể mở thông tin khách hàng khi bàn đang TRỐNG!");
-                }
-            }
-        });
-        GridPane.setMargin(btnBan, new Insets(5.0));
-        return btnBan;
-    }
+	private void loadDanhSachBan() {
+		gridPaneBan.getChildren().clear();
+		danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
+		int col = 0, row = 0;
+		final int MAX_COLS = 5;
+		String loaiBanChon = cmbLoaiBan.getValue();
+		LocalDate ngay = dpNgayDatBan.getValue();
+		String gioStr = cmbGioBatDau.getValue();
+		LocalTime gio = parseGio(gioStr);
 
-    private void handleChonBan(Ban ban, Button btnBan) {
-    	String trangThai = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(), 
-    			parseGio(cmbGioBatDau.getValue()));
-    	if (!trangThai.equals("Trống")) {
-    	    showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
-    	    return;
-    	}
-        
-        if (!danhSachBanDangChon.isEmpty()) {
-            Ban banCu = danhSachBanDangChon.get(0);
-            Button btnCu = danhSachButtonDangChonUI.get(0);
-            btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getTenLoaiBan() + ")");
-            String trangThaiThucTe = getTrangThaiThucTe(banCu,dpNgayDatBan.getValue(),parseGio(cmbGioBatDau.getValue()));
-            btnCu.setStyle(getStyleByStatusAndType( trangThaiThucTe,banCu.getLoaiBan().getMaLoaiBan()));
-            danhSachBanDangChon.clear();
-            danhSachButtonDangChonUI.clear();
-        }
-        
-        danhSachBanDangChon.add(ban);
-        danhSachButtonDangChonUI.add(btnBan);
-        btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
-        btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-    }
+		for (Ban ban : danhSachBan) {
+			String trangThaiThucTe = getTrangThaiThucTe(ban, ngay, gio);
+			String trangThaiChon = cmbTrangThai.getValue();
+			if (!"Tất cả".equals(trangThaiChon) && !trangThaiThucTe.equals(trangThaiChon))
+				continue;
+			// Lọc theo loại bàn
+			boolean matchLoai = "Tất cả".equals(loaiBanChon) || ban.getLoaiBan().getTenLoaiBan().equals(loaiBanChon);
 
+			if (!matchLoai)
+				continue;
 
-    private void danhDauBanDangDat(Ban banDaDat) {
-    	for (javafx.scene.Node node : gridPaneBan.getChildren()) {
-    	    if (node instanceof Button) {   	        
-    	        Button btn = (Button) node;
-    	        String[] parts = btn.getText().replace("✔", "").split("\n");
-    	        String ma = parts[0].trim();
-    	        if (ma.equals(banDaDat.getMaBan())) {
-    	            danhSachBanDangChon.add(banDaDat);
-    	            danhSachButtonDangChonUI.add(btn);
-    	            btn.setText("✔ " + banDaDat.getMaBan() +
-    	                        "\n(" + banDaDat.getLoaiBan().getTenLoaiBan() + ")");
-    	            btn.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-    	            break;
-    	        }
-            }
-        }
-    }
+			Button btnBan = taoNutBan(ban);
+			gridPaneBan.add(btnBan, col, row);
+			col++;
+			if (col >= MAX_COLS) {
+				col = 0;
+				row++;
+			}
+		}
+	}
 
-    private void filterBanTheoTrangThai() {
-        String trangThaiChon = cmbTrangThai.getValue();
-        gridPaneBan.getChildren().clear();
+	private Button taoNutBan(Ban ban) {
+		Button btnBan = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
+		btnBan.setPrefSize(170, 110);
+		LocalDate ngay = dpNgayDatBan.getValue();
+		String gioStr = cmbGioBatDau.getValue();
+		LocalTime gio = parseGio(gioStr);
+		String trangThai = getTrangThaiThucTe(ban, ngay, gio);
+		btnBan.setStyle(getStyleByStatusAndType(trangThai, ban.getLoaiBan().getMaLoaiBan()));
 
-        int col = 0, row = 0;
-        final int MAX_COLS = 5;
-        LocalDate ngay = dpNgayDatBan.getValue();
-        String gioStr = cmbGioBatDau.getValue();
-        LocalTime gio = parseGio(gioStr);
+		btnBan.setOnMouseClicked(event -> {
+			String trangThaiThucTe = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(),
+					parseGio(cmbGioBatDau.getValue()));
+			if (event.getClickCount() == 1) {
+				handleChonBan(ban, btnBan);
+			} else if (event.getClickCount() == 2) {
+				if (trangThaiThucTe.equals("Trống")) {
+					moFormThongTinKhachHang();
+				} else {
+					showAlert(Alert.AlertType.WARNING, "Chỉ có thể mở thông tin khách hàng khi bàn đang TRỐNG!");
+				}
+			}
+		});
+		GridPane.setMargin(btnBan, new Insets(5.0));
+		return btnBan;
+	}
 
-        for (Ban ban : danhSachBan) {
-            String trangThai = getTrangThaiThucTe(ban, ngay, gio);
-            if (!trangThaiChon.equals("Tất cả") && !trangThai.equals(trangThaiChon))
-                continue;
-            Button btnBan = taoNutBan(ban);
-            gridPaneBan.add(btnBan, col, row);
-            col++;
-            if (col >= MAX_COLS) {
-                col = 0;
-                row++;
-            }
-        }
-    }
+	private void handleChonBan(Ban ban, Button btnBan) {
+		String trangThai = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(), parseGio(cmbGioBatDau.getValue()));
+		if (!trangThai.equals("Trống")) {
+			showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
+			return;
+		}
 
-    private void locBanTheoNgayGio() {
-        LocalDate ngay = dpNgayDatBan.getValue();
-        String gioStr = cmbGioBatDau.getValue();
-        if (ngay == null || gioStr == null) return;
-        int gio = Integer.parseInt(gioStr.substring(0, 2));
-        LocalTime gioBatDau = LocalTime.of(gio, 0);
-        gridPaneBan.getChildren().clear();
+		if (!danhSachBanDangChon.isEmpty()) {
+			Ban banCu = danhSachBanDangChon.get(0);
+			Button btnCu = danhSachButtonDangChonUI.get(0);
+			btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getTenLoaiBan() + ")");
+			String trangThaiThucTe = getTrangThaiThucTe(banCu, dpNgayDatBan.getValue(),
+					parseGio(cmbGioBatDau.getValue()));
+			btnCu.setStyle(getStyleByStatusAndType(trangThaiThucTe, banCu.getLoaiBan().getMaLoaiBan()));
+			danhSachBanDangChon.clear();
+			danhSachButtonDangChonUI.clear();
+		}
 
-        int col = 0, row = 0;
-        final int MAX_COLS = 5;
-        for (Ban ban : danhSachBan) {
-        	boolean trung = coTrungLich(ban, ngay, gioBatDau);
-            Button btnBan = new Button(ban.getMaBan());
-            btnBan.setPrefSize(170, 110);
-            
-            btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-            if (trung) {
-                btnBan.setStyle(getStyleByStatusAndType("Đã được đặt", ban.getLoaiBan().getMaLoaiBan()));
-            } else {
-                btnBan.setStyle(getStyleByStatusAndType("Trống", ban.getLoaiBan().getMaLoaiBan()));
-            }
-            
-            GridPane.setMargin(btnBan, new Insets(5));
-            gridPaneBan.add(btnBan, col, row);
-            col++;
-            if (col >= MAX_COLS) {
-                col = 0;
-                row++;
-            }
-        }
-    }
+		danhSachBanDangChon.add(ban);
+		danhSachButtonDangChonUI.add(btnBan);
+		btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
+		btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+	}
 
-    private boolean coTrungLich(Ban ban, LocalDate ngay, LocalTime gioMoi) {
-        List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-        if (dsDon == null || dsDon.isEmpty()) return false;
+	private void danhDauBanDangDat(Ban banDaDat) {
+		for (javafx.scene.Node node : gridPaneBan.getChildren()) {
+			if (node instanceof Button) {
+				Button btn = (Button) node;
+				String[] parts = btn.getText().replace("✔", "").split("\n");
+				String ma = parts[0].trim();
+				if (ma.equals(banDaDat.getMaBan())) {
+					danhSachBanDangChon.add(banDaDat);
+					danhSachButtonDangChonUI.add(btn);
+					btn.setText("✔ " + banDaDat.getMaBan() + "\n(" + banDaDat.getLoaiBan().getTenLoaiBan() + ")");
+					btn.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+					break;
+				}
+			}
+		}
+	}
 
-        for (DonDatBan don : dsDon) {
-            if (donDatBanDuocChon != null &&
-                don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
-                continue;
+	private void filterBanTheoTrangThai() {
+		String trangThaiChon = cmbTrangThai.getValue();
+		gridPaneBan.getChildren().clear();
 
-            LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
-            if (!ngayDat.equals(ngay))
-                continue;
+		int col = 0, row = 0;
+		final int MAX_COLS = 5;
+		LocalDate ngay = dpNgayDatBan.getValue();
+		String gioStr = cmbGioBatDau.getValue();
+		LocalTime gio = parseGio(gioStr);
 
-            LocalTime gioBatDau = don.getGioBatDau();
-            LocalTime gioChan = gioBatDau.minusHours(1);
-            LocalTime gioKetThuc = gioBatDau.plusHours(1);
+		for (Ban ban : danhSachBan) {
+			String trangThai = getTrangThaiThucTe(ban, ngay, gio);
+			if (!trangThaiChon.equals("Tất cả") && !trangThai.equals(trangThaiChon))
+				continue;
+			Button btnBan = taoNutBan(ban);
+			gridPaneBan.add(btnBan, col, row);
+			col++;
+			if (col >= MAX_COLS) {
+				col = 0;
+				row++;
+			}
+		}
+	}
 
-            boolean trung;
+	private void locBanTheoNgayGio() {
+		LocalDate ngay = dpNgayDatBan.getValue();
+		String gioStr = cmbGioBatDau.getValue();
+		if (ngay == null || gioStr == null)
+			return;
+		int gio = Integer.parseInt(gioStr.substring(0, 2));
+		LocalTime gioBatDau = LocalTime.of(gio, 0);
+		gridPaneBan.getChildren().clear();
 
-            if (gioKetThuc.isAfter(gioChan)) {
-                trung = !gioMoi.isBefore(gioChan) && !gioMoi.isAfter(gioKetThuc);
-            } else {
-                trung = !gioMoi.isBefore(gioChan) || !gioMoi.isAfter(gioKetThuc);
-            }
-            if (trung)
-                return true;
-        }
-        return false;
-    }
+		int col = 0, row = 0;
+		final int MAX_COLS = 5;
+		for (Ban ban : danhSachBan) {
+			boolean trung = coTrungLich(ban, ngay, gioBatDau);
+			Button btnBan = new Button(ban.getMaBan());
+			btnBan.setPrefSize(170, 110);
 
-    private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
-        String backgroundColor = "white";
+			btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+			if (trung) {
+				btnBan.setStyle(getStyleByStatusAndType("Đã được đặt", ban.getLoaiBan().getMaLoaiBan()));
+			} else {
+				btnBan.setStyle(getStyleByStatusAndType("Trống", ban.getLoaiBan().getMaLoaiBan()));
+			}
 
-        switch (trangThai) {
-            case "Đã được đặt": backgroundColor = "#ff0000"; break;
-            case "Trống": backgroundColor = "#00aa00"; break;
-            case "Đang phục vụ": backgroundColor = "#ec9407"; break;
-        }
+			GridPane.setMargin(btnBan, new Insets(5));
+			gridPaneBan.add(btnBan, col, row);
+			col++;
+			if (col >= MAX_COLS) {
+				col = 0;
+				row++;
+			}
+		}
+	}
 
-        return "-fx-background-color: " + backgroundColor + ";" +
-               "-fx-background-radius: 15;" +
-               "-fx-padding: 10;" +
-               "-fx-font-size: 18px;" +
-               "-fx-font-weight: bold;" +
-               "-fx-text-fill: white;" +
-               "-fx-font-family: 'Times New Roman';" +
-               "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);";
-    }
-    
-    private void loadThongTinBan(Ban ban, DonDatBan don) {
-        try {
-            if (don.getNgayGioLapDon() != null) {
-                dpNgayDatBan.setValue(don.getNgayGioLapDon().toLocalDate());
-            }
-            if (don.getGioBatDau() != null) {
-                String gio = String.format("%02d:00", don.getGioBatDau().getHour());
-                cmbGioBatDau.setValue(gio);
-            }
-            if (ban.getLoaiBan() != null) {
-                cmbLoaiBan.setValue(ban.getLoaiBan().getTenLoaiBan());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-  
-    private void moFormThongTinKhachHang() {
-        if (donDatBanDuocChon == null) {
-            showAlert(Alert.AlertType.WARNING, "Không tìm thấy thông tin đơn đặt bàn!");
-            return;
-        }
-        
-        KhachHang kh = new HoaDon_DAOImpl()
-                .getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
-        
-        Alert dialog = new Alert(Alert.AlertType.NONE);
-        dialog.setTitle("Thông tin khách hàng");
-        dialog.setHeaderText("Thông tin khách hàng");
-        TextField txtSDT = new TextField(kh != null ? kh.getSdt() : "");
-        TextField txtTenKH = new TextField(kh != null ? kh.getTenKH() : "");
-        txtSDT.textProperty().addListener((obs, oldV, newV) -> {
-            if (newV.matches("\\d{9,11}")) {  
-                KhachHang khTim = new KhachHang_DAOlmpl().getKhachHangTheoSDT(newV);
-                if (khTim != null) {
-                    txtTenKH.setText(khTim.getTenKH());
-                } else {
-                    txtTenKH.clear();
-                }
-            } else {
-                txtTenKH.clear();
-            }
-        });
-        DatePicker dpNgayDat = new DatePicker(
-                donDatBanDuocChon.getNgayGioLapDon() != null ?
-                        donDatBanDuocChon.getNgayGioLapDon().toLocalDate() : LocalDate.now()
-        );        
-        ComboBox<String> cmbGioDat = new ComboBox<>();
-        for (int hour = 8; hour <= 23; hour++) {
-            for (int minute = 0; minute < 60; minute += 5) {
-            	cmbGioDat.getItems().add(String.format("%02d:%02d", hour, minute));
-            }
-        }
-        if (donDatBanDuocChon.getGioBatDau() != null) {
-            cmbGioDat.setValue(String.format("%02d:00", donDatBanDuocChon.getGioBatDau().getHour()));
-        } else {
-            cmbGioDat.setValue("08:00");
-        }
-        TextField txtSoLuong = new TextField(String.valueOf(donDatBanDuocChon.getSoLuong()));
-        txtSoLuong.textProperty().addListener((obs, oldV, newV) -> {
-            if (!newV.matches("\\d*")) {
-                showAlert(Alert.AlertType.ERROR, "Số lượng khách phải là số!");
-                txtSoLuong.setText(oldV);
-                return;
-            }
+	private boolean coTrungLich(Ban ban, LocalDate ngay, LocalTime gioMoi) {
+		List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+		if (dsDon == null || dsDon.isEmpty())
+			return false;
 
-            if (!newV.isEmpty()) {
-            	int sl = Integer.parseInt(newV);
-            	int sucChuaBanMoi = danhSachBanDangChon.isEmpty()
-            	        ? donDatBanDuocChon.getBan().getLoaiBan().getSoLuong()
-            	        : danhSachBanDangChon.get(0).getLoaiBan().getSoLuong();
-            	
-            	if (sl > sucChuaBanMoi) {
-            	    showAlert(Alert.AlertType.ERROR,
-            	            "Số lượng khách vượt quá số chỗ ngồi của bàn (" + sucChuaBanMoi + ")!");
-            	}
-            }
-        });     
-        GridPane pane = new GridPane();
-        pane.setHgap(20);
-        pane.setVgap(20);
-        pane.setPadding(new Insets(15));
+		for (DonDatBan don : dsDon) {
+			if (donDatBanDuocChon != null && don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
+				continue;
 
-        pane.addRow(0, new javafx.scene.control.Label("Số điện thoại:"), txtSDT);
-        pane.addRow(1, new javafx.scene.control.Label("Tên khách hàng:"), txtTenKH);
-        pane.addRow(2, new javafx.scene.control.Label("Ngày đặt:"), dpNgayDat);
-        pane.addRow(3, new javafx.scene.control.Label("Giờ đặt:"), cmbGioDat);
-        pane.addRow(4, new javafx.scene.control.Label("Số lượng:"), txtSoLuong);
-        
-        dialog.getDialogPane().setContent(pane);
-        dialog.getDialogPane().getButtonTypes().clear();
-        dialog.getDialogPane().getButtonTypes().addAll(
-                javafx.scene.control.ButtonType.OK,
-                javafx.scene.control.ButtonType.CANCEL
-        );
+			LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
+			if (!ngayDat.equals(ngay))
+				continue;
 
-        dialog.showAndWait().ifPresent(bt -> {
-            if (bt == javafx.scene.control.ButtonType.OK) {
-                try {
-                	KhachHang khUpdate = new HoaDon_DAOImpl()
-                            .getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
-                	
-                    if (txtSDT.getText().isEmpty() || txtTenKH.getText().isEmpty()) {
-                        showAlert(Alert.AlertType.WARNING, "Không được để trống SĐT hoặc Tên khách hàng!");
-                        return;
-                    }
-                    LocalDate ngayDat = dpNgayDat.getValue();
-                    if (ngayDat == null) {
-                        showAlert(Alert.AlertType.WARNING, "Ngày đặt không hợp lệ!");
-                        return;
-                    }
-                    String gioStr = cmbGioDat.getValue();
-                    int gio = Integer.parseInt(gioStr.substring(0, 2));
-                    LocalTime gioDat = LocalTime.of(gio, 0);
-                    int soLuong = Integer.parseInt(txtSoLuong.getText());
-                    
-                    if (khUpdate != null) {
-                        khUpdate.setSdt(txtSDT.getText());
-                        khUpdate.setTenKH(txtTenKH.getText());
-                        new KhachHang_DAOlmpl().capNhat(khUpdate);
-                    }
-                    
-                    donDatBanDuocChon.setNgayGioLapDon(ngayDat.atTime(gioDat));
-                    donDatBanDuocChon.setGioBatDau(gioDat);
-                    donDatBanDuocChon.setSoLuong(soLuong);
-                    donDAO.capNhat(donDatBanDuocChon);
-                    
-                    showAlert(Alert.AlertType.INFORMATION, "Cập nhật thông tin khách hàng thành công!");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Lỗi khi cập nhật dữ liệu!");
-                }
-            }
-        });
-    }
-    
-    private String getTrangThaiThucTe(Ban ban, LocalDate ngay, LocalTime gio) {
-        if (ngay == null || gio == null)
-            return "Trống";
+			LocalTime gioBatDau = don.getGioBatDau();
+			LocalTime gioChan = gioBatDau.minusHours(1);
+			LocalTime gioKetThuc = gioBatDau.plusHours(1);
 
-        List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-        if (dsDon == null || dsDon.isEmpty())
-            return "Trống";
+			boolean trung;
 
-        for (DonDatBan don : dsDon) {
-        	if (donDatBanDuocChon != null
-        	        && don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan())
-        	        && danhSachBanDangChon.isEmpty()) {
-        	    continue;
-        	}
+			if (gioKetThuc.isAfter(gioChan)) {
+				trung = !gioMoi.isBefore(gioChan) && !gioMoi.isAfter(gioKetThuc);
+			} else {
+				trung = !gioMoi.isBefore(gioChan) || !gioMoi.isAfter(gioKetThuc);
+			}
+			if (trung)
+				return true;
+		}
+		return false;
+	}
 
-            if (!don.getNgayGioLapDon().toLocalDate().equals(ngay))
-                continue;
+	private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
+		String backgroundColor = "white";
 
-            LocalTime gioBatDau = don.getGioBatDau();
-            LocalTime gioChan = gioBatDau.minusHours(1);
-            LocalTime gioKetThuc = gioBatDau.plusHours(1);
+		switch (trangThai) {
+		case "Đã được đặt":
+			backgroundColor = "#ff0000";
+			break;
+		case "Trống":
+			backgroundColor = "#00aa00";
+			break;
+		case "Đang phục vụ":
+			backgroundColor = "#ec9407";
+			break;
+		}
 
-            boolean trongKhoang;
-            if (gioKetThuc.isAfter(gioChan)) {
-                trongKhoang = !gio.isBefore(gioChan) && !gio.isAfter(gioKetThuc);
-            } else {
-                trongKhoang = !gio.isBefore(gioChan) || !gio.isAfter(gioKetThuc);
-            }
-            if (!trongKhoang)
-                continue;
+		return "-fx-background-color: " + backgroundColor + ";" + "-fx-background-radius: 15;" + "-fx-padding: 10;"
+				+ "-fx-font-size: 18px;" + "-fx-font-weight: bold;" + "-fx-text-fill: white;"
+				+ "-fx-font-family: 'Times New Roman';"
+				+ "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);";
+	}
 
-            if ("Đang phục vụ".equalsIgnoreCase(don.getTrangThai())
-                    || "Đã nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
-                return "Đang phục vụ";
-            }
-            if ("Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
-                return "Đã được đặt";
-            }
-        }
-        return "Trống";
-    }
+	private void loadThongTinBan(Ban ban, DonDatBan don) {
+		try {
+			if (don.getNgayGioLapDon() != null) {
+				dpNgayDatBan.setValue(don.getNgayGioLapDon().toLocalDate());
+			}
+			if (don.getGioBatDau() != null) {
+				String gio = String.format("%02d:00", don.getGioBatDau().getHour());
+				cmbGioBatDau.setValue(gio);
+			}
+			if (ban.getLoaiBan() != null) {
+				cmbLoaiBan.setValue(ban.getLoaiBan().getTenLoaiBan());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    private LocalTime parseGio(String gioStr) {
-        if (gioStr == null) return null;
-        String[] parts = gioStr.split(":");
-        return LocalTime.of(
-            Integer.parseInt(parts[0]),
-            Integer.parseInt(parts[1])
-        );
-    }
-    
-    private void showAlert(Alert.AlertType type, String msg) {
-        Alert alert = new Alert(type);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
+	private void moFormThongTinKhachHang() {
+		if (donDatBanDuocChon == null) {
+			showAlert(Alert.AlertType.WARNING, "Không tìm thấy thông tin đơn đặt bàn!");
+			return;
+		}
+
+		KhachHang kh = new HoaDon_DAOImpl().getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+
+		Alert dialog = new Alert(Alert.AlertType.NONE);
+		dialog.setTitle("Thông tin khách hàng");
+		dialog.setHeaderText("Thông tin khách hàng");
+		TextField txtSDT = new TextField(kh != null ? kh.getSdt() : "");
+		TextField txtTenKH = new TextField(kh != null ? kh.getTenKH() : "");
+		txtSDT.textProperty().addListener((obs, oldV, newV) -> {
+			if (newV.matches("\\d{9,11}")) {
+				KhachHang khTim = new KhachHang_DAOlmpl().getKhachHangTheoSDT(newV);
+				if (khTim != null) {
+					txtTenKH.setText(khTim.getTenKH());
+				} else {
+					txtTenKH.clear();
+				}
+			} else {
+				txtTenKH.clear();
+			}
+		});
+		DatePicker dpNgayDat = new DatePicker(
+				donDatBanDuocChon.getNgayGioLapDon() != null ? donDatBanDuocChon.getNgayGioLapDon().toLocalDate()
+						: LocalDate.now());
+		ComboBox<String> cmbGioDat = new ComboBox<>();
+		for (int hour = 8; hour <= 23; hour++) {
+			for (int minute = 0; minute < 60; minute += 5) {
+				cmbGioDat.getItems().add(String.format("%02d:%02d", hour, minute));
+			}
+		}
+		if (donDatBanDuocChon.getGioBatDau() != null) {
+			cmbGioDat.setValue(String.format("%02d:00", donDatBanDuocChon.getGioBatDau().getHour()));
+		} else {
+			cmbGioDat.setValue("08:00");
+		}
+		TextField txtSoLuong = new TextField(String.valueOf(donDatBanDuocChon.getSoLuong()));
+		txtSoLuong.textProperty().addListener((obs, oldV, newV) -> {
+			if (!newV.matches("\\d*")) {
+				showAlert(Alert.AlertType.ERROR, "Số lượng khách phải là số!");
+				txtSoLuong.setText(oldV);
+				return;
+			}
+
+			if (!newV.isEmpty()) {
+				int sl = Integer.parseInt(newV);
+				int sucChuaBanMoi = danhSachBanDangChon.isEmpty() ? donDatBanDuocChon.getBan().getLoaiBan().getSoLuong()
+						: danhSachBanDangChon.get(0).getLoaiBan().getSoLuong();
+
+				if (sl > sucChuaBanMoi) {
+					showAlert(Alert.AlertType.ERROR,
+							"Số lượng khách vượt quá số chỗ ngồi của bàn (" + sucChuaBanMoi + ")!");
+				}
+			}
+		});
+		GridPane pane = new GridPane();
+		pane.setHgap(20);
+		pane.setVgap(20);
+		pane.setPadding(new Insets(15));
+
+		pane.addRow(0, new javafx.scene.control.Label("Số điện thoại:"), txtSDT);
+		pane.addRow(1, new javafx.scene.control.Label("Tên khách hàng:"), txtTenKH);
+		pane.addRow(2, new javafx.scene.control.Label("Ngày đặt:"), dpNgayDat);
+		pane.addRow(3, new javafx.scene.control.Label("Giờ đặt:"), cmbGioDat);
+		pane.addRow(4, new javafx.scene.control.Label("Số lượng:"), txtSoLuong);
+
+		dialog.getDialogPane().setContent(pane);
+		dialog.getDialogPane().getButtonTypes().clear();
+		dialog.getDialogPane().getButtonTypes().addAll(javafx.scene.control.ButtonType.OK,
+				javafx.scene.control.ButtonType.CANCEL);
+
+		dialog.showAndWait().ifPresent(bt -> {
+			if (bt == javafx.scene.control.ButtonType.OK) {
+				try {
+					KhachHang khUpdate = new HoaDon_DAOImpl().getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+
+					if (txtSDT.getText().isEmpty() || txtTenKH.getText().isEmpty()) {
+						showAlert(Alert.AlertType.WARNING, "Không được để trống SĐT hoặc Tên khách hàng!");
+						return;
+					}
+					LocalDate ngayDat = dpNgayDat.getValue();
+					if (ngayDat == null) {
+						showAlert(Alert.AlertType.WARNING, "Ngày đặt không hợp lệ!");
+						return;
+					}
+					String gioStr = cmbGioDat.getValue();
+					int gio = Integer.parseInt(gioStr.substring(0, 2));
+					LocalTime gioDat = LocalTime.of(gio, 0);
+					int soLuong = Integer.parseInt(txtSoLuong.getText());
+
+					if (khUpdate != null) {
+						khUpdate.setSdt(txtSDT.getText());
+						khUpdate.setTenKH(txtTenKH.getText());
+						new KhachHang_DAOlmpl().capNhat(khUpdate);
+					}
+
+					donDatBanDuocChon.setNgayGioLapDon(ngayDat.atTime(gioDat));
+					donDatBanDuocChon.setGioBatDau(gioDat);
+					donDatBanDuocChon.setSoLuong(soLuong);
+					donDAO.capNhat(donDatBanDuocChon);
+
+					showAlert(Alert.AlertType.INFORMATION, "Cập nhật thông tin khách hàng thành công!");
+				} catch (Exception e) {
+					e.printStackTrace();
+					showAlert(Alert.AlertType.ERROR, "Lỗi khi cập nhật dữ liệu!");
+				}
+			}
+		});
+	}
+
+	private String getTrangThaiThucTe(Ban ban, LocalDate ngay, LocalTime gio) {
+		if (ngay == null || gio == null)
+			return "Trống";
+
+		List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+		if (dsDon == null || dsDon.isEmpty())
+			return "Trống";
+
+		for (DonDatBan don : dsDon) {
+			if (donDatBanDuocChon != null && don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan())
+					&& danhSachBanDangChon.isEmpty()) {
+				continue;
+			}
+
+			if (!don.getNgayGioLapDon().toLocalDate().equals(ngay))
+				continue;
+
+			LocalTime gioBatDau = don.getGioBatDau();
+			LocalTime gioChan = gioBatDau.minusHours(1);
+			LocalTime gioKetThuc = gioBatDau.plusHours(1);
+
+			boolean trongKhoang;
+			if (gioKetThuc.isAfter(gioChan)) {
+				trongKhoang = !gio.isBefore(gioChan) && !gio.isAfter(gioKetThuc);
+			} else {
+				trongKhoang = !gio.isBefore(gioChan) || !gio.isAfter(gioKetThuc);
+			}
+			if (!trongKhoang)
+				continue;
+
+			if ("Đang phục vụ".equalsIgnoreCase(don.getTrangThai())
+					|| "Đã nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
+				return "Đang phục vụ";
+			}
+			if ("Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
+				return "Đã được đặt";
+			}
+		}
+		return "Trống";
+	}
+
+	private LocalTime parseGio(String gioStr) {
+		if (gioStr == null)
+			return null;
+		String[] parts = gioStr.split(":");
+		return LocalTime.of(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+	}
+
+	private void showAlert(Alert.AlertType type, String msg) {
+		Alert alert = new Alert(type);
+		alert.setHeaderText(null);
+		alert.setContentText(msg);
+		alert.showAndWait();
+	}
 }

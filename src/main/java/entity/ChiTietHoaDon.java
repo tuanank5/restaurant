@@ -9,32 +9,27 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "ChiTietHoaDon.list",
-        query = "SELECT CTHD FROM ChiTietHoaDon CTHD"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "ChiTietHoaDon.list", query = "SELECT CTHD FROM ChiTietHoaDon CTHD") })
 public class ChiTietHoaDon {
 	@Id
-    @ManyToOne
-    @JoinColumn(name = "maHD", referencedColumnName = "maHD", nullable = false)
-    private HoaDon hoaDon;
+	@ManyToOne
+	@JoinColumn(name = "maHD", referencedColumnName = "maHD", nullable = false)
+	private HoaDon hoaDon;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "maMon", referencedColumnName = "maMon", nullable = false)
-    private MonAn monAn;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "maMon", referencedColumnName = "maMon", nullable = false)
+	private MonAn monAn;
 
-    @Column(name = "soLuong", nullable = false)
-    private int soLuong;
-    
-    //thanhTien cần xóa
-    @Column(name = "thanhTien", nullable = false)
-    private double thanhTien;
-    
+	@Column(name = "soLuong", nullable = false)
+	private int soLuong;
+
+	// thanhTien cần xóa
+	@Column(name = "thanhTien", nullable = false)
+	private double thanhTien;
+
 	public ChiTietHoaDon() {
-		
+
 	}
 
 	public ChiTietHoaDon(HoaDon hoaDon, MonAn monAn, int soLuong, double thanhTien) {
@@ -113,5 +108,4 @@ public class ChiTietHoaDon {
 				+ thanhTien + "]";
 	}
 
-	
 }

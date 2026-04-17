@@ -52,318 +52,320 @@ import javafx.scene.layout.VBox;
 
 public class DoiMonTruoc_Controller implements Initializable {
 
-    @FXML private TextField txtTim;
-    @FXML private Button btnTroLai;
-    @FXML private Button btnXacNhan;
-    @FXML private ComboBox<String> comBoxPhanLoai;
-    @FXML private ScrollPane scrollPaneMon;
-    @FXML private GridPane gridPaneMon;
+	@FXML
+	private TextField txtTim;
+	@FXML
+	private Button btnTroLai;
+	@FXML
+	private Button btnXacNhan;
+	@FXML
+	private ComboBox<String> comBoxPhanLoai;
+	@FXML
+	private ScrollPane scrollPaneMon;
+	@FXML
+	private GridPane gridPaneMon;
 
-    @FXML private TableView<ChiTietHoaDon> tblMonCu;
-    @FXML private TableColumn<ChiTietHoaDon, Integer> colSTT;
-    @FXML private TableColumn<ChiTietHoaDon, String> colTenMonCu;
-    @FXML private TableColumn<ChiTietHoaDon, Integer> colSoLuongCu;
-    @FXML private TableColumn<ChiTietHoaDon, Double> colDonGia;
+	@FXML
+	private TableView<ChiTietHoaDon> tblMonCu;
+	@FXML
+	private TableColumn<ChiTietHoaDon, Integer> colSTT;
+	@FXML
+	private TableColumn<ChiTietHoaDon, String> colTenMonCu;
+	@FXML
+	private TableColumn<ChiTietHoaDon, Integer> colSoLuongCu;
+	@FXML
+	private TableColumn<ChiTietHoaDon, Double> colDonGia;
 
-    private ObservableList<ChiTietHoaDon> danhSachMon = FXCollections.observableArrayList();
-    private List<MonAn> dsMonAn;
-    private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+	private ObservableList<ChiTietHoaDon> danhSachMon = FXCollections.observableArrayList();
+	private List<MonAn> dsMonAn;
+	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
 
-    public static Ban banChonStatic;
-    public static DonDatBan donDatBanDuocChon;
+	public static Ban banChonStatic;
+	public static DonDatBan donDatBanDuocChon;
 
-    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-    private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-    private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-    private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-    private ChiTietHoaDon_DAO chiTietHoaDonDAO = new ChiTietHoaDon_DAOImpl();
+	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
+	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
+	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
+	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+	private ChiTietHoaDon_DAO chiTietHoaDonDAO = new ChiTietHoaDon_DAOImpl();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
 
-        dsMonAn = monAnDAO.getDanhSachMonAn();
-        khoiTaoComboBoxPhanLoai();
+		dsMonAn = monAnDAO.getDanhSachMonAn();
+		khoiTaoComboBoxPhanLoai();
 
-        if (dsMonAn != null && !dsMonAn.isEmpty()) {
-            loadMonAnToGrid(dsMonAn);
-        }
+		if (dsMonAn != null && !dsMonAn.isEmpty()) {
+			loadMonAnToGrid(dsMonAn);
+		}
 
-        txtTim.textProperty().addListener((obs, o, n) -> timMonTheoTen());
+		txtTim.textProperty().addListener((obs, o, n) -> timMonTheoTen());
 
-        tblMonCu.setItems(danhSachMon);
+		tblMonCu.setItems(danhSachMon);
 
-        colSTT.setCellValueFactory(col ->
-            new ReadOnlyObjectWrapper<>(tblMonCu.getItems().indexOf(col.getValue()) + 1)
-        );
+		colSTT.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(tblMonCu.getItems().indexOf(col.getValue()) + 1));
 
-        colTenMonCu.setCellValueFactory(c -> {
-            ChiTietHoaDon ct = c.getValue();
-            return new ReadOnlyObjectWrapper<>(
-                ct.getMonAn() == null ? "" : ct.getMonAn().getTenMon()
-            );
-        });
+		colTenMonCu.setCellValueFactory(c -> {
+			ChiTietHoaDon ct = c.getValue();
+			return new ReadOnlyObjectWrapper<>(ct.getMonAn() == null ? "" : ct.getMonAn().getTenMon());
+		});
 
-        colSoLuongCu.setCellValueFactory(c ->
-            new ReadOnlyObjectWrapper<>(c.getValue().getSoLuong())
-        );
+		colSoLuongCu.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getSoLuong()));
 
-        colDonGia.setCellValueFactory(c ->
-            new ReadOnlyObjectWrapper<>(
-                c.getValue().getMonAn() == null
-                    ? 0.0
-                    : c.getValue().getMonAn().getDonGia()
-            )
-        );
+		colDonGia.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(
+				c.getValue().getMonAn() == null ? 0.0 : c.getValue().getMonAn().getDonGia()));
 
-        colDonGia.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? null : dinhDangTien(item));
-            }
-        });
+		colDonGia.setCellFactory(column -> new TableCell<>() {
+			@Override
+			protected void updateItem(Double item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty || item == null ? null : dinhDangTien(item));
+			}
+		});
 
-        javafx.application.Platform.runLater(() -> {
-            loadMonCu();
-        });
-       
-        btnTroLai.setTooltip(new Tooltip("Thông báo cho nút Trở lại!"));
-        btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
-        txtTim.setTooltip(new Tooltip("Nhập tên món ăn để tìm!"));
-        comBoxPhanLoai.setTooltip(new Tooltip("Lọc để tìm món ăn!"));
-    }
+		javafx.application.Platform.runLater(() -> {
+			loadMonCu();
+		});
 
-    //CHỌN MÓN
-    private void chonMon(MonAn mon) {
-    	if (dsMonAnDat.containsKey(mon)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Món đã chọn");
-            alert.setHeaderText(mon.getTenMon());
-            alert.setContentText("Bạn muốn thao tác gì?");
+		btnTroLai.setTooltip(new Tooltip("Thông báo cho nút Trở lại!"));
+		btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
+		txtTim.setTooltip(new Tooltip("Nhập tên món ăn để tìm!"));
+		comBoxPhanLoai.setTooltip(new Tooltip("Lọc để tìm món ăn!"));
+	}
 
-            ButtonType btnTang = new ButtonType("➕ Tăng");
-            ButtonType btnGiam = new ButtonType("➖ Giảm");
-            ButtonType btnXoa  = new ButtonType("❌ Xoá");
-            ButtonType btnHuy  = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
+	// CHỌN MÓN
+	private void chonMon(MonAn mon) {
+		if (dsMonAnDat.containsKey(mon)) {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.setTitle("Món đã chọn");
+			alert.setHeaderText(mon.getTenMon());
+			alert.setContentText("Bạn muốn thao tác gì?");
 
-            Button btnTangNode = (Button) alert.getDialogPane().lookupButton(btnTang);
-            Button btnGiamNode = (Button) alert.getDialogPane().lookupButton(btnGiam);
-            Button btnXoaNode  = (Button) alert.getDialogPane().lookupButton(btnXoa);
+			ButtonType btnTang = new ButtonType("➕ Tăng");
+			ButtonType btnGiam = new ButtonType("➖ Giảm");
+			ButtonType btnXoa = new ButtonType("❌ Xoá");
+			ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().setAll(btnTang, btnGiam, btnXoa, btnHuy);
 
-            btnTangNode.addEventFilter(ActionEvent.ACTION, e -> {
-                dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
-                hienThiMonMoi();
-                e.consume();
-            });
+			Button btnTangNode = (Button) alert.getDialogPane().lookupButton(btnTang);
+			Button btnGiamNode = (Button) alert.getDialogPane().lookupButton(btnGiam);
+			Button btnXoaNode = (Button) alert.getDialogPane().lookupButton(btnXoa);
 
-            btnGiamNode.addEventFilter(ActionEvent.ACTION, e -> {
-                int sl = dsMonAnDat.get(mon) - 1;
-                if (sl <= 0) {
-                    dsMonAnDat.remove(mon);
-                    hienThiMonMoi();
-                    alert.close();
-                } else {
-                    dsMonAnDat.put(mon, sl);
-                    hienThiMonMoi();
-                    e.consume();
-                }
-            });
+			btnTangNode.addEventFilter(ActionEvent.ACTION, e -> {
+				dsMonAnDat.put(mon, dsMonAnDat.get(mon) + 1);
+				hienThiMonMoi();
+				e.consume();
+			});
 
-            btnXoaNode.addEventHandler(ActionEvent.ACTION, e -> {
-                dsMonAnDat.remove(mon);
-                hienThiMonMoi();
-            });
-            alert.show(); 
-        }else {
-            dsMonAnDat.put(mon, 1);
-            hienThiMonMoi();
-        }
-    }
+			btnGiamNode.addEventFilter(ActionEvent.ACTION, e -> {
+				int sl = dsMonAnDat.get(mon) - 1;
+				if (sl <= 0) {
+					dsMonAnDat.remove(mon);
+					hienThiMonMoi();
+					alert.close();
+				} else {
+					dsMonAnDat.put(mon, sl);
+					hienThiMonMoi();
+					e.consume();
+				}
+			});
 
-    //HIỂN THỊ MÓN MỚI
-    private void hienThiMonMoi() {
-        danhSachMon.clear();
-        for (Map.Entry<MonAn,Integer> e : dsMonAnDat.entrySet()) {
-        	ChiTietHoaDon ct = new ChiTietHoaDon();
-        	ct.setMonAn(e.getKey());
-        	ct.setSoLuong(e.getValue());
-            danhSachMon.add(ct);
-        }
-        tblMonCu.refresh();
-    }
+			btnXoaNode.addEventHandler(ActionEvent.ACTION, e -> {
+				dsMonAnDat.remove(mon);
+				hienThiMonMoi();
+			});
+			alert.show();
+		} else {
+			dsMonAnDat.put(mon, 1);
+			hienThiMonMoi();
+		}
+	}
 
-    //Lấy món cũ lên     
-    private void loadMonCu() {
-        if (donDatBanDuocChon == null) return;
-        if (donDatBanDuocChon == null) return;
-        HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(
-            donDatBanDuocChon.getMaDatBan()
-        );
-        
-        if (hd == null) return;
-        List<ChiTietHoaDon> dsCTHD =
-            chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHoaDon());
+	// HIỂN THỊ MÓN MỚI
+	private void hienThiMonMoi() {
+		danhSachMon.clear();
+		for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
+			ChiTietHoaDon ct = new ChiTietHoaDon();
+			ct.setMonAn(e.getKey());
+			ct.setSoLuong(e.getValue());
+			danhSachMon.add(ct);
+		}
+		tblMonCu.refresh();
+	}
 
-        dsMonAnDat.clear();
-        danhSachMon.clear();
+	// Lấy món cũ lên
+	private void loadMonCu() {
+		if (donDatBanDuocChon == null)
+			return;
+		if (donDatBanDuocChon == null)
+			return;
+		HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
 
-        for (ChiTietHoaDon ct : dsCTHD) {
-            if (ct.getMonAn() != null) {
-                dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
-            }
-        }
-        hienThiMonMoi();
-    }
+		if (hd == null)
+			return;
+		List<ChiTietHoaDon> dsCTHD = chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHoaDon());
 
-    //TÌM MÓN
-    private void timMonTheoTen() {
-        String tuKhoa = txtTim.getText().trim().toLowerCase();
-        List<MonAn> dsLoc = new ArrayList<>();
+		dsMonAnDat.clear();
+		danhSachMon.clear();
 
-        if (tuKhoa.isEmpty()) dsLoc = dsMonAn;
-        else {
-            for (MonAn mon : dsMonAn) {
-                if (mon.getTenMon().toLowerCase().contains(tuKhoa))
-                    dsLoc.add(mon);
-            }
-        }
+		for (ChiTietHoaDon ct : dsCTHD) {
+			if (ct.getMonAn() != null) {
+				dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
+			}
+		}
+		hienThiMonMoi();
+	}
 
-        loadMonAnToGrid(dsLoc);
-    }
+	// TÌM MÓN
+	private void timMonTheoTen() {
+		String tuKhoa = txtTim.getText().trim().toLowerCase();
+		List<MonAn> dsLoc = new ArrayList<>();
 
-    //LỌC LOẠI MÓN
-    private void locMonTheoLoai() {
-        String loaiChon = comBoxPhanLoai.getValue();
-        List<MonAn> dsLoc = new ArrayList<>();
+		if (tuKhoa.isEmpty())
+			dsLoc = dsMonAn;
+		else {
+			for (MonAn mon : dsMonAn) {
+				if (mon.getTenMon().toLowerCase().contains(tuKhoa))
+					dsLoc.add(mon);
+			}
+		}
 
-        if (loaiChon.equals("Tất cả")) dsLoc = dsMonAn;
-        else {
-            for (MonAn mon : dsMonAn) {
-                if (loaiChon.equals(mon.getLoaiMon()))
-                    dsLoc.add(mon);
-            }
-        }
+		loadMonAnToGrid(dsLoc);
+	}
 
-        loadMonAnToGrid(dsLoc);
-    }
+	// LỌC LOẠI MÓN
+	private void locMonTheoLoai() {
+		String loaiChon = comBoxPhanLoai.getValue();
+		List<MonAn> dsLoc = new ArrayList<>();
 
-    private void khoiTaoComboBoxPhanLoai() {
-        List<String> dsLoai = new ArrayList<>();
-        dsLoai.add("Tất cả");
-        for (MonAn m : dsMonAn) {
-            if (!dsLoai.contains(m.getLoaiMon())) dsLoai.add(m.getLoaiMon());
-        }
-        comBoxPhanLoai.getItems().setAll(dsLoai);
-        comBoxPhanLoai.setOnAction(e -> locMonTheoLoai());
-    }
+		if (loaiChon.equals("Tất cả"))
+			dsLoc = dsMonAn;
+		else {
+			for (MonAn mon : dsMonAn) {
+				if (loaiChon.equals(mon.getLoaiMon()))
+					dsLoc.add(mon);
+			}
+		}
 
-    //LOAD GRID MÓN ĂN
-    private void loadMonAnToGrid(List<MonAn> danhSach) {
-        gridPaneMon.getChildren().clear();
-        gridPaneMon.getColumnConstraints().clear();
-        gridPaneMon.getRowConstraints().clear();
+		loadMonAnToGrid(dsLoc);
+	}
 
-        int columns = 4;
-        int col = 0, row = 0;
+	private void khoiTaoComboBoxPhanLoai() {
+		List<String> dsLoai = new ArrayList<>();
+		dsLoai.add("Tất cả");
+		for (MonAn m : dsMonAn) {
+			if (!dsLoai.contains(m.getLoaiMon()))
+				dsLoai.add(m.getLoaiMon());
+		}
+		comBoxPhanLoai.getItems().setAll(dsLoai);
+		comBoxPhanLoai.setOnAction(e -> locMonTheoLoai());
+	}
 
-        for (int i = 0; i < columns; i++) {
-            ColumnConstraints cc = new ColumnConstraints();
-            cc.setPercentWidth(100.0 / columns);
-            gridPaneMon.getColumnConstraints().add(cc);
-        }
+	// LOAD GRID MÓN ĂN
+	private void loadMonAnToGrid(List<MonAn> danhSach) {
+		gridPaneMon.getChildren().clear();
+		gridPaneMon.getColumnConstraints().clear();
+		gridPaneMon.getRowConstraints().clear();
 
-        int totalRows = (int) Math.ceil(danhSach.size() / (double) columns);
-        for (int i = 0; i < totalRows; i++) {
-            gridPaneMon.getRowConstraints().add(new RowConstraints(220));
-        }
+		int columns = 4;
+		int col = 0, row = 0;
 
-        for (MonAn mon : danhSach) {
-            ImageView img = new ImageView();
-            try { img.setImage(new Image("file:" + mon.getDuongDanAnh())); } catch (Exception ex) {}
+		for (int i = 0; i < columns; i++) {
+			ColumnConstraints cc = new ColumnConstraints();
+			cc.setPercentWidth(100.0 / columns);
+			gridPaneMon.getColumnConstraints().add(cc);
+		}
 
-            img.setFitWidth(120);
-            img.setFitHeight(120);
+		int totalRows = (int) Math.ceil(danhSach.size() / (double) columns);
+		for (int i = 0; i < totalRows; i++) {
+			gridPaneMon.getRowConstraints().add(new RowConstraints(220));
+		}
 
-            Label lblTen = new Label(mon.getTenMon());
-            lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
-            Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
+		for (MonAn mon : danhSach) {
+			ImageView img = new ImageView();
+			try {
+				img.setImage(new Image("file:" + mon.getDuongDanAnh()));
+			} catch (Exception ex) {
+			}
 
-            Button btnChon = new Button("Chọn");
-            btnChon.setOnAction(e -> chonMon(mon));
+			img.setFitWidth(120);
+			img.setFitHeight(120);
 
-            VBox box = new VBox(img, lblTen, lblGia, btnChon);
-            box.setSpacing(6);
-            box.setStyle("-fx-alignment:center; -fx-border-color:#ccc; -fx-background-color:white;");
+			Label lblTen = new Label(mon.getTenMon());
+			lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
+			Label lblGia = new Label(dinhDangTien(mon.getDonGia()));
 
-            gridPaneMon.add(box, col, row);
-            col++;
-            
-            if (col == columns) {
-                col = 0;
-                row++;
-            }
-        }
-    }
+			Button btnChon = new Button("Chọn");
+			btnChon.setOnAction(e -> chonMon(mon));
 
-    private String dinhDangTien(double soTien) {
-        return String.format("%,.0f", soTien);
-    }
+			VBox box = new VBox(img, lblTen, lblGia, btnChon);
+			box.setSpacing(6);
+			box.setStyle("-fx-alignment:center; -fx-border-color:#ccc; -fx-background-color:white;");
 
-    @FXML
-    private void hanhDongTroLai(ActionEvent e) {
-        MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
-    }
+			gridPaneMon.add(box, col, row);
+			col++;
 
-    @FXML
-    private void hanhDongXacNhan(ActionEvent e) {
-        if (donDatBanDuocChon == null) {
-            alert("Lỗi", "Chưa chọn đơn đặt bàn!");
-            return;
-        }
-        
-        System.out.println("Đơn đặt bàn: " + donDatBanDuocChon.getMaDatBan());
-        HoaDon hd1 = hoaDonDAO.getHoaDonTheoMaDatBan(
-            donDatBanDuocChon.getMaDatBan()
-        );
-        
-        System.out.println("HoaDon: " + hd1);
-        HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(
-        	    donDatBanDuocChon.getMaDatBan()
-        	);
+			if (col == columns) {
+				col = 0;
+				row++;
+			}
+		}
+	}
 
-        if (hd == null) {
-            alert("Lỗi", "Không tìm thấy hóa đơn!");
-            return;
-        }
+	private String dinhDangTien(double soTien) {
+		return String.format("%,.0f", soTien);
+	}
 
-        try {
-            // Xóa món cũ
-            chiTietHoaDonDAO.deleteByMaHoaDon(hd.getMaHoaDon());
-            // Ghi món mới
-            for (Map.Entry<MonAn,Integer> eMon : dsMonAnDat.entrySet()) {
-                MonAn mon = eMon.getKey();
-                int sl = eMon.getValue();
-                ChiTietHoaDon ct = new ChiTietHoaDon();
-                ct.setHoaDon(hd);
-                ct.setMonAn(mon);
-                ct.setSoLuong(sl);
-                ct.setThanhTien(mon.getDonGia() * sl);
-                chiTietHoaDonDAO.themChiTiet(ct); 
-            }
-            alert("Thành công", "Đổi món thành công!");
-            MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
-        } catch (Exception ex) {
-            alert("Lỗi", "Không lưu được: " + ex.getMessage());
-        }
-    }
+	@FXML
+	private void hanhDongTroLai(ActionEvent e) {
+		MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
+	}
 
-    private void alert(String t, String m){
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(t);
-        a.setHeaderText(null);
-        a.setContentText(m);
-        a.showAndWait();
-    }
-    
+	@FXML
+	private void hanhDongXacNhan(ActionEvent e) {
+		if (donDatBanDuocChon == null) {
+			alert("Lỗi", "Chưa chọn đơn đặt bàn!");
+			return;
+		}
+
+		System.out.println("Đơn đặt bàn: " + donDatBanDuocChon.getMaDatBan());
+		HoaDon hd1 = hoaDonDAO.getHoaDonTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+
+		System.out.println("HoaDon: " + hd1);
+		HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+
+		if (hd == null) {
+			alert("Lỗi", "Không tìm thấy hóa đơn!");
+			return;
+		}
+
+		try {
+			// Xóa món cũ
+			chiTietHoaDonDAO.deleteByMaHoaDon(hd.getMaHoaDon());
+			// Ghi món mới
+			for (Map.Entry<MonAn, Integer> eMon : dsMonAnDat.entrySet()) {
+				MonAn mon = eMon.getKey();
+				int sl = eMon.getValue();
+				ChiTietHoaDon ct = new ChiTietHoaDon();
+				ct.setHoaDon(hd);
+				ct.setMonAn(mon);
+				ct.setSoLuong(sl);
+				ct.setThanhTien(mon.getDonGia() * sl);
+				chiTietHoaDonDAO.themChiTiet(ct);
+			}
+			alert("Thành công", "Đổi món thành công!");
+			MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
+		} catch (Exception ex) {
+			alert("Lỗi", "Không lưu được: " + ex.getMessage());
+		}
+	}
+
+	private void alert(String t, String m) {
+		Alert a = new Alert(Alert.AlertType.INFORMATION);
+		a.setTitle(t);
+		a.setHeaderText(null);
+		a.setContentText(m);
+		a.showAndWait();
+	}
+
 }
