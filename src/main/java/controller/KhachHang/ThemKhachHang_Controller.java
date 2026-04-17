@@ -7,6 +7,7 @@ import java.util.Map;
 
 import config.DatabaseContext;
 import config.RestaurantApplication;
+import controller.Menu.MenuNV_Controller;
 import dao.HangKhachHang_DAO;
 import dao.KhachHang_DAO;
 import entity.HangKhachHang;
@@ -23,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import util.AlertUtil;
@@ -115,6 +117,14 @@ public class ThemKhachHang_Controller {
 			luuLai();
 		} else if (event.getCode() == KeyCode.X) {
 			resetAllField();
+		}
+	}
+	
+	@FXML
+	void mouseClicked(MouseEvent event) {
+		Object source = event.getSource();
+		if (source == lblDanhSachKhachHang) {
+			dongDialog();
 		}
 	}
 

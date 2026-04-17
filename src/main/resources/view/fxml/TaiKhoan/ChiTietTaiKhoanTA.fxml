@@ -75,7 +75,7 @@
    <top>
       <AnchorPane prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="lblDanhSachTaiKhoan" layoutX="25.0" layoutY="25.0" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Tài Khoản  &lt;" />
+            <Label fx:id="lblDanhSachTaiKhoan" layoutX="25.0" layoutY="25.0" onMouseClicked="#mouseClicked" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Danh Sách Tài Khoản  &lt;" />
             <Label layoutX="275.0" layoutY="25.0" style="-fx-font-weight: bold;" styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Chi Tiết Tài Khoản" />
             <Button mnemonicParsing="false" onAction="#btnQuayLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại (ESC)" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0" />
          </children>
