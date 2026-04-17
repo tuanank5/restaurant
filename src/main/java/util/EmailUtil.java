@@ -1,4 +1,4 @@
-package service;
+package util;
 
 import java.util.Properties;
 
@@ -11,7 +11,7 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-public class EmailService {
+public class EmailUtil {
 	private static final String FROM_EMAIL = "thanhdatfptshop123@gmail.com"; // Gmail bạn
 	private static final String APP_PASSWORD = "ordj auoq orpe rcsx"; // App password 16 chữ
 

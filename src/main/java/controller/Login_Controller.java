@@ -28,8 +28,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import service.EmailService;
 import util.AlertUtil;
+import util.EmailUtil;
 
 public class Login_Controller implements Initializable {
 
@@ -181,7 +181,7 @@ public class Login_Controller implements Initializable {
 			String subject = "Mã xác nhận đặt lại mật khẩu";
 			String contentEmail = "Mã xác nhận của bạn là: " + otp + "\n"
 					+ "Vui lòng không chia sẻ mã này cho bất kỳ ai.";
-			EmailService.sendEmail(emailNV, subject, contentEmail);
+			EmailUtil.sendEmail(emailNV, subject, contentEmail);
 			moManHinhQuenMatKhau(taiKhoan, otp);
 		});
 	}

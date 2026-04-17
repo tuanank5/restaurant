@@ -33,9 +33,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import service.EmailService;
 import util.AlertUtil;
 import util.AutoIDUitl;
+import util.EmailUtil;
 
 public class KhuyenMai_Controller {
 
@@ -190,7 +190,7 @@ public class KhuyenMai_Controller {
 			// Submit task gửi email vào thread pool
 			executor.submit(() -> {
 				try {
-					EmailService.sendEmail(kh.getEmail(), subject, emailContent);
+					EmailUtil.sendEmail(kh.getEmail(), subject, emailContent);
 					System.out.println("Đã gửi email đến: " + kh.getEmail());
 				} catch (Exception e) {
 					System.err.println("Gửi email thất bại: " + kh.getEmail());

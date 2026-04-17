@@ -38,10 +38,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import service.EmailService;
 import util.AlertUtil;
 import util.AutoIDUitl;
 import util.ComponentUtil;
+import util.EmailUtil;
 
 public class ThemNhanVien_Controller implements Initializable {
 	@FXML
@@ -273,7 +273,7 @@ public class ThemNhanVien_Controller implements Initializable {
 							+ "Tài khoản đăng nhập hệ thống của bạn:\n" + "Tên đăng nhập: " + username + "\n"
 							+ "Mật khẩu: " + password + "\n\n" + "Vui lòng đổi mật khẩu sau khi đăng nhập.";
 
-					EmailService.sendEmail(nvNew.getEmail(), "Thông tin tài khoản nhân viên", noiDungMail);
+					EmailUtil.sendEmail(nvNew.getEmail(), "Thông tin tài khoản nhân viên", noiDungMail);
 					AlertUtil.showAlert("Thông báo", "Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.",
 							Alert.AlertType.INFORMATION);
 
