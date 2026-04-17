@@ -58,7 +58,6 @@ public class DoiMonTruoc_Controller implements Initializable {
 	private ScrollPane scrollPaneMon;
 	@FXML
 	private GridPane gridPaneMon;
-
 	@FXML
 	private TableView<ChiTietHoaDon> tblMonCu;
 	@FXML

@@ -41,16 +41,12 @@ public class KhuyenMai_Controller {
 
 	@FXML
 	private BorderPane borderPane;
-
 	@FXML
 	private Button btnThemKM;
 	@FXML
 	private Button btnSuaKM;
 	@FXML
 	private Button btnXoaKM;
-	@FXML
-	private Button btnHelp;
-
 	@FXML
 	private TableColumn<KhuyenMai, String> colMaKM;
 	@FXML
@@ -63,12 +59,10 @@ public class KhuyenMai_Controller {
 	private TableColumn<KhuyenMai, Date> colNgayKetThuc;
 	@FXML
 	private TableColumn<KhuyenMai, Integer> colPhanTramGiamGia;
-
 	@FXML
 	private TableView<KhuyenMai> tblKM;
 	@FXML
 	private TextField txtTimKiem;
-
 	@FXML
 	private TextField txtMaKM, txtTenKM;
 	@FXML
@@ -133,8 +127,6 @@ public class KhuyenMai_Controller {
 			sua();
 		if (event.getSource() == btnXoaKM)
 			xoa();
-		if (event.getSource() == btnHelp)
-			MenuNVQL_Controller.instance.readyUI("Help/HelpScroll");
 	}
 
 	@FXML
