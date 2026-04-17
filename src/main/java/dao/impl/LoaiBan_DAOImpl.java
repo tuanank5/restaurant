@@ -1,12 +1,11 @@
 package dao.impl;
 
+import java.util.List;
+
 import dao.LoaiBan_DAO;
 import entity.LoaiBan;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-
-import java.util.List;
 
 public class LoaiBan_DAOImpl extends Entity_DAOImpl<LoaiBan> implements LoaiBan_DAO {
 

@@ -1,11 +1,12 @@
 package dao.impl;
 
+import java.util.List;
+
 import dao.KhachHang_DAO;
 import entity.KhachHang;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import java.util.List;
 
 public class KhachHang_DAOlmpl extends Entity_DAOImpl<KhachHang> implements KhachHang_DAO {
 

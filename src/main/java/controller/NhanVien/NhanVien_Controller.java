@@ -2,7 +2,9 @@ package controller.NhanVien;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import config.RestaurantApplication;
@@ -10,17 +12,27 @@ import controller.Menu.MenuNVQL_Controller;
 import dao.NhanVien_DAO;
 import entity.NhanVien;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import util.AlertUtil;
 import util.ComponentUtil;
 import util.ExportExcelUtil;
 
@@ -34,12 +46,10 @@ public class NhanVien_Controller {
 	private TextField txtTimKiem;
 	@FXML
 	private HBox hBox;
-
 	@FXML
 	private Button btnTatCa, btnDangLamViec, btnDaNghi;
 	@FXML
 	private Button btnThemNV, btnXoa, btnXuatPDF;
-
 	@FXML
 	private TableColumn<NhanVien, String> tblMaNV, tblTenNV, tblChucVu, tblEmail, tblDiaChi, tblGioiTinh, tblTrangThai;
 	@FXML
@@ -217,7 +227,7 @@ public class NhanVien_Controller {
 		if (nv == null)
 			return;
 
-		Optional<ButtonType> opt = showAlertConfirm("Bạn có chắc chắn xóa?");
+		Optional<ButtonType> opt = AlertUtil.showAlertConfirm("Bạn có chắc chắn xóa?");
 		if (opt.get().getButtonData() == ButtonBar.ButtonData.YES) {
 			nv.setTrangThai(false);
 			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class).capNhat(nv);
@@ -260,14 +270,5 @@ public class NhanVien_Controller {
 
 	private void huyChonDong() {
 		tblNV.getSelectionModel().clearSelection();
-	}
-
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setHeaderText(content);
-		alert.getButtonTypes().setAll(new ButtonType("Có", ButtonBar.ButtonData.YES),
-				new ButtonType("Không", ButtonBar.ButtonData.NO),
-				new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE));
-		return alert.showAndWait();
 	}
 }

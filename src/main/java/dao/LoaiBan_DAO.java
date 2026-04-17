@@ -1,8 +1,8 @@
 package dao;
 
-import entity.LoaiBan;
-
 import java.util.List;
+
+import entity.LoaiBan;
 
 public interface LoaiBan_DAO extends Entity_DAO<LoaiBan> {
 

@@ -5,14 +5,19 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import controller.Menu.MenuNV_Controller;
 import dao.impl.MonAn_DAOImpl;
 import entity.MonAn;
-
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,24 +26,24 @@ import util.AutoIDUitl;
 
 public class MonAn_Controller implements Initializable {
 
-	private MenuNV_Controller menuController; // Reference đến MenuNV_Controller
-
-	public void setMenuController(MenuNV_Controller menuController) {
-		this.menuController = menuController;
-	}
-
 	@FXML
 	private Button btnSua, btnThem, btnThemAnh, btnXoa;
+
 	@FXML
 	private ComboBox<String> cmbLoaiMon;
+
 	@FXML
 	private ImageView img;
+
 	@FXML
 	private TableView<MonAn> tblMon;
+
 	@FXML
 	private TableColumn<MonAn, String> colMa, colTen, colLoaiMon;
+
 	@FXML
 	private TableColumn<MonAn, Double> colDonGia;
+
 	@FXML
 	private TextField txtMaMon, txtTenMon, txtDonGia, txtTimKiem;
 

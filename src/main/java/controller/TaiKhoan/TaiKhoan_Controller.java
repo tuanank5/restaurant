@@ -16,7 +16,12 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -26,7 +31,6 @@ public class TaiKhoan_Controller implements Initializable {
 	private BorderPane borderPane;
 	@FXML
 	private Button btnTatCa;
-
 	@FXML
 	private TableView<TaiKhoan> tableView;
 	@FXML
@@ -41,7 +45,6 @@ public class TaiKhoan_Controller implements Initializable {
 	private TableColumn<TaiKhoan, String> colNDX;
 	@FXML
 	private TableColumn<TaiKhoan, String> colNgaySD;
-
 	@FXML
 	private TextField txtTimKiem;
 	@FXML

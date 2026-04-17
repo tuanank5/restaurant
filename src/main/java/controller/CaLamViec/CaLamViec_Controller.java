@@ -10,7 +10,6 @@ import com.jfoenix.controls.JFXButton;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-
 import dao.HoaDon_DAO;
 import dao.TaiKhoan_DAO;
 import dao.impl.HoaDon_DAOImpl;
@@ -21,13 +20,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import util.AlertUtil;
 
 public class CaLamViec_Controller {
 
@@ -161,7 +160,7 @@ public class CaLamViec_Controller {
 
 	@FXML
 	private void btnDangXuat(ActionEvent event) {
-		Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc muốn kết ca?");
+		Optional<ButtonType> buttonType = AlertUtil.showAlertConfirm("Bạn có chắc muốn kết ca?");
 		if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
 			return;
 		}
@@ -202,14 +201,4 @@ public class CaLamViec_Controller {
 		}
 	}
 
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Thông báo");
-		alert.setHeaderText(content);
-		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-		return alert.showAndWait();
-	}
 }

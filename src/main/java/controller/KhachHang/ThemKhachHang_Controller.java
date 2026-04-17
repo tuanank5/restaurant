@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import config.DatabaseContext;
 import config.RestaurantApplication;
-import controller.Menu.MenuNV_Controller;
 import dao.HangKhachHang_DAO;
 import dao.KhachHang_DAO;
 import entity.HangKhachHang;
@@ -20,16 +18,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import util.AlertUtil;
 import util.AutoIDUitl;
 
 public class ThemKhachHang_Controller {
@@ -122,33 +118,6 @@ public class ThemKhachHang_Controller {
 		}
 	}
 
-	// Chức năng xác nhận lưu khách hàng
-	private void xacNhanLuu(String ui) {
-		KhachHang khachHangNew = getKhachHangNew();
-		if (khachHangNew != null) {
-			Optional<ButtonType> buttonType = showAlertConfirm("Bạn có muốn lưu thông tin khách hàng không?");
-			if (buttonType.isPresent()) {
-				if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
-					MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
-				} else if (buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
-					// Thực hiện lưu khách hàng mới
-					boolean check = RestaurantApplication.getInstance().getDatabaseContext()
-							.newEntity_DAO(KhachHang_DAO.class).them(khachHangNew);
-					if (check) {
-						showAlert("Thông báo", "Thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
-						this.khachHang = khachHangNew;
-						// readyUI(ui); // Quay lại trang trước sau khi lưu
-						MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
-					} else {
-						showAlert("Thông báo", "Thêm khách hàng thất bại!", Alert.AlertType.WARNING);
-					}
-				}
-			}
-		} else {
-			MenuNV_Controller.instance.readyUI("KhachHang/KhachHang");
-		}
-	}
-
 	public void luuLai() {
 		KhachHang khachHangNew = getKhachHangNew();
 		try {
@@ -157,7 +126,7 @@ public class ThemKhachHang_Controller {
 						.newEntity_DAO(KhachHang_DAO.class).them(khachHangNew);
 				// Kiểm tra kết quả thêm
 				if (check) {
-					showAlert("Thông báo", "Thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
+					AlertUtil.showAlert("Thông báo", "Thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
 					this.khachHang = khachHangNew;
 					dongDialog();
 					// Nếu không ở form thêm, thì quay lại
@@ -167,14 +136,14 @@ public class ThemKhachHang_Controller {
 					// Reset lại toàn bộ các ô nhập
 					resetAllField();
 				} else {
-					showAlert("Thông báo", "Thêm khách hàng thất bại!", Alert.AlertType.WARNING);
+					AlertUtil.showAlert("Thông báo", "Thêm khách hàng thất bại!", Alert.AlertType.WARNING);
 				}
 			}
 		} catch (Exception e) {
 			if (e.getCause() != null && e.getCause().getMessage().contains("UNIQUE")) {
-				showAlert("Cảnh Báo", "Dữ liệu bị trùng (SĐT hoặc Email)!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh Báo", "Dữ liệu bị trùng (SĐT hoặc Email)!", Alert.AlertType.WARNING);
 			} else {
-				showAlert("Lỗi", "Xảy ra lỗi khi thêm khách hàng!", Alert.AlertType.ERROR);
+				AlertUtil.showAlert("Lỗi", "Xảy ra lỗi khi thêm khách hàng!", Alert.AlertType.ERROR);
 			}
 		}
 	}
@@ -190,19 +159,19 @@ public class ThemKhachHang_Controller {
 
 		// Kiểm tra tên khách hàng
 		if (tenKH.isEmpty()) {
-			showAlert("Cảnh Báo", "Vui lòng nhập tên khách hàng!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Vui lòng nhập tên khách hàng!", Alert.AlertType.WARNING);
 			txtKhachHang.requestFocus();
 			return null;
 		}
 		// Kiểm tra số điện thoại
 		if (sdt.isEmpty()) {
-			showAlert("Cảnh Báo", "Vui lòng nhập số điện thoại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Vui lòng nhập số điện thoại!", Alert.AlertType.WARNING);
 			txtSDT.requestFocus();
 			return null;
 		} else {
 			String regexPhone = "(84|0)[987531][0-9]{8,9}\\b";
 			if (!sdt.matches(regexPhone)) {
-				showAlert("Cảnh Báo", "Số điện thoại không hợp lệ!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh Báo", "Số điện thoại không hợp lệ!", Alert.AlertType.WARNING);
 				txtSDT.requestFocus();
 				return null;
 			} else {
@@ -211,7 +180,7 @@ public class ThemKhachHang_Controller {
 				List<KhachHang> listKH = databaseContext.newEntity_DAO(KhachHang_DAO.class).getDanhSach(KhachHang.class,
 						filter);
 				if (!listKH.isEmpty()) {
-					showAlert("Cảnh Báo", "Số điện thoại đã tồn tại!", Alert.AlertType.WARNING);
+					AlertUtil.showAlert("Cảnh Báo", "Số điện thoại đã tồn tại!", Alert.AlertType.WARNING);
 					return null;
 				}
 			}
@@ -219,17 +188,17 @@ public class ThemKhachHang_Controller {
 
 		// Kiểm tra email
 		if (email.isEmpty()) {
-			showAlert("Cảnh Báo", "Vui lòng nhập email!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Vui lòng nhập email!", Alert.AlertType.WARNING);
 			txtEmail.requestFocus();
 			return null;
 		} else if (!email.matches("^[a-zA-Z][a-zA-Z0-9]+@[a-zA-Z]+(\\.[a-zA-Z]+)+$")) {
-			showAlert("Cảnh Báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
 			txtEmail.requestFocus();
 			return null;
 		}
 		// Kiểm tra địa chỉ
 		if (diaChi.isEmpty()) {
-			showAlert("Cảnh Báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
 			txtDiaChi.requestFocus();
 			return null;
 		}
@@ -238,36 +207,36 @@ public class ThemKhachHang_Controller {
 		try {
 			diemTichLuy = Integer.parseInt(diemStr);
 			if (diemTichLuy < 0) {
-				showAlert("Cảnh Báo", "Điểm tích lũy không thể âm!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh Báo", "Điểm tích lũy không thể âm!", Alert.AlertType.WARNING);
 				txtDiemTichLuy.requestFocus();
 				return null;
 			}
 		} catch (NumberFormatException e) {
-			showAlert("Cảnh Báo", "Điểm tích lũy phải là số nguyên!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Điểm tích lũy phải là số nguyên!", Alert.AlertType.WARNING);
 			txtDiemTichLuy.requestFocus();
 			return null;
 		}
 		// Kiểm tra hạng khách hàng
 		if (hangKH == null) {
-			showAlert("Cảnh Báo", "Vui lòng chọn hạng khách hàng!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Vui lòng chọn hạng khách hàng!", Alert.AlertType.WARNING);
 			comBoxHangKH.requestFocus();
 			return null;
 		}
 
 		if (daTonTai("tenKH", tenKH)) {
-			showAlert("Cảnh Báo", "Tên khách hàng đã tồn tại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Tên khách hàng đã tồn tại!", Alert.AlertType.WARNING);
 			txtKhachHang.requestFocus();
 			return null;
 		}
 
 		if (daTonTai("sdt", sdt)) {
-			showAlert("Cảnh Báo", "Số điện thoại đã tồn tại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Số điện thoại đã tồn tại!", Alert.AlertType.WARNING);
 			txtSDT.requestFocus();
 			return null;
 		}
 
 		if (daTonTai("email", email)) {
-			showAlert("Cảnh Báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh Báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
 			txtEmail.requestFocus();
 			return null;
 		}
@@ -293,24 +262,6 @@ public class ThemKhachHang_Controller {
 		List<KhachHang> list = RestaurantApplication.getInstance().getDatabaseContext()
 				.newEntity_DAO(KhachHang_DAO.class).getDanhSach(KhachHang.class, filter);
 		return !list.isEmpty();
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType alertType) {
-		Alert alert = new Alert(alertType);
-		alert.setTitle(title);
-		alert.setHeaderText(content);
-		alert.show();
-	}
-
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Thông báo");
-		alert.setHeaderText(content);
-		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-		return alert.showAndWait();
 	}
 
 	private void resetAllField() {

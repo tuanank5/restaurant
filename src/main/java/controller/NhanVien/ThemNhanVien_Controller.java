@@ -9,18 +9,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import dao.TaiKhoan_DAO;
-import dao.impl.TaiKhoan_DAOImpl;
-import entity.TaiKhoan;
 import config.DatabaseContext;
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
 import dao.NhanVien_DAO;
+import dao.TaiKhoan_DAO;
+import dao.impl.TaiKhoan_DAOImpl;
 import entity.NhanVien;
+import entity.TaiKhoan;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,8 +27,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -42,6 +39,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import service.EmailService;
+import util.AlertUtil;
 import util.AutoIDUitl;
 import util.ComponentUtil;
 
@@ -157,7 +155,6 @@ public class ThemNhanVien_Controller implements Initializable {
 
 	@FXML
 	void mouseClicked(MouseEvent event) {
-		Object source = event.getSource();
 		if (event.getSource() == lblDanhSachNhanVien) {
 			MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
 		}
@@ -189,13 +186,13 @@ public class ThemNhanVien_Controller implements Initializable {
 		DatabaseContext db = RestaurantApplication.getInstance().getDatabaseContext();
 
 		if (tenNV.isEmpty()) {
-			showAlert("Cảnh báo", "Vui lòng nhập tên nhân viên!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập tên nhân viên!", Alert.AlertType.WARNING);
 			txtTenNV.requestFocus();
 			return null;
 		}
 
 		if (email.isEmpty() || !email.matches("^[a-zA-Z][a-zA-Z0-9]+@[a-zA-Z]+(\\.[a-zA-Z]+)+$")) {
-			showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
 			txtEmail.requestFocus();
 			return null;
 		}
@@ -203,27 +200,27 @@ public class ThemNhanVien_Controller implements Initializable {
 		Map<String, Object> filter = new HashMap<>();
 		filter.put("email", email);
 		if (!db.newEntity_DAO(NhanVien_DAO.class).getDanhSach(NhanVien.class, filter).isEmpty()) {
-			showAlert("Cảnh báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
 			return null;
 		}
 
 		if (namSinh == null || Period.between(namSinh, LocalDate.now()).getYears() < 18) {
-			showAlert("Cảnh báo", "Nhân viên phải đủ 18 tuổi!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Nhân viên phải đủ 18 tuổi!", Alert.AlertType.WARNING);
 			return null;
 		}
 
 		if (diaChi.isEmpty()) {
-			showAlert("Cảnh báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
 			return null;
 		}
 
 		if (gioiTinhStr == null || chucVu == null) {
-			showAlert("Cảnh báo", "Vui lòng chọn giới tính và chức vụ!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng chọn giới tính và chức vụ!", Alert.AlertType.WARNING);
 			return null;
 		}
 
 		if (ngayVaoLam == null) {
-			showAlert("Cảnh báo", "Vui lòng chọn ngày vào làm!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng chọn ngày vào làm!", Alert.AlertType.WARNING);
 			return null;
 		}
 
@@ -277,7 +274,7 @@ public class ThemNhanVien_Controller implements Initializable {
 							+ "Mật khẩu: " + password + "\n\n" + "Vui lòng đổi mật khẩu sau khi đăng nhập.";
 
 					EmailService.sendEmail(nvNew.getEmail(), "Thông tin tài khoản nhân viên", noiDungMail);
-					showAlert("Thông báo", "Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.",
+					AlertUtil.showAlert("Thông báo", "Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.",
 							Alert.AlertType.INFORMATION);
 
 					this.nhanVien = nvNew;
@@ -286,12 +283,12 @@ public class ThemNhanVien_Controller implements Initializable {
 					}
 					resetAllField();
 				} else {
-					showAlert("Thông báo", "Thêm nhân viên thất bại!", Alert.AlertType.WARNING);
+					AlertUtil.showAlert("Thông báo", "Thêm nhân viên thất bại!", Alert.AlertType.WARNING);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			showAlert("Lỗi", "Xảy ra lỗi khi thêm nhân viên!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Xảy ra lỗi khi thêm nhân viên!", Alert.AlertType.ERROR);
 		}
 	}
 
@@ -384,24 +381,6 @@ public class ThemNhanVien_Controller implements Initializable {
 			Button button = ComponentUtil.createButton(String.valueOf(i + 1), 14);
 			hBox.getChildren().add(button);
 		}
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType alertType) {
-		Alert alert = new Alert(alertType);
-		alert.setTitle(title);
-		alert.setHeaderText(content);
-		alert.show();
-	}
-
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Thông báo");
-		alert.setHeaderText(content);
-		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-		return alert.showAndWait();
 	}
 
 }

@@ -23,10 +23,6 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
 
-	private EntityManager getEntityManager() {
-		return emf.createEntityManager();
-	}
-
 	@Override
 	public boolean themHoaDon(HoaDon hoaDon) {
 		EntityManager em = emf.createEntityManager();

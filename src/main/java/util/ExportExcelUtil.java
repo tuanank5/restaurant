@@ -36,7 +36,6 @@ public class ExportExcelUtil {
 		ObservableList<?> items = tableView.getItems();
 		for (int rowIndex = 0; rowIndex < items.size(); rowIndex++) {
 			Row row = sheet.createRow(rowIndex + 1);
-			Object rowData = items.get(rowIndex);
 
 			for (int colIndex = 0; colIndex < columns.size(); colIndex++) {
 				TableColumn<?, ?> column = columns.get(colIndex);

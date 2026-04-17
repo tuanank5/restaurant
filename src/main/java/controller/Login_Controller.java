@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
-import javafx.scene.control.ButtonBar;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
@@ -24,13 +23,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import service.EmailService;
+import util.AlertUtil;
 
 public class Login_Controller implements Initializable {
 
@@ -51,24 +50,24 @@ public class Login_Controller implements Initializable {
 			String user = txtUserName.getText().trim();
 			String pass = txtPassword.getText().trim();
 			if (user.isEmpty() && pass.isEmpty()) {
-				showAlert("Cảnh báo", "Vui lòng nhập tài khoản và mật khẩu!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập tài khoản và mật khẩu!", Alert.AlertType.WARNING);
 				return;
 			}
 			if (user.isEmpty()) {
-				showAlert("Cảnh báo", "Vui lòng nhập tài khoản!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập tài khoản!", Alert.AlertType.WARNING);
 				return;
 			}
 			if (pass.isEmpty()) {
-				showAlert("Cảnh báo", "Vui lòng nhập mật khẩu!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập mật khẩu!", Alert.AlertType.WARNING);
 				return;
 			}
 			if (!user.matches("^(QL|NV)\\d{4}$")) {
-				showAlert("Cảnh báo", "Tài khoản phải bắt đầu bằng 'QL' hoặc 'NV' theo sau là 4 chữ số!",
+				AlertUtil.showAlert("Cảnh báo", "Tài khoản phải bắt đầu bằng 'QL' hoặc 'NV' theo sau là 4 chữ số!",
 						Alert.AlertType.WARNING);
 				return;
 			}
 			if (pass.length() < 6) {
-				showAlert("Cảnh báo", "Mật khẩu phải có ít nhất 6 ký tự!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh báo", "Mật khẩu phải có ít nhất 6 ký tự!", Alert.AlertType.WARNING);
 				return;
 			} else {
 				Map<String, Object> filter = new HashMap<>();
@@ -118,10 +117,10 @@ public class Login_Controller implements Initializable {
 						stage.setMaximized(true);
 						stage.show();
 
-						showAlert("Thông báo", "Đăng nhập thành công!", Alert.AlertType.INFORMATION);
+						AlertUtil.showAlert("Thông báo", "Đăng nhập thành công!", Alert.AlertType.INFORMATION);
 
 					} else {
-						showAlert("Cảnh báo", "Tên đăng nhập hoặc mật khẩu không chính xác! Vui lòng thử lại",
+						AlertUtil.showAlert("Cảnh báo", "Tên đăng nhập hoặc mật khẩu không chính xác! Vui lòng thử lại",
 								Alert.AlertType.WARNING);
 					}
 				}
@@ -135,7 +134,7 @@ public class Login_Controller implements Initializable {
 	void quenmatkhau(ActionEvent event) {
 		String tenTK = txtUserName.getText();
 		if (tenTK.isEmpty()) {
-			showAlert("Cảnh báo", "Vui lòng nhập tên tài khoản", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập tên tài khoản", Alert.AlertType.WARNING);
 			return;
 		}
 		Map<String, Object> filter = new HashMap<>();
@@ -143,7 +142,7 @@ public class Login_Controller implements Initializable {
 		List<TaiKhoan> list = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
 				.getDanhSach(TaiKhoan.class, filter);
 		if (list.isEmpty()) {
-			showAlert("Lỗi", "Không tìm thấy tài khoản", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Không tìm thấy tài khoản", Alert.AlertType.ERROR);
 			return;
 		}
 		TaiKhoan taiKhoan = list.get(0);
@@ -175,7 +174,7 @@ public class Login_Controller implements Initializable {
 		dialog.showAndWait().ifPresent(emailInput -> {
 			String emailNV = taiKhoan.getNhanVien().getEmail();
 			if (!emailInput.equalsIgnoreCase(emailNV)) {
-				showAlert("Lỗi", "Email không khớp với nhân viên", Alert.AlertType.ERROR);
+				AlertUtil.showAlert("Lỗi", "Email không khớp với nhân viên", Alert.AlertType.ERROR);
 				return;
 			}
 			String otp = util.AutoIDUitl.generateOTP();
@@ -200,13 +199,6 @@ public class Login_Controller implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType alertType) {
-		Alert alert = new Alert(alertType);
-		alert.setTitle(title);
-		alert.setHeaderText(content);
-		alert.show();
 	}
 
 	@Override

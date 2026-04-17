@@ -1,14 +1,13 @@
 package dao.impl;
 
+import java.util.List;
+
 import dao.ChiTietHoaDon_DAO;
 import entity.ChiTietHoaDon;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-
-import java.util.List;
 
 public class ChiTietHoaDon_DAOImpl extends Entity_DAOImpl<ChiTietHoaDon> implements ChiTietHoaDon_DAO {
 

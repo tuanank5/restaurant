@@ -26,6 +26,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import util.AlertUtil;
 
 public class CapNhatKhachHang_Controller {
 	@FXML
@@ -117,7 +118,7 @@ public class CapNhatKhachHang_Controller {
 	private void luuLai() {
 		KhachHang khachHangNew = getKhachHangNew();
 		if (khachHangNew != null) {
-			Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc chắn muốn lưu thay đổi?");
+			Optional<ButtonType> buttonType = AlertUtil.showAlertConfirm("Bạn có chắc chắn muốn lưu thay đổi?");
 			if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
 				return;
 			}
@@ -127,37 +128,38 @@ public class CapNhatKhachHang_Controller {
 						.newEntity_DAO(KhachHang_DAO.class).capNhat(khachHangNew);
 
 				if (check) {
-					showAlert("Thông báo", "Cập nhật thông tin khách hàng thành công!", Alert.AlertType.INFORMATION);
+					AlertUtil.showAlert("Thông báo", "Cập nhật thông tin khách hàng thành công!",
+							Alert.AlertType.INFORMATION);
 					this.khachHang = khachHangNew;
 					troLai("KhachHang/ThongTinChiTietKhachHang");
 				} else {
-					showAlert("Thông báo", "Cập nhật thất bại!", Alert.AlertType.WARNING);
+					AlertUtil.showAlert("Thông báo", "Cập nhật thất bại!", Alert.AlertType.WARNING);
 				}
 			}
 		} else {
-			showAlert("Lỗi", "Xảy ra lỗi khi cập nhật thông tin khách hàng!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Xảy ra lỗi khi cập nhật thông tin khách hàng!", Alert.AlertType.ERROR);
 		}
 	}
 
 	private void hoanTac() {
-		Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc chắn muốn hoàn tác?");
+		Optional<ButtonType> buttonType = AlertUtil.showAlertConfirm("Bạn có chắc chắn muốn hoàn tác?");
 		if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
 			return;
 		}
 		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(KhachHang_DAO.class)
 				.capNhat(khachHang);
 		if (check) {
-			showAlert("Thông báo", "Hoàn tác thành công!", Alert.AlertType.INFORMATION);
+			AlertUtil.showAlert("Thông báo", "Hoàn tác thành công!", Alert.AlertType.INFORMATION);
 			hienThiThongTin(khachHang);
 		} else {
-			showAlert("Thông báo", "Hoàn tác thất bại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Thông báo", "Hoàn tác thất bại!", Alert.AlertType.WARNING);
 		}
 	}
 
 	private void xacNhanLuu(String ui) {
 		KhachHang khachHangNew = getKhachHangNew();
 		if (khachHangNew != null && !khachHangNew.equals(khachHang)) {
-			Optional<ButtonType> buttonType = showAlertConfirm("Bạn có muốn lưu cập nhật?");
+			Optional<ButtonType> buttonType = AlertUtil.showAlertConfirm("Bạn có muốn lưu cập nhật?");
 
 			if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
 				troLai(ui);
@@ -166,11 +168,11 @@ public class CapNhatKhachHang_Controller {
 				boolean check = RestaurantApplication.getInstance().getDatabaseContext()
 						.newEntity_DAO(KhachHang_DAO.class).capNhat(khachHangNew);
 				if (check) {
-					showAlert("Thông báo", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
+					AlertUtil.showAlert("Thông báo", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
 					this.khachHang = khachHangNew;
 					troLai(ui);
 				} else {
-					showAlert("Thông báo", "Cập nhật thất bại!", Alert.AlertType.WARNING);
+					AlertUtil.showAlert("Thông báo", "Cập nhật thất bại!", Alert.AlertType.WARNING);
 				}
 			}
 		} else {
@@ -219,38 +221,38 @@ public class CapNhatKhachHang_Controller {
 
 		// Kiểm tra các trường bắt buộc
 		if (tenKH.isEmpty()) {
-			showAlert("Cảnh báo", "Vui lòng nhập tên khách hàng!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập tên khách hàng!", Alert.AlertType.WARNING);
 			txtTenKH.requestFocus();
 			return null;
 		}
 
 		if (sdt.isEmpty()) {
-			showAlert("Cảnh báo", "Vui lòng nhập số điện thoại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập số điện thoại!", Alert.AlertType.WARNING);
 			txtSDT.requestFocus();
 			return null;
 		} else {
 			String regexPhone = "(84|0)[35789][0-9]{8,9}\\b";
 			if (!sdt.matches(regexPhone)) {
-				showAlert("Cảnh báo", "Số điện thoại không hợp lệ!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh báo", "Số điện thoại không hợp lệ!", Alert.AlertType.WARNING);
 				txtSDT.requestFocus();
 				return null;
 			}
 		}
 
 		if (email.isEmpty()) {
-			showAlert("Cảnh báo", "Vui lòng nhập email!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập email!", Alert.AlertType.WARNING);
 			txtEmail.requestFocus();
 			return null;
 		} else {
 			if (!email.matches("^[a-zA-Z][a-zA-Z0-9._]*@[a-zA-Z]+(\\.[a-zA-Z]+)+$")) {
-				showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
 				txtEmail.requestFocus();
 				return null;
 			}
 		}
 
 		if (diaChi.isEmpty()) {
-			showAlert("Cảnh báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập địa chỉ!", Alert.AlertType.WARNING);
 			txtDiaChi.requestFocus();
 			return null;
 		}
@@ -260,18 +262,18 @@ public class CapNhatKhachHang_Controller {
 			try {
 				diemTichLuy = Integer.parseInt(diemStr);
 				if (diemTichLuy < 0) {
-					showAlert("Cảnh báo", "Điểm tích lũy không được âm!", Alert.AlertType.WARNING);
+					AlertUtil.showAlert("Cảnh báo", "Điểm tích lũy không được âm!", Alert.AlertType.WARNING);
 					txtDiemTichLuy.requestFocus();
 					return null;
 				}
 			} catch (NumberFormatException e) {
-				showAlert("Cảnh báo", "Điểm tích lũy phải là số nguyên!", Alert.AlertType.WARNING);
+				AlertUtil.showAlert("Cảnh báo", "Điểm tích lũy phải là số nguyên!", Alert.AlertType.WARNING);
 				txtDiemTichLuy.requestFocus();
 				return null;
 			}
 		}
 		if (hangKH == null) {
-			showAlert("Cảnh báo", "Vui lòng chọn hạng khách hàng!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng chọn hạng khách hàng!", Alert.AlertType.WARNING);
 			comBoxHangKH.requestFocus();
 			return null;
 		}
@@ -297,23 +299,5 @@ public class CapNhatKhachHang_Controller {
 			comBoxHangKH.getItems().add(hang.getTenHang());
 		}
 		comBoxHangKH.getSelectionModel().selectFirst();
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType alertType) {
-		Alert alert = new Alert(alertType);
-		alert.setTitle(title);
-		alert.setHeaderText(content);
-		alert.show();
-	}
-
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Thông báo");
-		alert.setHeaderText(content);
-		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-		return alert.showAndWait();
 	}
 }

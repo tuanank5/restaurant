@@ -1,10 +1,8 @@
 package controller.Ban;
 
 import java.util.List;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+
 import config.RestaurantApplication;
-import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
 import dao.LoaiBan_DAO;
 import entity.Ban;
@@ -19,17 +17,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import util.AlertUtil;
 import util.AutoIDUitl;
 
 public class QuanLyBan_Controller {
-
-	private MenuNV_Controller menuController; // Reference đến MenuNV_Controller
-
-	public void setMenuController(MenuNV_Controller menuController) {
-		this.menuController = menuController;
-	}
 
 	@FXML
 	private BorderPane borderPane;
@@ -63,8 +58,6 @@ public class QuanLyBan_Controller {
 
 	@FXML
 	private TextField txtViTri;
-
-	private ObservableList<Ban> dsBan;
 
 	@FXML
 	private ComboBox<LoaiBan> comBoxLoaiBan;
@@ -198,7 +191,7 @@ public class QuanLyBan_Controller {
 		LoaiBan loaiBan = comBoxLoaiBan.getValue(); // Lấy trực tiếp đối tượng
 
 		if (maBan.isEmpty() || viTri.isEmpty() || loaiBan == null) {
-			showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
 			return;
 		}
 
@@ -211,18 +204,18 @@ public class QuanLyBan_Controller {
 		if (check) {
 			danhSachBan.add(ban);
 			tblBan.refresh();
-			showAlert("Thành công", "Thêm bàn thành công!", Alert.AlertType.INFORMATION);
+			AlertUtil.showAlert("Thành công", "Thêm bàn thành công!", Alert.AlertType.INFORMATION);
 
 			resetForm();
 		} else {
-			showAlert("Lỗi", "Không thể thêm bàn. Mã bàn có thể đã tồn tại!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Không thể thêm bàn. Mã bàn có thể đã tồn tại!", Alert.AlertType.ERROR);
 		}
 	}
 
 	private void suaBan() {
 		Ban banChon = tblBan.getSelectionModel().getSelectedItem();
 		if (banChon == null) {
-			showAlert("Thông báo", "Vui lòng chọn bàn cần sửa!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Thông báo", "Vui lòng chọn bàn cần sửa!", Alert.AlertType.WARNING);
 			return;
 		}
 
@@ -230,7 +223,7 @@ public class QuanLyBan_Controller {
 		LoaiBan loaiBan = comBoxLoaiBan.getValue();
 
 		if (viTri.isEmpty() || loaiBan == null) {
-			showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
 			return;
 		}
 
@@ -244,17 +237,17 @@ public class QuanLyBan_Controller {
 
 		if (check) {
 			tblBan.refresh(); // Làm mới TableView
-			showAlert("Thành công", "Sửa bàn thành công!", Alert.AlertType.INFORMATION);
+			AlertUtil.showAlert("Thành công", "Sửa bàn thành công!", Alert.AlertType.INFORMATION);
 			resetForm(); // Reset form để nhập bàn khác
 		} else {
-			showAlert("Lỗi", "Không thể sửa bàn!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Không thể sửa bàn!", Alert.AlertType.ERROR);
 		}
 	}
 
 	private void xoaBan() {
 		Ban banChon = tblBan.getSelectionModel().getSelectedItem();
 		if (banChon == null) {
-			showAlert("Thông báo", "Vui lòng chọn bàn cần xóa!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Thông báo", "Vui lòng chọn bàn cần xóa!", Alert.AlertType.WARNING);
 			return;
 		}
 
@@ -264,27 +257,11 @@ public class QuanLyBan_Controller {
 		if (check) {
 			danhSachBan.remove(banChon);
 			tblBan.refresh();
-			showAlert("Thành công", "Xóa bàn thành công!", Alert.AlertType.INFORMATION);
+			AlertUtil.showAlert("Thành công", "Xóa bàn thành công!", Alert.AlertType.INFORMATION);
 			resetForm();
 		} else {
-			showAlert("Lỗi", "Không thể xóa bàn!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Không thể xóa bàn!", Alert.AlertType.ERROR);
 		}
-	}
-
-	private void refreshTable() {
-		List<Ban> list = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class)
-				.getDanhSach(Ban.class, null);
-
-		danhSachBan.setAll(list);
-		tblBan.setItems(danhSachBan);
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType type) {
-		Alert alert = new Alert(type);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(content);
-		alert.show();
 	}
 
 	private void resetForm() {

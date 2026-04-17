@@ -9,7 +9,6 @@ import java.util.concurrent.Executors;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import controller.Menu.MenuNV_Controller;
 import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
 import entity.KhachHang;
@@ -19,13 +18,23 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import service.EmailService;
+import util.AlertUtil;
 import util.AutoIDUitl;
 
 public class KhuyenMai_Controller {
@@ -159,12 +168,12 @@ public class KhuyenMai_Controller {
 
 			if (khuyenMaiDAO.them(km)) {
 				loadData();
-				showAlert("Thành công", "Thêm khuyến mãi thành công!", Alert.AlertType.INFORMATION);
+				AlertUtil.showAlert("Thành công", "Thêm khuyến mãi thành công!", Alert.AlertType.INFORMATION);
 				guiEmailThongBaoKM(km);
 				clearForm();
 			}
 		} catch (Exception e) {
-			showAlert("Lỗi", "Không thể thêm khuyến mãi!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Không thể thêm khuyến mãi!", Alert.AlertType.ERROR);
 			e.printStackTrace();
 		}
 	}
@@ -207,7 +216,7 @@ public class KhuyenMai_Controller {
 		if (km == null)
 			return;
 		if (dangDienRa(km)) {
-			showAlert("Lỗi", "Khuyến mãi đang diễn ra, không thể cập nhật!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Khuyến mãi đang diễn ra, không thể cập nhật!", Alert.AlertType.ERROR);
 			return;
 		}
 		if (!validateKhuyenMai())
@@ -221,11 +230,11 @@ public class KhuyenMai_Controller {
 
 			if (khuyenMaiDAO.sua(km)) {
 				loadData();
-				showAlert("Thành công", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
+				AlertUtil.showAlert("Thành công", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
 				clearForm();
 			}
 		} catch (Exception e) {
-			showAlert("Lỗi", "Dữ liệu không hợp lệ!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Dữ liệu không hợp lệ!", Alert.AlertType.ERROR);
 			e.printStackTrace();
 		}
 	}
@@ -235,11 +244,11 @@ public class KhuyenMai_Controller {
 		if (km == null)
 			return;
 
-		Optional<ButtonType> confirm = showAlertConfirm("Bạn có chắc muốn xóa?");
+		Optional<ButtonType> confirm = AlertUtil.showAlertConfirm("Bạn có chắc muốn xóa?");
 		if (confirm.get().getButtonData() == ButtonBar.ButtonData.YES) {
 			if (khuyenMaiDAO.xoa(km.getMaKM())) {
 				loadData();
-				showAlert("Thành công", "Xóa thành công!", Alert.AlertType.INFORMATION);
+				AlertUtil.showAlert("Thành công", "Xóa thành công!", Alert.AlertType.INFORMATION);
 			}
 		}
 	}
@@ -299,7 +308,7 @@ public class KhuyenMai_Controller {
 		if (txtTenKM.getText().isBlank() || comBoxLoaiKM.getValue() == null || dpNgayBatDau.getValue() == null
 				|| dpNgayKetThuc.getValue() == null || comBoxPhanTram.getValue() == null) {
 
-			showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.ERROR);
 			return false;
 		}
 		Date today = new Date(System.currentTimeMillis());
@@ -307,30 +316,30 @@ public class KhuyenMai_Controller {
 		Date end = Date.valueOf(dpNgayKetThuc.getValue());
 		// Ngày bắt đầu < hôm nay
 		if (start.before(today)) {
-			showAlert("Lỗi", "Ngày bắt đầu không được nhỏ hơn ngày hiện tại!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Ngày bắt đầu không được nhỏ hơn ngày hiện tại!", Alert.AlertType.ERROR);
 			return false;
 		}
 
 		// Ngày kết thúc <= ngày bắt đầu
 		if (!end.after(start)) {
-			showAlert("Lỗi", "Ngày kết thúc phải lớn hơn ngày bắt đầu!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Ngày kết thúc phải lớn hơn ngày bắt đầu!", Alert.AlertType.ERROR);
 			return false;
 		}
 
 		// Trùng khuyến mãi
 		if (khuyenMaiDaTonTai()) {
-			showAlert("Lỗi", "Khuyến mãi đã tồn tại hoặc trùng thời gian!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Khuyến mãi đã tồn tại hoặc trùng thời gian!", Alert.AlertType.ERROR);
 			return false;
 		}
 		// Giới hạn %
 		int giam = comBoxPhanTram.getValue();
 		if (comBoxLoaiKM.getValue().contains("tổng") && giam > 30) {
-			showAlert("Lỗi", "Khuyến mãi tổng hóa đơn tối đa 30%!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Khuyến mãi tổng hóa đơn tối đa 30%!", Alert.AlertType.ERROR);
 			return false;
 		}
 
 		if (comBoxLoaiKM.getValue().contains("Kim Cương") && giam > 40) {
-			showAlert("Lỗi", "Ưu đãi Kim Cương tối đa 40%!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Ưu đãi Kim Cương tối đa 40%!", Alert.AlertType.ERROR);
 			return false;
 		}
 		return true;
@@ -361,20 +370,5 @@ public class KhuyenMai_Controller {
 			}
 		}
 		return false;
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType type) {
-		Alert alert = new Alert(type);
-		alert.setTitle(title);
-		alert.setHeaderText(content);
-		alert.show();
-	}
-
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setHeaderText(content);
-		alert.getButtonTypes().setAll(new ButtonType("Có", ButtonBar.ButtonData.YES),
-				new ButtonType("Không", ButtonBar.ButtonData.NO));
-		return alert.showAndWait();
 	}
 }

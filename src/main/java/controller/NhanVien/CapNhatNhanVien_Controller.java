@@ -1,17 +1,5 @@
 package controller.NhanVien;
 
-import config.RestaurantApplication;
-import controller.Menu.MenuNVQL_Controller;
-import dao.NhanVien_DAO;
-import entity.NhanVien;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -19,6 +7,26 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import config.RestaurantApplication;
+import controller.Menu.MenuNVQL_Controller;
+import dao.NhanVien_DAO;
+import entity.NhanVien;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import util.AlertUtil;
 
 public class CapNhatNhanVien_Controller implements Initializable {
 
@@ -108,7 +116,7 @@ public class CapNhatNhanVien_Controller implements Initializable {
 		if (nhanVienNew == null)
 			return;
 
-		Optional<ButtonType> option = showAlertConfirm("Bạn có chắc chắn muốn lưu thay đổi?");
+		Optional<ButtonType> option = AlertUtil.showAlertConfirm("Bạn có chắc chắn muốn lưu thay đổi?");
 		if (option.get().getButtonData() == ButtonBar.ButtonData.NO)
 			return;
 
@@ -116,11 +124,11 @@ public class CapNhatNhanVien_Controller implements Initializable {
 				.capNhat(nhanVienNew);
 
 		if (check) {
-			showAlert("Thông báo", "Cập nhật nhân viên thành công!", Alert.AlertType.INFORMATION);
+			AlertUtil.showAlert("Thông báo", "Cập nhật nhân viên thành công!", Alert.AlertType.INFORMATION);
 			this.nhanVien = nhanVienNew;
 			quayLai();
 		} else {
-			showAlert("Lỗi", "Cập nhật thất bại!", Alert.AlertType.ERROR);
+			AlertUtil.showAlert("Lỗi", "Cập nhật thất bại!", Alert.AlertType.ERROR);
 		}
 	}
 
@@ -144,27 +152,27 @@ public class CapNhatNhanVien_Controller implements Initializable {
 	private boolean validate() {
 
 		if (txtTenNV.getText().trim().isEmpty()) {
-			showAlert("Cảnh báo", "Tên nhân viên không được rỗng!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Tên nhân viên không được rỗng!", Alert.AlertType.WARNING);
 			return false;
 		}
 
 		if (!txtEmail.getText().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-			showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Email không hợp lệ!", Alert.AlertType.WARNING);
 			return false;
 		}
 
 		if (txtNamSinh.getValue() == null || Period.between(txtNamSinh.getValue(), LocalDate.now()).getYears() < 18) {
-			showAlert("Cảnh báo", "Nhân viên phải đủ 18 tuổi!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Nhân viên phải đủ 18 tuổi!", Alert.AlertType.WARNING);
 			return false;
 		}
 
 		if (txtNgayVaoLam.getValue() == null) {
-			showAlert("Cảnh báo", "Vui lòng chọn ngày vào làm!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng chọn ngày vào làm!", Alert.AlertType.WARNING);
 			return false;
 		}
 
 		if (cmbTrangThai.getValue() == null) {
-			showAlert("Cảnh báo", "Vui lòng chọn trạng thái!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Cảnh báo", "Vui lòng chọn trạng thái!", Alert.AlertType.WARNING);
 			return false;
 		}
 
@@ -172,7 +180,7 @@ public class CapNhatNhanVien_Controller implements Initializable {
 	}
 
 	private void xacNhanQuayLai() {
-		Optional<ButtonType> option = showAlertConfirm("Bạn có muốn lưu thay đổi?");
+		Optional<ButtonType> option = AlertUtil.showAlertConfirm("Bạn có muốn lưu thay đổi?");
 		if (option.get().getButtonData() == ButtonBar.ButtonData.YES) {
 			luuCapNhat();
 		} else {
@@ -181,38 +189,21 @@ public class CapNhatNhanVien_Controller implements Initializable {
 	}
 
 	private void hoanTac() {
-		Optional<ButtonType> buttonType = showAlertConfirm("Bạn có chắc chắn muốn hoàn tác?");
+		Optional<ButtonType> buttonType = AlertUtil.showAlertConfirm("Bạn có chắc chắn muốn hoàn tác?");
 		if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
 			return;
 		}
 		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class)
 				.capNhat(nhanVien);
 		if (check) {
-			showAlert("Thông báo", "Hoàn tác thành công!", Alert.AlertType.INFORMATION);
+			AlertUtil.showAlert("Thông báo", "Hoàn tác thành công!", Alert.AlertType.INFORMATION);
 			hienThiThongTin(nhanVien);
 		} else {
-			showAlert("Thông báo", "Hoàn tác thất bại!", Alert.AlertType.WARNING);
+			AlertUtil.showAlert("Thông báo", "Hoàn tác thất bại!", Alert.AlertType.WARNING);
 		}
 	}
 
 	private void quayLai() {
 		MenuNVQL_Controller.instance.readyUI("NhanVien/ThongTinChiTietNV");
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType type) {
-		Alert alert = new Alert(type);
-		alert.setTitle(title);
-		alert.setHeaderText(content);
-		alert.show();
-	}
-
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Thông báo");
-		alert.setHeaderText(content);
-		ButtonType yes = new ButtonType("Có", ButtonBar.ButtonData.YES);
-		ButtonType no = new ButtonType("Không", ButtonBar.ButtonData.NO);
-		alert.getButtonTypes().setAll(yes, no);
-		return alert.showAndWait();
 	}
 }

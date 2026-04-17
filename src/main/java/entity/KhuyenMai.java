@@ -5,8 +5,8 @@ import java.sql.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = "KhuyenMai.list", query = "SELECT KM FROM KhuyenMai KM"),

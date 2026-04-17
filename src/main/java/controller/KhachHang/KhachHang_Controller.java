@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
@@ -20,10 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -39,12 +35,6 @@ import javafx.stage.Stage;
 import util.ExportExcelUtil;
 
 public class KhachHang_Controller {
-
-	private MenuNV_Controller menuController; // Reference đến MenuNV_Controller
-
-	public void setMenuController(MenuNV_Controller menuController) {
-		this.menuController = menuController;
-	}
 
 	@FXML
 	private BorderPane borderPane;
@@ -128,9 +118,6 @@ public class KhachHang_Controller {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/KhachHang/ThemKhachHang.fxml"));
 			Parent root = loader.load();
-
-			// Lấy controller nếu cần truyền dữ liệu
-			ThemKhachHang_Controller controller = loader.getController();
 
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Thêm Khách Hàng");
@@ -315,23 +302,5 @@ public class KhachHang_Controller {
 				thongTinKhachHang.setKhachHang(khachHang);
 			}
 		}
-	}
-
-	private void showAlert(String title, String content, Alert.AlertType alertType) {
-		Alert alert = new Alert(alertType);
-		alert.setTitle(title);
-		alert.setHeaderText(content);
-		alert.show();
-	}
-
-	private Optional<ButtonType> showAlertConfirm(String content) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Thông báo");
-		alert.setHeaderText(content);
-		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
-		return alert.showAndWait();
 	}
 }

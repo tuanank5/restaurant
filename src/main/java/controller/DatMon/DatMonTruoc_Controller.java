@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import dao.impl.Ban_DAOImpl;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
 import controller.DatBan.DatBanTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.DonDatBan_DAO;
 import dao.KhachHang_DAO;
 import dao.MonAn_DAO;
+import dao.impl.Ban_DAOImpl;
+import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
@@ -50,6 +50,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import util.AlertUtil;
 
 public class DatMonTruoc_Controller implements Initializable {
 	@FXML
@@ -97,9 +98,6 @@ public class DatMonTruoc_Controller implements Initializable {
 	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
 	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-	private KhachHang khachHangDuocChon;
-	private List<Ban> danhSachBan = new ArrayList<>();
-	private int soLuongKhach;
 	private List<MonAn> dsMonAn;
 	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
 
@@ -332,15 +330,15 @@ public class DatMonTruoc_Controller implements Initializable {
 		String tenKH = txtKH.getText() == null ? "" : txtKH.getText().trim();
 		String sdt = txtSdt.getText() == null ? "" : txtSdt.getText().trim();
 		if (tenKH.isEmpty() && sdt.isEmpty()) {
-			showAlert(Alert.AlertType.ERROR, "Vui lòng nhập tên hoặc số điện thoại khách hàng.");
+			AlertUtil.showAlert("Thông báo", "Vui lòng nhập tên hoặc số điện thoại khách hàng.", Alert.AlertType.ERROR);
 			return;
 		}
 		if (dsMonAnDat.isEmpty()) {
-			showAlert(Alert.AlertType.ERROR, "Danh sách món đặt trống.");
+			AlertUtil.showAlert("Thông báo", "Danh sách món đặt trống.", Alert.AlertType.ERROR);
 			return;
 		}
 		if (danhSachBanChonStatic == null || danhSachBanChonStatic.isEmpty()) {
-			showAlert(Alert.AlertType.ERROR, "Chưa chọn bàn để đặt.");
+			AlertUtil.showAlert("Thông báo", "Chưa chọn bàn để đặt.", Alert.AlertType.ERROR);
 			return;
 		}
 
@@ -363,7 +361,8 @@ public class DatMonTruoc_Controller implements Initializable {
 				kh = null;
 			}
 			if (kh == null) {
-				showAlert(Alert.AlertType.ERROR, "Không tìm thấy khách hàng với số điện thoại này.");
+				AlertUtil.showAlert("Thông báo", "Không tìm thấy khách hàng với số điện thoại này.",
+						Alert.AlertType.ERROR);
 				return;
 			}
 
@@ -392,7 +391,8 @@ public class DatMonTruoc_Controller implements Initializable {
 				ddb.setTrangThai("Chưa nhận bàn");
 				boolean okDDB = donDatBanDAO.them(ddb);
 				if (!okDDB) {
-					showAlert(Alert.AlertType.ERROR, "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan());
+					AlertUtil.showAlert("Thông báo", "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan(),
+							Alert.AlertType.ERROR);
 					return;
 				}
 				danhSachDatBanDaTao.add(ddb);
@@ -423,7 +423,7 @@ public class DatMonTruoc_Controller implements Initializable {
 			hd.setDonDatBan(donDau);
 			boolean okHD = hoaDonDAO.them(hd);
 			if (!okHD) {
-				showAlert(Alert.AlertType.ERROR, "Không thể lưu hóa đơn.");
+				AlertUtil.showAlert("Thông báo", "Không thể lưu hóa đơn.", Alert.AlertType.ERROR);
 				return;
 			}
 
@@ -437,13 +437,14 @@ public class DatMonTruoc_Controller implements Initializable {
 				cthd.setThanhTien(m.getDonGia() * sl);
 				boolean okCT = cthdDAO.themChiTiet(cthd);
 				if (!okCT) {
-					showAlert(Alert.AlertType.ERROR, "Lỗi khi lưu chi tiết hoá đơn cho món " + m.getTenMon());
+					AlertUtil.showAlert("Thông báo", "Lỗi khi lưu chi tiết hoá đơn cho món " + m.getTenMon(),
+							Alert.AlertType.ERROR);
 					return;
 				}
 			}
 
-			showAlert(Alert.AlertType.INFORMATION,
-					"Đặt món thành công. Hóa đơn được lưu ở trạng thái 'Chưa Thanh Toán'.");
+			AlertUtil.showAlert("Thông báo", "Đặt món thành công. Hóa đơn được lưu ở trạng thái 'Chưa Thanh Toán'.",
+					Alert.AlertType.INFORMATION);
 			dsMonAnDat.clear();
 			tblDS.setItems(FXCollections.observableArrayList());
 			tblDS.refresh();
@@ -453,7 +454,7 @@ public class DatMonTruoc_Controller implements Initializable {
 			MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			showAlert(Alert.AlertType.ERROR, "Đã có lỗi: " + ex.getMessage());
+			AlertUtil.showAlert("Thông báo", "Đã có lỗi: " + ex.getMessage(), Alert.AlertType.ERROR);
 		}
 	}
 
@@ -474,16 +475,6 @@ public class DatMonTruoc_Controller implements Initializable {
 		}
 	}
 
-	public void nhanThongTinDatTruoc(KhachHang kh, List<Ban> dsBan, int soLuong) {
-		this.khachHangDuocChon = kh;
-		this.danhSachBan = dsBan;
-		this.soLuongKhach = soLuong;
-		// Hiển thị lên UI
-		txtKH.setText(kh.getTenKH());
-		txtSdt.setText(kh.getSdt());
-		txtSoLuongKH.setText(String.valueOf(soLuong));
-	}
-
 	@FXML
 	private void onTroLai(ActionEvent event) {
 		try {
@@ -492,12 +483,4 @@ public class DatMonTruoc_Controller implements Initializable {
 			e.printStackTrace();
 		}
 	}
-
-	private void showAlert(Alert.AlertType type, String msg) {
-		Alert alert = new Alert(type);
-		alert.setHeaderText(null);
-		alert.setContentText(msg);
-		alert.showAndWait();
-	}
-
 }

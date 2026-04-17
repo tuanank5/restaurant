@@ -8,23 +8,17 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
-import dao.HoaDon_DAO;
-import dao.impl.HoaDon_DAOImpl;
 import dao.ChiTietHoaDon_DAO;
-import dao.DonDatBan_DAO;
-import dao.KhachHang_DAO;
+import dao.HoaDon_DAO;
 import dao.MonAn_DAO;
 import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
+import dao.impl.HoaDon_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
-
 import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.MonAn;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -84,8 +78,6 @@ public class DoiMonTruoc_Controller implements Initializable {
 	public static DonDatBan donDatBanDuocChon;
 
 	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
 	private ChiTietHoaDon_DAO chiTietHoaDonDAO = new ChiTietHoaDon_DAOImpl();
 

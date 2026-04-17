@@ -1,5 +1,7 @@
 package dao.impl;
 
+import java.util.List;
+
 import dao.MonAn_DAO;
 import entity.MonAn;
 import jakarta.persistence.EntityManager;
@@ -7,13 +9,11 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
-import java.util.List;
-
 public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
 
 	private final EntityManagerFactory emf = restaurantApplication.getEntityManagerFactory();
 
-	// ✅ LẤY DANH SÁCH MON AN – KHÔNG DÙNG getAll()
+	// LẤY DANH SÁCH MON AN – KHÔNG DÙNG getAll()
 	public List<MonAn> getDanhSachMonAn() {
 		EntityManager em = emf.createEntityManager();
 		try {
