@@ -13,14 +13,21 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class Ban {
+public class KhachHang_DTO {
 
-	private String maBan;
+	private String maKH;
 
-	private String viTri;
+	private String tenKH;
 
-	private String trangThai;
+	private String sdt;
 
-	private LoaiBan loaiBan;
+	private String email;
+
+	private String diaChi;
+
+	@Builder.Default
+	private int diemTichLuy = 0;
+
+	private HangKhachHang_DTO hangKhachHang;
 
 }

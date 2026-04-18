@@ -18,7 +18,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class HoaDon {
+public class HoaDon_DTO {
 
 	private String maHD;
 
@@ -42,8 +42,8 @@ public class HoaDon {
 
 	private NhanVien nhanVien;
 
-	private DonDatBan donDatBan;
+	private DonDatBan_DTO donDatBan;
 
-	private Coc coc;
+	private Coc_DTO coc;
 
 }

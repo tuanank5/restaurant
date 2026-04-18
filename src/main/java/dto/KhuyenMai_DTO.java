@@ -15,24 +15,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class NhanVien {
+public class KhuyenMai_DTO {
 
-	private String maNV;
+	private String maKM;
 
-	private String tenNV;
+	private String tenKM;
 
-	private String chucVu;
+	private String loaiKM;
 
-	private String email;
+	private Date ngayBatDau;
 
-	private Date namSinh;
+	private Date ngayKetThuc;
 
-	private String diaChi;
-
-	private boolean gioiTinh;
-
-	private Date ngayVaoLam;
-
-	private boolean trangThai;
+	private int phanTramGiamGia;
 
 }

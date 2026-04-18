@@ -15,9 +15,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class DonLapDoiHuyBan {
+public class DonLapDoiHuyBan_DTO {
 
-	private DonDatBan donDatBan;
+	private DonDatBan_DTO donDatBan;
 
 	private String lyDo;
 

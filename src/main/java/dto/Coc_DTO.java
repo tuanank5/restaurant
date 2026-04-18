@@ -13,12 +13,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class LoaiBan {
+public class Coc_DTO {
 
-	private String maLoaiBan;
+	private String maCoc;
 
-	private String tenLoaiBan;
+	private boolean loaiCoc;
 
-	private int soLuong;
+	private int phanTramCoc;
+
+	private double soTienCoc;
 
 }

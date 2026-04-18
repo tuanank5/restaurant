@@ -1,5 +1,7 @@
 package dto;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,21 +15,24 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class KhachHang {
+public class NhanVien_DTO {
 
-	private String maKH;
+	private String maNV;
 
-	private String tenKH;
+	private String tenNV;
 
-	private String sdt;
+	private String chucVu;
 
 	private String email;
 
+	private Date namSinh;
+
 	private String diaChi;
 
-	@Builder.Default
-	private int diemTichLuy = 0;
+	private boolean gioiTinh;
 
-	private HangKhachHang hangKhachHang;
+	private Date ngayVaoLam;
+
+	private boolean trangThai;
 
 }

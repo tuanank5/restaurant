@@ -1,7 +1,8 @@
 package dto;
 
-import entity.HoaDon;
-import entity.MonAn;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,14 +16,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class ChiTietHoaDon {
+public class DonDatBan_DTO {
 
-	private HoaDon hoaDon;
+	private String maDatBan;
 
-	private MonAn monAn;
+	private LocalDateTime ngayGioLapDon;
 
 	private int soLuong;
-	// thanhTien cần xóa
-	private double thanhTien;
+
+	private Ban_DTO ban;
+
+	private LocalTime gioBatDau;
+
+	private String trangThai;
 
 }
