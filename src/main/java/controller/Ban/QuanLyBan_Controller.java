@@ -197,7 +197,7 @@ public class QuanLyBan_Controller {
 
 		String trangThaiMacDinh = "Trống";
 
-		Ban ban = new Ban(maBan, viTri, trangThaiMacDinh, 0, loaiBan);
+		Ban ban = new Ban(maBan, viTri, trangThaiMacDinh, loaiBan);
 
 		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).them(ban);
 

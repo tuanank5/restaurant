@@ -4,7 +4,21 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "maMon")
 @Entity
 @Table(name = "MonAn")
 public class MonAn {
@@ -19,82 +33,10 @@ public class MonAn {
 	@Column(name = "donGia", nullable = false)
 	private double donGia;
 
-	@Column(name = "duongDanAnh", length = 255) // Thêm cột lưu đường dẫn ảnh
+	@Column(name = "duongDanAnh", length = 255)
 	private String duongDanAnh;
 
 	@Column(name = "loaiMon", length = 100)
 	private String loaiMon;
 
-	public MonAn() {
-		// constructor rỗng cho JPA
-	}
-
-	public MonAn(String maMon, String tenMon, double donGia, String duongDanAnh, String loaiMon) {
-		this.maMon = maMon;
-		this.tenMon = tenMon;
-		this.donGia = donGia;
-		this.duongDanAnh = duongDanAnh;
-		this.loaiMon = loaiMon;
-	}
-
-	public String getMaMon() {
-		return maMon;
-	}
-
-	public void setMaMon(String maMon) {
-		this.maMon = maMon;
-	}
-
-	public String getTenMon() {
-		return tenMon;
-	}
-
-	public void setTenMon(String tenMon) {
-		this.tenMon = tenMon;
-	}
-
-	public double getDonGia() {
-		return donGia;
-	}
-
-	public void setDonGia(double donGia) {
-		this.donGia = donGia;
-	}
-
-	public String getDuongDanAnh() {
-		return duongDanAnh;
-	}
-
-	public void setDuongDanAnh(String duongDanAnh) {
-		this.duongDanAnh = duongDanAnh;
-	}
-
-	public String getLoaiMon() {
-		return loaiMon;
-	}
-
-	public void setLoaiMon(String loaiMon) {
-		this.loaiMon = loaiMon;
-	}
-
-	@Override
-	public int hashCode() {
-		return maMon == null ? 0 : maMon.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof MonAn))
-			return false;
-		MonAn other = (MonAn) obj;
-		return maMon != null && maMon.equals(other.maMon);
-	}
-
-	@Override
-	public String toString() {
-		return "MonAn [maMon=" + maMon + ", tenMon=" + tenMon + ", donGia=" + donGia + ", duongDanAnh=" + duongDanAnh
-				+ ", loaiMon=" + loaiMon + "]";
-	}
 }

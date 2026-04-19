@@ -7,11 +7,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 @Entity
 @NamedQueries({ @NamedQuery(name = "NhanVien.list", query = "SELECT NV FROM NhanVien NV"),
 		@NamedQuery(name = "NhanVien.count", query = "SELECT COUNT(maNV) FROM NhanVien"),
-		//
 		@NamedQuery(name = "NhanVien.state", query = "SELECT NV FROM NhanVien NV WHERE trangThai = :status") })
 public class NhanVien {
 	@Id
@@ -41,95 +52,6 @@ public class NhanVien {
 
 	@Column(name = "trangThai", nullable = false, columnDefinition = "BIT DEFAULT 1")
 	private boolean trangThai;
-
-	public NhanVien() {
-
-	}
-
-	public NhanVien(String maNV, String tenNV, String chucVu, String email, Date namSinh, String diaChi,
-			boolean gioiTinh, Date ngayVaoLam, boolean trangThai) {
-		this.maNV = maNV;
-		this.tenNV = tenNV;
-		this.chucVu = chucVu;
-		this.email = email;
-		this.namSinh = namSinh;
-		this.diaChi = diaChi;
-		this.gioiTinh = gioiTinh;
-		this.ngayVaoLam = ngayVaoLam;
-		this.trangThai = trangThai;
-	}
-
-	public String getMaNV() {
-		return maNV;
-	}
-
-	public void setMaNV(String maNV) {
-		this.maNV = maNV;
-	}
-
-	public String getTenNV() {
-		return tenNV;
-	}
-
-	public void setTenNV(String tenNV) {
-		this.tenNV = tenNV;
-	}
-
-	public String getChucVu() {
-		return chucVu;
-	}
-
-	public void setChucVu(String chucVu) {
-		this.chucVu = chucVu;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Date getNamSinh() {
-		return namSinh;
-	}
-
-	public void setNamSinh(Date namSinh) {
-		this.namSinh = namSinh;
-	}
-
-	public String getDiaChi() {
-		return diaChi;
-	}
-
-	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
-	}
-
-	public boolean isGioiTinh() {
-		return gioiTinh;
-	}
-
-	public void setGioiTinh(boolean gioiTinh) {
-		this.gioiTinh = gioiTinh;
-	}
-
-	public Date getNgayVaoLam() {
-		return ngayVaoLam;
-	}
-
-	public void setNgayVaoLam(Date ngayVaoLam) {
-		this.ngayVaoLam = ngayVaoLam;
-	}
-
-	public boolean isTrangThai() {
-		return trangThai;
-	}
-
-	public void setTrangThai(boolean trangThai) {
-		this.trangThai = trangThai;
-	}
 
 	@Override
 	public int hashCode() {
@@ -196,13 +118,6 @@ public class NhanVien {
 		if (trangThai != other.trangThai)
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "NhanVien [maNV=" + maNV + ", tenNV=" + tenNV + ", chucVu=" + chucVu + ", email=" + email + ", namSinh="
-				+ namSinh + ", diaChi=" + diaChi + ", gioiTinh=" + gioiTinh + ", ngayVaoLam=" + ngayVaoLam
-				+ ", trangThai=" + trangThai + "]";
 	}
 
 }

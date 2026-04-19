@@ -95,7 +95,7 @@ public class ThongKeNV_Controller {
 	private final HoaDon_DAOImpl hoaDon_DAO;
 	private final DonDatBan_DAOImpl donDatBan_DAO;
 
-	private NhanVien nhanVien = MenuNV_Controller.instance.taiKhoan.getNhanVien();
+	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
 
 	public ThongKeNV_Controller() {
 		this.hoaDon_DAO = new HoaDon_DAOImpl();

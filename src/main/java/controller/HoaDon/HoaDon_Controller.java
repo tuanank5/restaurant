@@ -104,7 +104,7 @@ public class HoaDon_Controller implements Initializable {
 	}
 
 	private void cauHinhCot() {
-		colMaHD.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMaHoaDon()));
+		colMaHD.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMaHD()));
 
 		colNgayLap.setCellValueFactory(data -> new SimpleStringProperty(
 				data.getValue().getNgayLap() != null ? data.getValue().getNgayLap().toString() : ""));
@@ -189,7 +189,7 @@ public class HoaDon_Controller implements Initializable {
 			String keyword = newText.toLowerCase().trim();
 
 			danhSachHoaDon.setAll(danhSachHoaDonDB.stream()
-					.filter(hd -> hd.getMaHoaDon().toLowerCase().contains(keyword) || (hd.getKhachHang() != null
+					.filter(hd -> hd.getMaHD().toLowerCase().contains(keyword) || (hd.getKhachHang() != null
 							&& hd.getKhachHang().getTenKH().toLowerCase().contains(keyword)))
 					.filter(this::locTheoNgay).filter(this::locTheoTrangThai)
 					.collect(java.util.stream.Collectors.toList()));

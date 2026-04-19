@@ -5,7 +5,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @NamedQueries({ @NamedQuery(name = "HangKhachHang.findAll", query = "SELECT H FROM HangKhachHang H"),
 		@NamedQuery(name = "HangKhachHang.findByMaHang", query = "SELECT H FROM HangKhachHang H WHERE H.maHang = :maHang") })
@@ -25,58 +35,6 @@ public class HangKhachHang {
 
 	@Column(name = "moTa", length = 200)
 	private String moTa;
-
-	public HangKhachHang() {
-
-	}
-
-	public HangKhachHang(String maHang, String tenHang, int diemHang, double giamGia, String moTa) {
-		this.maHang = maHang;
-		this.tenHang = tenHang;
-		this.diemHang = diemHang;
-		this.giamGia = giamGia;
-		this.moTa = moTa;
-	}
-
-	public String getMaHang() {
-		return maHang;
-	}
-
-	public void setMaHang(String maHang) {
-		this.maHang = maHang;
-	}
-
-	public String getTenHang() {
-		return tenHang;
-	}
-
-	public void setTenHang(String tenHang) {
-		this.tenHang = tenHang;
-	}
-
-	public int getDiemHang() {
-		return diemHang;
-	}
-
-	public void setDiemHang(int diemHang) {
-		this.diemHang = diemHang;
-	}
-
-	public double getGiamGia() {
-		return giamGia;
-	}
-
-	public void setGiamGia(double giamGia) {
-		this.giamGia = giamGia;
-	}
-
-	public String getMoTa() {
-		return moTa;
-	}
-
-	public void setMoTa(String moTa) {
-		this.moTa = moTa;
-	}
 
 	@Override
 	public int hashCode() {

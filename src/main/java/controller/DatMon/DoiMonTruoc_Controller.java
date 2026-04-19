@@ -194,7 +194,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 
 		if (hd == null)
 			return;
-		List<ChiTietHoaDon> dsCTHD = chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHoaDon());
+		List<ChiTietHoaDon> dsCTHD = chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHD());
 
 		dsMonAnDat.clear();
 		danhSachMon.clear();
@@ -332,7 +332,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 
 		try {
 			// Xóa món cũ
-			chiTietHoaDonDAO.deleteByMaHoaDon(hd.getMaHoaDon());
+			chiTietHoaDonDAO.deleteByMaHoaDon(hd.getMaHD());
 			// Ghi món mới
 			for (Map.Entry<MonAn, Integer> eMon : dsMonAnDat.entrySet()) {
 				MonAn mon = eMon.getKey();

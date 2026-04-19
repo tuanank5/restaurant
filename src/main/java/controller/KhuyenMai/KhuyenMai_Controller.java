@@ -8,7 +8,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import config.RestaurantApplication;
-import controller.Menu.MenuNVQL_Controller;
 import dao.KhachHang_DAO;
 import dao.KhuyenMai_DAO;
 import entity.KhachHang;

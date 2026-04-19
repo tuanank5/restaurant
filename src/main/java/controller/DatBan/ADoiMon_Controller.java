@@ -9,21 +9,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import controller.Menu.MenuNV_Controller;
-import dao.DonDatBan_DAO;
-import dao.HoaDon_DAO;
-import dao.KhachHang_DAO;
-import dao.MonAn_DAO;
-import dao.NhanVien_DAO;
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.MonAn_DAOImpl;
-import dao.impl.NhanVien_DAOImpl;
 import config.RestaurantApplication;
+import controller.Menu.MenuNV_Controller;
 import dao.ChiTietHoaDon_DAO;
-import entity.ChiTietHoaDon;
+import dao.MonAn_DAO;
+import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.MonAn;
@@ -104,9 +96,6 @@ public class ADoiMon_Controller implements Initializable {
 	// -----Bàn---------
 	private Ban banDangChon;
 
-	private NhanVien_DAO nhanVienDAO = new NhanVien_DAOImpl();
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
 	private List<MonAn> dsMonAn;
 	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
@@ -129,7 +118,7 @@ public class ADoiMon_Controller implements Initializable {
 				.newEntity_DAO(ChiTietHoaDon_DAO.class);
 
 		// 1️⃣ Xóa chi tiết cũ
-		ctDAO.deleteByMaHoaDon(hoaDonHienTai.getMaHoaDon());
+		ctDAO.deleteByMaHoaDon(hoaDonHienTai.getMaHD());
 
 		// 2️⃣ Lưu chi tiết mới
 		for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
@@ -381,10 +370,8 @@ public class ADoiMon_Controller implements Initializable {
 		lblTongTien.setText(dinhDangTien(tongTruocVAT));
 	}
 
-	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-
 	private String dinhDangTien(double soTien) {
-		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("vi-VN"));
 		return nf.format(soTien);
 	}
 
@@ -397,7 +384,7 @@ public class ADoiMon_Controller implements Initializable {
 		dsMonAnDat.clear();
 
 		List<ChiTietHoaDon> dsCT = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDonHienTai.getMaHoaDon());
+				.newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDonHienTai.getMaHD());
 
 		for (ChiTietHoaDon ct : dsCT) {
 			dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());

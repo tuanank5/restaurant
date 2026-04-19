@@ -3,9 +3,7 @@ package controller.DatBan;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,12 +16,10 @@ import dao.Ban_DAO;
 import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
-import dao.MonAn_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
-import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
@@ -44,7 +40,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.util.Duration;
 
 public class ABanHienTai_Controller {
 
@@ -100,17 +95,11 @@ public class ABanHienTai_Controller {
 	private Ban_DAO banDAO = new Ban_DAOImpl();
 	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 	private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
-	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
 	private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
 
 	// --- Danh sách và trạng thái ---
 	private List<HoaDon> dsHoaDon = new ArrayList<>();
 	private List<Ban> dsBan = new ArrayList<Ban>();
-	private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
-	private Ban hoaDonDangChon = null;
-	private Button buttonHoaDonDangChonUI = null;
-	private String maHoaDonDangChon;
-	private boolean isFromSearch = false;
 	private int tongDatBan;
 
 	public static ABanHienTai_Controller aBHT;
@@ -141,7 +130,6 @@ public class ABanHienTai_Controller {
 		checkTTbangKo = false;
 		dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
 		dsBan = banDAO.getDanhSach("Ban.list", Ban.class);
-		dsDDB = donDatBanDao.getDanhSach("DonDatBan.list", DonDatBan.class);
 		capNhatTrangThaiBanMacDinh();
 		capNhatTrangThaiBanTheoDonDatTruoc();
 		khoiTaoComboBoxes();
@@ -209,8 +197,6 @@ public class ABanHienTai_Controller {
 	private void loadDanhSachHoaDon() {
 		tongDatBan = 0;
 		gridPaneHD.getChildren().clear();
-		hoaDonDangChon = null;
-		buttonHoaDonDangChonUI = null;
 
 		int col = 0, row = 0;
 		final int MAX_COLS = 9;
@@ -265,7 +251,7 @@ public class ABanHienTai_Controller {
 							checkTTbangKo = true;
 							MenuNV_Controller.aBanHienTai_HD = hoaDon;
 							MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
-							dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(hoaDon.getMaHoaDon());
+							dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(hoaDon.getMaHD());
 							dsMonAnTA.clear();
 							for (ChiTietHoaDon cthd : dsCTHD_DB) {
 								dsMonAnTA.put(cthd.getMonAn(), cthd.getSoLuong());
@@ -378,18 +364,6 @@ public class ABanHienTai_Controller {
 		alert.showAndWait();
 	}
 
-//    ("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
-	private String getStyleByStatusAndType() {
-		String backgroundColor = "white"; // Mặc định
-
-		return String.format(
-				"-fx-background-color: %s;" + "-fx-background-radius: 15;" + "-fx-padding: 10;" + "-fx-font-size: 14px;"
-						+ "-fx-font-weight: bold;" + "-fx-text-fill: white;" + "-fx-font-family: 'Times New Roman';"
-						+ "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);",
-				backgroundColor);
-
-	}
-
 	private String getBorderStyle() {
 		return "-fx-border-color: gray; " + "-fx-border-width: 2; " + "-fx-background-color: white; "
 				+ "-fx-border-radius: 10; " + "-fx-padding: 10;";
@@ -403,7 +377,7 @@ public class ABanHienTai_Controller {
 
 	private double tinhTongTienMon(HoaDon hoaDon) {
 		List<ChiTietHoaDon> dsCT = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDon.getMaHoaDon());
+				.newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDon.getMaHD());
 
 		double tong = 0;
 		for (ChiTietHoaDon ct : dsCT) {

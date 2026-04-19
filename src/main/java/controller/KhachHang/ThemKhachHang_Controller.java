@@ -7,7 +7,6 @@ import java.util.Map;
 
 import config.DatabaseContext;
 import config.RestaurantApplication;
-import controller.Menu.MenuNV_Controller;
 import dao.HangKhachHang_DAO;
 import dao.KhachHang_DAO;
 import entity.HangKhachHang;
@@ -66,8 +65,6 @@ public class ThemKhachHang_Controller {
 
 	private String ui;
 
-	private KhachHang khachHang;
-
 	private List<HangKhachHang> danhSachHangKhachHangDB;
 
 	@FXML
@@ -119,7 +116,7 @@ public class ThemKhachHang_Controller {
 			resetAllField();
 		}
 	}
-	
+
 	@FXML
 	void mouseClicked(MouseEvent event) {
 		Object source = event.getSource();
@@ -137,7 +134,6 @@ public class ThemKhachHang_Controller {
 				// Kiểm tra kết quả thêm
 				if (check) {
 					AlertUtil.showAlert("Thông báo", "Thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
-					this.khachHang = khachHangNew;
 					dongDialog();
 					// Nếu không ở form thêm, thì quay lại
 					if (!lblDanhSachKhachHang.getText().equalsIgnoreCase("Danh Sách Khách Hàng")) {

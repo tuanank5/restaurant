@@ -7,7 +7,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(of = "maKM")
 @Entity
 @NamedQueries({ @NamedQuery(name = "KhuyenMai.list", query = "SELECT KM FROM KhuyenMai KM"),
 		@NamedQuery(name = "KhuyenMai.count", query = "SELECT COUNT(maKM) FROM KhuyenMai") })
@@ -30,93 +42,6 @@ public class KhuyenMai {
 
 	@Column(name = "phanTramGiamGia", nullable = false)
 	private int phanTramGiamGia;
-
-	public KhuyenMai() {
-
-	}
-
-	public KhuyenMai(String maKM, String tenKM, String loaiKM, Date ngayBatDau, Date ngayKetThuc, int phanTramGiamGia) {
-		super();
-		this.maKM = maKM;
-		this.tenKM = tenKM;
-		this.loaiKM = loaiKM;
-		this.ngayBatDau = ngayBatDau;
-		this.ngayKetThuc = ngayKetThuc;
-		this.phanTramGiamGia = phanTramGiamGia;
-	}
-
-	public String getMaKM() {
-		return maKM;
-	}
-
-	public void setMaKM(String maKM) {
-		this.maKM = maKM;
-	}
-
-	public String getTenKM() {
-		return tenKM;
-	}
-
-	public void setTenKM(String tenKM) {
-		this.tenKM = tenKM;
-	}
-
-	public String getLoaiKM() {
-		return loaiKM;
-	}
-
-	public void setLoaiKM(String loaiKM) {
-		this.loaiKM = loaiKM;
-	}
-
-	public Date getNgayBatDau() {
-		return ngayBatDau;
-	}
-
-	public void setNgayBatDau(Date ngayBatDau) {
-		this.ngayBatDau = ngayBatDau;
-	}
-
-	public Date getNgayKetThuc() {
-		return ngayKetThuc;
-	}
-
-	public void setNgayKetThuc(Date ngayKetThuc) {
-		this.ngayKetThuc = ngayKetThuc;
-	}
-
-	public int getPhanTramGiamGia() {
-		return phanTramGiamGia;
-	}
-
-	public void setPhanTramGiamGia(int phanTramGiamGia) {
-		this.phanTramGiamGia = phanTramGiamGia;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((maKM == null) ? 0 : maKM.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KhuyenMai other = (KhuyenMai) obj;
-		if (maKM == null) {
-			if (other.maKM != null)
-				return false;
-		} else if (!maKM.equals(other.maKM))
-			return false;
-		return true;
-	}
 
 	@Override
 	public String toString() {

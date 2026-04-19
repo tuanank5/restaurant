@@ -1,54 +1,60 @@
 package controller.DatBan;
 
-import dao.KhachHang_DAO;
-import dao.Ban_DAO;
-import dao.ChiTietHoaDon_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.DonDatBan_DAO;
-import dao.HoaDon_DAO;
-import dao.impl.DonDatBan_DAOImpl;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.KhachHang;
-import entity.DonDatBan;
-import entity.HoaDon;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
-import javafx.util.Duration;
-import util.AutoIDUitl;
-
 import java.net.URL;
 import java.sql.Date;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
+import dao.Ban_DAO;
+import dao.ChiTietHoaDon_DAO;
+import dao.DonDatBan_DAO;
+import dao.HoaDon_DAO;
 import dao.MonAn_DAO;
+import dao.impl.Ban_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
+import entity.Ban;
+import entity.ChiTietHoaDon;
+import entity.DonDatBan;
+import entity.HoaDon;
+import entity.KhachHang;
 import entity.MonAn;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.text.NumberFormat;
-import java.util.Locale;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import util.AutoIDUitl;
 
 public class ADatMon_Controller implements Initializable {
 
@@ -105,8 +111,6 @@ public class ADatMon_Controller implements Initializable {
 
 	// -----Bàn---------
 	private Ban banDangChon;
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
 	private List<MonAn> dsMonAn;
 	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
@@ -121,14 +125,7 @@ public class ADatMon_Controller implements Initializable {
 
 	}
 
-	private DonDatBan donDatBanHienTai;
-
-	public void setDonDatBanHienTai(DonDatBan don) {
-		this.donDatBanHienTai = don;
-	}
-
 	private boolean checkTTbangKo = ABanHienTai_Controller.aBHT.checkTTbangKo;
-	private Map<MonAn, Integer> dsMonAnTA = ABanHienTai_Controller.aBHT.dsMonAnTA;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -218,11 +215,7 @@ public class ADatMon_Controller implements Initializable {
 		}
 	}
 
-	// cài khách hàng
-	private KhachHang khachHangDangChon;
-
 	public void setKhachHang(KhachHang kh) {
-		this.khachHangDangChon = kh;
 		if (kh != null) {
 			txtKhachHang.setText(kh.getTenKH());
 		}
@@ -327,7 +320,7 @@ public class ADatMon_Controller implements Initializable {
 
 	private void themHD(DonDatBan ddb) {
 		HoaDon hd = new HoaDon();
-		hd.setMaHoaDon(AutoIDUitl.sinhMaHoaDon());
+		hd.setMaHD(AutoIDUitl.sinhMaHoaDon());
 		LocalDate localDate = LocalDate.now();
 		Date dateNow = Date.valueOf(localDate);
 		hd.setNgayLap(dateNow);
@@ -521,8 +514,8 @@ public class ADatMon_Controller implements Initializable {
 	}
 
 	private String dinhDangTien(double soTien) {
-		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-		return nf.format(soTien);
+	    NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("vi-VN"));
+	    return nf.format(soTien);
 	}
 
 	private void showAlert(String title, String content, Alert.AlertType alertType) {

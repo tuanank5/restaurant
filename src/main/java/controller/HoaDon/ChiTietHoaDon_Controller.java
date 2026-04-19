@@ -111,7 +111,7 @@ public class ChiTietHoaDon_Controller {
 	}
 
 	private void hienThiThongTinHoaDon() {
-		txtMaHoaDon.setText(hoaDon.getMaHoaDon());
+		txtMaHoaDon.setText(hoaDon.getMaHD());
 		txtTenKH.setText(hoaDon.getKhachHang().getTenKH());
 		txtSDT.setText(hoaDon.getKhachHang().getSdt());
 		txtNV.setText(hoaDon.getNhanVien().getTenNV());
@@ -124,7 +124,7 @@ public class ChiTietHoaDon_Controller {
 
 	private void loadChiTietHoaDon() {
 		HoaDon_DAOImpl dao = new HoaDon_DAOImpl();
-		var list = dao.findByMaHoaDon(hoaDon.getMaHoaDon());
+		var list = dao.findByMaHoaDon(hoaDon.getMaHD());
 		System.out.println("CTHD size = " + list.size());
 		list.forEach(ct -> System.out.println(ct.getMonAn()));
 		danhSachCTHD.setAll(list);
@@ -151,7 +151,7 @@ public class ChiTietHoaDon_Controller {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Lưu hóa đơn");
 			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-			fileChooser.setInitialFileName("HoaDon_" + hoaDon.getMaHoaDon() + ".pdf");
+			fileChooser.setInitialFileName("HoaDon_" + hoaDon.getMaHD() + ".pdf");
 
 			Stage stage = (Stage) btnXuatHD.getScene().getWindow();
 			File file = fileChooser.showSaveDialog(stage);
@@ -172,7 +172,7 @@ public class ChiTietHoaDon_Controller {
 			title.setAlignment(Element.ALIGN_CENTER);
 			document.add(title);
 
-			document.add(new Paragraph("Mã hóa đơn: " + hoaDon.getMaHoaDon(), normalFont));
+			document.add(new Paragraph("Mã hóa đơn: " + hoaDon.getMaHD(), normalFont));
 			document.add(new Paragraph("Ngày lập: " + hoaDon.getNgayLap(), normalFont));
 			document.add(new Paragraph("Nhân viên: " + hoaDon.getNhanVien().getTenNV(), normalFont));
 			document.add(new Paragraph("Khách hàng: " + hoaDon.getKhachHang().getTenKH(), normalFont));

@@ -101,7 +101,7 @@ public class MenuNV_Controller {
 	}
 
 	public void setThongTin(TaiKhoan taiKhoan) {
-		this.taiKhoan = taiKhoan;
+		MenuNV_Controller.taiKhoan = taiKhoan;
 		String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
 		txtThongTin.setText(hoTen);
 		dashBoard();

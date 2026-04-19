@@ -409,7 +409,7 @@ public class DatMonTruoc_Controller implements Initializable {
 			}
 			DonDatBan donDau = danhSachDatBanDaTao.get(0);
 			HoaDon hd = new HoaDon();
-			hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
+			hd.setMaHD(util.AutoIDUitl.sinhMaHoaDon());
 			hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
 			hd.setTongTien(tongTien);
 			hd.setThue(0.0);

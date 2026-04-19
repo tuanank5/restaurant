@@ -113,7 +113,6 @@ public class ThemNhanVien_Controller implements Initializable {
 	@FXML
 	private HBox hBox;
 
-	private NhanVien nhanVien;
 	private ObservableList<NhanVien> danhSachNhanVien = FXCollections.observableArrayList();
 	private List<NhanVien> danhSachNhanVienDB;
 	private final int LIMIT = 15;
@@ -277,7 +276,6 @@ public class ThemNhanVien_Controller implements Initializable {
 					AlertUtil.showAlert("Thông báo", "Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.",
 							Alert.AlertType.INFORMATION);
 
-					this.nhanVien = nvNew;
 					if (!lblDanhSachNhanVien.getText().equalsIgnoreCase("Danh Sách Nhân Viên")) {
 						MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
 					}

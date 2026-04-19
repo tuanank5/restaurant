@@ -25,10 +25,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.HoaDon_DAO;
-import entity.HoaDon;
-import entity.KhachHang;
 import dao.KhachHang_DAO;
 import dao.impl.KhachHang_DAOlmpl;
+import entity.HoaDon;
+import entity.KhachHang;
 import entity.KhuyenMai;
 import entity.MonAn;
 import javafx.event.ActionEvent;
@@ -290,7 +290,7 @@ public class AThuTien_Controller {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Chọn nơi lưu hóa đơn");
 			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-			fileChooser.setInitialFileName("HoaDon_" + hoaDonHienTai.getMaHoaDon() + ".pdf");
+			fileChooser.setInitialFileName("HoaDon_" + hoaDonHienTai.getMaHD() + ".pdf");
 
 			Stage stage = (Stage) btnIn.getScene().getWindow();
 			File file = fileChooser.showSaveDialog(stage);
@@ -313,7 +313,7 @@ public class AThuTien_Controller {
 			title.setAlignment(Element.ALIGN_CENTER);
 			document.add(title);
 			document.add(new Paragraph("Ngày lập: " + hoaDonHienTai.getNgayLap(), fontNormal));
-			document.add(new Paragraph("Mã hóa đơn: " + hoaDonHienTai.getMaHoaDon(), fontNormal));
+			document.add(new Paragraph("Mã hóa đơn: " + hoaDonHienTai.getMaHD(), fontNormal));
 			document.add(Chunk.NEWLINE);
 
 			// THÔNG TIN KHÁCH HÀNG
@@ -339,7 +339,7 @@ public class AThuTien_Controller {
 			}
 
 			// Dữ liệu bảng
-			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("vi-VN"));
 			for (MonAn mon : dsMonAn.keySet()) {
 				int sl = dsMonAn.get(mon);
 				double thanhTien = mon.getDonGia() * sl;
@@ -390,7 +390,7 @@ public class AThuTien_Controller {
 	}
 
 	private String formatTienVN(double tien) {
-		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("vi-VN"));
 		nf.setGroupingUsed(true);
 		return nf.format(tien) + " VND";
 	}
@@ -408,7 +408,7 @@ public class AThuTien_Controller {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Chọn nơi lưu hóa đơn");
 			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-			fileChooser.setInitialFileName("HoaDon_" + hoaDonHienTai.getMaHoaDon() + ".pdf");
+			fileChooser.setInitialFileName("HoaDon_" + hoaDonHienTai.getMaHD() + ".pdf");
 
 			Stage stage = (Stage) btnIn.getScene().getWindow();
 			File file = fileChooser.showSaveDialog(stage);
@@ -431,7 +431,7 @@ public class AThuTien_Controller {
 			title.setAlignment(Element.ALIGN_CENTER);
 			document.add(title);
 			document.add(new Paragraph("Ngày lập: " + hoaDonHienTai.getNgayLap(), fontNormal));
-			document.add(new Paragraph("Mã hóa đơn: " + hoaDonHienTai.getMaHoaDon(), fontNormal));
+			document.add(new Paragraph("Mã hóa đơn: " + hoaDonHienTai.getMaHD(), fontNormal));
 			document.add(Chunk.NEWLINE);
 
 			// THÔNG TIN KHÁCH HÀNG
@@ -457,7 +457,7 @@ public class AThuTien_Controller {
 			}
 
 			// Dữ liệu bảng
-			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("vi-VN"));
 			for (MonAn mon : dsMonAn.keySet()) {
 				int sl = dsMonAn.get(mon);
 				double thanhTien = mon.getDonGia() * sl;
@@ -514,7 +514,7 @@ public class AThuTien_Controller {
 		KhachHang kh = hoaDonHienTai.getKhachHang();
 
 		int diemCu = kh.getDiemTichLuy();
-		int diemSuDung = AThanhToan_Controller.aTT.diemSuDung;
+		int diemSuDung = AThanhToan_Controller.diemSuDung;
 
 		int diemMoi = diemCu - diemSuDung + 50;
 		if (diemMoi < 0)

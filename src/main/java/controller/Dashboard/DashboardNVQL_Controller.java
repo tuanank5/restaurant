@@ -214,8 +214,6 @@ public class DashboardNVQL_Controller {
 		List<String> daysWithMinRevenue = new ArrayList<>();
 		List<String> daysWithMinKhac0 = new ArrayList<>();
 
-		int daysWithRevenue = 0; // Biến đếm số ngày có doanh thu khác 0
-
 		// Duyệt qua từng ngày để tính các thông số
 		for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
 			String ngay = entry.getKey();
@@ -246,11 +244,6 @@ public class DashboardNVQL_Controller {
 				daysWithMinKhac0.add(ngay);
 			} else if (soDDB == minSoDDB2) {
 				daysWithMinKhac0.add(ngay);
-			}
-
-			// Đếm số ngày có doanh thu khác 0
-			if (soDDB > 0) {
-				daysWithRevenue++;
 			}
 		}
 

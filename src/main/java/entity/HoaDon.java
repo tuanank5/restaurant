@@ -9,7 +9,21 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "maHD")
 @Entity
 @NamedQueries({ @NamedQuery(name = "HoaDon.list", query = "SELECT HD FROM HoaDon HD"),
 		@NamedQuery(name = "HoaDon.count", query = "SELECT COUNT(HD.maHD) FROM HoaDon HD"),
@@ -60,167 +74,5 @@ public class HoaDon {
 	@ManyToOne
 	@JoinColumn(name = "maCoc", referencedColumnName = "maCoc", nullable = true)
 	private Coc coc;
-
-	public HoaDon() {
-	}
-
-	public HoaDon(String maHD, Date ngayLap, double tongTien, double thue, String trangThai, String kieuThanhToan,
-			double tienNhan, double tienThua, KhachHang khachHang, KhuyenMai khuyenMai, NhanVien nhanVien,
-			DonDatBan donDatBan, Coc coc) {
-		this.maHD = maHD;
-		this.ngayLap = ngayLap;
-		this.tongTien = tongTien;
-		this.thue = thue;
-		this.trangThai = trangThai;
-		this.kieuThanhToan = kieuThanhToan;
-		this.tienNhan = tienNhan;
-		this.tienThua = tienThua;
-		this.khachHang = khachHang;
-		this.khuyenMai = khuyenMai;
-		this.nhanVien = nhanVien;
-		this.donDatBan = donDatBan;
-		this.coc = coc;
-	}
-
-	public String getMaHoaDon() {
-		return maHD;
-	}
-
-	public void setMaHoaDon(String maHD) {
-		this.maHD = maHD;
-	}
-
-	public Date getNgayLap() {
-		return ngayLap;
-	}
-
-	public void setNgayLap(Date ngayLap) {
-		this.ngayLap = ngayLap;
-	}
-
-	public double getTongTien() {
-		return tongTien;
-	}
-
-	public void setTongTien(double tongTien) {
-		this.tongTien = tongTien;
-	}
-
-	public double getThue() {
-		return thue;
-	}
-
-	public void setThue(double thue) {
-		this.thue = thue;
-	}
-
-	public String getTrangThai() {
-		return trangThai;
-	}
-
-	public void setTrangThai(String trangThai) {
-		this.trangThai = trangThai;
-	}
-
-	public String getKieuThanhToan() {
-		return kieuThanhToan;
-	}
-
-	public void setKieuThanhToan(String kieuThanhToan) {
-		this.kieuThanhToan = kieuThanhToan;
-	}
-
-	public double getTienNhan() {
-		return tienNhan;
-	}
-
-	public void setTienNhan(double tienNhan) {
-		this.tienNhan = tienNhan;
-	}
-
-	public double getTienThua() {
-		return tienThua;
-	}
-
-	public void setTienThua(double tienThua) {
-		this.tienThua = tienThua;
-	}
-
-	public KhachHang getKhachHang() {
-		return khachHang;
-	}
-
-	public void setKhachHang(KhachHang khachHang) {
-		this.khachHang = khachHang;
-	}
-
-	public KhuyenMai getKhuyenMai() {
-		return khuyenMai;
-	}
-
-	public void setKhuyenMai(KhuyenMai khuyenMai) {
-		this.khuyenMai = khuyenMai;
-	}
-
-	public NhanVien getNhanVien() {
-		return nhanVien;
-	}
-
-	public void setNhanVien(NhanVien nhanVien) {
-		this.nhanVien = nhanVien;
-	}
-
-	public DonDatBan getDonDatBan() {
-		return donDatBan;
-	}
-
-	public void setDonDatBan(DonDatBan donDatBan) {
-		this.donDatBan = donDatBan;
-	}
-
-	public Coc getCoc() {
-		return coc;
-	}
-
-	public void setCoc(Coc coc) {
-		this.coc = coc;
-	}
-
-	// ======================
-	// HASHCODE, EQUALS, TO_STRING
-	// ======================
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((maHD == null) ? 0 : maHD.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		HoaDon other = (HoaDon) obj;
-		if (maHD == null) {
-			if (other.maHD != null)
-				return false;
-		} else if (!maHD.equals(other.maHD))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "HoaDon [maHD=" + maHD + ", ngayLap=" + ngayLap + ", tongTien=" + tongTien + ", thue=" + thue
-				+ ", trangThai=" + trangThai + ", kieuThanhToan=" + kieuThanhToan + ", tienNhan=" + tienNhan
-				+ ", tienThua=" + tienThua + ", khachHang=" + khachHang + ", khuyenMai=" + khuyenMai + ", nhanVien="
-				+ nhanVien + ", donDatBan=" + donDatBan + ", coc=" + coc + "]";
-	}
 
 }

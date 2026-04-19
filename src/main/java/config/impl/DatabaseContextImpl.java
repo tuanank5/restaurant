@@ -5,6 +5,7 @@ import dao.*;
 import dao.impl.*;
 
 public class DatabaseContextImpl implements DatabaseContext {
+	@SuppressWarnings("unchecked")
 	@Override
 	public <R extends Entity_DAO<?>> R newEntity_DAO(Class<R> entityType) {
 		if (entityType == Ban_DAO.class) {

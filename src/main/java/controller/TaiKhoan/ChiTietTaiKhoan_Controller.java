@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNVQL_Controller;
-import controller.Menu.MenuNV_Controller;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,7 +46,7 @@ public class ChiTietTaiKhoan_Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 	}
-	
+
 	@FXML
 	void mouseClicked(MouseEvent event) {
 		Object source = event.getSource();
@@ -55,11 +54,11 @@ public class ChiTietTaiKhoan_Controller implements Initializable {
 			troLai();
 		}
 	}
-	
+
 	public void troLai() {
 		MenuNVQL_Controller.instance.readyUI("TaiKhoan/TaiKhoanTA");
 	}
-	
+
 	public void btnQuayLai(ActionEvent event) {
 		MenuNVQL_Controller.instance.readyUI("TaiKhoan/TaiKhoanTA");
 	}

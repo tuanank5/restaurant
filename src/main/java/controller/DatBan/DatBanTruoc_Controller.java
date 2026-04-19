@@ -1,14 +1,15 @@
 package controller.DatBan;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import controller.DatMon.DatMonTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
-import javafx.scene.control.ButtonBar;
 import dao.Ban_DAO;
 import dao.DonDatBan_DAO;
 import dao.LoaiBan_DAO;
@@ -27,6 +28,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
@@ -36,9 +38,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class DatBanTruoc_Controller implements Initializable {
 
@@ -58,7 +57,6 @@ public class DatBanTruoc_Controller implements Initializable {
 	private Ban_DAO banDAO = new Ban_DAOImpl();
 	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 	private LoaiBan_DAO loaiBanDAO = new LoaiBan_DAOImpl();
-	private List<LoaiBan> dsLoaiBan;
 	private List<Ban> danhSachBan = new ArrayList<>();
 	private List<Ban> danhSachBanDangChon = new ArrayList<>();
 	private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
@@ -161,7 +159,6 @@ public class DatBanTruoc_Controller implements Initializable {
 			btn.setPrefSize(170, 110);
 			btn.setStyle(buildStyle(bgColor));
 			final boolean isDangPhucVu = "Đang phục vụ".equals(trangThai);
-			final boolean isBanBanFinal = banBan || isDangPhucVu;
 			btn.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 2) {
 					// Double click -> mở form nhập thông tin khách hàng
@@ -495,8 +492,6 @@ public class DatBanTruoc_Controller implements Initializable {
 		this.khachHangDaChon = kh;
 		int soLuongKH = Integer.parseInt(soLuongInput.trim());
 		this.slKhach = soLuongKH;
-		// Số lượng khách
-		int soLuongKH_final = 1;
 		try {
 			soLuongKH = Integer.parseInt(soLuongInput.trim());
 			if (soLuongKH <= 0)
@@ -559,7 +554,7 @@ public class DatBanTruoc_Controller implements Initializable {
 		DonDatBan donDau = danhSachDatBanDaTao.get(0);
 		try {
 			HoaDon hd = new HoaDon();
-			hd.setMaHoaDon(util.AutoIDUitl.sinhMaHoaDon());
+			hd.setMaHD(util.AutoIDUitl.sinhMaHoaDon());
 			hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
 			hd.setTongTien(0.0);
 			hd.setThue(0.0);

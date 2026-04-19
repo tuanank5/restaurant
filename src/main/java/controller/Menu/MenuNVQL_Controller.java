@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import config.RestaurantApplication;
-import controller.Dashboard.DashboardNVQLScroll_Controller;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javafx.animation.KeyFrame;
@@ -76,7 +75,6 @@ public class MenuNVQL_Controller {
 	@FXML
 	public void initialize() {
 		instance = this;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
 			lblClock.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 		}));
@@ -136,7 +134,7 @@ public class MenuNVQL_Controller {
 	}
 
 	public void setThongTin(TaiKhoan taiKhoan) {
-		this.taiKhoan = taiKhoan;
+		MenuNV_Controller.taiKhoan = taiKhoan;
 		String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
 		txtThongTin.setText(hoTen);
 		dashBoard();
@@ -160,6 +158,6 @@ public class MenuNVQL_Controller {
 	}
 
 	public void dashBoard() {
-		DashboardNVQLScroll_Controller controller = readyUI("Dashboard/DashboardNVQLScroll").getController();
+		readyUI("Dashboard/DashboardNVQLScroll").getController();
 	}
 }

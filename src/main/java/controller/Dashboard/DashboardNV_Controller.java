@@ -53,7 +53,7 @@ public class DashboardNV_Controller {
 	private final HoaDon_DAOImpl hoaDon_DAO;
 	private final DonDatBan_DAOImpl donDatBan_DAO;
 
-	private NhanVien nhanVien = MenuNV_Controller.instance.taiKhoan.getNhanVien();
+	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
 
 	public DashboardNV_Controller() {
 		this.hoaDon_DAO = new HoaDon_DAOImpl();
@@ -210,8 +210,6 @@ public class DashboardNV_Controller {
 		List<String> daysWithMinRevenue = new ArrayList<>();
 		List<String> daysWithMinKhac0 = new ArrayList<>();
 
-		int daysWithRevenue = 0; // Biến đếm số ngày có doanh thu khác 0
-
 		// Duyệt qua từng ngày để tính các thông số
 		for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
 			String ngay = entry.getKey();
@@ -242,11 +240,6 @@ public class DashboardNV_Controller {
 				daysWithMinKhac0.add(ngay);
 			} else if (soDDB == minSoDDB2) {
 				daysWithMinKhac0.add(ngay);
-			}
-
-			// Đếm số ngày có doanh thu khác 0
-			if (soDDB > 0) {
-				daysWithRevenue++;
 			}
 		}
 

@@ -1,9 +1,11 @@
 package controller.DatBan;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
@@ -29,8 +31,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class ThayDoiBanTruoc_Controller implements Initializable {
 
@@ -52,7 +52,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 	private GridPane gridPaneBan;
 
 	public static DonDatBan donDatBanDuocChon;
-	private String loaiBanCu;
 
 	private Ban_DAO banDAO = new Ban_DAOImpl();
 	private DonDatBan_DAO donDAO = new DonDatBan_DAOImpl();
@@ -60,7 +59,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 	private LoaiBan_DAO loaiBanDAO = new LoaiBan_DAOImpl();
 
 	private List<Ban> danhSachBan = new ArrayList<>();
-	private List<LoaiBan> dsLoaiBan;
 	private List<Ban> danhSachBanDangChon = new ArrayList<>();
 	private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
 
@@ -288,69 +286,6 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 				row++;
 			}
 		}
-	}
-
-	private void locBanTheoNgayGio() {
-		LocalDate ngay = dpNgayDatBan.getValue();
-		String gioStr = cmbGioBatDau.getValue();
-		if (ngay == null || gioStr == null)
-			return;
-		int gio = Integer.parseInt(gioStr.substring(0, 2));
-		LocalTime gioBatDau = LocalTime.of(gio, 0);
-		gridPaneBan.getChildren().clear();
-
-		int col = 0, row = 0;
-		final int MAX_COLS = 5;
-		for (Ban ban : danhSachBan) {
-			boolean trung = coTrungLich(ban, ngay, gioBatDau);
-			Button btnBan = new Button(ban.getMaBan());
-			btnBan.setPrefSize(170, 110);
-
-			btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
-			if (trung) {
-				btnBan.setStyle(getStyleByStatusAndType("Đã được đặt", ban.getLoaiBan().getMaLoaiBan()));
-			} else {
-				btnBan.setStyle(getStyleByStatusAndType("Trống", ban.getLoaiBan().getMaLoaiBan()));
-			}
-
-			GridPane.setMargin(btnBan, new Insets(5));
-			gridPaneBan.add(btnBan, col, row);
-			col++;
-			if (col >= MAX_COLS) {
-				col = 0;
-				row++;
-			}
-		}
-	}
-
-	private boolean coTrungLich(Ban ban, LocalDate ngay, LocalTime gioMoi) {
-		List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-		if (dsDon == null || dsDon.isEmpty())
-			return false;
-
-		for (DonDatBan don : dsDon) {
-			if (donDatBanDuocChon != null && don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan()))
-				continue;
-
-			LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
-			if (!ngayDat.equals(ngay))
-				continue;
-
-			LocalTime gioBatDau = don.getGioBatDau();
-			LocalTime gioChan = gioBatDau.minusHours(1);
-			LocalTime gioKetThuc = gioBatDau.plusHours(1);
-
-			boolean trung;
-
-			if (gioKetThuc.isAfter(gioChan)) {
-				trung = !gioMoi.isBefore(gioChan) && !gioMoi.isAfter(gioKetThuc);
-			} else {
-				trung = !gioMoi.isBefore(gioChan) || !gioMoi.isAfter(gioKetThuc);
-			}
-			if (trung)
-				return true;
-		}
-		return false;
 	}
 
 	private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {

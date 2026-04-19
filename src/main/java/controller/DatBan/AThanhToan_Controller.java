@@ -156,7 +156,7 @@ public class AThanhToan_Controller {
 	@FXML
 	public void initialize() {
 		aTT = this;
-		String maHD = MenuNV_Controller.instance.aBanHienTai_HD.getMaHoaDon();
+		String maHD = MenuNV_Controller.aBanHienTai_HD.getMaHD();
 		dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(maHD);
 
 		dsMonAn = new HashMap<>();
@@ -170,7 +170,7 @@ public class AThanhToan_Controller {
 
 		dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
 		for (HoaDon hd : dsHoaDon) {
-			if (hd.getMaHoaDon().equals(maHD)) {
+			if (hd.getMaHD().equals(maHD)) {
 				hoaDonHienTai = hd;
 			}
 		}
@@ -306,7 +306,7 @@ public class AThanhToan_Controller {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Chọn nơi lưu hóa đơn");
 			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-			fileChooser.setInitialFileName("HoaDon_" + hoaDonHienTai.getMaHoaDon() + ".pdf");
+			fileChooser.setInitialFileName("HoaDon_" + hoaDonHienTai.getMaHD() + ".pdf");
 
 			Stage stage = (Stage) btnTamTinh.getScene().getWindow();
 			File file = fileChooser.showSaveDialog(stage);
@@ -329,7 +329,7 @@ public class AThanhToan_Controller {
 			title.setAlignment(Element.ALIGN_CENTER);
 			document.add(title);
 			document.add(new Paragraph("Ngày lập: " + hoaDonHienTai.getNgayLap(), fontNormal));
-			document.add(new Paragraph("Mã hóa đơn: " + hoaDonHienTai.getMaHoaDon(), fontNormal));
+			document.add(new Paragraph("Mã hóa đơn: " + hoaDonHienTai.getMaHD(), fontNormal));
 			document.add(Chunk.NEWLINE);
 
 			// THÔNG TIN KHÁCH HÀNG
@@ -355,7 +355,7 @@ public class AThanhToan_Controller {
 			}
 
 			// Dữ liệu bảng
-			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("vi-VN"));
 			for (MonAn mon : dsMonAn.keySet()) {
 				int sl = dsMonAn.get(mon);
 				double thanhTien = mon.getDonGia() * sl;
@@ -414,7 +414,7 @@ public class AThanhToan_Controller {
 	}
 
 	private String formatTienVN(double tien) {
-		NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("vi-VN"));
 		nf.setGroupingUsed(true);
 		return nf.format(tien) + " VND";
 	}

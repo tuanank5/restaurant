@@ -14,9 +14,7 @@ import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
 import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
-import dao.KhachHang_DAO;
 import dao.impl.DonDatBan_DAOImpl;
-import javafx.scene.control.ButtonBar;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.HoaDon;
@@ -31,6 +29,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -90,13 +89,10 @@ public class DonDatBan_Controller implements Initializable {
 
 	private DonDatBan donDangChon;
 
-	private KhachHang_DAO khachHangDAO;
 	private DonDatBan_DAO donDatBanDAO;
 
 	private ObservableList<DonDatBan> danhSachDonDatBan = FXCollections.observableArrayList();
 	private List<DonDatBan> danhSachDonDatBanDB;
-	private final int LIMIT = 15;
-	private String status = "all";
 
 	private void capNhatTongDon() {
 		txtTongDonDat.setText(String.valueOf(tblView.getItems().size()));
@@ -128,7 +124,6 @@ public class DonDatBan_Controller implements Initializable {
 				}
 			}
 		});
-		khachHangDAO = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(KhachHang_DAO.class);
 
 		donDatBanDAO = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(DonDatBan_DAO.class);
 
@@ -191,12 +186,6 @@ public class DonDatBan_Controller implements Initializable {
 
 		tblView.setItems(danhSachDonDatBan);
 		capNhatTongDon();
-	}
-
-	private void loadData(List<DonDatBan> list) {
-		danhSachDonDatBan.clear();
-		danhSachDonDatBan.addAll(list);
-		tblView.setItems(danhSachDonDatBan);
 	}
 
 	private void setValueTable() {

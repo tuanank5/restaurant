@@ -5,24 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.scene.control.ButtonBar;
 
 import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
 import dao.DonDatBan_DAO;
-import dao.LoaiBan_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.LoaiBan_DAOImpl;
 import entity.Ban;
 import entity.DonDatBan;
-import entity.LoaiBan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
@@ -170,16 +167,10 @@ public class ADoiBan_Controller implements Initializable {
 	}
 
 	public static DonDatBan donDatBanDuocChon;
-	private String loaiBanCu;
 	private Ban_DAO banDAO = new Ban_DAOImpl();
 	private DonDatBan_DAO donDAO = new DonDatBan_DAOImpl();
-	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-	private LoaiBan_DAO loaiBanDAO = new LoaiBan_DAOImpl();
 
 	private List<Ban> danhSachBan = new ArrayList<>();
-	private List<LoaiBan> dsLoaiBan;
-	private List<Ban> danhSachBanDangChon = new ArrayList<>();
-	private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

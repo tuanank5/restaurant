@@ -1,33 +1,31 @@
 package controller.DatBan;
 
-import dao.KhachHang_DAO;
-import dao.Ban_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.HoaDon_DAO;
-import dao.impl.HoaDon_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.DonDatBan_DAO;
-import dao.impl.DonDatBan_DAOImpl;
-import entity.Ban;
-import entity.KhachHang;
-import entity.DonDatBan;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.util.Duration;
-import util.AutoIDUitl;
-
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
+import dao.Ban_DAO;
+import dao.KhachHang_DAO;
+import dao.impl.Ban_DAOImpl;
+import dao.impl.KhachHang_DAOlmpl;
+import entity.Ban;
+import entity.KhachHang;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.GridPane;
 
 public class ADatBanHienTai_Controller implements Initializable {
 
@@ -45,17 +43,11 @@ public class ADatBanHienTai_Controller implements Initializable {
 
 	// --- DAO ---
 	private Ban_DAO banDAO = new Ban_DAOImpl();
-	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
 
 	// --- Danh sách và trạng thái ---
 	private List<Ban> danhSachBan = new ArrayList<>();
 	private Ban banDangChon = null;
-	private Button buttonBanDangChonUI = null;
-	private boolean isFromSearch = false;
-	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-
-	private List<DonDatBan> dsDDB = new ArrayList<DonDatBan>();
 
 	private KhachHang aBanHienTai_KH;
 
@@ -105,7 +97,6 @@ public class ADatBanHienTai_Controller implements Initializable {
 	private void loadDanhSachBan() {
 		gridPaneBan.getChildren().clear();
 		banDangChon = null;
-		buttonBanDangChonUI = null;
 
 		danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
 		int col = 0, row = 0;
@@ -262,72 +253,6 @@ public class ADatBanHienTai_Controller implements Initializable {
 					row++;
 				}
 			}
-		}
-	}
-
-	private boolean checkDonDatBan(Ban ban) {
-		dsDDB = donDatBanDAO.getDanhSach("DonDatBan.list", DonDatBan.class);
-		LocalTime now = LocalTime.now();
-
-		for (DonDatBan ddb : dsDDB) {
-			if (ddb.getBan().getMaBan().equals(ban.getMaBan())) {
-				if (now.isAfter(ddb.getGioBatDau().minusHours(1)) && now.isBefore(ddb.getGioBatDau().plusHours(1))) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	private void handleChonBan(Ban ban, Button btnBan) {
-		Ban banCu = this.banDangChon;
-		Button btnCu = this.buttonBanDangChonUI;
-		this.banDangChon = ban;
-
-		// --- Nếu đã được đặt → vẫn mở DatMon để xem hoặc sửa ---
-		if ("Đã được đặt".equals(ban.getTrangThai()) && !isFromSearch) {
-			List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
-			if (dsDon != null && !dsDon.isEmpty()) {
-				DonDatBan donGan = dsDon.get(dsDon.size() - 1);
-				MenuNV_Controller.banDangChon = ban;
-				KhachHang kh = hoaDonDAO.getKhachHangTheoMaDatBan(donGan.getMaDatBan());
-				MenuNV_Controller.khachHangDangChon = kh;
-			}
-			return;
-		}
-		// Style chọn bàn
-		if (btnCu != null) {
-			btnCu.getStyleClass().remove("ban-selected");
-		}
-		btnBan.getStyleClass().add("ban-selected");
-
-		this.buttonBanDangChonUI = btnBan;
-
-	}
-
-	private void handleDatBan(ActionEvent event) {
-		if (banDangChon == null) {
-			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn!");
-			return;
-		}
-		if ("Đã được đặt".equals(banDangChon.getTrangThai()) || "Đang phục vụ".equals(banDangChon.getTrangThai())) {
-			showAlert(Alert.AlertType.WARNING, "Bàn này đã được chọn hoặc đang phục vụ, không thể đặt lại!");
-			return;
-		}
-
-		DonDatBan don = new DonDatBan();
-		don.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
-		don.setBan(banDangChon);
-
-		banDangChon.setTrangThai("Đã được đặt");
-
-		boolean thanhCong = donDatBanDAO.them(don);
-		if (thanhCong) {
-			banDAO.sua(banDangChon);
-			showAlert(Alert.AlertType.INFORMATION, "Đặt bàn thành công!");
-			loadDanhSachBan();
-		} else {
-			showAlert(Alert.AlertType.ERROR, "Lỗi khi thêm đơn đặt bàn!");
 		}
 	}
 
