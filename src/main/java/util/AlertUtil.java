@@ -20,9 +20,9 @@ public class AlertUtil {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Thông báo");
 		alert.setHeaderText(content);
-		ButtonType buttonLuu = new ButtonType("Có", ButtonBar.ButtonData.YES);
-		ButtonType buttonKhongLuu = new ButtonType("Không", ButtonBar.ButtonData.NO);
-		ButtonType buttonHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+		ButtonType buttonLuu = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+		ButtonType buttonKhongLuu = new ButtonType("No", ButtonBar.ButtonData.NO);
+		ButtonType buttonHuy = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 		alert.getButtonTypes().setAll(buttonLuu, buttonKhongLuu, buttonHuy);
 		return alert.showAndWait();
 	}

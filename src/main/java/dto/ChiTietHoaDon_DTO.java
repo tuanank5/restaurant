@@ -1,7 +1,5 @@
 package dto;
 
-import entity.HoaDon;
-import entity.MonAn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +15,9 @@ import lombok.ToString;
 @ToString
 public class ChiTietHoaDon_DTO {
 
-	private HoaDon hoaDon;
+	private String maHoaDon;
 
-	private MonAn monAn;
+	private String maMonAn;
 
 	private int soLuong;
 
