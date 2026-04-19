@@ -514,8 +514,8 @@ public class ADatMon_Controller implements Initializable {
 	}
 
 	private String dinhDangTien(double soTien) {
-	    NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("vi-VN"));
-	    return nf.format(soTien);
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("vi-VN"));
+		return nf.format(soTien);
 	}
 
 	private void showAlert(String title, String content, Alert.AlertType alertType) {

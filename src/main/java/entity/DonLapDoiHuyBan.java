@@ -30,11 +30,11 @@ public class DonLapDoiHuyBan {
 	@ManyToOne
 	@JoinColumn(name = "maDatBan", referencedColumnName = "maDatBan", nullable = false)
 	private DonDatBan donDatBan;
-	
+
 	@EqualsAndHashCode.Include
-    public String getMaDatBan() {
-        return donDatBan != null ? donDatBan.getMaDatBan() : null;
-    }
+	public String getMaDatBan() {
+		return donDatBan != null ? donDatBan.getMaDatBan() : null;
+	}
 
 	@Column(name = "lyDo", nullable = false, length = 200)
 	private String lyDo;

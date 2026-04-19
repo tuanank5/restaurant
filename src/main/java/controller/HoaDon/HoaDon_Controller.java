@@ -188,9 +188,8 @@ public class HoaDon_Controller implements Initializable {
 		txtTimKiem.textProperty().addListener((obs, oldText, newText) -> {
 			String keyword = newText.toLowerCase().trim();
 
-			danhSachHoaDon.setAll(danhSachHoaDonDB.stream()
-					.filter(hd -> hd.getMaHD().toLowerCase().contains(keyword) || (hd.getKhachHang() != null
-							&& hd.getKhachHang().getTenKH().toLowerCase().contains(keyword)))
+			danhSachHoaDon.setAll(danhSachHoaDonDB.stream().filter(hd -> hd.getMaHD().toLowerCase().contains(keyword)
+					|| (hd.getKhachHang() != null && hd.getKhachHang().getTenKH().toLowerCase().contains(keyword)))
 					.filter(this::locTheoNgay).filter(this::locTheoTrangThai)
 					.collect(java.util.stream.Collectors.toList()));
 		});

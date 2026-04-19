@@ -20,13 +20,13 @@ public class ChiTietHoaDon_ServiceImpl implements ChiTietHoaDon_Service {
 	@Override
 	public boolean themChiTiet(ChiTietHoaDon_DTO cthd_DTO) {
 		if (cthd_DTO == null) {
-			throw new IllegalArgumentException("themChiTiet: cthd_DTO không được rỗng");
+			throw new IllegalArgumentException("cthd_DTO không được rỗng");
 		}
 		if (cthd_DTO.getMaHoaDon() == null || cthd_DTO.getMaHoaDon().trim().isEmpty()) {
-			throw new IllegalArgumentException("themChiTiet: cthd_DTO.maHoaDon không được rỗng");
+			throw new IllegalArgumentException("cthd_DTO.maHoaDon không được rỗng");
 		}
 		if (cthd_DTO.getMaMonAn() == null || cthd_DTO.getMaMonAn().trim().isEmpty()) {
-			throw new IllegalArgumentException("themChiTiet: cthd_DTO.maMonAn không được rỗng");
+			throw new IllegalArgumentException("cthd_DTO.maMonAn không được rỗng");
 		}
 		return chiTietHoaDon_DAO.themChiTiet(MapperUtil.map(cthd_DTO, ChiTietHoaDon.class));
 	}
@@ -34,19 +34,17 @@ public class ChiTietHoaDon_ServiceImpl implements ChiTietHoaDon_Service {
 	@Override
 	public List<ChiTietHoaDon_DTO> getChiTietTheoMaHoaDon(String maHD) {
 		if (maHD == null || maHD.trim().isEmpty()) {
-			throw new IllegalArgumentException("getChiTietTheoMaHoaDon: maHD không được rỗng");
+			throw new IllegalArgumentException("maHD không được rỗng");
 		}
 		List<ChiTietHoaDon> chiTietHoaDons = chiTietHoaDon_DAO.getChiTietTheoMaHoaDon(maHD);
-		return chiTietHoaDons
-				.stream()
-				.map(chiTietHoaDon -> MapperUtil.map(chiTietHoaDon, ChiTietHoaDon_DTO.class))
+		return chiTietHoaDons.stream().map(chiTietHoaDon -> MapperUtil.map(chiTietHoaDon, ChiTietHoaDon_DTO.class))
 				.toList();
 	}
 
 	@Override
 	public void deleteByMaHoaDon(String maHD) {
 		if (maHD == null || maHD.trim().isEmpty()) {
-			throw new IllegalArgumentException("deleteByMaHoaDon: maHD không được rỗng");
+			throw new IllegalArgumentException("maHD không được rỗng");
 		}
 		chiTietHoaDon_DAO.deleteByMaHoaDon(maHD);
 	}

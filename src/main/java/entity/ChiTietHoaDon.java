@@ -34,16 +34,16 @@ public class ChiTietHoaDon {
 	@ManyToOne
 	@JoinColumn(name = "maMon", referencedColumnName = "maMon", nullable = false)
 	private MonAn monAn;
-	
-	@EqualsAndHashCode.Include
-    public String getMaHD() {
-        return hoaDon != null ? hoaDon.getMaHD() : null;
-    }
 
-    @EqualsAndHashCode.Include
-    public String getMaMon() {
-        return monAn != null ? monAn.getMaMon() : null;
-    }
+	@EqualsAndHashCode.Include
+	public String getMaHD() {
+		return hoaDon != null ? hoaDon.getMaHD() : null;
+	}
+
+	@EqualsAndHashCode.Include
+	public String getMaMon() {
+		return monAn != null ? monAn.getMaMon() : null;
+	}
 
 	@Column(name = "soLuong", nullable = false)
 	private int soLuong;

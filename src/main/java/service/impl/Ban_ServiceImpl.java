@@ -20,7 +20,7 @@ public class Ban_ServiceImpl implements Ban_Service {
 	@Override
 	public LoaiBan_DTO timLoaiBanTheoTen(String tenLoaiBan) {
 		if (tenLoaiBan == null || tenLoaiBan.trim().isEmpty()) {
-			throw new IllegalArgumentException("timLoaiBanTheoTen: tenLoaiBan không được rỗng");
+			throw new IllegalArgumentException("tenLoaiBan không được rỗng");
 		}
 		LoaiBan loaiBan = ban_DAO.timLoaiBanTheoTen(tenLoaiBan);
 		return MapperUtil.map(loaiBan, LoaiBan_DTO.class);
@@ -34,10 +34,10 @@ public class Ban_ServiceImpl implements Ban_Service {
 	@Override
 	public boolean sua(Ban_DTO ban_DTO) {
 		if (ban_DTO == null) {
-			throw new IllegalArgumentException("sua: ban_DTO không được rỗng");
+			throw new IllegalArgumentException("ban_DTO không được rỗng");
 		}
 		if (ban_DTO.getMaBan() == null || ban_DTO.getMaBan().trim().isEmpty()) {
-			throw new IllegalArgumentException("sua: ban_DTO.maBan không được rỗng");
+			throw new IllegalArgumentException("ban_DTO.maBan không được rỗng");
 		}
 		return ban_DAO.sua(MapperUtil.map(ban_DTO, Ban.class));
 	}

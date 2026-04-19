@@ -34,5 +34,5 @@ public class LoaiBan {
 
 	@Column(name = "soLuong", nullable = false)
 	private int soLuong;
-	
+
 }

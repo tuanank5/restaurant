@@ -1,8 +1,33 @@
 package config.impl;
 
 import config.DatabaseContext;
-import dao.*;
-import dao.impl.*;
+import dao.Ban_DAO;
+import dao.ChiTietHoaDon_DAO;
+import dao.Coc_DAO;
+import dao.DonDatBan_DAO;
+import dao.DonLapDoiHuyBan_DAO;
+import dao.Entity_DAO;
+import dao.HangKhachHang_DAO;
+import dao.HoaDon_DAO;
+import dao.KhachHang_DAO;
+import dao.KhuyenMai_DAO;
+import dao.LoaiBan_DAO;
+import dao.MonAn_DAO;
+import dao.NhanVien_DAO;
+import dao.TaiKhoan_DAO;
+import dao.impl.Ban_DAOImpl;
+import dao.impl.ChiTietHoaDon_DAOImpl;
+import dao.impl.Coc_DAOImpl;
+import dao.impl.DonDatBan_DAOImpl;
+import dao.impl.DonLapDoiHuyBan_DAOImpl;
+import dao.impl.HangKhachHang_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
+import dao.impl.KhachHang_DAOlmpl;
+import dao.impl.KhuyenMai_DAOImpl;
+import dao.impl.LoaiBan_DAOImpl;
+import dao.impl.MonAn_DAOImpl;
+import dao.impl.NhanVien_DAOImpl;
+import dao.impl.TaiKhoan_DAOImpl;
 
 public class DatabaseContextImpl implements DatabaseContext {
 	@SuppressWarnings("unchecked")
