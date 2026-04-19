@@ -2,9 +2,6 @@ package dto;
 
 import java.sql.Date;
 
-import entity.KhachHang;
-import entity.KhuyenMai;
-import entity.NhanVien;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
