@@ -28,6 +28,6 @@ public class KhachHang_DTO {
 	@Builder.Default
 	private int diemTichLuy = 0;
 
-	private HangKhachHang_DTO hangKhachHang;
+	private String maHangKhachHang;
 
 }

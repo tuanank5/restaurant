@@ -21,6 +21,6 @@ public class Ban_DTO {
 
 	private String trangThai;
 
-	private LoaiBan_DTO loaiBan;
+	private String maLoaiBan;
 
 }

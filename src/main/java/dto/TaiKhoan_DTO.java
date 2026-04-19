@@ -29,6 +29,6 @@ public class TaiKhoan_DTO {
 
 	private Date ngaySuaDoi;
 
-	private NhanVien_DTO nhanVien;
+	private String maNhanVien;
 
 }

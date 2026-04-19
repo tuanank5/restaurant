@@ -36,14 +36,14 @@ public class HoaDon_DTO {
 
 	private double tienThua;
 
-	private KhachHang khachHang;
+	private String maKhachHang;
 
-	private KhuyenMai khuyenMai;
+	private String maKhuyenMai;
 
-	private NhanVien nhanVien;
+	private String maNhanVien;
 
-	private DonDatBan_DTO donDatBan;
+	private String maDonDatBan;
 
-	private Coc_DTO coc;
+	private String maCoc;
 
 }

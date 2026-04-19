@@ -22,6 +22,7 @@ public class ChiTietHoaDon_DTO {
 	private MonAn monAn;
 
 	private int soLuong;
+
 	// thanhTien cần xóa
 	private double thanhTien;
 

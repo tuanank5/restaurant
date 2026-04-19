@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 public class DonLapDoiHuyBan_DTO {
 
-	private DonDatBan_DTO donDatBan;
+	private String maDonDatBan;
 
 	private String lyDo;
 
