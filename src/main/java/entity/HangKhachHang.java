@@ -5,8 +5,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @NamedQueries({ @NamedQuery(name = "HangKhachHang.findAll", query = "SELECT H FROM HangKhachHang H"),
 		@NamedQuery(name = "HangKhachHang.findByMaHang", query = "SELECT H FROM HangKhachHang H WHERE H.maHang = :maHang") })
 public class HangKhachHang {
@@ -25,6 +37,7 @@ public class HangKhachHang {
 
 	@Column(name = "moTa", length = 200)
 	private String moTa;
+}
 
 	public HangKhachHang() {
 

@@ -5,8 +5,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @NamedQueries({ @NamedQuery(name = "LoaiBan.list", query = "SELECT LB FROM LoaiBan LB"),
 		@NamedQuery(name = "LoaiBan.count", query = "SELECT COUNT(LB.maLoaiBan) FROM LoaiBan LB") })
 public class LoaiBan {

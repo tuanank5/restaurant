@@ -4,9 +4,21 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "Coc")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Coc {
 	@Id
 	@Column(name = "maCoc", nullable = false, length = 20)
@@ -20,10 +32,7 @@ public class Coc {
 
 	@Column(name = "soTienCoc", nullable = false)
 	private double soTienCoc;
-
-	public Coc() {
-
-	}
+}
 
 	public Coc(String maCoc, boolean loaiCoc, int phanTramCoc, double soTienCoc) {
 		this.maCoc = maCoc;

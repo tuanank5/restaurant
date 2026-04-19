@@ -7,11 +7,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @NamedQueries({ @NamedQuery(name = "NhanVien.list", query = "SELECT NV FROM NhanVien NV"),
 		@NamedQuery(name = "NhanVien.count", query = "SELECT COUNT(maNV) FROM NhanVien"),
-		//
 		@NamedQuery(name = "NhanVien.state", query = "SELECT NV FROM NhanVien NV WHERE trangThai = :status") })
 public class NhanVien {
 	@Id

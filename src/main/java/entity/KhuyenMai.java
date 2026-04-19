@@ -7,8 +7,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @NamedQueries({ @NamedQuery(name = "KhuyenMai.list", query = "SELECT KM FROM KhuyenMai KM"),
 		@NamedQuery(name = "KhuyenMai.count", query = "SELECT COUNT(maKM) FROM KhuyenMai") })
 public class KhuyenMai {
