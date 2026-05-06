@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import dao.NhanVien_DAO;
-import entity.NhanVien;
+import dto.NhanVien_DTO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +30,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AlertUtil;
 import util.ComponentUtil;
 import util.ExportExcelUtil;
@@ -41,7 +43,7 @@ public class NhanVien_Controller {
 	@FXML
 	private BorderPane borderPane;
 	@FXML
-	private TableView<NhanVien> tblNV;
+	private TableView<NhanVien_DTO> tblNV;
 	@FXML
 	private TextField txtTimKiem;
 	@FXML
@@ -51,20 +53,28 @@ public class NhanVien_Controller {
 	@FXML
 	private Button btnThemNV, btnXoa, btnXuatPDF;
 	@FXML
-	private TableColumn<NhanVien, String> tblMaNV, tblTenNV, tblChucVu, tblEmail, tblDiaChi, tblGioiTinh, tblTrangThai;
+	private TableColumn<NhanVien_DTO, String> tblMaNV, tblTenNV, tblChucVu, tblEmail, tblDiaChi, tblGioiTinh,
+			tblTrangThai;
 	@FXML
-	private TableColumn<NhanVien, Date> tblNamSinh, tblNgayVaoLam;
+	private TableColumn<NhanVien_DTO, Date> tblNamSinh, tblNgayVaoLam;
 
-	private ObservableList<NhanVien> danhSachNhanVien = FXCollections.observableArrayList();
-	private List<NhanVien> danhSachNhanVienDB;
+	private ObservableList<NhanVien_DTO> danhSachNhanVien = FXCollections.observableArrayList();
+	private List<NhanVien_DTO> danhSachNhanVienDB = List.of();
 	private final int LIMIT = 15;
 	private String status = "all";
+
+	private Client client;
 
 	@FXML
 	private void initialize() {
 		setValueTable();
+
+		client = Client.tryCreate();
+
 		loadData();
-		phanTrang(danhSachNhanVienDB.size());
+		if (danhSachNhanVienDB != null) {
+			phanTrang(danhSachNhanVienDB.size());
+		}
 		btnThemNV.setTooltip(new Tooltip("Thêm nhân viên mới"));
 		btnXoa.setTooltip(new Tooltip("Đổi thành nhân viên ngừng làm việc"));
 		btnXuatPDF.setTooltip(new Tooltip("Xuất danh sách nhân viên ra file"));
@@ -112,7 +122,7 @@ public class NhanVien_Controller {
 		}
 		if (event.getSource() == tblNV) {
 			if (event.getClickCount() == 2) {
-				NhanVien nv = tblNV.getSelectionModel().getSelectedItem();
+				NhanVien_DTO nv = tblNV.getSelectionModel().getSelectedItem();
 				if (nv == null)
 					return;
 
@@ -139,8 +149,8 @@ public class NhanVien_Controller {
 	}
 
 	private void timKiem() {
-		ObservableList<NhanVien> tempList = FXCollections.observableArrayList(danhSachNhanVienDB);
-		FilteredList<NhanVien> filteredData = new FilteredList<>(tempList, p -> true);
+		ObservableList<NhanVien_DTO> tempList = FXCollections.observableArrayList(danhSachNhanVienDB);
+		FilteredList<NhanVien_DTO> filteredData = new FilteredList<>(tempList, p -> true);
 
 		hBox.setVisible(false);
 
@@ -167,7 +177,7 @@ public class NhanVien_Controller {
 	private int locTheoTrangThai(String status) {
 		danhSachNhanVien.clear();
 
-		List<NhanVien> filtered = danhSachNhanVienDB;
+		List<NhanVien_DTO> filtered = danhSachNhanVienDB;
 		if (!status.equals("all")) {
 			boolean active = status.equals("active");
 			filtered = danhSachNhanVienDB.stream().filter(nv -> nv.isTrangThai() == active)
@@ -188,7 +198,7 @@ public class NhanVien_Controller {
 				int page = Integer.parseInt(((Button) btn).getText()) - 1;
 				int skip = page * LIMIT;
 
-				List<NhanVien> source = danhSachNhanVienDB;
+				List<NhanVien_DTO> source = danhSachNhanVienDB;
 				if (!status.equals("all")) {
 					boolean active = status.equals("active");
 					source = danhSachNhanVienDB.stream().filter(nv -> nv.isTrangThai() == active)
@@ -201,7 +211,7 @@ public class NhanVien_Controller {
 		});
 	}
 
-	private void phanTrang(FilteredList<NhanVien> list) {
+	private void phanTrang(FilteredList<NhanVien_DTO> list) {
 		hBox.getChildren().clear();
 		loadCountPage(list.size());
 
@@ -223,15 +233,16 @@ public class NhanVien_Controller {
 	}
 
 	private void xoa() {
-		NhanVien nv = tblNV.getSelectionModel().getSelectedItem();
+		NhanVien_DTO nv = tblNV.getSelectionModel().getSelectedItem();
 		if (nv == null)
 			return;
 
 		Optional<ButtonType> opt = AlertUtil.showAlertConfirm("Bạn có chắc chắn xóa?");
 		if (opt.get().getButtonData() == ButtonBar.ButtonData.YES) {
 			nv.setTrangThai(false);
-			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class).capNhat(nv);
-			loadData();
+			if (capNhatNhanVien(nv)) {
+				loadData();
+			}
 		}
 	}
 
@@ -242,13 +253,29 @@ public class NhanVien_Controller {
 		loadData();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadData() {
-		danhSachNhanVienDB = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class)
-				.getDanhSach(NhanVien.class, new HashMap<>());
-		loadData(danhSachNhanVienDB.subList(0, Math.min(LIMIT, danhSachNhanVienDB.size())));
+		try {
+			Request request = Request.builder().commandType(CommandType.NHANVIEN_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+
+			if (!(data instanceof List<?> rawList)) {
+				danhSachNhanVienDB = List.of();
+				loadData(List.of());
+				return;
+			}
+
+			List<NhanVien_DTO> list = (List<NhanVien_DTO>) rawList;
+			danhSachNhanVienDB = list == null ? List.of() : list;
+
+			loadData(danhSachNhanVienDB.subList(0, Math.min(LIMIT, danhSachNhanVienDB.size())));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void loadData(List<NhanVien> list) {
+	private void loadData(List<NhanVien_DTO> list) {
 		danhSachNhanVien.setAll(list);
 		tblNV.setItems(danhSachNhanVien);
 	}
@@ -270,5 +297,16 @@ public class NhanVien_Controller {
 
 	private void huyChonDong() {
 		tblNV.getSelectionModel().clearSelection();
+	}
+
+	private boolean capNhatNhanVien(NhanVien_DTO dto) {
+		try {
+			Request request = Request.builder().commandType(CommandType.NHANVIEN_UPDATE).data(dto).build();
+			Response response = client == null ? null : client.send(request);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

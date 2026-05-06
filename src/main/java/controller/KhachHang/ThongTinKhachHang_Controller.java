@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.HangKhachHang_DAO;
-import entity.HangKhachHang;
-import entity.KhachHang;
+import dto.HangKhachHang_DTO;
+import dto.KhachHang_DTO;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +18,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class ThongTinKhachHang_Controller {
 	@FXML
@@ -61,12 +63,16 @@ public class ThongTinKhachHang_Controller {
 	@FXML
 	private TextField txtTenKH;
 
-	private KhachHang khachHang;
+	private KhachHang_DTO khachHang;
 
-	private List<HangKhachHang> danhSachHangKhachHangDB;
+	private final Map<String, String> tenHangByMaHang = new HashMap<>();
+	private Client client;
 
 	public void initialize() {
 		Platform.runLater(() -> btnTroLai.requestFocus());
+
+		client = Client.tryCreate();
+
 		loadData();
 	}
 
@@ -109,7 +115,7 @@ public class ThongTinKhachHang_Controller {
 		}
 	}
 
-	public void hienThiThongTin(KhachHang khachHang) {
+	public void hienThiThongTin(KhachHang_DTO khachHang) {
 		if (khachHang != null) {
 			txtMaKH.setText(khachHang.getMaKH());
 			txtTenKH.setText(khachHang.getTenKH());
@@ -117,27 +123,45 @@ public class ThongTinKhachHang_Controller {
 			txtEmail.setText(khachHang.getEmail());
 			txtDiaChi.setText(khachHang.getDiaChi());
 			txtDiemTichLuy.setText(String.valueOf(khachHang.getDiemTichLuy()));
-			HangKhachHang hang = khachHang.getHangKhachHang();
-			if (hang != null) {
-				comBoxHangKH.setValue(hang.getTenHang());
-			}
+			String tenHang = tenHangByMaHang.get(khachHang.getMaHangKhachHang());
+			comBoxHangKH.setValue(tenHang == null ? "" : tenHang);
 		}
 	}
 
-	public void setKhachHang(KhachHang khachHang) {
+	public void setKhachHang(KhachHang_DTO khachHang) {
 		this.khachHang = khachHang;
 		hienThiThongTin(khachHang);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadData() {
-		Map<String, Object> filter = new HashMap<>();
-		danhSachHangKhachHangDB = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(HangKhachHang_DAO.class).getDanhSach(HangKhachHang.class, filter);
-		comBoxHangKH.getItems().clear();
-		for (HangKhachHang hang : danhSachHangKhachHangDB) {
-			comBoxHangKH.getItems().add(hang.getTenHang());
+		try {
+			Request request = Request.builder().commandType(CommandType.HANGKHACHHANG_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+
+			if (!(data instanceof List<?> rawList)) {
+				return;
+			}
+
+			List<HangKhachHang_DTO> list = (List<HangKhachHang_DTO>) rawList;
+
+			tenHangByMaHang.clear();
+			comBoxHangKH.getItems().clear();
+
+			if (list != null) {
+				for (HangKhachHang_DTO hang : list) {
+					if (hang != null && hang.getMaHang() != null) {
+						tenHangByMaHang.put(hang.getMaHang(), hang.getTenHang());
+						comBoxHangKH.getItems().add(hang.getTenHang());
+					}
+				}
+			}
+
+			comBoxHangKH.getSelectionModel().selectFirst();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		comBoxHangKH.getSelectionModel().selectFirst();
 	}
 
 	public void troLai() {

@@ -3,6 +3,9 @@ package network.server;
 import java.util.HashMap;
 import java.util.Map;
 
+import handler.HangKhachHangHandler;
+import handler.KhachHangHandler;
+import handler.NhanVienHandler;
 import handler.TaiKhoanHandler;
 import network.common.CommandHandler;
 import network.common.CommandType;
@@ -15,6 +18,9 @@ public class RequestDispatcher {
 
     public RequestDispatcher() {
         handlerMap.put("TAIKHOAN", new TaiKhoanHandler());
+        handlerMap.put("KHACHHANG", new KhachHangHandler());
+        handlerMap.put("HANGKHACHHANG", new HangKhachHangHandler());
+        handlerMap.put("NHANVIEN", new NhanVienHandler());
     }
 
     public Response dispatch(Request request) {

@@ -1,16 +1,19 @@
 package controller;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import dao.TaiKhoan_DAO;
-import entity.TaiKhoan;
+import dto.TaiKhoan_DTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.BorderPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AlertUtil;
+import util.MapperUtil;
 
 public class DoiMatKhauQL_Controller {
 	@FXML
@@ -34,6 +37,13 @@ public class DoiMatKhauQL_Controller {
 	@FXML
 	private PasswordField mkNhapLaiTextField;
 
+	private Client client;
+
+	@FXML
+	private void initialize() {
+		client = Client.tryCreate();
+	}
+
 	@FXML
 	void controller(ActionEvent event) {
 		Object src = event.getSource();
@@ -48,10 +58,16 @@ public class DoiMatKhauQL_Controller {
 
 	@FXML
 	void btnLuuLai(ActionEvent event) {
-		TaiKhoan taiKhoan = MenuNVQL_Controller.taiKhoan;
+		Object tkObj = MenuNVQL_Controller.taiKhoan;
+		TaiKhoan_DTO taiKhoan = tkObj == null ? null : MapperUtil.map(tkObj, TaiKhoan_DTO.class);
 		String mkCu = mkCuTextField.getText();
 		String mkMoi = mkMoiTextField.getText();
 		String mkNhapLai = mkNhapLaiTextField.getText();
+
+		if (taiKhoan == null) {
+			AlertUtil.showAlert("Thông báo", "Không tìm thấy tài khoản", Alert.AlertType.WARNING);
+			return;
+		}
 
 		if (mkCu.isEmpty() || mkMoi.isEmpty() || mkNhapLai.isEmpty()) {
 			AlertUtil.showAlert("Thông báo", "Vui lòng nhập đầy đủ thông tin", Alert.AlertType.WARNING);
@@ -77,7 +93,10 @@ public class DoiMatKhauQL_Controller {
 		}
 
 		taiKhoan.setMatKhau(mkMoi);
-		RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class).capNhat(taiKhoan);
+		if (!capNhatMatKhau(taiKhoan)) {
+			AlertUtil.showAlert("Thông báo", "Đổi mật khẩu thất bại", Alert.AlertType.ERROR);
+			return;
+		}
 
 		AlertUtil.showAlert("Thông báo", "Đổi mật khẩu thành công", Alert.AlertType.INFORMATION);
 		lamMoi();
@@ -97,5 +116,16 @@ public class DoiMatKhauQL_Controller {
 	@FXML
 	void btnQuayLai(ActionEvent event) {
 		MenuNVQL_Controller.getInstance().dashBoard();
+	}
+
+	private boolean capNhatMatKhau(TaiKhoan_DTO dto) {
+		try {
+			Request request = Request.builder().commandType(CommandType.TAIKHOAN_UPDATE_PASSWORD).data(dto).build();
+			Response response = client == null ? null : client.send(request);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

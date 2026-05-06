@@ -19,6 +19,14 @@ public class Client {
 		in = new ObjectInputStream(socket.getInputStream());
 	}
 
+	public static Client tryCreate() {
+		try {
+			return new Client();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	public Response send(Request request) throws Exception {
 		out.writeObject(request);
 		out.flush();
