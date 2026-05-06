@@ -7,9 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import config.RestaurantApplication;
-import dao.TaiKhoan_DAO;
-import entity.TaiKhoan;
+import dto.TaiKhoan_DTO;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -26,6 +24,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class MenuNVQL_Controller {
 	@FXML
@@ -38,7 +40,8 @@ public class MenuNVQL_Controller {
 	private Label lblClock;
 
 	public static MenuNVQL_Controller instance;
-	public static TaiKhoan taiKhoan;
+	public static TaiKhoan_DTO taiKhoan;
+	private Client client;
 
 	@FXML
 	void btnDangXuat(ActionEvent event) {
@@ -52,8 +55,7 @@ public class MenuNVQL_Controller {
 			Date dateNow = Date.valueOf(LocalDate.now());
 			taiKhoan.setNgayDangXuat(dateNow);
 
-			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
-					.capNhat(taiKhoan);
+			capNhatTaiKhoanTaiServer(taiKhoan);
 
 			Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 			currentStage.close();
@@ -75,6 +77,7 @@ public class MenuNVQL_Controller {
 	@FXML
 	public void initialize() {
 		instance = this;
+		client = Client.tryCreate();
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
 			lblClock.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 		}));
@@ -133,9 +136,9 @@ public class MenuNVQL_Controller {
 		return fxmlLoader;
 	}
 
-	public void setThongTin(TaiKhoan taiKhoan) {
-		MenuNV_Controller.taiKhoan = taiKhoan;
-		String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
+	public void setThongTin(TaiKhoan_DTO taiKhoan) {
+		MenuNVQL_Controller.taiKhoan = taiKhoan;
+		String hoTen = taiKhoan.getTenNhanVien() + " - " + taiKhoan.getMaNhanVien();
 		txtThongTin.setText(hoTen);
 		dashBoard();
 	}
@@ -159,5 +162,15 @@ public class MenuNVQL_Controller {
 
 	public void dashBoard() {
 		readyUI("Dashboard/DashboardNVQLScroll").getController();
+	}
+
+	private boolean capNhatTaiKhoanTaiServer(TaiKhoan_DTO dto) {
+		try {
+			Request request = Request.builder().commandType(CommandType.TAIKHOAN_UPDATE_PASSWORD).data(dto).build();
+			Response response = client == null ? null : client.send(request);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

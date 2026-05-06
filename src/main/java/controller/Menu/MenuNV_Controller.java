@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import config.RestaurantApplication;
-import dao.TaiKhoan_DAO;
+import dto.KhachHang_DTO;
+import dto.TaiKhoan_DTO;
 import entity.Ban;
 import entity.DonDatBan;
 import entity.HoaDon;
@@ -35,6 +35,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class MenuNV_Controller {
 
@@ -51,7 +55,7 @@ public class MenuNV_Controller {
 	public static int soLuongKhach = 0;
 
 	public static MenuNV_Controller instance;
-	public static Map<entity.MonAn, Integer> dsMonAnDangChon;
+	public static Map<MonAn, Integer> dsMonAnDangChon;
 	public static String tongTienSauVAT;
 	public static Ban banDangChon;
 	public static DonDatBan DonDatBan;
@@ -63,6 +67,7 @@ public class MenuNV_Controller {
 	public static Map<String, Map<MonAn, Integer>> dsMonTheoBan = new HashMap<>();
 
 	public static TaiKhoan taiKhoan;
+	private Client client;
 
 	@FXML
 	private BorderPane borderPane;
@@ -76,6 +81,7 @@ public class MenuNV_Controller {
 	@FXML
 	private void initialize() {
 		instance = this; // Gán instance khi FXML được load
+		client = Client.tryCreate();
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
 			lblClock.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 		}));
@@ -100,9 +106,9 @@ public class MenuNV_Controller {
 		return fxmlLoader;
 	}
 
-	public void setThongTin(TaiKhoan taiKhoan) {
-		MenuNV_Controller.taiKhoan = taiKhoan;
-		String hoTen = taiKhoan.getNhanVien().getTenNV() + " - " + taiKhoan.getNhanVien().getMaNV();
+	public void setThongTin(TaiKhoan_DTO taiKhoan) {
+		MenuNV_Controller.taiKhoan = taiKhoan == null ? null : util.MapperUtil.map(taiKhoan, TaiKhoan.class);
+		String hoTen = taiKhoan.getTenNhanVien() + " - " + taiKhoan.getMaNhanVien();
 		txtThongTin.setText(hoTen);
 		dashBoard();
 	}
@@ -119,8 +125,7 @@ public class MenuNV_Controller {
 			Date dateNow = Date.valueOf(localDate);
 
 			taiKhoan.setNgayDangXuat(dateNow);
-			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
-					.capNhat(taiKhoan);
+			capNhatTaiKhoanTaiServer(taiKhoan == null ? null : util.MapperUtil.map(taiKhoan, TaiKhoan_DTO.class));
 
 			try {
 				Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -167,6 +172,16 @@ public class MenuNV_Controller {
 		}
 		// Nếu DatBan đang hiển thị, reload UI để cập nhật trạng thái bàn
 		readyUI("DatBan/aBanHienTai");
+	}
+
+	private boolean capNhatTaiKhoanTaiServer(TaiKhoan_DTO dto) {
+		try {
+			Request request = Request.builder().commandType(CommandType.TAIKHOAN_UPDATE_PASSWORD).data(dto).build();
+			Response response = client == null ? null : client.send(request);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	@FXML

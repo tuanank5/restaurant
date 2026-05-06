@@ -1,7 +1,6 @@
 package controller.DatBan;
 
 import java.net.URL;
-import java.sql.Date;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,21 +12,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.Ban_DAO;
-import dao.ChiTietHoaDon_DAO;
-import dao.DonDatBan_DAO;
-import dao.HoaDon_DAO;
-import dao.MonAn_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.MonAn_DAOImpl;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.MonAn;
+import dto.Ban_DTO;
+import dto.ChiTietHoaDon_DTO;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import dto.KhachHang_DTO;
+import dto.MonAn_DTO;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -54,6 +45,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AutoIDUitl;
 
 public class ADatMon_Controller implements Initializable {
@@ -80,16 +75,16 @@ public class ADatMon_Controller implements Initializable {
 	private ComboBox<String> cmbLoaiMon;
 
 	@FXML
-	private TableColumn<MonAn, Double> colDonGia;
+	private TableColumn<MonAn_DTO, Double> colDonGia;
 
 	@FXML
-	private TableColumn<MonAn, Integer> colSTT;
+	private TableColumn<MonAn_DTO, Integer> colSTT;
 
 	@FXML
-	private TableColumn<MonAn, Integer> colSoLuong;
+	private TableColumn<MonAn_DTO, Integer> colSoLuong;
 
 	@FXML
-	private TableColumn<MonAn, String> colTenMon;
+	private TableColumn<MonAn_DTO, String> colTenMon;
 
 	@FXML
 	private GridPane gridPaneMon;
@@ -101,7 +96,7 @@ public class ADatMon_Controller implements Initializable {
 	private ScrollPane scrollPaneMon;
 
 	@FXML
-	private TableView<MonAn> tblDS;
+	private TableView<MonAn_DTO> tblDS;
 
 	@FXML
 	private TextField txtMaBan;
@@ -110,12 +105,12 @@ public class ADatMon_Controller implements Initializable {
 	private TextField txtSoLuong;
 
 	// -----Bàn---------
-	private Ban banDangChon;
-	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-	private List<MonAn> dsMonAn;
-	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+	private Ban_DTO banDangChon;
+	private List<MonAn_DTO> dsMonAn = List.of();
+	private final Map<MonAn_DTO, Integer> dsMonAnDat = new LinkedHashMap<>();
+	private Client client;
 
-	public void setBanDangChon(Ban ban) {
+	public void setBanDangChon(Ban_DTO ban) {
 		this.banDangChon = ban;
 		loadMonCuaBan();
 	}
@@ -129,12 +124,14 @@ public class ADatMon_Controller implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// Lấy danh sách món ăn từ DB
-		dsMonAn = monAnDAO.getDanhSachMonAn();
+		client = Client.tryCreate();
+		dsMonAn = getAllMonAn();
 		loadTenKhachHang();
 		// lấy sluong khách
 		if (checkTTbangKo == true) {
-			txtSoLuong.setText(MenuNV_Controller.aBanHienTai_HD.getDonDatBan().getSoLuong() + "");
+			txtSoLuong.setText(MenuNV_Controller.aBanHienTai_HD == null || MenuNV_Controller.aBanHienTai_HD.getDonDatBan() == null
+					? "0"
+					: String.valueOf(MenuNV_Controller.aBanHienTai_HD.getDonDatBan().getSoLuong()));
 		} else {
 			txtSoLuong.setText(String.valueOf(MenuNV_Controller.soLuongKhach));
 		}
@@ -150,7 +147,7 @@ public class ADatMon_Controller implements Initializable {
 		});
 		colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
 		colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-		colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
+		colDonGia.setCellFactory(col -> new TableCell<MonAn_DTO, Double>() {
 			@Override
 			protected void updateItem(Double item, boolean empty) {
 				super.updateItem(item, empty);
@@ -168,9 +165,11 @@ public class ADatMon_Controller implements Initializable {
 		tblDS.setItems(FXCollections.observableArrayList());
 		// --- Nhận dữ liệu bàn và KH từ MenuNV_Controller ---
 		if (checkTTbangKo == true) {
-			txtMaBan.setText(MenuNV_Controller.aBanHienTai_HD.getDonDatBan().getBan().getMaBan());
+			txtMaBan.setText(MenuNV_Controller.aBanHienTai_HD == null || MenuNV_Controller.aBanHienTai_HD.getDonDatBan() == null
+					? ""
+					: MenuNV_Controller.aBanHienTai_HD.getDonDatBan().getMaDatBan());
 		} else if (MenuNV_Controller.banDangChon != null) {
-			this.banDangChon = MenuNV_Controller.banDangChon;
+			this.banDangChon = util.MapperUtil.map(MenuNV_Controller.banDangChon, Ban_DTO.class);
 			txtMaBan.setText(banDangChon.getMaBan());
 			loadMonCuaBan();
 		}
@@ -215,7 +214,7 @@ public class ADatMon_Controller implements Initializable {
 		}
 	}
 
-	public void setKhachHang(KhachHang kh) {
+	public void setKhachHang(KhachHang_DTO kh) {
 		if (kh != null) {
 			txtKhachHang.setText(kh.getTenKH());
 		}
@@ -223,9 +222,11 @@ public class ADatMon_Controller implements Initializable {
 
 	private void loadTenKhachHang() {
 		if (checkTTbangKo == false) {
-			txtKhachHang.setText(MenuNV_Controller.khachHangDangChon.getTenKH());
+			txtKhachHang.setText(MenuNV_Controller.khachHangDangChon == null ? "" : MenuNV_Controller.khachHangDangChon.getTenKH());
 		} else {
-			txtKhachHang.setText(MenuNV_Controller.aBanHienTai_HD.getKhachHang().getTenKH());
+			txtKhachHang.setText(MenuNV_Controller.aBanHienTai_HD == null || MenuNV_Controller.aBanHienTai_HD.getKhachHang() == null
+					? ""
+					: MenuNV_Controller.aBanHienTai_HD.getKhachHang().getTenKH());
 		}
 	}
 
@@ -233,7 +234,7 @@ public class ADatMon_Controller implements Initializable {
 		// Lấy danh sách loại món duy nhất
 		List<String> danhSachLoai = new ArrayList<>();
 		danhSachLoai.add("Tất cả"); // để hiển thị toàn bộ món
-		for (MonAn mon : dsMonAn) {
+		for (MonAn_DTO mon : dsMonAn) {
 			String loai = mon.getLoaiMon();
 			if (loai != null && !danhSachLoai.contains(loai)) {
 				danhSachLoai.add(loai);
@@ -247,11 +248,11 @@ public class ADatMon_Controller implements Initializable {
 
 	private void locMonTheoLoai() {
 		String loaiChon = cmbLoaiMon.getValue();
-		List<MonAn> dsLoc = new ArrayList<>();
+		List<MonAn_DTO> dsLoc = new ArrayList<>();
 		if (loaiChon.equals("Tất cả")) {
 			dsLoc = dsMonAn;
 		} else {
-			for (MonAn mon : dsMonAn) {
+			for (MonAn_DTO mon : dsMonAn) {
 				if (loaiChon.equals(mon.getLoaiMon())) {
 					dsLoc.add(mon);
 				}
@@ -265,12 +266,18 @@ public class ADatMon_Controller implements Initializable {
 	void handleThanhToan(ActionEvent event) {
 		try {
 			// Gán dữ liệu cho hóa đơn như bạn đang làm
-			MenuNV_Controller.banDangChon = banDangChon;
-			MenuNV_Controller.dsMonAnDangChon = dsMonAnDat;
-			// Cập nhật trạng thái bàn về TRỐNG trong database
-			Ban_DAO banDAO = new Ban_DAOImpl();
-			banDangChon.setTrangThai("Trống");
-			banDAO.capNhat(banDangChon);
+			MenuNV_Controller.banDangChon = banDangChon == null ? null : util.MapperUtil.map(banDangChon, entity.Ban.class);
+			Map<entity.MonAn, Integer> dsMonEntity = new LinkedHashMap<>();
+			for (Map.Entry<MonAn_DTO, Integer> e : dsMonAnDat.entrySet()) {
+				if (e.getKey() != null) {
+					dsMonEntity.put(util.MapperUtil.map(e.getKey(), entity.MonAn.class), e.getValue());
+				}
+			}
+			MenuNV_Controller.dsMonAnDangChon = dsMonEntity;
+			if (banDangChon != null) {
+				banDangChon.setTrangThai("Trống");
+				updateBan(banDangChon);
+			}
 			// Xóa món ăn đã lưu tạm cho bàn này
 			MenuNV_Controller.dsMonTheoBan.remove(banDangChon.getMaBan());
 			// Cập nhật giao diện danh sách bàn trong MenuNV
@@ -290,58 +297,47 @@ public class ADatMon_Controller implements Initializable {
 		} else {
 			if (checkTTbangKo == true) {
 				showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
-				themChiTietHoaDon(MenuNV_Controller.aBanHienTai_HD, dsMonAnDat);
+				HoaDon_DTO hoaDonTam = MenuNV_Controller.aBanHienTai_HD == null ? null
+						: util.MapperUtil.map(MenuNV_Controller.aBanHienTai_HD, HoaDon_DTO.class);
+				themChiTietHoaDon(hoaDonTam, dsMonAnDat);
 				MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
 			} else {
-				DonDatBan ddb = themDDB();
+				DonDatBan_DTO ddb = themDDB();
 				themHD(ddb);
 			}
 		}
 	}
 
-	private DonDatBan themDDB() {
+	private DonDatBan_DTO themDDB() {
 		LocalDateTime nowDate = LocalDateTime.now();
 		LocalTime nowHour = LocalTime.now();
 
-		DonDatBan ddb = new DonDatBan();
-		ddb.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
-		ddb.setNgayGioLapDon(nowDate);
-		ddb.setSoLuong(MenuNV_Controller.soLuongKhach);
-		ddb.setBan(MenuNV_Controller.banDangChon);
-		ddb.setGioBatDau(nowHour);
-		ddb.setTrangThai("Đã nhận bàn");
-
-		if (RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(DonDatBan_DAO.class).them(ddb)) {
-			return ddb;
+		DonDatBan_DTO ddb = DonDatBan_DTO.builder().maDatBan(AutoIDUitl.sinhMaDonDatBan()).ngayGioLapDon(nowDate)
+				.soLuong(MenuNV_Controller.soLuongKhach)
+				.ban(MenuNV_Controller.banDangChon == null ? null
+						: util.MapperUtil.map(MenuNV_Controller.banDangChon, Ban_DTO.class))
+				.gioBatDau(nowHour)
+				.trangThai("Đã nhận bàn").build();
+		Request req = Request.builder().commandType(CommandType.DONDATBAN_ADD).data(ddb).build();
+		try {
+			Response response = client == null ? null : client.send(req);
+			return response != null && response.isSuccess() ? ddb : null;
+		} catch (Exception e) {
+			return null;
 		}
-
-		return null;
 	}
 
-	private void themHD(DonDatBan ddb) {
-		HoaDon hd = new HoaDon();
-		hd.setMaHD(AutoIDUitl.sinhMaHoaDon());
-		LocalDate localDate = LocalDate.now();
-		Date dateNow = Date.valueOf(localDate);
-		hd.setNgayLap(dateNow);
-
-		hd.setTrangThai("Hiện tại");
-		hd.setKieuThanhToan("Chưa thanh toán");
-
-		// --- Gán khách hàng ---
-		KhachHang kh = MenuNV_Controller.khachHangDangChon;
-		hd.setKhachHang(kh);
-
-		hd.setKhuyenMai(null);
-		hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-		hd.setDonDatBan(ddb);
-		hd.setCoc(null);
-
+	private void themHD(DonDatBan_DTO ddb) {
+		HoaDon_DTO hd = HoaDon_DTO.builder().maHD(AutoIDUitl.sinhMaHoaDon())
+				.ngayLap(java.sql.Date.valueOf(LocalDate.now())).trangThai("Hiện tại").kieuThanhToan("Chưa thanh toán")
+				.maKhachHang(MenuNV_Controller.khachHangDangChon == null ? null : MenuNV_Controller.khachHangDangChon.getMaKH())
+				.maNhanVien(MenuNV_Controller.taiKhoan == null || MenuNV_Controller.taiKhoan.getNhanVien() == null ? null
+						: MenuNV_Controller.taiKhoan.getNhanVien().getMaNV())
+				.maDonDatBan(ddb == null ? null : ddb.getMaDatBan()).build();
 		try {
-			boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
-					.them(hd);
-
-			if (check) {
+			Request req = Request.builder().commandType(CommandType.HOADON_ADD).data(hd).build();
+			Response response = client == null ? null : client.send(req);
+			if (response != null && response.isSuccess()) {
 				showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
 				if (!dsMonAnDat.isEmpty()) {
 					themChiTietHoaDon(hd, dsMonAnDat);
@@ -356,19 +352,29 @@ public class ADatMon_Controller implements Initializable {
 		}
 	}
 
-	private void themChiTietHoaDon(HoaDon hd, Map<MonAn, Integer> dsMonAn) {
-		ChiTietHoaDon cthd = new ChiTietHoaDon();
-		for (Map.Entry<MonAn, Integer> entry : dsMonAn.entrySet()) {
-			MonAn monAn = entry.getKey(); // Lấy món ăn
-			Integer soLuong = entry.getValue(); // Lấy số lượng tương ứng
-			cthd.setHoaDon(hd);
-			cthd.setMonAn(monAn);
-			cthd.setSoLuong(soLuong);
-			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(ChiTietHoaDon_DAO.class).them(cthd);
+	private void themChiTietHoaDon(HoaDon_DTO hd, Map<MonAn_DTO, Integer> dsMonAn) {
+		if (hd == null || hd.getMaHD() == null) {
+			showAlert("Lỗi", "Không tìm thấy hóa đơn để lưu chi tiết món.", Alert.AlertType.ERROR);
+			return;
+		}
+		List<ChiTietHoaDon_DTO> cts = new ArrayList<>();
+		for (Map.Entry<MonAn_DTO, Integer> entry : dsMonAn.entrySet()) {
+			cts.add(ChiTietHoaDon_DTO.builder().maHoaDon(hd.getMaHD())
+					.maMonAn(entry.getKey() == null ? null : entry.getKey().getMaMon()).soLuong(entry.getValue())
+					.thanhTien((entry.getKey() == null ? 0 : entry.getKey().getDonGia()) * entry.getValue()).build());
+		}
+		Request req = Request.builder().commandType(CommandType.CTHD_ADD_BATCH).data(cts).build();
+		if (client == null) {
+			return;
+		}
+		try {
+			client.send(req);
+		} catch (Exception e) {
+			showAlert("Lỗi", "Không thể gửi chi tiết hóa đơn lên server.", Alert.AlertType.ERROR);
 		}
 	}
 
-	private void loadMonAnToGrid(List<MonAn> danhSach) {
+	private void loadMonAnToGrid(List<MonAn_DTO> danhSach) {
 		gridPaneMon.getChildren().clear();
 		gridPaneMon.getColumnConstraints().clear();
 		gridPaneMon.getRowConstraints().clear();
@@ -400,7 +406,7 @@ public class ADatMon_Controller implements Initializable {
 		}
 
 		// HIỂN THỊ MÓN ĂN ĐÚNG DANH SÁCH ĐANG LOAD
-		for (MonAn mon : danhSach) {
+		for (MonAn_DTO mon : danhSach) {
 			ImageView img = new ImageView();
 			String path = mon.getDuongDanAnh();
 			if (path != null && !path.isEmpty()) {
@@ -445,7 +451,15 @@ public class ADatMon_Controller implements Initializable {
 
 		// Nếu bàn đã từng đặt món → lấy lại
 		if (MenuNV_Controller.dsMonTheoBan.containsKey(banDangChon.getMaBan())) {
-			dsMonAnDat = MenuNV_Controller.dsMonTheoBan.get(banDangChon.getMaBan());
+			dsMonAnDat.clear();
+			Map<entity.MonAn, Integer> dsMonEntity = MenuNV_Controller.dsMonTheoBan.get(banDangChon.getMaBan());
+			if (dsMonEntity != null) {
+				for (Map.Entry<entity.MonAn, Integer> e : dsMonEntity.entrySet()) {
+					if (e.getKey() != null) {
+						dsMonAnDat.put(util.MapperUtil.map(e.getKey(), MonAn_DTO.class), e.getValue());
+					}
+				}
+			}
 		}
 
 		// Cập nhật bảng
@@ -454,7 +468,7 @@ public class ADatMon_Controller implements Initializable {
 		capNhatTongTien();
 	}
 
-	private void chonMon(MonAn mon) {
+	private void chonMon(MonAn_DTO mon) {
 		if (dsMonAnDat.containsKey(mon)) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle("Món đã chọn");
@@ -523,5 +537,30 @@ public class ADatMon_Controller implements Initializable {
 		alert.setTitle(title);
 		alert.setHeaderText(content);
 		alert.show();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<MonAn_DTO> getAllMonAn() {
+		try {
+			Request req = Request.builder().commandType(CommandType.MONAN_GET_ALL).build();
+			Response response = client == null ? null : client.send(req);
+			Object data = response == null ? null : response.getData();
+			if (!(data instanceof List<?> rawList)) {
+				return List.of();
+			}
+			return (List<MonAn_DTO>) rawList;
+		} catch (Exception e) {
+			return List.of();
+		}
+	}
+
+	private boolean updateBan(Ban_DTO ban) {
+		try {
+			Request req = Request.builder().commandType(CommandType.BAN_UPDATE).data(ban).build();
+			Response response = client == null ? null : client.send(req);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

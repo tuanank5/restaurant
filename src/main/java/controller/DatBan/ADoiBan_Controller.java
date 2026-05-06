@@ -7,12 +7,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
-import dao.Ban_DAO;
-import dao.DonDatBan_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.DonDatBan_DAOImpl;
-import entity.Ban;
-import entity.DonDatBan;
+import dto.Ban_DTO;
+import dto.DonDatBan_DTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +23,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class ADoiBan_Controller implements Initializable {
 
@@ -56,7 +56,7 @@ public class ADoiBan_Controller implements Initializable {
 			return;
 		}
 
-		int soChoToiDa = banMoiDuocChon.getLoaiBan().getSoLuong();
+		int soChoToiDa = 20;
 
 		Dialog<ButtonType> dialog = new Dialog<>();
 		dialog.setTitle("Xác nhận đổi bàn");
@@ -68,7 +68,7 @@ public class ADoiBan_Controller implements Initializable {
 		grid.setPadding(new Insets(10));
 
 		Label lblBanMoi = new Label(
-				"Bàn mới: " + banMoiDuocChon.getMaBan() + " (" + banMoiDuocChon.getLoaiBan().getTenLoaiBan() + ")");
+				"Bàn mới: " + banMoiDuocChon.getMaBan());
 
 		TextField txtSoLuong = new TextField();
 		txtSoLuong.setPromptText("Tối đa " + soChoToiDa + " khách");
@@ -105,16 +105,18 @@ public class ADoiBan_Controller implements Initializable {
 	}
 
 	private void thucHienDoiBan(int soLuongMoi) {
-
 		// 1. Kiểm tra đơn đặt bàn
-		DonDatBan don = MenuNV_Controller.donDatBanDangDoi;
+		DonDatBan_DTO don = util.MapperUtil.map(
+				MenuNV_Controller.donDatBanDangDoi,
+				DonDatBan_DTO.class
+		);
 		if (don == null) {
 			showAlert(Alert.AlertType.ERROR, "Không tìm thấy đơn đặt bàn cần đổi!");
 			return;
 		}
 
 		// 2. Kiểm tra bàn cũ
-		Ban banCu = don.getBan();
+		Ban_DTO banCu = don.getBan();
 		if (banCu == null) {
 			showAlert(Alert.AlertType.ERROR, "Đơn đặt bàn chưa có bàn cũ!");
 			return;
@@ -135,17 +137,17 @@ public class ADoiBan_Controller implements Initializable {
 		try {
 			// 5. Cập nhật trạng thái bàn cũ
 			banCu.setTrangThai("Trống");
-			banDAO.capNhat(banCu);
+			capNhatBan(banCu);
 
 			// 6. Cập nhật trạng thái bàn mới
 			banMoiDuocChon.setTrangThai("Đã được đặt");
-			banDAO.capNhat(banMoiDuocChon);
+			capNhatBan(banMoiDuocChon);
 
 			// 7. Cập nhật đơn đặt bàn
 			don.setBan(banMoiDuocChon);
 			don.setSoLuong(soLuongMoi); // CÀI LẠI SỐ LƯỢNG CHỖ
 
-			donDAO.capNhat(don);
+			capNhatDonDatBan(don);
 
 			showAlert(Alert.AlertType.INFORMATION, "Đổi bàn thành công!");
 
@@ -166,14 +168,13 @@ public class ADoiBan_Controller implements Initializable {
 		MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
 	}
 
-	public static DonDatBan donDatBanDuocChon;
-	private Ban_DAO banDAO = new Ban_DAOImpl();
-	private DonDatBan_DAO donDAO = new DonDatBan_DAOImpl();
-
-	private List<Ban> danhSachBan = new ArrayList<>();
+	public static DonDatBan_DTO donDatBanDuocChon;
+	private List<Ban_DTO> danhSachBan = new ArrayList<>();
+	private Client client;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		client = Client.tryCreate();
 		khoiTaoComboBoxes();
 		loadDanhSachBan();
 		cmbTrangThai.setOnAction(e -> loadDanhSachBan());
@@ -197,9 +198,9 @@ public class ADoiBan_Controller implements Initializable {
 		cmbTrangThai.getSelectionModel().select("Tất cả");
 		cmbLoaiBan.getItems().clear();
 		cmbLoaiBan.getItems().add("Tất cả");
-		List<Ban> danhSachBanTemp = banDAO.getDanhSach("Ban.list", Ban.class);
-		for (Ban ban : danhSachBanTemp) {
-			String tenLoai = ban.getLoaiBan().getTenLoaiBan();
+		List<Ban_DTO> danhSachBanTemp = getAllBan();
+		for (Ban_DTO ban : danhSachBanTemp) {
+			String tenLoai = ban.getMaLoaiBan();
 			if (!cmbLoaiBan.getItems().contains(tenLoai)) {
 				cmbLoaiBan.getItems().add(tenLoai);
 			}
@@ -207,12 +208,12 @@ public class ADoiBan_Controller implements Initializable {
 		cmbLoaiBan.getSelectionModel().select("Tất cả");
 	}
 
-	private Ban banMoiDuocChon = null; // đổi bàn
+	private Ban_DTO banMoiDuocChon = null; // đổi bàn
 	private Button btnBanDangChonUI = null;
 
 	private void loadDanhSachBan() {
 		gridPaneBan.getChildren().clear();
-		danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
+		danhSachBan = getAllBan();
 
 		int col = 0, row = 0;
 		final int MAX_COLS = 6;
@@ -220,15 +221,15 @@ public class ADoiBan_Controller implements Initializable {
 		String trangThaiLoc = cmbTrangThai.getValue();
 		String loaiBanLoc = cmbLoaiBan.getValue();
 
-		for (Ban ban : danhSachBan) {
+		for (Ban_DTO ban : danhSachBan) {
 			boolean matchStatus = "Tất cả".equals(trangThaiLoc) || trangThaiLoc.equals(ban.getTrangThai());
-			boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(ban.getLoaiBan().getTenLoaiBan());
+			boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(ban.getMaLoaiBan());
 
 			if (matchStatus && matchType) {
 
-				Button btnBan = new Button(ban.getMaBan() + "\n" + ban.getLoaiBan().getTenLoaiBan());
+				Button btnBan = new Button(ban.getMaBan() + "\n" + ban.getMaLoaiBan());
 				btnBan.setPrefSize(185, 110);
-				btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+				btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getMaLoaiBan()));
 
 				btnBan.setOnMouseClicked(event -> {
 
@@ -241,7 +242,7 @@ public class ADoiBan_Controller implements Initializable {
 					// Hoàn nguyên style bàn cũ
 					if (btnBanDangChonUI != null && banMoiDuocChon != null) {
 						btnBanDangChonUI.setStyle(getStyleByStatusAndType(banMoiDuocChon.getTrangThai(),
-								banMoiDuocChon.getLoaiBan().getMaLoaiBan()));
+								banMoiDuocChon.getMaLoaiBan()));
 					}
 
 					// Lưu bàn mới
@@ -292,5 +293,40 @@ public class ADoiBan_Controller implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText(msg);
 		alert.showAndWait();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Ban_DTO> getAllBan() {
+		try {
+			Request req = Request.builder().commandType(CommandType.BAN_GET_ALL).build();
+			Response response = client == null ? null : client.send(req);
+			Object data = response == null ? null : response.getData();
+			if (!(data instanceof List<?> rawList)) {
+				return List.of();
+			}
+			return (List<Ban_DTO>) rawList;
+		} catch (Exception e) {
+			return List.of();
+		}
+	}
+
+	private boolean capNhatBan(Ban_DTO ban) {
+		try {
+			Request req = Request.builder().commandType(CommandType.BAN_UPDATE).data(ban).build();
+			Response response = client == null ? null : client.send(req);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private boolean capNhatDonDatBan(DonDatBan_DTO donDatBan) {
+		try {
+			Request req = Request.builder().commandType(CommandType.DONDATBAN_UPDATE).data(donDatBan).build();
+			Response response = client == null ? null : client.send(req);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
