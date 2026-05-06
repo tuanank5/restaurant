@@ -2,13 +2,11 @@ package controller.TaiKhoan;
 
 import java.net.URL;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import dao.TaiKhoan_DAO;
+import dto.TaiKhoan_DTO;
 import entity.TaiKhoan;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +22,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
+import network.Client;
+import util.MapperUtil;
 
 public class TaiKhoan_Controller implements Initializable {
 
@@ -32,35 +35,44 @@ public class TaiKhoan_Controller implements Initializable {
 	@FXML
 	private Button btnTatCa;
 	@FXML
-	private TableView<TaiKhoan> tableView;
+	private TableView<TaiKhoan_DTO> tableView;
 	@FXML
-	private TableColumn<TaiKhoan, String> colMaTK;
+	private TableColumn<TaiKhoan_DTO, String> colMaTK;
 	@FXML
-	private TableColumn<TaiKhoan, String> colTenTK;
+	private TableColumn<TaiKhoan_DTO, String> colTenTK;
 	@FXML
-	private TableColumn<TaiKhoan, String> colHoTen;
+	private TableColumn<TaiKhoan_DTO, String> colHoTen;
 	@FXML
-	private TableColumn<TaiKhoan, String> colNgayDN;
+	private TableColumn<TaiKhoan_DTO, String> colNgayDN;
 	@FXML
-	private TableColumn<TaiKhoan, String> colNDX;
+	private TableColumn<TaiKhoan_DTO, String> colNDX;
 	@FXML
-	private TableColumn<TaiKhoan, String> colNgaySD;
+	private TableColumn<TaiKhoan_DTO, String> colNgaySD;
 	@FXML
 	private TextField txtTimKiem;
 	@FXML
 	private DatePicker txtDate;
 
-	private ObservableList<TaiKhoan> danhSachTaiKhoan = FXCollections.observableArrayList();
-	private List<TaiKhoan> danhSachTaiKhoanDB;
-	private FilteredList<TaiKhoan> filteredList;
+	private ObservableList<TaiKhoan_DTO> danhSachTaiKhoan = FXCollections.observableArrayList();
+	private FilteredList<TaiKhoan_DTO> filteredList;
+
+	private Client client;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		cauHinhTable();
+
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		loadData();
 		xuLyTimKiem();
 		xuLyLocTheoNgay();
 		xuLyNutTatCa();
+
 		txtDate.setTooltip(new Tooltip("Lọc tài khoản theo thời gian"));
 		btnTatCa.setTooltip(new Tooltip("Hiện tất cả tài khoản"));
 		txtTimKiem.setTooltip(new Tooltip("Nhập từ khoá để tìm kiếm tài khoản"));
@@ -79,7 +91,7 @@ public class TaiKhoan_Controller implements Initializable {
 		colTenTK.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTenTaiKhoan()));
 
 		colHoTen.setCellValueFactory(c -> new SimpleStringProperty(
-				c.getValue().getNhanVien() != null ? c.getValue().getNhanVien().getTenNV() : ""));
+				c.getValue().getTenNhanVien() != null ? c.getValue().getTenNhanVien() : ""));
 
 		colNgayDN.setCellValueFactory(c -> new SimpleStringProperty(
 				c.getValue().getNgayDangNhap() != null ? c.getValue().getNgayDangNhap().toString() : ""));
@@ -91,13 +103,23 @@ public class TaiKhoan_Controller implements Initializable {
 				c.getValue().getNgaySuaDoi() != null ? c.getValue().getNgaySuaDoi().toString() : ""));
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadData() {
-		danhSachTaiKhoanDB = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
-				.getDanhSach(TaiKhoan.class, new HashMap<>());
+		try {
+			Request request = new Request();
+			request.setCommandType(CommandType.TAIKHOAN_GET_ALL);
 
-		danhSachTaiKhoan.setAll(danhSachTaiKhoanDB);
-		filteredList = new FilteredList<>(danhSachTaiKhoan, p -> true);
-		tableView.setItems(filteredList);
+			Response response = client.send(request);
+
+			List<TaiKhoan_DTO> list = (List<TaiKhoan_DTO>) response.getData();
+
+			danhSachTaiKhoan.setAll(list);
+			filteredList = new FilteredList<>(danhSachTaiKhoan, p -> true);
+			tableView.setItems(filteredList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void xuLyTimKiem() {
@@ -109,7 +131,7 @@ public class TaiKhoan_Controller implements Initializable {
 					return true;
 
 				return tk.getMaTaiKhoan().toLowerCase().contains(f) || tk.getTenTaiKhoan().toLowerCase().contains(f)
-						|| tk.getNhanVien().getTenNV().toLowerCase().contains(f);
+						|| (tk.getTenNhanVien() != null && tk.getTenNhanVien().toLowerCase().contains(f));
 			});
 		});
 	}
@@ -129,11 +151,13 @@ public class TaiKhoan_Controller implements Initializable {
 	}
 
 	private void showThongTin() {
-		TaiKhoan taiKhoan = tableView.getSelectionModel().getSelectedItem();
+		TaiKhoan_DTO taiKhoan = tableView.getSelectionModel().getSelectedItem();
+
 		if (taiKhoan != null) {
 			ChiTietTaiKhoan_Controller chiTiet = MenuNVQL_Controller.instance.readyUI("TaiKhoan/ChiTietTaiKhoanTA")
 					.getController();
-			chiTiet.setTaiKhoan(taiKhoan);
+
+			chiTiet.setTaiKhoan(MapperUtil.map(taiKhoan, TaiKhoan.class));
 		}
 	}
 

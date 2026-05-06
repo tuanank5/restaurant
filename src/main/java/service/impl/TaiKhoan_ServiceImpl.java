@@ -1,5 +1,9 @@
 package service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import dao.TaiKhoan_DAO;
 import dao.impl.TaiKhoan_DAOImpl;
 import dto.TaiKhoan_DTO;
@@ -37,6 +41,29 @@ public class TaiKhoan_ServiceImpl implements TaiKhoan_Service {
 	@Override
 	public String getMaxMaTK() {
 		return taiKhoan_DAO.getMaxMaTK();
+	}
+
+	@Override
+	public List<TaiKhoan_DTO> getAll() {
+
+		List<TaiKhoan> list = taiKhoan_DAO.getDanhSach(TaiKhoan.class, new HashMap<>());
+
+		if (list == null) {
+			return new ArrayList<>();
+		}
+
+		return list.stream().map(tk -> {
+
+			TaiKhoan_DTO dto = MapperUtil.map(tk, TaiKhoan_DTO.class);
+
+			if (tk.getNhanVien() != null) {
+				dto.setMaNhanVien(tk.getNhanVien().getMaNV());
+				dto.setTenNhanVien(tk.getNhanVien().getTenNV());
+			}
+
+			return dto;
+
+		}).toList();
 	}
 
 }
