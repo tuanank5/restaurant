@@ -66,7 +66,7 @@ public class MenuNV_Controller {
 	// Lưu món ăn tạm theo từng bàn
 	public static Map<String, Map<MonAn, Integer>> dsMonTheoBan = new HashMap<>();
 
-	public static TaiKhoan taiKhoan;
+	public static TaiKhoan_DTO taiKhoan;
 	private Client client;
 
 	@FXML
@@ -107,7 +107,7 @@ public class MenuNV_Controller {
 	}
 
 	public void setThongTin(TaiKhoan_DTO taiKhoan) {
-		MenuNV_Controller.taiKhoan = taiKhoan == null ? null : util.MapperUtil.map(taiKhoan, TaiKhoan.class);
+		MenuNV_Controller.taiKhoan = taiKhoan;
 		String hoTen = taiKhoan.getTenNhanVien() + " - " + taiKhoan.getMaNhanVien();
 		txtThongTin.setText(hoTen);
 		dashBoard();

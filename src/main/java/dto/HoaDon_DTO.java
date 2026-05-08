@@ -1,5 +1,6 @@
 package dto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class HoaDon_DTO {
+public class HoaDon_DTO implements Serializable {
 
 	private String maHD;
 
@@ -42,5 +43,9 @@ public class HoaDon_DTO {
 	private String maDonDatBan;
 
 	private String maCoc;
+
+	private NhanVien_DTO nhanVien;
+	private KhachHang_DTO khachHang;
+	private DonDatBan_DTO donDatBan;
 
 }

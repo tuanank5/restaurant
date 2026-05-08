@@ -36,6 +36,16 @@ public class DonDatBan_ServiceImpl implements DonDatBan_Service {
 	}
 
 	@Override
+	public boolean them(DonDatBan_DTO dto) {
+		if (dto == null) {
+			throw new IllegalArgumentException("dto null");
+		}
+		return donDatBan_DAO.them(
+				MapperUtil.map(dto, DonDatBan.class)
+		);
+	}
+
+	@Override
 	public List<DonDatBan_DTO> timTheoKhachHang(KhachHang_DTO kh_DTO) {
 		if (kh_DTO == null) {
 			throw new IllegalArgumentException("kh_DTO không được rỗng");

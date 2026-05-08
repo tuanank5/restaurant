@@ -11,7 +11,8 @@ import entity.LoaiBan;
 
 public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
 	DonDatBan layDonDatTheoBan(String maBan);
-
+	boolean them(DonDatBan donDatBan);
+	DonDatBan findById(String maDatBan);
 	List<DonDatBan> timTheoKhachHang(KhachHang kh);
 
 	List<DonDatBan> timTheoBan(Ban ban);

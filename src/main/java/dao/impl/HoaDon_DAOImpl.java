@@ -7,36 +7,39 @@ import java.util.List;
 import java.util.Map;
 
 import dao.HoaDon_DAO;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.KhachHang;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
+import dto.HoaDon_DTO;
+import entity.*;
+import jakarta.persistence.*;
 
 public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO {
 
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
 
 	@Override
-	public boolean themHoaDon(HoaDon hoaDon) {
+	public boolean themHoaDon(HoaDon_DTO dto) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
+
 		try {
 			tx.begin();
-			em.persist(hoaDon);
+
+			HoaDon entity = toEntity(dto, em);
+
+			em.persist(entity);
+
 			tx.commit();
+
 			return true;
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx.isActive())
+
+			if(tx.isActive()) {
 				tx.rollback();
+			}
+
 			return false;
+
 		} finally {
 			em.close();
 		}
@@ -517,4 +520,45 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 		}
 	}
 
+	public HoaDon toEntity(HoaDon_DTO dto,EntityManager entityManager) {
+		if(dto == null) return null;
+
+		HoaDon hd = new HoaDon();
+
+		hd.setMaHD(dto.getMaHD());
+		hd.setNgayLap(dto.getNgayLap());
+		hd.setTongTien(dto.getTongTien());
+		hd.setThue(dto.getThue());
+		hd.setTrangThai(dto.getTrangThai());
+		hd.setKieuThanhToan(dto.getKieuThanhToan());
+		hd.setTienNhan(dto.getTienNhan());
+		hd.setTienThua(dto.getTienThua());
+
+		// map khóa ngoại
+		if(dto.getKhachHang() != null) {
+			KhachHang kh = entityManager.find(
+					KhachHang.class,
+					dto.getKhachHang().getMaKH()
+			);
+			hd.setKhachHang(kh);
+		}
+
+		if(dto.getMaNhanVien() != null) {
+			NhanVien nv = entityManager.find(
+					NhanVien.class,
+					dto.getMaNhanVien()
+			);
+			hd.setNhanVien(nv);
+		}
+
+		if(dto.getMaDonDatBan() != null) {
+			DonDatBan ddb = entityManager.find(
+					DonDatBan.class,
+					dto.getMaDonDatBan()
+			);
+			hd.setDonDatBan(ddb);
+		}
+
+		return hd;
+	}
 }

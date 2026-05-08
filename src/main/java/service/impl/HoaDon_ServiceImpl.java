@@ -3,20 +3,18 @@ package service.impl;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
+import Mapper.mapper;
 import dao.HoaDon_DAO;
+import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
-import dto.Ban_DTO;
-import dto.ChiTietHoaDon_DTO;
-import dto.DonDatBan_DTO;
-import dto.HoaDon_DTO;
-import dto.KhachHang_DTO;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.KhachHang;
+import dao.impl.KhachHang_DAOlmpl;
+import dao.impl.NhanVien_DAOImpl;
+import dto.*;
+import entity.*;
 import service.HoaDon_Service;
+import service.NhanVien_Service;
 import util.MapperUtil;
 
 public class HoaDon_ServiceImpl implements HoaDon_Service {
@@ -37,10 +35,48 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 		if (hoaDon_DTO == null) {
 			throw new IllegalArgumentException("hoaDon_DTO không được rỗng");
 		}
-		if (hoaDon_DTO.getMaHD() == null || hoaDon_DTO.getMaHD().trim().isEmpty()) {
-			throw new IllegalArgumentException("hoaDon_DTO.maHD() không được rỗng");
+
+		HoaDon_DTO hoaDon = new HoaDon_DTO();
+		hoaDon.setMaHD(hoaDon_DTO.getMaHD());
+		hoaDon.setNgayLap(hoaDon_DTO.getNgayLap());
+		hoaDon.setTongTien(hoaDon_DTO.getTongTien());
+		hoaDon.setThue(hoaDon_DTO.getThue());
+		hoaDon.setTrangThai(hoaDon_DTO.getTrangThai());
+		hoaDon.setKieuThanhToan(hoaDon_DTO.getKieuThanhToan());
+		hoaDon.setTienNhan(hoaDon_DTO.getTienNhan());
+		hoaDon.setTienThua(hoaDon_DTO.getTienThua());
+
+		if (hoaDon_DTO.getMaDonDatBan() != null) {
+			DonDatBan_DAOImpl donDatBanDAO = new DonDatBan_DAOImpl();
+			DonDatBan donDatBan = donDatBanDAO.findById(hoaDon_DTO.getMaDonDatBan());
+
+			if (donDatBan == null) {
+				throw new RuntimeException("Không tìm thấy đơn đặt bàn: " + hoaDon_DTO.getMaDonDatBan());
+			}
+			hoaDon.setMaDonDatBan(donDatBan.getMaDatBan());
 		}
-		return hoaDon_DAO.themHoaDon(MapperUtil.map(hoaDon_DTO, HoaDon.class));
+
+		if (hoaDon_DTO.getMaKhachHang() != null) {
+			KhachHang_ServiceImpl khachHangService = new KhachHang_ServiceImpl();
+			KhachHang_DTO kh = khachHangService.timTheoMa(hoaDon_DTO.getMaKhachHang());
+			if (kh == null) {
+				throw new RuntimeException("Không tìm thấy khách hàng: " + hoaDon_DTO.getMaKhachHang());
+			}
+			hoaDon.setKhachHang(kh);
+			hoaDon.setMaKhachHang(kh.getMaKH());
+		}
+
+		if (hoaDon_DTO.getMaNhanVien() != null) {
+			NhanVien_Service nhanVienService = new NhanVien_ServiceImpl();
+			NhanVien_DTO nv = nhanVienService.findById(hoaDon_DTO.getMaNhanVien());
+			if (nv == null) {
+				throw new RuntimeException("Không tìm thấy nhân viên: " + hoaDon_DTO.getMaNhanVien());
+			}
+			hoaDon.setNhanVien(nv);
+			hoaDon.setMaNhanVien(nv.getMaNV());
+		}
+
+		return hoaDon_DAO.themHoaDon(hoaDon);
 	}
 
 	@Override
@@ -284,6 +320,42 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 		}
 		List<ChiTietHoaDon> chiTietHoaDons = hoaDon_DAO.findByMaHoaDon(maHoaDon);
 		return chiTietHoaDons.stream().map(chiTiet -> MapperUtil.map(chiTiet, ChiTietHoaDon_DTO.class)).toList();
+	}
+
+	@Override
+	public Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV) {
+		return hoaDon_DAO.getDoanhThuNVTheoNam(nam,maNV);
+	}
+
+	@Override
+	public boolean capNhat(HoaDon_DTO dto) {
+		HoaDon entity = MapperUtil.map(dto, HoaDon.class);
+		if(dto.getMaNhanVien() != null){
+			NhanVien nv = new NhanVien();
+			nv.setMaNV(dto.getMaNhanVien());
+			entity.setNhanVien(nv);
+		}
+
+		if(dto.getMaKhuyenMai() != null){
+			KhuyenMai km = new KhuyenMai();
+			km.setMaKM(dto.getMaKhuyenMai());
+			entity.setKhuyenMai(km);
+		}
+
+		if(dto.getMaKhachHang() != null){
+			KhachHang kh = new KhachHang();
+			kh.setMaKH(dto.getMaKhachHang());
+			entity.setKhachHang(kh);
+		}
+		return hoaDon_DAO.capNhat(entity);
+	}
+
+	@Override
+	public List<HoaDon_DTO> getDanhSach(String namedQuery) {
+		List<HoaDon> entities = hoaDon_DAO.getDanhSach(namedQuery, HoaDon.class);
+		return entities.stream()
+				.map(entity -> mapper.mapper(entity, HoaDon_DTO.class))
+				.toList();
 	}
 
 }

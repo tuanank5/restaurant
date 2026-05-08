@@ -11,6 +11,7 @@ import dto.LoaiBan_DTO;
 
 public interface DonDatBan_Service {
 	DonDatBan_DTO layDonDatTheoBan(String maBan);
+	boolean them(DonDatBan_DTO dto);
 
 	List<DonDatBan_DTO> timTheoKhachHang(KhachHang_DTO kh_DTO);
 

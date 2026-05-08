@@ -53,7 +53,8 @@ public class DashboardNV_Controller {
 	private final HoaDon_DAOImpl hoaDon_DAO;
 	private final DonDatBan_DAOImpl donDatBan_DAO;
 
-	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
+//	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
+	private String maNhanVien;
 
 	public DashboardNV_Controller() {
 		this.hoaDon_DAO = new HoaDon_DAOImpl();
@@ -64,6 +65,11 @@ public class DashboardNV_Controller {
 
 	@FXML
 	public void initialize() {
+		if (MenuNV_Controller.taiKhoan != null
+				&& MenuNV_Controller.taiKhoan.getMaNhanVien() != null) {
+			maNhanVien = MenuNV_Controller.taiKhoan.getMaNhanVien();
+		}
+
 		txtDateEnd.setValue(LocalDate.now());
 		txtDateStart.setValue(LocalDate.now().minusDays(6));
 		displayData();
@@ -89,9 +95,9 @@ public class DashboardNV_Controller {
 		LocalDate dateEnd = txtDateEnd.getValue();
 
 		// UpDate 4 Ô TOP
-		List<HoaDon> dsHD = hoaDon_DAO.getHoaDonNVTheoNgayCuThe(dateStart, dateEnd, nhanVien.getMaNV());
+		List<HoaDon> dsHD = hoaDon_DAO.getHoaDonNVTheoNgayCuThe(dateStart, dateEnd, maNhanVien);
 
-		List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayNVCuThe(dateStart, dateEnd, nhanVien.getMaNV());
+		List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayNVCuThe(dateStart, dateEnd, maNhanVien);
 		// END - UpDate 4 Ô TOP
 
 		// UpDate Chart

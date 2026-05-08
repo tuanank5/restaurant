@@ -1,6 +1,7 @@
 package service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dao.MonAn_DAO;
 import dao.impl.MonAn_DAOImpl;
@@ -20,7 +21,15 @@ public class MonAn_ServiceImpl implements MonAn_Service {
 	@Override
 	public List<MonAn_DTO> getDanhSachMonAn() {
 		List<MonAn> monAns = monAn_DAO.getDanhSachMonAn();
-		return monAns.stream().map(ma -> MapperUtil.map(ma, MonAn_DTO.class)).toList();
+		return monAns.stream()
+				.map(ma -> MonAn_DTO.builder()
+						.maMon(ma.getMaMon())
+						.tenMon(ma.getTenMon())
+						.donGia(ma.getDonGia())
+						.duongDanAnh(ma.getDuongDanAnh())
+						.loaiMon(ma.getLoaiMon())
+						.build())
+				.toList();
 	}
 
 	@Override

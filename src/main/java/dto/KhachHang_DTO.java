@@ -29,9 +29,11 @@ public class KhachHang_DTO implements Serializable {
 
 	private String diaChi;
 
+	private String maHangKhachHang;
+
+	private String tenHang;
+
 	@Builder.Default
 	private int diemTichLuy = 0;
-
-	private String maHangKhachHang;
 
 }

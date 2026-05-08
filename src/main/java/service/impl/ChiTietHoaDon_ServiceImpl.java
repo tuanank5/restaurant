@@ -6,6 +6,8 @@ import dao.ChiTietHoaDon_DAO;
 import dao.impl.ChiTietHoaDon_DAOImpl;
 import dto.ChiTietHoaDon_DTO;
 import entity.ChiTietHoaDon;
+import entity.HoaDon;
+import entity.MonAn;
 import service.ChiTietHoaDon_Service;
 import util.MapperUtil;
 
@@ -28,7 +30,21 @@ public class ChiTietHoaDon_ServiceImpl implements ChiTietHoaDon_Service {
 		if (cthd_DTO.getMaMonAn() == null || cthd_DTO.getMaMonAn().trim().isEmpty()) {
 			throw new IllegalArgumentException("cthd_DTO.maMonAn không được rỗng");
 		}
-		return chiTietHoaDon_DAO.themChiTiet(MapperUtil.map(cthd_DTO, ChiTietHoaDon.class));
+
+		ChiTietHoaDon entity = new ChiTietHoaDon();
+		entity.setSoLuong(cthd_DTO.getSoLuong());
+		entity.setThanhTien(cthd_DTO.getThanhTien());
+
+		// set HoaDon
+		HoaDon hd = new HoaDon();
+		hd.setMaHD(cthd_DTO.getMaHoaDon());
+		entity.setHoaDon(hd);
+
+		// set MonAn
+		MonAn mon = new MonAn();
+		mon.setMaMon(cthd_DTO.getMaMonAn());
+		entity.setMonAn(mon);
+		return chiTietHoaDon_DAO.themChiTiet(entity);
 	}
 
 	@Override

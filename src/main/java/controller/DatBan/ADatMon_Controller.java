@@ -331,8 +331,8 @@ public class ADatMon_Controller implements Initializable {
 		HoaDon_DTO hd = HoaDon_DTO.builder().maHD(AutoIDUitl.sinhMaHoaDon())
 				.ngayLap(java.sql.Date.valueOf(LocalDate.now())).trangThai("Hiện tại").kieuThanhToan("Chưa thanh toán")
 				.maKhachHang(MenuNV_Controller.khachHangDangChon == null ? null : MenuNV_Controller.khachHangDangChon.getMaKH())
-				.maNhanVien(MenuNV_Controller.taiKhoan == null || MenuNV_Controller.taiKhoan.getNhanVien() == null ? null
-						: MenuNV_Controller.taiKhoan.getNhanVien().getMaNV())
+				.maNhanVien(MenuNV_Controller.taiKhoan == null || MenuNV_Controller.taiKhoan.getMaNhanVien() == null ? null
+						: MenuNV_Controller.taiKhoan.getMaNhanVien())
 				.maDonDatBan(ddb == null ? null : ddb.getMaDatBan()).build();
 		try {
 			Request req = Request.builder().commandType(CommandType.HOADON_ADD).data(hd).build();
@@ -541,15 +541,30 @@ public class ADatMon_Controller implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	private List<MonAn_DTO> getAllMonAn() {
+
 		try {
-			Request req = Request.builder().commandType(CommandType.MONAN_GET_ALL).build();
+
+			Request req = Request.builder()
+					.commandType(CommandType.MONAN_GET_ALL)
+					.build();
+
 			Response response = client == null ? null : client.send(req);
-			Object data = response == null ? null : response.getData();
-			if (!(data instanceof List<?> rawList)) {
+
+			if (response == null) {
+				System.out.println("Response NULL");
 				return List.of();
 			}
-			return (List<MonAn_DTO>) rawList;
+
+			Object data = response.getData();
+			System.out.println("DATA = " + data);
+
+			if (data == null) {
+				System.out.println("Data NULL");
+				return List.of();
+			}
+			return (List<MonAn_DTO>) data;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return List.of();
 		}
 	}

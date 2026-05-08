@@ -552,9 +552,9 @@ public class DatBanTruoc_Controller implements Initializable {
 					.ngayLap(java.sql.Date.valueOf(LocalDate.now())).tongTien(0.0).thue(0.0).trangThai("Đặt trước")
 					.kieuThanhToan("Chưa thanh toán").tienNhan(0.0).tienThua(0.0)
 					.maKhachHang(kh == null ? null : kh.getMaKH())
-					.maNhanVien(MenuNV_Controller.taiKhoan == null || MenuNV_Controller.taiKhoan.getNhanVien() == null
+					.maNhanVien(MenuNV_Controller.taiKhoan == null || MenuNV_Controller.taiKhoan.getMaNhanVien() == null
 							? null
-							: MenuNV_Controller.taiKhoan.getNhanVien().getMaNV())
+							: MenuNV_Controller.taiKhoan.getMaNhanVien())
 					.maDonDatBan(donDau.getMaDatBan()).build();
 			boolean okHD = addHoaDon(hd);
 			if (!okHD) {
@@ -572,15 +572,15 @@ public class DatBanTruoc_Controller implements Initializable {
 
 	private void xuLyChonMon(Ban_DTO ban) {
 		try {
-			Ban banEntity = util.MapperUtil.map(ban, Ban.class);
-			DatMonTruoc_Controller.danhSachBanChonStatic = banEntity == null ? List.of() : List.of(banEntity);
+			DatMonTruoc_Controller.danhSachBanChonStatic =
+					ban == null ? List.of() : List.of(ban);
 			if (khachHangDaChon == null) {
 				showAlert(Alert.AlertType.WARNING, "Vui lòng nhập số điện thoại hợp lệ!");
 				return;
 
 			}
 			KhachHang khEntity = khachHangDaChon == null ? null : util.MapperUtil.map(khachHangDaChon, KhachHang.class);
-			DatMonTruoc_Controller.khachHangStatic = khEntity;
+			DatMonTruoc_Controller.khachHangStatic = khachHangDaChon;
 			DatMonTruoc_Controller.soLuongKHStatic = slKhach > 0 ? slKhach : 1;
 			MenuNV_Controller.instance.readyUI("MonAn/DatMonTruoc");
 		} catch (Exception e) {

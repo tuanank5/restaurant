@@ -27,10 +27,11 @@ import controller.Menu.MenuNV_Controller;
 import dao.HoaDon_DAO;
 import dao.KhachHang_DAO;
 import dao.impl.KhachHang_DAOlmpl;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.KhuyenMai;
-import entity.MonAn;
+//import entity.HoaDon;
+//import entity.KhachHang;
+//import entity.KhuyenMai;
+//import entity.MonAn;
+import dto.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -40,6 +41,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import service.HoaDon_Service;
+import service.KhachHang_Service;
+import service.impl.HoaDon_ServiceImpl;
+import service.impl.KhachHang_ServiceImpl;
 
 public class AThuTien_Controller {
 
@@ -101,11 +106,12 @@ public class AThuTien_Controller {
 	private Label lblTienCanTra;
 
 	private double tongThanhTien = AThanhToan_Controller.aTT.tongSauVAT;
-	private HoaDon hoaDonHienTai = AThanhToan_Controller.aTT.hoaDonHienTai;
-	private Map<MonAn, Integer> dsMonAn = AThanhToan_Controller.aTT.dsMonAn;
-	private KhuyenMai kmDangChon = AThanhToan_Controller.aTT.kmDangChon;
+	private HoaDon_DTO hoaDonHienTai = AThanhToan_Controller.aTT.hoaDonHienTai;
+	private Map<ChiTietHoaDon_DTO, Integer> dsMonAn = AThanhToan_Controller.aTT.dsMonAn;
+	private KhuyenMai_DTO kmDangChon = AThanhToan_Controller.aTT.kmDangChon;
 	private double thueHD = AThanhToan_Controller.aTT.thueHD;
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
+	private KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
+	private HoaDon_Service hoaDonService = new HoaDon_ServiceImpl();
 	private double tongThanhTienLamTron = Math.round(tongThanhTien / 1000.0) * 1000;
 
 	private int tienKH = 0;
@@ -226,21 +232,20 @@ public class AThuTien_Controller {
 		} else if (source == btnIn) {
 			int tienNhan = Integer.parseInt(txtTienKH.getText());
 			if (tienTra >= 0) {
-				KhuyenMai km = kmDangChon.getMaKM().equals("KM000") ? null : kmDangChon;
+				String km = kmDangChon.getMaKM().equals("KM000") ? null : kmDangChon.getMaKM();
 
 				LocalDate localDate = LocalDate.now();
 				Date dateNow = Date.valueOf(localDate);
 				hoaDonHienTai.setNgayLap(dateNow);
 
 				hoaDonHienTai.setKieuThanhToan("Tiền mặt");
-				hoaDonHienTai.setKhuyenMai(km);
-				hoaDonHienTai.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+				hoaDonHienTai.setMaKhuyenMai(km);
+				hoaDonHienTai.setMaNhanVien(MenuNV_Controller.taiKhoan.getMaNhanVien());
 				hoaDonHienTai.setTongTien(tongThanhTienLamTron);
 				hoaDonHienTai.setTienNhan((double) tienNhan);
 				hoaDonHienTai.setTienThua(tienTra);
 				hoaDonHienTai.setThue(thueHD);
-				boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
-						.capNhat(hoaDonHienTai);
+				boolean check = hoaDonService.capNhat(hoaDonHienTai);
 				// Kiểm tra kết quả thêm
 				if (check) {
 					capNhatDiemTichLuySauThanhToan();
@@ -256,20 +261,19 @@ public class AThuTien_Controller {
 				showAlert(Alert.AlertType.ERROR, "Số tiền khách đưa cho hóa đơn chưa đủ!");
 			}
 		} else if (source == btnInChuyenKhoan) {
-			KhuyenMai km = kmDangChon.getMaKM().equals("KM000") ? null : kmDangChon;
+			String km = kmDangChon.getMaKM().equals("KM000") ? null : kmDangChon.getMaKM();
 
 			LocalDate localDate = LocalDate.now();
 			Date dateNow = Date.valueOf(localDate);
 			hoaDonHienTai.setNgayLap(dateNow);
 			hoaDonHienTai.setKieuThanhToan("Chuyển khoản");
-			hoaDonHienTai.setKhuyenMai(km);
-			hoaDonHienTai.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+			hoaDonHienTai.setMaKhuyenMai(km);
+			hoaDonHienTai.setMaNhanVien(MenuNV_Controller.taiKhoan.getMaNhanVien());
 			hoaDonHienTai.setTongTien(tongThanhTienLamTron);
 			hoaDonHienTai.setTienNhan(tongThanhTienLamTron);
 			hoaDonHienTai.setTienThua(0);
 			hoaDonHienTai.setThue(thueHD);
-			boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
-					.capNhat(hoaDonHienTai);
+			boolean check = hoaDonService.capNhat(hoaDonHienTai);
 			// Kiểm tra kết quả thêm
 			if (check) {
 				capNhatDiemTichLuySauThanhToan();
@@ -340,11 +344,11 @@ public class AThuTien_Controller {
 
 			// Dữ liệu bảng
 			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("vi-VN"));
-			for (MonAn mon : dsMonAn.keySet()) {
+			for (ChiTietHoaDon_DTO mon : dsMonAn.keySet()) {
 				int sl = dsMonAn.get(mon);
 				double thanhTien = mon.getDonGia() * sl;
 
-				table.addCell(new PdfPCell(new Phrase(mon.getMaMon(), fontNormal)));
+				table.addCell(new PdfPCell(new Phrase(mon.getMaMonAn(), fontNormal)));
 				table.addCell(new PdfPCell(new Phrase(mon.getTenMon(), fontNormal)));
 
 				PdfPCell slCell = new PdfPCell(new Phrase(String.valueOf(sl), fontNormal));
@@ -458,11 +462,11 @@ public class AThuTien_Controller {
 
 			// Dữ liệu bảng
 			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("vi-VN"));
-			for (MonAn mon : dsMonAn.keySet()) {
+			for (ChiTietHoaDon_DTO mon : dsMonAn.keySet()) {
 				int sl = dsMonAn.get(mon);
 				double thanhTien = mon.getDonGia() * sl;
 
-				table.addCell(new PdfPCell(new Phrase(mon.getMaMon(), fontNormal)));
+				table.addCell(new PdfPCell(new Phrase(mon.getMaMonAn(), fontNormal)));
 				table.addCell(new PdfPCell(new Phrase(mon.getTenMon(), fontNormal)));
 
 				PdfPCell slCell = new PdfPCell(new Phrase(String.valueOf(sl), fontNormal));
@@ -511,7 +515,7 @@ public class AThuTien_Controller {
 	}
 
 	private void capNhatDiemTichLuySauThanhToan() {
-		KhachHang kh = hoaDonHienTai.getKhachHang();
+		KhachHang_DTO kh = hoaDonHienTai.getKhachHang();
 
 		int diemCu = kh.getDiemTichLuy();
 		int diemSuDung = AThanhToan_Controller.diemSuDung;
@@ -523,7 +527,7 @@ public class AThuTien_Controller {
 		kh.setDiemTichLuy(diemMoi);
 
 		// cập nhật DB
-		khachHangDAO.capNhat(kh);
+		khachHangService.capNhat(kh);
 	}
 
 	private void showAlert(String title, String content, Alert.AlertType alertType) {

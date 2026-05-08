@@ -2,6 +2,7 @@ package entity;
 
 import java.sql.Date;
 
+import dto.NhanVien_DTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
