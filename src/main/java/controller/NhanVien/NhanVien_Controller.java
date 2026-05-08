@@ -269,7 +269,7 @@ public class NhanVien_Controller {
 							Math.min(LIMIT, danhSachNhanVienDB.size())
 					);
 
-			loadData(pageData);
+//			loadData(pageData);
 
 		} catch (Exception e) {
 			e.printStackTrace();
