@@ -9,6 +9,8 @@ import entity.LoaiBan;
 import service.Ban_Service;
 import util.MapperUtil;
 
+import java.util.List;
+
 public class Ban_ServiceImpl implements Ban_Service {
 
 	private Ban_DAO ban_DAO;
@@ -40,6 +42,14 @@ public class Ban_ServiceImpl implements Ban_Service {
 			throw new IllegalArgumentException("ban_DTO.maBan không được rỗng");
 		}
 		return ban_DAO.sua(MapperUtil.map(ban_DTO, Ban.class));
+	}
+
+	@Override
+	public List<Ban_DTO> getAllBan() {
+		List<Ban> ds = ban_DAO.getAllBan();
+		return ds.stream()
+				.map(ban -> MapperUtil.map(ban, Ban_DTO.class))
+				.toList();
 	}
 
 }

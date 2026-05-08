@@ -14,6 +14,7 @@ import dao.impl.NhanVien_DAOImpl;
 import dto.*;
 import entity.*;
 import service.HoaDon_Service;
+import service.KhachHang_Service;
 import service.NhanVien_Service;
 import util.MapperUtil;
 
@@ -74,6 +75,17 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 			}
 			hoaDon.setNhanVien(nv);
 			hoaDon.setMaNhanVien(nv.getMaNV());
+		}
+
+		if (hoaDon_DTO.getMaKhachHang() != null && !hoaDon_DTO.getMaKhachHang().trim().isEmpty()) {
+			String maKH = hoaDon_DTO.getMaKhachHang();
+			KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
+			KhachHang_DTO kh = khachHangService.timTheoMa(maKH);
+			if (kh == null) {
+				throw new RuntimeException("Không tìm thấy khách hàng: " + maKH);
+			}
+			hoaDon.setKhachHang(kh);
+			hoaDon.setMaKhachHang(maKH);
 		}
 
 		return hoaDon_DAO.themHoaDon(hoaDon);

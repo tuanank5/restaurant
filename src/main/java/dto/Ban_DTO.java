@@ -22,7 +22,6 @@ public class Ban_DTO implements Serializable {
 	private String viTri;
 
 	private String trangThai;
-
 	private String maLoaiBan;
 
 }

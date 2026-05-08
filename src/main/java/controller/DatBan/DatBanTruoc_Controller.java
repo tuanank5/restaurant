@@ -135,7 +135,7 @@ public class DatBanTruoc_Controller implements Initializable {
 		LocalTime gioChon = (gioStr != null ? LocalTime.parse(gioStr) : null);
 		for (Ban_DTO ban : danhSachBan) {
 			if (loaiBanChon != null && !loaiBanChon.equals("Tất cả")) {
-				if (!loaiBanChon.equalsIgnoreCase(ban.getMaLoaiBan())) {
+				if (!loaiBanChon.equalsIgnoreCase(getTenLoaiBan(ban.getMaLoaiBan()))) {
 					continue;
 				}
 			}
@@ -153,7 +153,7 @@ public class DatBanTruoc_Controller implements Initializable {
 			default:
 				bgColor = "#00aa00"; // xanh
 			}
-			Button btn = new Button(ban.getMaBan() + "\n(" + ban.getMaLoaiBan() + ")");
+			Button btn = new Button(ban.getMaBan() + "\n(" + getTenLoaiBan(ban.getMaLoaiBan()) + ")");
 			btn.setPrefSize(170, 110);
 			btn.setStyle(buildStyle(bgColor));
 			final boolean isDangPhucVu = "Đang phục vụ".equals(trangThai);
@@ -692,5 +692,13 @@ public class DatBanTruoc_Controller implements Initializable {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	private String getTenLoaiBan(String maLoaiBan) {
+		return getAllLoaiBan().stream()
+				.filter(lb -> lb.getMaLoaiBan().equals(maLoaiBan))
+				.map(LoaiBan_DTO::getTenLoaiBan)
+				.findFirst()
+				.orElse(maLoaiBan);
 	}
 }

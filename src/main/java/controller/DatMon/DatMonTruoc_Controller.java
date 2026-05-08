@@ -441,7 +441,7 @@ public class DatMonTruoc_Controller implements Initializable {
 			hd.setKieuThanhToan("Chưa thanh toán");
 			hd.setTienNhan(0.0);
 			hd.setTienThua(0.0);
-			hd.setKhachHang(kh);
+			hd.setMaKhachHang(kh.getMaKH());
 			hd.setMaKhuyenMai(null);
 			hd.setMaNhanVien(MenuNV_Controller.taiKhoan.getMaNhanVien());
 			hd.setMaDonDatBan(donDau.getMaDatBan());

@@ -8,6 +8,8 @@ import network.common.Response;
 import service.Ban_Service;
 import service.impl.Ban_ServiceImpl;
 
+import java.util.List;
+
 public class BanHandler implements CommandHandler {
 
     private final Ban_Service banService;
@@ -18,19 +20,12 @@ public class BanHandler implements CommandHandler {
 
     @Override
     public Response handle(Request request) {
-
         try {
-
             CommandType type = request.getCommandType();
-
             switch (type) {
-
                 case BAN_UPDATE: {
-
                     Ban_DTO ban = (Ban_DTO) request.getData();
-
                     boolean result = banService.sua(ban);
-
                     return Response.builder()
                             .success(result)
                             .message(result
@@ -40,10 +35,11 @@ public class BanHandler implements CommandHandler {
                 }
 
                 case BAN_GET_ALL: {
-
+                    List<Ban_DTO> dsBan = banService.getAllBan();
                     return Response.builder()
-                            .success(false)
-                            .message("Service chưa hỗ trợ lấy danh sách bàn")
+                            .success(true)
+                            .data(dsBan)
+                            .message("Lấy danh sách bàn thành công")
                             .build();
                 }
 
@@ -53,11 +49,8 @@ public class BanHandler implements CommandHandler {
                             .message("Không hỗ trợ command: " + type)
                             .build();
             }
-
         } catch (Exception e) {
-
             e.printStackTrace();
-
             return Response.builder()
                     .success(false)
                     .message("Lỗi xử lý Bàn: " + e.getMessage())

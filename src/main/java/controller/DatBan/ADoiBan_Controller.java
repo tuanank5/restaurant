@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import controller.Menu.MenuNV_Controller;
 import dto.Ban_DTO;
 import dto.DonDatBan_DTO;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -175,8 +176,10 @@ public class ADoiBan_Controller implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		client = Client.tryCreate();
+
 		khoiTaoComboBoxes();
-		loadDanhSachBan();
+		Platform.runLater(() -> {loadDanhSachBan();});
+
 		cmbTrangThai.setOnAction(e -> loadDanhSachBan());
 		cmbLoaiBan.setOnAction(e -> loadDanhSachBan());
 
@@ -296,14 +299,29 @@ public class ADoiBan_Controller implements Initializable {
 	@SuppressWarnings("unchecked")
 	private List<Ban_DTO> getAllBan() {
 		try {
-			Request req = Request.builder().commandType(CommandType.BAN_GET_ALL).build();
+			Request req = Request.builder()
+					.commandType(CommandType.BAN_GET_ALL)
+					.build();
 			Response response = client == null ? null : client.send(req);
-			Object data = response == null ? null : response.getData();
+			if (response == null) {
+				System.out.println("Response null");
+				return List.of();
+			}
+
+			System.out.println("Success = " + response.isSuccess());
+			System.out.println("Message = " + response.getMessage());
+			System.out.println("Data = " + response.getData());
+
+			if (!response.isSuccess()) {
+				return List.of();
+			}
+			Object data = response.getData();
 			if (!(data instanceof List<?> rawList)) {
 				return List.of();
 			}
 			return (List<Ban_DTO>) rawList;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return List.of();
 		}
 	}

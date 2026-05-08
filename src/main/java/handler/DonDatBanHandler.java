@@ -2,6 +2,7 @@ package handler;
 
 import java.util.List;
 
+import dto.Ban_DTO;
 import dto.DonDatBan_DTO;
 import network.common.CommandHandler;
 import network.common.CommandType;
@@ -39,10 +40,9 @@ public class DonDatBanHandler implements CommandHandler {
                 }
 
                 case DONDATBAN_GET_BY_BAN: {
+                    Ban_DTO banDTO = (Ban_DTO) request.getData();
 
-                    String maBan = (String) request.getData();
-
-                    DonDatBan_DTO ddb = donDatBanService.layDonDatTheoBan(maBan);
+                    DonDatBan_DTO ddb = donDatBanService.layDonDatTheoBan(banDTO.getMaBan());
 
                     return Response.builder()
                             .success(true)
