@@ -34,4 +34,6 @@ public class TaiKhoan_DTO implements Serializable {
 	
 	private String tenNhanVien;
 
+	private String chucVu;
+
 }

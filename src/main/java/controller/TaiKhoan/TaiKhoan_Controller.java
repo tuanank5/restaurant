@@ -157,7 +157,7 @@ public class TaiKhoan_Controller implements Initializable {
 			ChiTietTaiKhoan_Controller chiTiet = MenuNVQL_Controller.instance.readyUI("TaiKhoan/ChiTietTaiKhoanTA")
 					.getController();
 
-			chiTiet.setTaiKhoan(MapperUtil.map(taiKhoan, TaiKhoan.class));
+			chiTiet.setTaiKhoan(taiKhoan);
 		}
 	}
 
