@@ -232,8 +232,6 @@ public class ADoiBan_Controller implements Initializable {
 				btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getMaLoaiBan()));
 
 				btnBan.setOnMouseClicked(event -> {
-
-					// ❌ Chỉ cho chọn bàn trống
 					if (!"Trống".equals(ban.getTrangThai())) {
 						showAlert(Alert.AlertType.WARNING, "Chỉ được chọn bàn trống để đổi!");
 						return;
