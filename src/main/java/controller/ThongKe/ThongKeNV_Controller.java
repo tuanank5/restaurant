@@ -10,6 +10,7 @@ import entity.NhanVien;
 import dto.DonDatBan_DTO;
 import dto.HoaDon_DTO;
 import dto.NhanVien_DTO;
+import network.common.Response;
 import service.DonDatBan_Service;
 import service.HoaDon_Service;
 import service.impl.DonDatBan_ServiceImpl;
@@ -94,36 +95,50 @@ public class ThongKeNV_Controller {
 
 	private Client client;
 
-	//	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
-	private final NhanVien nhanVien = NhanVien.builder()
-			.maNV("NV001")
-			.tenNV("Nguyen Van A")
-			.chucVu("NhanVien")
-			.email("nva@gmail.com")
-			.namSinh(Date.valueOf("2000-01-01"))
-			.diaChi("Go Vap")
-			.gioiTinh(true)
-			.ngayVaoLam(Date.valueOf("2024-01-01"))
-			.trangThai(true)
-			.build();
-
     private String maNV;
 
 	public ThongKeNV_Controller() {
 
 	}
 
+	NhanVien_DTO nhanVien;
+
 	DecimalFormat decimalFormat = new DecimalFormat("#,##0 VNĐ");
 
 	@FXML
 	public void initialize() throws Exception {
 		try {
+
 			client = Client.tryCreate();
+
+			maNV =
+					MenuNV_Controller
+							.taiKhoan
+							.getMaNhanVien();
+
+			Request request = new Request(
+					CommandType.THONGKE_FINDBYID,
+					maNV);
+
+			Response response =
+					client.send(request);
+
+			if (response != null
+					&& response.isSuccess()) {
+
+				nhanVien =
+						(NhanVien_DTO)
+								response.getData();
+
+			} else {
+
+				System.out.println(
+						response.getMessage());
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-//        maNV = MenuNV_Controller.taiKhoan.getMaNhanVien();
 
         btnGroup();
 		setCmb();

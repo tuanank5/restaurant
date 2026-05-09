@@ -87,6 +87,25 @@ public class NhanVienHandler implements CommandHandler {
 			yield new Response(true, tkDto, "OK");
 		}
 
+		case THONGKE_FINDBYID -> {
+
+			if (!(request.getData() instanceof String maNV)) {
+				yield new Response(
+						false,
+						null,
+						"Invalid data type for THONGKE_FINDBYID");
+			}
+
+			NhanVien entity = nvDao.findById(maNV);
+			NhanVien_DTO dto =
+					MapperUtil.map(entity, NhanVien_DTO.class);
+
+			yield new Response(
+					entity != null,
+					dto,
+					entity != null ? "OK" : "NOT_FOUND");
+		}
+
 		default -> new Response(false, null, "Invalid command");
 		};
 	}

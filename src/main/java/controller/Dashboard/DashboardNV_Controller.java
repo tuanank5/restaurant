@@ -2,6 +2,7 @@ package controller.Dashboard;
 
 import dto.DonDatBan_DTO;
 import dto.HoaDon_DTO;
+import dto.NhanVien_DTO;
 import entity.NhanVien;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
@@ -44,6 +45,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import network.Client;
+import network.common.Response;
 
 public class DashboardNV_Controller {
 
@@ -68,20 +70,9 @@ public class DashboardNV_Controller {
 
 	private Client client;
 
-	//	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
-	private final NhanVien nhanVien = NhanVien.builder()
-			.maNV("NV001")
-			.tenNV("Nguyen Van A")
-			.chucVu("NhanVien")
-			.email("nva@gmail.com")
-			.namSinh(Date.valueOf("2000-01-01"))
-			.diaChi("Go Vap")
-			.gioiTinh(true)
-			.ngayVaoLam(Date.valueOf("2024-01-01"))
-			.trangThai(true)
-			.build();
-
     private String maNhanVien;
+
+	NhanVien_DTO nhanVien;
 
 	public DashboardNV_Controller() {
 
@@ -91,16 +82,44 @@ public class DashboardNV_Controller {
 
 	@FXML
 	public void initialize() throws Exception {
-        try {
+		try {
+
 			client = Client.tryCreate();
+
+			if (MenuNV_Controller.taiKhoan != null
+					&& MenuNV_Controller
+					.taiKhoan
+					.getMaNhanVien() != null) {
+
+				maNhanVien =
+						MenuNV_Controller
+								.taiKhoan
+								.getMaNhanVien();
+
+				Request request = new Request(
+						CommandType.THONGKE_FINDBYID,
+						maNhanVien);
+
+				Response response =
+						client.send(request);
+
+				if (response != null
+						&& response.isSuccess()) {
+
+					nhanVien =
+							(NhanVien_DTO)
+									response.getData();
+
+				} else {
+
+					System.out.println(
+							response.getMessage());
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-        if (MenuNV_Controller.taiKhoan != null
-                && MenuNV_Controller.taiKhoan.getMaNhanVien() != null) {
-//            maNhanVien = MenuNV_Controller.taiKhoan.getMaNhanVien();
-        }
 
 		txtDateEnd.setValue(LocalDate.now());
 		txtDateStart.setValue(LocalDate.now().minusDays(6));

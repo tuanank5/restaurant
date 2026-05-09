@@ -102,6 +102,7 @@ public enum CommandType {
     DONDATBAN_GET_KHACHHANG_THEO_NGAY_CUTHE,
 
     HOADON_GET_TONG_DOANHTHU_THEO_NGAY_CUTHE,
+    THONGKE_FINDBYID,
 
     //Gia An (không trùng tên với các constant phía trên)
     BAN_GET_ALL_ENTITY,
