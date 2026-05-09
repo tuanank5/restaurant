@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.net.URL;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
@@ -405,12 +406,17 @@ public class ABanHienTai_Controller {
 	}
 
 	private Button taoButtonIcon(String text, String iconPath) {
-		ImageView icon = new ImageView(getClass().getResource(iconPath).toExternalForm());
-		icon.setFitWidth(30);
-		icon.setFitHeight(30);
-
 		Button btn = new Button();
-		btn.setGraphic(icon);
+		URL iconUrl = getClass().getResource(iconPath);
+		if (iconUrl != null) {
+			ImageView icon = new ImageView(iconUrl.toExternalForm());
+			icon.setFitWidth(30);
+			icon.setFitHeight(30);
+			btn.setGraphic(icon);
+		} else {
+			// Fallback khi ảnh icon chưa có trong resources.
+			btn.setText(text);
+		}
 		btn.setStyle(getButtonStyle());
 		btn.setContentDisplay(javafx.scene.control.ContentDisplay.LEFT);
 		btn.setGraphicTextGap(5);

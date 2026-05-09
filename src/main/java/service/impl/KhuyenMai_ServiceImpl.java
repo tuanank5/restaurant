@@ -4,7 +4,6 @@ import dao.KhuyenMai_DAO;
 import dto.KhuyenMai_DTO;
 import entity.KhuyenMai;
 import service.KhuyenMai_Service;
-import util.KhuyenMaiMapper;
 import config.RestaurantApplication;
 
 import java.time.LocalDate;
@@ -20,14 +19,23 @@ public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
 	@Override
 	public List<KhuyenMai_DTO> getAll() {
 		List<KhuyenMai> list = dao.getDanhSach(KhuyenMai.class, new HashMap<>());
-		return list.stream().map(KhuyenMaiMapper::toDTO).toList();
+		return list.stream().map(km ->
+				KhuyenMai_DTO.builder()
+						.maKM(km.getMaKM())
+						.tenKM(km.getTenKM())
+						.loaiKM(km.getLoaiKM())
+						.ngayBatDau(km.getNgayBatDau())
+						.ngayKetThuc(km.getNgayKetThuc())
+						.phanTramGiamGia(km.getPhanTramGiamGia())
+						.build()
+		).toList();
 	}
 
 	// ================= ADD =================
 	@Override
 	public boolean add(KhuyenMai_DTO dto) {
 
-		KhuyenMai km = KhuyenMaiMapper.toEntity(dto);
+		KhuyenMai km = toEntity(dto);
 
 		// 🔥 AUTO ID
 		km.setMaKM(generateMaKM());
@@ -43,7 +51,7 @@ public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
 	@Override
 	public boolean update(KhuyenMai_DTO dto) {
 
-		KhuyenMai km = KhuyenMaiMapper.toEntity(dto);
+		KhuyenMai km = toEntity(dto);
 
 		if (!validateUpdate(km)) return false;
 
@@ -140,5 +148,18 @@ public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
 		}
 
 		return false;
+	}
+
+	private KhuyenMai toEntity(KhuyenMai_DTO dto) {
+		if (dto == null) return null;
+
+		return KhuyenMai.builder()
+				.maKM(dto.getMaKM())
+				.tenKM(dto.getTenKM())
+				.loaiKM(dto.getLoaiKM())
+				.ngayBatDau(dto.getNgayBatDau())
+				.ngayKetThuc(dto.getNgayKetThuc())
+				.phanTramGiamGia(dto.getPhanTramGiamGia())
+				.build();
 	}
 }

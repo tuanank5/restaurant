@@ -6,7 +6,6 @@ import dto.Ban_DTO;
 import entity.Ban;
 import entity.LoaiBan;
 import service.Ban_Service;
-import util.BanMapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,14 @@ public class Ban_ServiceImpl implements Ban_Service {
 	@Override
 	public List<Ban_DTO> getAll() {
 		List<Ban> list = dao.getDanhSach(Ban.class, new HashMap<>());
-		return list.stream().map(BanMapper::toDTO).toList();
+		return list.stream().map(ban ->
+				Ban_DTO.builder()
+						.maBan(ban.getMaBan())
+						.viTri(ban.getViTri())
+						.trangThai(ban.getTrangThai())
+						.maLoaiBan(ban.getLoaiBan() != null ? ban.getLoaiBan().getMaLoaiBan() : null)
+						.build()
+		).toList();
 	}
 
 	@Override
@@ -97,7 +103,12 @@ public class Ban_ServiceImpl implements Ban_Service {
 			loaiBan = dao.timLoaiBanTheoMa(dto.getMaLoaiBan());
 		}
 
-		return BanMapper.toEntity(dto, loaiBan);
+		return Ban.builder()
+				.maBan(dto.getMaBan())
+				.viTri(dto.getViTri())
+				.trangThai(dto.getTrangThai())
+				.loaiBan(loaiBan)
+				.build();
 	}
 
 	private boolean validateAdd(Ban ban) {

@@ -7,7 +7,6 @@ import java.util.List;
 import dto.MonAn_DTO;
 import entity.MonAn;
 import service.MonAn_Service;
-import util.MonAnMapper;
 
 public class MonAn_ServiceImpl implements MonAn_Service {
 
@@ -19,12 +18,20 @@ public class MonAn_ServiceImpl implements MonAn_Service {
 	@Override
 	public List<MonAn_DTO> getAll() {
 		List<MonAn> list = dao.getDanhSach(MonAn.class, null);
-		return list.stream().map(MonAnMapper::toDTO).toList();
+		return list.stream().map(monAn ->
+				MonAn_DTO.builder()
+						.maMon(monAn.getMaMon())
+						.tenMon(monAn.getTenMon())
+						.donGia(monAn.getDonGia())
+						.duongDanAnh(monAn.getDuongDanAnh())
+						.loaiMon(monAn.getLoaiMon())
+						.build()
+		).toList();
 	}
 
 	@Override
 	public boolean add(MonAn_DTO dto) {
-		MonAn mon = MonAnMapper.toEntity(dto);
+		MonAn mon = toEntity(dto);
 
 		// AUTO ID (server)
 		mon.setMaMon(generateMaMon());
@@ -36,7 +43,7 @@ public class MonAn_ServiceImpl implements MonAn_Service {
 
 	@Override
 	public boolean update(MonAn_DTO dto) {
-		MonAn mon = MonAnMapper.toEntity(dto);
+		MonAn mon = toEntity(dto);
 
 		if (!validateUpdate(mon)) return false;
 
@@ -83,5 +90,17 @@ public class MonAn_ServiceImpl implements MonAn_Service {
 		if (!validateAdd(mon)) return false;
 		if (mon.getMaMon() == null || mon.getMaMon().isBlank()) return false;
 		return dao.timTheoMa(mon.getMaMon()) != null;
+	}
+
+	private MonAn toEntity(MonAn_DTO dto) {
+		if (dto == null) return null;
+
+		return MonAn.builder()
+				.maMon(dto.getMaMon())
+				.tenMon(dto.getTenMon())
+				.donGia(dto.getDonGia())
+				.duongDanAnh(dto.getDuongDanAnh())
+				.loaiMon(dto.getLoaiMon())
+				.build();
 	}
 }
