@@ -41,15 +41,26 @@ public class Ban_ServiceImpl implements Ban_Service {
 		if (ban_DTO.getMaBan() == null || ban_DTO.getMaBan().trim().isEmpty()) {
 			throw new IllegalArgumentException("ban_DTO.maBan không được rỗng");
 		}
-		return ban_DAO.sua(MapperUtil.map(ban_DTO, Ban.class));
+		Ban banCu = ban_DAO.timTheoMa(ban_DTO.getMaBan());
+		if (banCu == null) {
+			throw new IllegalArgumentException("Không tìm thấy bàn");
+		}
+
+		banCu.setTrangThai(ban_DTO.getTrangThai());
+		banCu.setViTri(ban_DTO.getViTri());
+		return ban_DAO.sua(banCu);
 	}
 
 	@Override
 	public List<Ban_DTO> getAllBan() {
 		List<Ban> ds = ban_DAO.getAllBan();
-		return ds.stream()
-				.map(ban -> MapperUtil.map(ban, Ban_DTO.class))
-				.toList();
+		return ds.stream().map(ban -> {
+			Ban_DTO dto = MapperUtil.map(ban, Ban_DTO.class);
+			if (ban.getLoaiBan() != null) {
+				dto.setMaLoaiBan(ban.getLoaiBan().getMaLoaiBan());
+			}
+			return dto;
+		}).toList();
 	}
 
 }

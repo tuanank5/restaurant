@@ -231,6 +231,25 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	}
 
 	@Override
+	public boolean sua(DonDatBan donDatBan) {
+		EntityManager em = getEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.merge(donDatBan);
+			em.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			return false;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
 	public List<DonDatBan> getAllDonDatBanTheoNam(int nam) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		List<DonDatBan> dsDon = null;

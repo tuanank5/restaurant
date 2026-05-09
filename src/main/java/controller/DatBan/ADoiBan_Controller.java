@@ -138,17 +138,32 @@ public class ADoiBan_Controller implements Initializable {
 		try {
 			// 5. Cập nhật trạng thái bàn cũ
 			banCu.setTrangThai("Trống");
-			capNhatBan(banCu);
+			boolean r1 = capNhatBan(banCu);
+			if (!r1) {
+				showAlert(Alert.AlertType.ERROR,
+						"Cập nhật bàn cũ thất bại");
+				return;
+			}
 
 			// 6. Cập nhật trạng thái bàn mới
 			banMoiDuocChon.setTrangThai("Đã được đặt");
-			capNhatBan(banMoiDuocChon);
+			boolean r2 = capNhatBan(banMoiDuocChon);
+			if (!r2) {
+				showAlert(Alert.AlertType.ERROR,
+						"Cập nhật bàn mới thất bại");
+				return;
+			}
 
 			// 7. Cập nhật đơn đặt bàn
 			don.setBan(banMoiDuocChon);
 			don.setSoLuong(soLuongMoi); // CÀI LẠI SỐ LƯỢNG CHỖ
 
-			capNhatDonDatBan(don);
+			boolean r3 = capNhatDonDatBan(don);
+			if (!r3) {
+				showAlert(Alert.AlertType.ERROR,
+						"Cập nhật đơn đặt bàn thất bại");
+				return;
+			}
 
 			showAlert(Alert.AlertType.INFORMATION, "Đổi bàn thành công!");
 

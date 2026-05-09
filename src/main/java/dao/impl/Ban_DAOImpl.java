@@ -1,6 +1,7 @@
 package dao.impl;
 
 import dao.Ban_DAO;
+import db.JPAUtils;
 import entity.Ban;
 import entity.LoaiBan;
 import jakarta.persistence.EntityManager;
@@ -22,6 +23,16 @@ public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
 					.setParameter("ten", tenLoaiBan).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public Ban timTheoMa(String maBan) {
+		EntityManager em = JPAUtils.getEntityManager();
+		try {
+			return em.find(Ban.class, maBan);
 		} finally {
 			em.close();
 		}

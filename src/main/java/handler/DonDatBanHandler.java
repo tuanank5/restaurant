@@ -63,13 +63,13 @@ public class DonDatBanHandler implements CommandHandler {
                 }
 
                 case DONDATBAN_UPDATE: {
-
                     DonDatBan_DTO ddb = (DonDatBan_DTO) request.getData();
-
-                    // Tạm thời chưa có method update trong service
+                    boolean result = donDatBanService.sua(ddb);
                     return Response.builder()
-                            .success(false)
-                            .message("Service chưa hỗ trợ cập nhật đơn đặt bàn")
+                            .success(result)
+                            .message(result
+                                    ? "Cập nhật đơn đặt bàn thành công"
+                                    : "Cập nhật đơn đặt bàn thất bại")
                             .build();
                 }
 

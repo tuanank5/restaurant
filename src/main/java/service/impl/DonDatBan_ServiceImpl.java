@@ -305,4 +305,23 @@ public class DonDatBan_ServiceImpl implements DonDatBan_Service {
 		List<DonDatBan> donDatBans = donDatBan_DAO.getAllDonDatBanTheoNgayNVCuThe(dateStart, dateEnd, maNV);
 		return donDatBans.stream().map(donDatBan -> MapperUtil.map(donDatBan, DonDatBan_DTO.class)).toList();
 	}
+
+	@Override
+	public boolean sua(DonDatBan_DTO dto) {
+		if (dto == null) {
+			throw new IllegalArgumentException("dto null");
+		}
+		DonDatBan entity = MapperUtil.map(dto, DonDatBan.class);
+		if (dto.getBan() != null) {
+			Ban ban = new Ban();
+			ban.setMaBan(dto.getBan().getMaBan());
+			if (dto.getBan().getMaLoaiBan() != null) {
+				LoaiBan loaiBan = new LoaiBan();
+				loaiBan.setMaLoaiBan(dto.getBan().getMaLoaiBan());
+				ban.setLoaiBan(loaiBan);
+			}
+			entity.setBan(ban);
+		}
+		return donDatBan_DAO.sua(entity);
+	}
 }
