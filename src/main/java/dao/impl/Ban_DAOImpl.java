@@ -13,74 +13,74 @@ import java.util.List;
 
 public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
 
-	private final EntityManagerFactory emf = restaurantApplication.getEntityManagerFactory();
+    private final EntityManagerFactory emf = restaurantApplication.getEntityManagerFactory();
 
-	@Override
-	public LoaiBan timLoaiBanTheoTen(String tenLoaiBan) {
-		EntityManager em = emf.createEntityManager();
-		try {
-			return em.createQuery("SELECT l FROM LoaiBan l WHERE l.tenLoaiBan = :ten", LoaiBan.class)
-					.setParameter("ten", tenLoaiBan).getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
+    @Override
+    public LoaiBan timLoaiBanTheoTen(String tenLoaiBan) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT l FROM LoaiBan l WHERE l.tenLoaiBan = :ten", LoaiBan.class)
+                    .setParameter("ten", tenLoaiBan).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
 
-	@Override
-	public Ban timTheoMa(String maBan) {
-		EntityManager em = JPAUtils.getEntityManager();
-		try {
-			return em.find(Ban.class, maBan);
-		} finally {
-			em.close();
-		}
-	}
+    @Override
+    public Ban timTheoMa(String maBan) {
+        EntityManager em = JPAUtils.getEntityManager();
+        try {
+            return em.find(Ban.class, maBan);
+        } finally {
+            em.close();
+        }
+    }
 
-	@Override
-	public String getMaxMaBan() {
-		EntityManager em = emf.createEntityManager();
-		try {
-			return em.createQuery("SELECT MAX(b.maBan) FROM Ban b", String.class).getSingleResult();
-		} catch (Exception e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
+    @Override
+    public String getMaxMaBan() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT MAX(b.maBan) FROM Ban b", String.class).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
 
-	@Override
-	public boolean sua(Ban ban) {
-		EntityManager em = emf.createEntityManager();
-		try {
-			em.getTransaction().begin();
-			em.merge(ban); // Cập nhật bàn
-			em.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
-			}
-			return false;
-		} finally {
-			em.close();
-		}
-	}
+    @Override
+    public boolean sua(Ban ban) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(ban); // Cập nhật bàn
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            return false;
+        } finally {
+            em.close();
+        }
+    }
 
-	@Override
-	public List<Ban> getAllBan() {
-		EntityManager em = emf.createEntityManager();
-		try {
-			String jqpl = """
+    @Override
+    public List<Ban> getAllBan() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jqpl = """
 					SELECT b
 					FROM Ban b
 					""";
-			TypedQuery<Ban> query = em.createQuery(jqpl, Ban.class);
-			return query.getResultList();
-		} finally {
-			em.close();
-		}
-	}
+            TypedQuery<Ban> query = em.createQuery(jqpl, Ban.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

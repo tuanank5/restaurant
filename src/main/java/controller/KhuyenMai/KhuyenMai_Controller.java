@@ -1,365 +1,425 @@
 package controller.KhuyenMai;
 
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import config.RestaurantApplication;
-import dao.KhachHang_DAO;
-import dao.KhuyenMai_DAO;
-import entity.KhachHang;
-import entity.KhuyenMai;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import dto.KhuyenMai_DTO;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.*;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AlertUtil;
-import util.AutoIDUitl;
-import util.EmailUtil;
 
-public class KhuyenMai_Controller {
+import java.net.URL;
+import java.sql.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
-	@FXML
-	private BorderPane borderPane;
-	@FXML
-	private Button btnThemKM;
-	@FXML
-	private Button btnSuaKM;
-	@FXML
-	private Button btnXoaKM;
-	@FXML
-	private TableColumn<KhuyenMai, String> colMaKM;
-	@FXML
-	private TableColumn<KhuyenMai, String> colTenKM;
-	@FXML
-	private TableColumn<KhuyenMai, String> colloaiKM;
-	@FXML
-	private TableColumn<KhuyenMai, Date> colNgayBatDau;
-	@FXML
-	private TableColumn<KhuyenMai, Date> colNgayKetThuc;
-	@FXML
-	private TableColumn<KhuyenMai, Integer> colPhanTramGiamGia;
-	@FXML
-	private TableView<KhuyenMai> tblKM;
-	@FXML
-	private TextField txtTimKiem;
-	@FXML
-	private TextField txtMaKM, txtTenKM;
-	@FXML
-	private ComboBox<String> comBoxLoaiKM;
-	@FXML
-	private ComboBox<Integer> comBoxPhanTram;
-	@FXML
-	private DatePicker dpNgayBatDau, dpNgayKetThuc;
+public class KhuyenMai_Controller implements Initializable {
 
-	private ObservableList<KhuyenMai> danhSachKhuyenMai = FXCollections.observableArrayList();
+	@FXML private BorderPane borderPane;
 
-	private final KhuyenMai_DAO khuyenMaiDAO = RestaurantApplication.getInstance().getDatabaseContext()
-			.newEntity_DAO(KhuyenMai_DAO.class);
+	@FXML private Button btnThemKM, btnSuaKM, btnXoaKM;
 
-	private final KhachHang_DAO khachHangDAO = RestaurantApplication.getInstance().getDatabaseContext()
-			.newEntity_DAO(KhachHang_DAO.class);
+	// TABLE
+	@FXML private TableView<KhuyenMai_DTO> tblKM;
+	@FXML private TableColumn<KhuyenMai_DTO, String> colMaKM;
+	@FXML private TableColumn<KhuyenMai_DTO, String> colTenKM;
+	@FXML private TableColumn<KhuyenMai_DTO, String> colloaiKM;
+	@FXML private TableColumn<KhuyenMai_DTO, String> colNgayBatDau;
+	@FXML private TableColumn<KhuyenMai_DTO, String> colNgayKetThuc;
+	@FXML private TableColumn<KhuyenMai_DTO, String> colPhanTramGiamGia;
 
-	// private final SmsService smsService = new SmsService();
+	// FORM
+	@FXML private TextField txtTimKiem, txtMaKM, txtTenKM;
+	@FXML private ComboBox<String> comBoxLoaiKM;
+	@FXML private ComboBox<Integer> comBoxPhanTram;
+	@FXML private DatePicker dpNgayBatDau, dpNgayKetThuc;
 
-	@FXML
-	private void initialize() {
-		setValueTable();
-		setComboBoxValue();
+	private ObservableList<KhuyenMai_DTO> danhSach = FXCollections.observableArrayList();
+	private FilteredList<KhuyenMai_DTO> filteredList;
+
+	private Client client;
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		txtMaKM.setEditable(false);
+		setTable();
+		setComboBox();
 		loadData();
 		timKiem();
-		hienThiMaKMMoi();
+
 		btnSuaKM.setDisable(true);
 		btnXoaKM.setDisable(true);
-		tblKM.setOnMouseClicked(event -> {
-			KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
+
+		tblKM.setOnMouseClicked(e -> {
+
+			KhuyenMai_DTO km = tblKM.getSelectionModel().getSelectedItem();
+
 			if (km != null) {
-				fillForm(km); // Điền dữ liệu lên form
+
+				fillForm(km);
+
 				btnSuaKM.setDisable(false);
 				btnXoaKM.setDisable(false);
 			}
 		});
-
-		btnSuaKM.setTooltip(new Tooltip("Sửa khuyến mãi đã chọn"));
-		btnThemKM.setTooltip(new Tooltip("Thêm khuyến mãi mới"));
-		btnXoaKM.setTooltip(new Tooltip("Xóa khuyến mãi đã chọn"));
-		txtTimKiem.setTooltip(new Tooltip("Nhập tên hoặc mã khuyến mãi để tìm kiếm"));
-		txtMaKM.setTooltip(new Tooltip("Mã khuyến mãi"));
-		txtTenKM.setTooltip(new Tooltip("Tên khuyến mãi"));
-		dpNgayBatDau.setTooltip(new Tooltip("Chọn ngày bắt đầu"));
-		dpNgayKetThuc.setTooltip(new Tooltip("Chọn ngày kết thúc"));
-		comBoxLoaiKM.setTooltip(new Tooltip("Chọn loại khuyến mãi"));
-		comBoxPhanTram.setTooltip(new Tooltip("Chọn phần trăm giảm giá"));
-
 	}
 
-	private void setComboBoxValue() {
-		comBoxLoaiKM.setItems(
-				FXCollections.observableArrayList("Ưu đãi cho khách hàng Kim Cương", "Khuyến mãi trên tổng hóa đơn"));
-		comBoxPhanTram.setItems(FXCollections.observableArrayList(5, 10, 15, 20, 25, 30, 35, 40));
+	// ================= TABLE =================
+	private void setTable() {
+
+		colMaKM.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getMaKM()));
+
+		colTenKM.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getTenKM()));
+
+		colloaiKM.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getLoaiKM()));
+
+		colNgayBatDau.setCellValueFactory(c ->
+				new SimpleStringProperty(
+						c.getValue().getNgayBatDau() != null
+								? c.getValue().getNgayBatDau().toString()
+								: ""
+				)
+		);
+
+		colNgayKetThuc.setCellValueFactory(c ->
+				new SimpleStringProperty(
+						c.getValue().getNgayKetThuc() != null
+								? c.getValue().getNgayKetThuc().toString()
+								: ""
+				)
+		);
+
+		colPhanTramGiamGia.setCellValueFactory(c ->
+				new SimpleStringProperty(
+						String.valueOf(c.getValue().getPhanTramGiamGia())
+				)
+		);
 	}
 
+	// ================= COMBOBOX =================
+	private void setComboBox() {
+
+		comBoxLoaiKM.setItems(FXCollections.observableArrayList(
+				"Ưu đãi VIP",
+				"Khuyến mãi hóa đơn"
+		));
+
+		comBoxPhanTram.setItems(FXCollections.observableArrayList(
+				5, 10, 15, 20, 25, 30, 35, 40
+		));
+	}
+
+	// ================= LOAD DATA =================
+	@SuppressWarnings("unchecked")
+	private void loadData() {
+
+		try {
+
+			Request req = new Request(
+					CommandType.KHUYENMAI_GET_ALL,
+					null
+			);
+
+			Response res = client.send(req);
+
+			if (res != null && res.isSuccess()) {
+
+				List<KhuyenMai_DTO> list =
+						(List<KhuyenMai_DTO>) res.getData();
+
+				danhSach.setAll(list);
+
+				filteredList =
+						new FilteredList<>(danhSach, p -> true);
+
+				tblKM.setItems(filteredList);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// ================= BUTTON =================
 	@FXML
 	private void controller(ActionEvent event) {
-		if (event.getSource() == btnThemKM)
+
+		Object source = event.getSource();
+
+		if (source == btnThemKM) {
 			them();
-		if (event.getSource() == btnSuaKM)
+
+		} else if (source == btnSuaKM) {
 			sua();
-		if (event.getSource() == btnXoaKM)
+
+		} else if (source == btnXoaKM) {
 			xoa();
-	}
-
-	@FXML
-	void mouseClicked(MouseEvent event) {
-		KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
-		if (km != null) {
-			btnSuaKM.setDisable(false);
-			btnXoaKM.setDisable(false);
-			fillForm(km); // Gọi phương thức điền form
-		} else {
-			// Nếu không còn dòng nào được chọn
-			btnSuaKM.setDisable(true);
-			btnXoaKM.setDisable(true);
-			clearForm();
 		}
 	}
 
-	@FXML
-	void keyPressed(KeyEvent event) {
-		if (event.getCode() == KeyCode.ESCAPE)
-			huyChonDong();
-	}
-
+	// ================= ADD =================
 	private void them() {
-		if (!validateKhuyenMai())
-			return;
+
+		if (!validate()) return;
+
 		try {
-			KhuyenMai km = new KhuyenMai(txtMaKM.getText(), txtTenKM.getText().trim(), comBoxLoaiKM.getValue(),
-					Date.valueOf(dpNgayBatDau.getValue()), Date.valueOf(dpNgayKetThuc.getValue()),
-					comBoxPhanTram.getValue());
 
-			if (khuyenMaiDAO.them(km)) {
-				loadData();
-				AlertUtil.showAlert("Thành công", "Thêm khuyến mãi thành công!", Alert.AlertType.INFORMATION);
-				guiEmailThongBaoKM(km);
-				clearForm();
-			}
-		} catch (Exception e) {
-			AlertUtil.showAlert("Lỗi", "Không thể thêm khuyến mãi!", Alert.AlertType.ERROR);
-			e.printStackTrace();
-		}
-	}
+			KhuyenMai_DTO km = getFormData();
 
-	private void guiEmailThongBaoKM(KhuyenMai km) {
-		List<KhachHang> dsKH = khachHangDAO.getDanhSach(KhachHang.class, new HashMap<>());
-		String subject = "🎉 Khuyến mãi mới: " + km.getTenKM();
+			Request req = new Request(
+					CommandType.KHUYENMAI_ADD,
+					km
+			);
 
-		String contentTemplate = "🎁 THÔNG BÁO KHUYẾN MÃI MỚI\n\n" + "Tên khuyến mãi: " + km.getTenKM() + "\n"
-				+ "Loại KM: " + km.getLoaiKM() + "\n" + "Thời gian: " + km.getNgayBatDau() + " → " + km.getNgayKetThuc()
-				+ "\n" + "Mức giảm giá: " + km.getPhanTramGiamGia() + "%\n\n"
-				+ "👉 Hãy đến nhà hàng để nhận ưu đãi nhé!\n";
-		// Tạo thread pool với 15 luồng (có thể thay đổi số luồng)
-		ExecutorService executor = Executors.newFixedThreadPool(15);
+			Response res = client.send(req);
 
-		for (KhachHang kh : dsKH) {
-			if (kh.getEmail() == null || kh.getEmail().trim().isEmpty()) {
-				System.out.println("❌ Bỏ qua KH không có email: " + kh.getTenKH());
-				continue;
-			}
-			String emailContent = "Xin chào " + kh.getTenKH() + ",\n\n" + contentTemplate;
-			// Submit task gửi email vào thread pool
-			executor.submit(() -> {
-				try {
-					EmailUtil.sendEmail(kh.getEmail(), subject, emailContent);
-					System.out.println("Đã gửi email đến: " + kh.getEmail());
-				} catch (Exception e) {
-					System.err.println("Gửi email thất bại: " + kh.getEmail());
-					e.printStackTrace();
+			if (res != null) {
+
+				if (res.isSuccess()) {
+
+					loadData();
+
+					clearForm();
+
+					AlertUtil.showAlert(
+							"OK",
+							"Thêm thành công",
+							Alert.AlertType.INFORMATION
+					);
+
+				} else {
+
+					AlertUtil.showAlert(
+							"Lỗi",
+							res.getMessage(),
+							Alert.AlertType.ERROR
+					);
 				}
-			});
-		}
-		// Đóng executor sau khi submit xong
-		executor.shutdown();
-		System.out.println("Tất cả email đã được submit để gửi.");
-	}
-
-	private void sua() {
-		KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
-		if (km == null)
-			return;
-		if (dangDienRa(km)) {
-			AlertUtil.showAlert("Lỗi", "Khuyến mãi đang diễn ra, không thể cập nhật!", Alert.AlertType.ERROR);
-			return;
-		}
-		if (!validateKhuyenMai())
-			return;
-		try {
-			km.setTenKM(txtTenKM.getText().trim());
-			km.setLoaiKM(comBoxLoaiKM.getValue());
-			km.setNgayBatDau(Date.valueOf(dpNgayBatDau.getValue()));
-			km.setNgayKetThuc(Date.valueOf(dpNgayKetThuc.getValue()));
-			km.setPhanTramGiamGia(comBoxPhanTram.getValue());
-
-			if (khuyenMaiDAO.sua(km)) {
-				loadData();
-				AlertUtil.showAlert("Thành công", "Cập nhật thành công!", Alert.AlertType.INFORMATION);
-				clearForm();
 			}
+
 		} catch (Exception e) {
-			AlertUtil.showAlert("Lỗi", "Dữ liệu không hợp lệ!", Alert.AlertType.ERROR);
 			e.printStackTrace();
 		}
 	}
 
-	private void xoa() {
-		KhuyenMai km = tblKM.getSelectionModel().getSelectedItem();
-		if (km == null)
-			return;
+	// ================= UPDATE =================
+	private void sua() {
 
-		Optional<ButtonType> confirm = AlertUtil.showAlertConfirm("Bạn có chắc muốn xóa?");
-		if (confirm.get().getButtonData() == ButtonBar.ButtonData.YES) {
-			if (khuyenMaiDAO.xoa(km.getMaKM())) {
-				loadData();
-				AlertUtil.showAlert("Thành công", "Xóa thành công!", Alert.AlertType.INFORMATION);
+		if (!validate()) return;
+
+		try {
+
+			KhuyenMai_DTO km = getFormData();
+
+			Request req = new Request(
+					CommandType.KHUYENMAI_UPDATE,
+					km
+			);
+
+			Response res = client.send(req);
+
+			if (res != null) {
+
+				if (res.isSuccess()) {
+
+					loadData();
+
+					clearForm();
+
+					AlertUtil.showAlert(
+							"OK",
+							"Cập nhật thành công",
+							Alert.AlertType.INFORMATION
+					);
+
+				} else {
+
+					AlertUtil.showAlert(
+							"Lỗi",
+							res.getMessage(),
+							Alert.AlertType.ERROR
+					);
+				}
 			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private void fillForm(KhuyenMai km) {
+	// ================= DELETE =================
+	private void xoa() {
+
+		KhuyenMai_DTO km =
+				tblKM.getSelectionModel().getSelectedItem();
+
+		if (km == null) return;
+
+		try {
+
+			Request req = new Request(
+					CommandType.KHUYENMAI_DELETE,
+					km.getMaKM()
+			);
+
+			Response res = client.send(req);
+
+			if (res != null && res.isSuccess()) {
+
+				loadData();
+
+				clearForm();
+
+				AlertUtil.showAlert(
+						"OK",
+						"Xóa thành công",
+						Alert.AlertType.INFORMATION
+				);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// ================= GET FORM =================
+	private KhuyenMai_DTO getFormData() {
+
+		return new KhuyenMai_DTO(
+				txtMaKM.getText(),
+
+				txtTenKM.getText(),
+
+				comBoxLoaiKM.getValue(),
+
+				Date.valueOf(dpNgayBatDau.getValue()),
+
+				Date.valueOf(dpNgayKetThuc.getValue()),
+
+				comBoxPhanTram.getValue()
+		);
+	}
+
+	// ================= FILL FORM =================
+	private void fillForm(KhuyenMai_DTO km) {
+
 		txtMaKM.setText(km.getMaKM());
+
 		txtTenKM.setText(km.getTenKM());
+
 		comBoxLoaiKM.setValue(km.getLoaiKM());
+
 		comBoxPhanTram.setValue(km.getPhanTramGiamGia());
-		dpNgayBatDau.setValue(km.getNgayBatDau().toLocalDate());
-		dpNgayKetThuc.setValue(km.getNgayKetThuc().toLocalDate());
+
+		dpNgayBatDau.setValue(
+				km.getNgayBatDau().toLocalDate()
+		);
+
+		dpNgayKetThuc.setValue(
+				km.getNgayKetThuc().toLocalDate()
+		);
 	}
 
-	private void huyChonDong() {
-		tblKM.getSelectionModel().clearSelection();
-		btnSuaKM.setDisable(true);
-		btnXoaKM.setDisable(true);
-		clearForm();
-	}
-
-	private void loadData() {
-		List<KhuyenMai> list = khuyenMaiDAO.getDanhSach(KhuyenMai.class, new HashMap<>());
-		danhSachKhuyenMai.setAll(list);
-		tblKM.setItems(danhSachKhuyenMai);
-	}
-
-	private void setValueTable() {
-		colMaKM.setCellValueFactory(new PropertyValueFactory<>("maKM"));
-		colTenKM.setCellValueFactory(new PropertyValueFactory<>("tenKM"));
-		colloaiKM.setCellValueFactory(new PropertyValueFactory<>("loaiKM"));
-		colNgayBatDau.setCellValueFactory(new PropertyValueFactory<>("ngayBatDau"));
-		colNgayKetThuc.setCellValueFactory(new PropertyValueFactory<>("ngayKetThuc"));
-		colPhanTramGiamGia.setCellValueFactory(new PropertyValueFactory<>("phanTramGiamGia"));
-	}
-
-	private void timKiem() {
-		FilteredList<KhuyenMai> filtered = new FilteredList<>(danhSachKhuyenMai, p -> true);
-		txtTimKiem.textProperty().addListener((obs, oldValue, newValue) -> {
-			String keyword = newValue.toLowerCase();
-			filtered.setPredicate(km -> km.getMaKM().toLowerCase().contains(keyword)
-					|| km.getTenKM().toLowerCase().contains(keyword) || km.getLoaiKM().toLowerCase().contains(keyword));
-		});
-		tblKM.setItems(filtered);
-	}
-
+	// ================= CLEAR =================
 	private void clearForm() {
+
 		txtMaKM.clear();
+
 		txtTenKM.clear();
-		comBoxLoaiKM.getSelectionModel().clearSelection();
-		comBoxPhanTram.getSelectionModel().clearSelection();
+
+		comBoxLoaiKM
+				.getSelectionModel()
+				.clearSelection();
+
+		comBoxPhanTram
+				.getSelectionModel()
+				.clearSelection();
+
 		dpNgayBatDau.setValue(null);
+
 		dpNgayKetThuc.setValue(null);
-		hienThiMaKMMoi();
+
+		tblKM.getSelectionModel().clearSelection();
+
+		btnSuaKM.setDisable(true);
+
+		btnXoaKM.setDisable(true);
 	}
 
-	private boolean validateKhuyenMai() {
-		if (txtTenKM.getText().isBlank() || comBoxLoaiKM.getValue() == null || dpNgayBatDau.getValue() == null
-				|| dpNgayKetThuc.getValue() == null || comBoxPhanTram.getValue() == null) {
+	// ================= SEARCH =================
+	private void timKiem() {
 
-			AlertUtil.showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.ERROR);
-			return false;
-		}
-		Date today = new Date(System.currentTimeMillis());
-		Date start = Date.valueOf(dpNgayBatDau.getValue());
-		Date end = Date.valueOf(dpNgayKetThuc.getValue());
-		// Ngày bắt đầu < hôm nay
-		if (start.before(today)) {
-			AlertUtil.showAlert("Lỗi", "Ngày bắt đầu không được nhỏ hơn ngày hiện tại!", Alert.AlertType.ERROR);
-			return false;
-		}
+		txtTimKiem.textProperty().addListener((obs, oldV, newV) -> {
 
-		// Ngày kết thúc <= ngày bắt đầu
-		if (!end.after(start)) {
-			AlertUtil.showAlert("Lỗi", "Ngày kết thúc phải lớn hơn ngày bắt đầu!", Alert.AlertType.ERROR);
-			return false;
-		}
+			String f = newV == null ? "" : newV.toLowerCase().trim();
 
-		// Trùng khuyến mãi
-		if (khuyenMaiDaTonTai()) {
-			AlertUtil.showAlert("Lỗi", "Khuyến mãi đã tồn tại hoặc trùng thời gian!", Alert.AlertType.ERROR);
-			return false;
-		}
-		// Giới hạn %
-		int giam = comBoxPhanTram.getValue();
-		if (comBoxLoaiKM.getValue().contains("tổng") && giam > 30) {
-			AlertUtil.showAlert("Lỗi", "Khuyến mãi tổng hóa đơn tối đa 30%!", Alert.AlertType.ERROR);
+			filteredList.setPredicate(km ->
+
+					km.getMaKM().toLowerCase().contains(f)
+
+							|| km.getTenKM().toLowerCase().contains(f)
+
+							|| km.getLoaiKM().toLowerCase().contains(f)
+			);
+		});
+	}
+
+	// ================= VALIDATE =================
+	private boolean validate() {
+
+		if (txtTenKM.getText().isBlank()) {
+
+			AlertUtil.showAlert(
+					"Lỗi",
+					"Tên khuyến mãi không được rỗng",
+					Alert.AlertType.WARNING
+			);
+
 			return false;
 		}
 
-		if (comBoxLoaiKM.getValue().contains("Kim Cương") && giam > 40) {
-			AlertUtil.showAlert("Lỗi", "Ưu đãi Kim Cương tối đa 40%!", Alert.AlertType.ERROR);
+		if (dpNgayBatDau.getValue() == null
+				|| dpNgayKetThuc.getValue() == null) {
+
+			AlertUtil.showAlert(
+					"Lỗi",
+					"Vui lòng chọn ngày",
+					Alert.AlertType.WARNING
+			);
+
 			return false;
 		}
+
+		if (!dpNgayKetThuc.getValue()
+				.isAfter(dpNgayBatDau.getValue())) {
+
+			AlertUtil.showAlert(
+					"Lỗi",
+					"Ngày kết thúc phải sau ngày bắt đầu",
+					Alert.AlertType.WARNING
+			);
+
+			return false;
+		}
+
 		return true;
 	}
 
-	private void hienThiMaKMMoi() {
-		String maMoi = AutoIDUitl.sinhMaKhuyenMai();
-		txtMaKM.setText(maMoi);
-		txtMaKM.setEditable(false);
-	}
-
-	private boolean dangDienRa(KhuyenMai km) {
-		Date today = new Date(System.currentTimeMillis());
-		return !today.before(km.getNgayBatDau()) && !today.after(km.getNgayKetThuc());
-	}
-
-	private boolean khuyenMaiDaTonTai() {
-		List<KhuyenMai> ds = khuyenMaiDAO.getDanhSach(KhuyenMai.class, new HashMap<>());
-		Date start = Date.valueOf(dpNgayBatDau.getValue());
-		Date end = Date.valueOf(dpNgayKetThuc.getValue());
-		for (KhuyenMai km : ds) {
-			boolean trungTenLoai = km.getTenKM().equalsIgnoreCase(txtTenKM.getText().trim())
-					&& km.getLoaiKM().equalsIgnoreCase(comBoxLoaiKM.getValue());
-			boolean giaoThoiGian = !(end.before(km.getNgayBatDau()) || start.after(km.getNgayKetThuc()));
-
-			if (trungTenLoai && giaoThoiGian) {
-				return true;
-			}
-		}
-		return false;
-	}
 }

@@ -14,57 +14,57 @@ import entity.KhachHang;
 import jakarta.persistence.EntityManager;
 
 public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
-	long tongSoHoaDon();
+    long tongSoHoaDon();
 
-	boolean themHoaDon(HoaDon_DTO dto);
+    boolean themHoaDon(HoaDon_DTO dto);
 
-	List<HoaDon> getAllHoaDons();
+    List<HoaDon> getAllHoaDons();
 
-	List<HoaDon> getAllHoaDonTheoThang(int thang, int nam);
+    List<HoaDon> getAllHoaDonTheoThang(int thang, int nam);
 
-	List<HoaDon> getHoaDonTheoNam(int nam);
+    List<HoaDon> getHoaDonTheoNam(int nam);
 
-	Double getTongDoanhThuTheoThang(int thang, int nam);
+    Double getTongDoanhThuTheoThang(int thang, int nam);
 
-	Double getTongDoanhThuTheoNam(int nam);
+    Double getTongDoanhThuTheoNam(int nam);
 
-	List<HoaDon> getHoaDonTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
+    List<HoaDon> getHoaDonTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
 
-	Double getTongDoanhThuTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
+    Double getTongDoanhThuTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd);
 
-	//
-	Double getTongDoanhThuTheoNgayVaNhanVien(Date ngayLap, String maNV);
+    //
+    Double getTongDoanhThuTheoNgayVaNhanVien(Date ngayLap, String maNV);
 
-	Long countHoaDonTheoNgayVaNhanVien(Date ngayLap, String maNV);
-	//
+    Long countHoaDonTheoNgayVaNhanVien(Date ngayLap, String maNV);
+    //
 
-	List<HoaDon> getAllHoaDonNVTheoThang(int thang, int nam, String maNV);
+    List<HoaDon> getAllHoaDonNVTheoThang(int thang, int nam, String maNV);
 
-	List<HoaDon> getHoaDonNVTheoNam(int nam, String maNV);
+    List<HoaDon> getHoaDonNVTheoNam(int nam, String maNV);
 
-	Double getTongDoanhThuNVTheoThang(int thang, int nam, String maNV);
+    Double getTongDoanhThuNVTheoThang(int thang, int nam, String maNV);
 
-	Double getTongDoanhThuNVTheoNam(int nam, String maNV);
+    Double getTongDoanhThuNVTheoNam(int nam, String maNV);
 
-	List<HoaDon> getHoaDonNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
+    List<HoaDon> getHoaDonNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
 
-	Double getTongDoanhThuNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
+    Double getTongDoanhThuNVTheoNgayCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
 
-	String getMaxMaHoaDon();
+    String getMaxMaHoaDon();
 
-	HoaDon getHoaDonTheoMaDatBan(String maDatBan);
+    HoaDon getHoaDonTheoMaDatBan(String maDatBan);
 
-	public KhachHang getKhachHangTheoMaDatBan(String maDatBan);
+    public KhachHang getKhachHangTheoMaDatBan(String maDatBan);
 
-	HoaDon timHoaDonDangPhucVuTheoBan(Ban ban, LocalDate ngay);
+    HoaDon timHoaDonDangPhucVuTheoBan(Ban ban, LocalDate ngay);
 
-	HoaDon timHoaDonTheoDonDatBan(DonDatBan donDatBan);
+    HoaDon timHoaDonTheoDonDatBan(DonDatBan donDatBan);
 
-	List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon);
+    List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon);
 
     HoaDon toEntity(HoaDon_DTO dto, EntityManager entityManager);
 
     Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
 
-	public Map<String, Double> getDoanhThuTheoNam(int nam);
+    public Map<String, Double> getDoanhThuTheoNam(int nam);
 }

@@ -6,10 +6,10 @@ import dto.LoaiBan_DTO;
 import java.util.List;
 
 public interface Ban_Service {
-	LoaiBan_DTO timLoaiBanTheoTen(String tenLoaiBan);
+    LoaiBan_DTO timLoaiBanTheoTen(String tenLoaiBan);
 
-	String getMaxMaBan();
+    String getMaxMaBan();
 
-	boolean sua(Ban_DTO ban_DTO);
-	List<Ban_DTO> getAllBan();
+    boolean sua(Ban_DTO ban_DTO);
+    List<Ban_DTO> getAllBan();
 }

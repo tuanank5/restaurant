@@ -46,6 +46,19 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	}
 
 	@Override
+	public HoaDon timTheoMa(String maHD) {
+		if (maHD == null || maHD.isBlank()) {
+			return null;
+		}
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		try {
+			return entityManager.find(HoaDon.class, maHD);
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@Override
 	public long tongSoHoaDon() {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		long count = 0;

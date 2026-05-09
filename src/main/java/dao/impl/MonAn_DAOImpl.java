@@ -28,6 +28,22 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
 	}
 
 	@Override
+	public String getMaxMaMon() {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery(
+					"SELECT MAX(m.maMon) FROM MonAn m",
+					String.class
+			).getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
 	public MonAn timTheoMa(String maMon) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -67,6 +83,10 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
+			MonAn existing = em.find(MonAn.class, mon.getMaMon());
+			if (existing == null) {
+				return false;
+			}
 			em.merge(mon); // merge để cập nhật dữ liệu
 			tx.commit();
 			return true;
@@ -87,9 +107,8 @@ public class MonAn_DAOImpl extends Entity_DAOImpl<MonAn> implements MonAn_DAO {
 		try {
 			tx.begin();
 			MonAn mon = em.find(MonAn.class, maMon);
-			if (mon != null) {
-				em.remove(mon);
-			}
+			if (mon == null) return false;
+			em.remove(mon);
 			tx.commit();
 			return true;
 		} catch (Exception e) {

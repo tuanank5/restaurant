@@ -18,7 +18,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import controller.Menu.MenuNV_Controller;
-import dao.impl.HoaDon_DAOImpl;
+import dto.ChiTietHoaDon_DTO;
 import entity.ChiTietHoaDon;
 import entity.HoaDon;
 import javafx.beans.property.SimpleStringProperty;
@@ -34,6 +34,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class ChiTietHoaDon_Controller {
 	@FXML
@@ -46,22 +50,22 @@ public class ChiTietHoaDon_Controller {
 	private Label lblTienTra;
 
 	@FXML
-	private TableView<ChiTietHoaDon> tblDanhSachMon;
+	private TableView<ChiTietHoaDon_DTO> tblDanhSachMon;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> tblMaMonAn;
+	private TableColumn<ChiTietHoaDon_DTO, String> tblMaMonAn;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> tblTenMonAn;
+	private TableColumn<ChiTietHoaDon_DTO, String> tblTenMonAn;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> tblSoLuong;
+	private TableColumn<ChiTietHoaDon_DTO, String> tblSoLuong;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> tblDonGia;
+	private TableColumn<ChiTietHoaDon_DTO, String> tblDonGia;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> tblThanhTien;
+	private TableColumn<ChiTietHoaDon_DTO, String> tblThanhTien;
 
 	@FXML
 	private TextField txtMaHoaDon;
@@ -85,10 +89,16 @@ public class ChiTietHoaDon_Controller {
 	private TextField txtKieuThanhToan;
 
 	private HoaDon hoaDon;
-	private final ObservableList<ChiTietHoaDon> danhSachCTHD = FXCollections.observableArrayList();
+	private final ObservableList<ChiTietHoaDon_DTO> danhSachCTHD = FXCollections.observableArrayList();
+	private Client client;
 
 	@FXML
 	private void initialize() {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		cauHinhBang();
 		tblDanhSachMon.setItems(danhSachCTHD);
 	}
@@ -123,27 +133,28 @@ public class ChiTietHoaDon_Controller {
 	}
 
 	private void loadChiTietHoaDon() {
-		HoaDon_DAOImpl dao = new HoaDon_DAOImpl();
-		var list = dao.findByMaHoaDon(hoaDon.getMaHD());
-		System.out.println("CTHD size = " + list.size());
-		list.forEach(ct -> System.out.println(ct.getMonAn()));
-		danhSachCTHD.setAll(list);
+		try {
+			Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, hoaDon.getMaHD()));
+			if (res != null && res.isSuccess()) {
+				@SuppressWarnings("unchecked")
+				var list = (java.util.List<ChiTietHoaDon_DTO>) res.getData();
+				danhSachCTHD.setAll(list);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void cauHinhBang() {
-		tblMaMonAn.setCellValueFactory(ct -> new SimpleStringProperty(ct.getValue().getMonAn().getMaMon()));
+		tblMaMonAn.setCellValueFactory(ct -> new SimpleStringProperty(ct.getValue().getMaMonAn()));
 
-		tblTenMonAn.setCellValueFactory(ct -> new SimpleStringProperty(ct.getValue().getMonAn().getTenMon()));
+		tblTenMonAn.setCellValueFactory(ct -> new SimpleStringProperty(ct.getValue().getTenMonAn()));
 
 		tblSoLuong.setCellValueFactory(ct -> new SimpleStringProperty(String.valueOf(ct.getValue().getSoLuong())));
 
-		tblDonGia.setCellValueFactory(
-				ct -> new SimpleStringProperty(formatTienVN(ct.getValue().getMonAn().getDonGia())));
+		tblDonGia.setCellValueFactory(ct -> new SimpleStringProperty(formatTienVN(ct.getValue().getDonGia())));
 
-		tblThanhTien.setCellValueFactory(ct -> {
-			double tt = ct.getValue().getSoLuong() * ct.getValue().getMonAn().getDonGia();
-			return new SimpleStringProperty(formatTienVN(tt));
-		});
+		tblThanhTien.setCellValueFactory(ct -> new SimpleStringProperty(formatTienVN(ct.getValue().getThanhTien())));
 	}
 
 	private void xuatHoaDonPDF() {
@@ -193,18 +204,17 @@ public class ChiTietHoaDon_Controller {
 				table.addCell(cell);
 			}
 
-			for (ChiTietHoaDon ct : danhSachCTHD) {
-				table.addCell(new Phrase(ct.getMonAn().getMaMon(), normalFont));
-				table.addCell(new Phrase(ct.getMonAn().getTenMon(), normalFont));
+			for (ChiTietHoaDon_DTO ct : danhSachCTHD) {
+				table.addCell(new Phrase(ct.getMaMonAn(), normalFont));
+				table.addCell(new Phrase(ct.getTenMonAn(), normalFont));
 
 				PdfPCell slCell = new PdfPCell(new Phrase(String.valueOf(ct.getSoLuong()), normalFont));
 				slCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(slCell);
 
-				table.addCell(new Phrase(formatTienVN(ct.getMonAn().getDonGia()), normalFont));
+				table.addCell(new Phrase(formatTienVN(ct.getDonGia()), normalFont));
 
-				double thanhTien = ct.getSoLuong() * ct.getMonAn().getDonGia();
-				table.addCell(new Phrase(formatTienVN(thanhTien), normalFont));
+				table.addCell(new Phrase(formatTienVN(ct.getThanhTien()), normalFont));
 			}
 
 			document.add(table);

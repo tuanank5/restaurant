@@ -12,13 +12,13 @@ import network.Client;
  */
 public class App extends Application {
 
-	@Override
-	public void start(Stage stage) throws Exception {
-		ClientManager.init();
+    @Override
+    public void start(Stage stage) throws Exception {
+        ClientManager.init();
 
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/ThongKe/ThongKeNVQLScroll.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Dashboard/DashboardNVQLScroll.fxml"));
-		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/ThongKe/ThongKeNVScroll.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/ThongKe/ThongKeNVScroll.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Dashboard/DashboardNVScroll.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/TaiKhoan/TaiKhoanTA.fxml"));
 
@@ -26,33 +26,33 @@ public class App extends Application {
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
 
-		Scene scene = new Scene(root);
-		stage.setTitle("Đăng Nhập");
-		stage.setScene(scene);
-		stage.show();
-	}
+        Scene scene = new Scene(root);
+        stage.setTitle("Đăng Nhập");
+        stage.setScene(scene);
+        stage.show();
+    }
 
-	public class ClientManager {
+    public class ClientManager {
 
-		private static Client client;
+        private static Client client;
 
-		public static void init() {
-			if (client == null) {
-				try {
-					client = new Client();
-				} catch (Exception e) {
-					throw new RuntimeException("Không thể kết nối server", e);
-				}
-			}
-		}
+        public static void init() {
+            if (client == null) {
+                try {
+                    client = new Client();
+                } catch (Exception e) {
+                    throw new RuntimeException("Không thể kết nối server", e);
+                }
+            }
+        }
 
-		public static Client getClient() {
-			return client;
-		}
-	}
+        public static Client getClient() {
+            return client;
+        }
+    }
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 
 }

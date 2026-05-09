@@ -3,6 +3,7 @@ package controller.DatBan;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -12,8 +13,9 @@ import java.util.ResourceBundle;
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.ChiTietHoaDon_DAO;
-import dao.MonAn_DAO;
-import dao.impl.MonAn_DAOImpl;
+import dao.HoaDon_DAO;
+import dto.ChiTietHoaDon_DTO;
+import dto.MonAn_DTO;
 import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
@@ -45,6 +47,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
+import dao.impl.HoaDon_DAOImpl;
 
 public class ADoiMon_Controller implements Initializable {
 
@@ -96,11 +103,12 @@ public class ADoiMon_Controller implements Initializable {
 	// -----Bàn---------
 	private Ban banDangChon;
 
-	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+	private Client client;
 	private List<MonAn> dsMonAn;
 	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
 	private DonDatBan donDatBanHienTai;
 	private HoaDon hoaDonHienTai;
+	private final HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 
 	@FXML
 	void btnQuayLai(ActionEvent event) {
@@ -114,19 +122,30 @@ public class ADoiMon_Controller implements Initializable {
 			return;
 		}
 
-		ChiTietHoaDon_DAO ctDAO = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(ChiTietHoaDon_DAO.class);
+		try {
+			List<ChiTietHoaDon_DTO> items = new ArrayList<>();
+			for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
+				items.add(ChiTietHoaDon_DTO.builder()
+						.maHoaDon(hoaDonHienTai.getMaHD())
+						.maMonAn(entry.getKey().getMaMon())
+						.soLuong(entry.getValue())
+						.thanhTien(entry.getKey().getDonGia() * entry.getValue())
+						.build());
+			}
+			Map<String, Object> payload = new HashMap<>();
+			payload.put("maHD", hoaDonHienTai.getMaHD());
+			payload.put("items", items);
 
-		// 1️⃣ Xóa chi tiết cũ
-		ctDAO.deleteByMaHoaDon(hoaDonHienTai.getMaHD());
-
-		// 2️⃣ Lưu chi tiết mới
-		for (Map.Entry<MonAn, Integer> entry : dsMonAnDat.entrySet()) {
-			ChiTietHoaDon ct = new ChiTietHoaDon();
-			ct.setHoaDon(hoaDonHienTai);
-			ct.setMonAn(entry.getKey());
-			ct.setSoLuong(entry.getValue());
-			ctDAO.them(ct);
+			Response res = client.send(new Request(CommandType.CTHD_REPLACE_BY_MAHD, payload));
+			if (res == null || !res.isSuccess()) {
+				showAlert("Lỗi", "Không thể cập nhật món ăn!", Alert.AlertType.ERROR);
+				return;
+			}
+			updateTongTienHoaDon();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			showAlert("Lỗi", "Không thể cập nhật món ăn!", Alert.AlertType.ERROR);
+			return;
 		}
 
 		showAlert("Thành công", "Cập nhật món ăn thành công!", Alert.AlertType.INFORMATION);
@@ -136,9 +155,14 @@ public class ADoiMon_Controller implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		hoaDonHienTai = MenuNV_Controller.aBanHienTai_HD;
 		donDatBanHienTai = MenuNV_Controller.donDatBanDangDoi;
-		dsMonAn = monAnDAO.getDanhSachMonAn();
+		dsMonAn = loadMonAnFromServer();
 		// Khởi tạo ComboBox phân loại (dùng dsMonAn)
 		khoiTaoComboBoxPhanLoai();
 		loadThongTinKhachVaSoLuong();
@@ -383,11 +407,18 @@ public class ADoiMon_Controller implements Initializable {
 
 		dsMonAnDat.clear();
 
-		List<ChiTietHoaDon> dsCT = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDonHienTai.getMaHD());
-
-		for (ChiTietHoaDon ct : dsCT) {
-			dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
+		try {
+			Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, hoaDonHienTai.getMaHD()));
+			if (res != null && res.isSuccess()) {
+				@SuppressWarnings("unchecked")
+				List<ChiTietHoaDon_DTO> dsCT = (List<ChiTietHoaDon_DTO>) res.getData();
+				for (ChiTietHoaDon_DTO ct : dsCT) {
+					MonAn mon = findMonById(ct.getMaMonAn());
+					if (mon != null) dsMonAnDat.put(mon, ct.getSoLuong());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		tblDS.setItems(FXCollections.observableArrayList(dsMonAnDat.keySet()));
@@ -408,6 +439,12 @@ public class ADoiMon_Controller implements Initializable {
 	}
 
 	private void loadThongTinKhachVaSoLuong() {
+		if (donDatBanHienTai == null) {
+			txtKhachHang.setText("Khách lẻ");
+			txtSoLuongKhach.clear();
+			txtMaBan.clear();
+			return;
+		}
 
 		// ===== TÊN KHÁCH =====
 		if (hoaDonHienTai != null && hoaDonHienTai.getKhachHang() != null) {
@@ -423,5 +460,45 @@ public class ADoiMon_Controller implements Initializable {
 
 		// ===== MÃ BÀN =====
 		txtMaBan.setText(donDatBanHienTai.getBan().getMaBan());
+	}
+
+	private void updateTongTienHoaDon() {
+		if (hoaDonHienTai == null) return;
+		double tongTienMoi = dsMonAnDat.entrySet()
+				.stream()
+				.mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
+				.sum();
+		hoaDonHienTai.setTongTien(tongTienMoi);
+		hoaDonDAO.capNhat(hoaDonHienTai);
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<MonAn> loadMonAnFromServer() {
+		List<MonAn> result = new ArrayList<>();
+		try {
+			Response res = client.send(new Request(CommandType.MONAN_GET_ALL, null));
+			if (res != null && res.isSuccess()) {
+				List<MonAn_DTO> list = (List<MonAn_DTO>) res.getData();
+				for (MonAn_DTO dto : list) {
+					result.add(new MonAn(
+							dto.getMaMon(),
+							dto.getTenMon(),
+							dto.getDonGia(),
+							dto.getDuongDanAnh(),
+							dto.getLoaiMon()
+					));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private MonAn findMonById(String maMon) {
+		for (MonAn mon : dsMonAn) {
+			if (mon.getMaMon().equals(maMon)) return mon;
+		}
+		return null;
 	}
 }

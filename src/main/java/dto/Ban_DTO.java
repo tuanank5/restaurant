@@ -14,11 +14,11 @@ import java.io.Serializable;
 @ToString
 public class Ban_DTO implements Serializable {
 
-	private String maBan;
+    private String maBan;
 
-	private String viTri;
+    private String viTri;
 
-	private String trangThai;
-	private String maLoaiBan;
-	private String tenLoaiBan;
+    private String trangThai;
+    private String maLoaiBan;
+    private String tenLoaiBan;
 }

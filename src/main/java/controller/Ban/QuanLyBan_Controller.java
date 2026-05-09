@@ -5,11 +5,11 @@ import java.util.List;
 import config.RestaurantApplication;
 import dao.Ban_DAO;
 import dao.LoaiBan_DAO;
-import entity.Ban;
 import entity.LoaiBan;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,10 +19,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
+import dto.Ban_DTO;
 import util.AlertUtil;
-import util.AutoIDUitl;
 
 public class QuanLyBan_Controller {
 
@@ -42,16 +45,16 @@ public class QuanLyBan_Controller {
 	private Button btnXoa;
 
 	@FXML
-	private TableColumn<Ban, String> colMaBan;
+	private TableColumn<Ban_DTO, String> colMaBan;
 
 	@FXML
-	private TableColumn<Ban, String> colMaLoaiBan;
+	private TableColumn<Ban_DTO, String> colMaLoaiBan;
 
 	@FXML
-	private TableColumn<Ban, String> colViTri;
+	private TableColumn<Ban_DTO, String> colViTri;
 
 	@FXML
-	private TableView<Ban> tblBan;
+	private TableView<Ban_DTO> tblBan;
 
 	@FXML
 	private TextField txtMaBan;
@@ -62,18 +65,22 @@ public class QuanLyBan_Controller {
 	@FXML
 	private ComboBox<LoaiBan> comBoxLoaiBan;
 
-	private ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
+	private ObservableList<Ban_DTO> danhSachBan = FXCollections.observableArrayList();
+	private FilteredList<Ban_DTO> filteredList;
+
+	private Client client;
 
 	@FXML
 	public void initialize() {
-		// Thiết lập các cột TableView
-		colMaBan.setCellValueFactory(new PropertyValueFactory<>("maBan"));
-		colViTri.setCellValueFactory(new PropertyValueFactory<>("viTri"));
-		colMaLoaiBan.setCellValueFactory(cellData -> {
-			LoaiBan loaiBan = cellData.getValue().getLoaiBan();
-			String tenLoai = (loaiBan != null) ? loaiBan.getTenLoaiBan() : "";
-			return new SimpleStringProperty(tenLoai);
-		});
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		txtMaBan.setEditable(false);
+
+		setTable();
 
 		// Load dữ liệu loại bàn từ DB
 		List<LoaiBan> listLoaiBan = RestaurantApplication.getInstance().getDatabaseContext()
@@ -106,18 +113,7 @@ public class QuanLyBan_Controller {
 				btnSua.setDisable(false);
 				btnXoa.setDisable(false);
 				// Điền dữ liệu vào các TextField và ComboBox
-				txtMaBan.setText(newSelection.getMaBan()); // Mã bàn vẫn giữ, không sửa
-				txtViTri.setText(newSelection.getViTri());
-
-				if (newSelection.getLoaiBan() != null) {
-					// tìm loại bàn trong comboBox
-					for (LoaiBan lb : comBoxLoaiBan.getItems()) {
-						if (lb.getMaLoaiBan().equals(newSelection.getLoaiBan().getMaLoaiBan())) {
-							comBoxLoaiBan.setValue(lb);
-							break;
-						}
-					}
-				}
+				fillForm(newSelection);
 
 			} else {
 				// Không có dòng nào được chọn → disable nút Sửa/Xóa
@@ -125,22 +121,13 @@ public class QuanLyBan_Controller {
 				btnXoa.setDisable(true);
 
 				// Reset form
-				resetForm();
+				clearForm();
 			}
 		});
 
-		// Load dữ liệu bàn từ DB
-		List<Ban> listBan = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class)
-				.getDanhSach(Ban.class, null);
-
-		// Đưa dữ liệu vào ObservableList và hiển thị lên TableView
-		danhSachBan.setAll(listBan);
-		tblBan.setItems(danhSachBan);
-		txtMaBan.setText(AutoIDUitl.sinhMaBan());
-		txtTimKiem.setOnKeyReleased(event -> {
-			String keyword = txtTimKiem.getText().trim();
-			timKiemBan(keyword);
-		});
+		loadData();
+		timKiem();
+		generateId();
 
 		btnSua.setTooltip(new Tooltip("Sửa thông tin bàn đã chọn"));
 		btnThem.setTooltip(new Tooltip("Thêm bàn mới vào danh sách"));
@@ -152,127 +139,228 @@ public class QuanLyBan_Controller {
 
 	}
 
-	private void timKiemBan(String keyword) {
-		String kw = keyword.toLowerCase();
+	// ================= TABLE =================
+	private void setTable() {
+		colMaBan.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getMaBan()));
 
-		if (kw.isEmpty()) {
-			tblBan.setItems(danhSachBan); // reset danh sách gốc
-			return;
-		}
+		colViTri.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getViTri()));
 
-		ObservableList<Ban> kq = FXCollections.observableArrayList();
-
-		for (Ban b : danhSachBan) {
-			boolean matchMa = b.getMaBan().toLowerCase().contains(kw);
-			boolean matchViTri = b.getViTri().toLowerCase().contains(kw);
-			boolean matchLoai = b.getLoaiBan() != null && b.getLoaiBan().getTenLoaiBan().toLowerCase().contains(kw);
-
-			if (matchMa || matchViTri || matchLoai) {
-				kq.add(b);
+		colMaLoaiBan.setCellValueFactory(c -> {
+			String maLoai = c.getValue().getMaLoaiBan();
+			String tenLoai = "";
+			if (maLoai != null) {
+				for (LoaiBan lb : comBoxLoaiBan.getItems()) {
+					if (maLoai.equals(lb.getMaLoaiBan())) {
+						tenLoai = lb.getTenLoaiBan();
+						break;
+					}
+				}
 			}
+			return new SimpleStringProperty(tenLoai);
+		});
+	}
+
+	// ================= LOAD DATA =================
+	@SuppressWarnings("unchecked")
+	private void loadData() {
+		try {
+			Request req = new Request(CommandType.BAN_GET_ALL, null);
+			Response res = client.send(req);
+
+			if (res != null && res.isSuccess()) {
+				List<Ban_DTO> list = (List<Ban_DTO>) res.getData();
+				danhSachBan.setAll(list);
+				filteredList = new FilteredList<>(danhSachBan, p -> true);
+				tblBan.setItems(filteredList);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		tblBan.setItems(kq);
+	}
+
+	// ================= GENERATE ID =================
+	private void generateId() {
+		try {
+			Request req = new Request(CommandType.BAN_GENERATE_ID, null);
+			Response res = client.send(req);
+			if (res != null && res.isSuccess() && res.getData() != null) {
+				txtMaBan.setText(res.getData().toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// ================= SEARCH =================
+	private void timKiem() {
+		txtTimKiem.textProperty().addListener((obs, oldV, newV) -> {
+			if (filteredList == null) return;
+
+			String kw = newV == null ? "" : newV.toLowerCase().trim();
+
+			filteredList.setPredicate(b -> {
+				String tenLoai = "";
+				if (b.getMaLoaiBan() != null) {
+					for (LoaiBan lb : comBoxLoaiBan.getItems()) {
+						if (b.getMaLoaiBan().equals(lb.getMaLoaiBan())) {
+							tenLoai = lb.getTenLoaiBan();
+							break;
+						}
+					}
+				}
+
+				return b.getMaBan().toLowerCase().contains(kw)
+						|| b.getViTri().toLowerCase().contains(kw)
+						|| tenLoai.toLowerCase().contains(kw);
+			});
+		});
 	}
 
 	@FXML
 	void controller(ActionEvent event) {
 		if (event.getSource() == btnThem) {
-			themBan();
+			them();
 		} else if (event.getSource() == btnSua) {
-			suaBan();
+			sua();
 		} else if (event.getSource() == btnXoa) {
-			xoaBan();
+			xoa();
 		}
 	}
 
-	private void themBan() {
-		String maBan = txtMaBan.getText().trim();
-		String viTri = txtViTri.getText().trim();
-		LoaiBan loaiBan = comBoxLoaiBan.getValue(); // Lấy trực tiếp đối tượng
+	// ================= ADD =================
+	private void them() {
+		if (!validate()) return;
 
-		if (maBan.isEmpty() || viTri.isEmpty() || loaiBan == null) {
-			AlertUtil.showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
-			return;
-		}
+		try {
+			Ban_DTO dto = getFormDataAdd();
+			Request req = new Request(CommandType.BAN_ADD, dto);
+			Response res = client.send(req);
 
-		String trangThaiMacDinh = "Trống";
-
-		Ban ban = new Ban(maBan, viTri, trangThaiMacDinh, loaiBan);
-
-		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).them(ban);
-
-		if (check) {
-			danhSachBan.add(ban);
-			tblBan.refresh();
-			AlertUtil.showAlert("Thành công", "Thêm bàn thành công!", Alert.AlertType.INFORMATION);
-
-			resetForm();
-		} else {
-			AlertUtil.showAlert("Lỗi", "Không thể thêm bàn. Mã bàn có thể đã tồn tại!", Alert.AlertType.ERROR);
+			if (res != null) {
+				if (res.isSuccess()) {
+					loadData();
+					clearForm();
+					AlertUtil.showAlert("Thành công", "Thêm bàn thành công!", Alert.AlertType.INFORMATION);
+				} else {
+					AlertUtil.showAlert("Lỗi", res.getMessage(), Alert.AlertType.ERROR);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private void suaBan() {
-		Ban banChon = tblBan.getSelectionModel().getSelectedItem();
-		if (banChon == null) {
-			AlertUtil.showAlert("Thông báo", "Vui lòng chọn bàn cần sửa!", Alert.AlertType.WARNING);
-			return;
-		}
+	// ================= UPDATE =================
+	private void sua() {
+		Ban_DTO selected = tblBan.getSelectionModel().getSelectedItem();
+		if (selected == null) return;
 
-		String viTri = txtViTri.getText().trim();
-		LoaiBan loaiBan = comBoxLoaiBan.getValue();
+		if (!validate()) return;
 
-		if (viTri.isEmpty() || loaiBan == null) {
-			AlertUtil.showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
-			return;
-		}
+		try {
+			Ban_DTO dto = getFormDataUpdate(selected);
+			Request req = new Request(CommandType.BAN_UPDATE, dto);
+			Response res = client.send(req);
 
-		// Cập nhật thông tin vào đối tượng
-		banChon.setViTri(viTri);
-		banChon.setLoaiBan(loaiBan);
-
-		// Cập nhật vào database
-		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class)
-				.sua(banChon); // giả sử Ban_DAO có phương thức sua()
-
-		if (check) {
-			tblBan.refresh(); // Làm mới TableView
-			AlertUtil.showAlert("Thành công", "Sửa bàn thành công!", Alert.AlertType.INFORMATION);
-			resetForm(); // Reset form để nhập bàn khác
-		} else {
-			AlertUtil.showAlert("Lỗi", "Không thể sửa bàn!", Alert.AlertType.ERROR);
+			if (res != null) {
+				if (res.isSuccess()) {
+					loadData();
+					clearForm();
+					AlertUtil.showAlert("Thành công", "Sửa bàn thành công!", Alert.AlertType.INFORMATION);
+				} else {
+					AlertUtil.showAlert("Lỗi", res.getMessage(), Alert.AlertType.ERROR);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private void xoaBan() {
-		Ban banChon = tblBan.getSelectionModel().getSelectedItem();
+	// ================= DELETE =================
+	private void xoa() {
+		Ban_DTO banChon = tblBan.getSelectionModel().getSelectedItem();
 		if (banChon == null) {
 			AlertUtil.showAlert("Thông báo", "Vui lòng chọn bàn cần xóa!", Alert.AlertType.WARNING);
 			return;
 		}
 
-		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class)
-				.xoa(banChon);
+		if (AlertUtil.showAlertConfirm("Xác nhận xóa bàn " + banChon.getMaBan() + "?")
+				.filter(bt -> bt.getButtonData() == javafx.scene.control.ButtonBar.ButtonData.YES)
+				.isEmpty()) {
+			return;
+		}
 
-		if (check) {
-			danhSachBan.remove(banChon);
-			tblBan.refresh();
-			AlertUtil.showAlert("Thành công", "Xóa bàn thành công!", Alert.AlertType.INFORMATION);
-			resetForm();
-		} else {
-			AlertUtil.showAlert("Lỗi", "Không thể xóa bàn!", Alert.AlertType.ERROR);
+		try {
+			Request req = new Request(CommandType.BAN_DELETE, banChon.getMaBan());
+			Response res = client.send(req);
+			if (res != null && res.isSuccess()) {
+				loadData();
+				clearForm();
+				AlertUtil.showAlert("Thành công", "Xóa bàn thành công!", Alert.AlertType.INFORMATION);
+			} else if (res != null) {
+				AlertUtil.showAlert("Lỗi", res.getMessage(), Alert.AlertType.ERROR);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private void resetForm() {
-		// Tự sinh mã bàn mới
-		txtMaBan.setText(AutoIDUitl.sinhMaBan());
+	// ================= FORM =================
+	private Ban_DTO getFormDataAdd() {
+		return Ban_DTO.builder()
+				.maBan(txtMaBan.getText())
+				.viTri(txtViTri.getText().trim())
+				.trangThai("Trống")
+				.maLoaiBan(comBoxLoaiBan.getValue().getMaLoaiBan())
+				.build();
+	}
 
-		// Xóa textField vị trí
+	private Ban_DTO getFormDataUpdate(Ban_DTO selected) {
+		return Ban_DTO.builder()
+				.maBan(selected.getMaBan()) // không cho sửa ID
+				.viTri(txtViTri.getText().trim())
+				.trangThai(selected.getTrangThai() != null ? selected.getTrangThai() : "Trống")
+				.maLoaiBan(comBoxLoaiBan.getValue().getMaLoaiBan())
+				.build();
+	}
+
+	private void fillForm(Ban_DTO b) {
+		txtMaBan.setText(b.getMaBan());
+		txtViTri.setText(b.getViTri());
+
+		if (b.getMaLoaiBan() != null) {
+			for (LoaiBan lb : comBoxLoaiBan.getItems()) {
+				if (b.getMaLoaiBan().equals(lb.getMaLoaiBan())) {
+					comBoxLoaiBan.setValue(lb);
+					break;
+				}
+			}
+		}
+	}
+
+	private void clearForm() {
 		txtViTri.clear();
-
-		// ComboBox loại bàn chưa chọn
 		comBoxLoaiBan.getSelectionModel().clearSelection();
+		tblBan.getSelectionModel().clearSelection();
+
+		btnSua.setDisable(true);
+		btnXoa.setDisable(true);
+
+		generateId();
+	}
+
+	private boolean validate() {
+		if (txtViTri.getText().isBlank()) {
+			AlertUtil.showAlert("Lỗi", "Vị trí không được rỗng", Alert.AlertType.WARNING);
+			return false;
+		}
+		if (comBoxLoaiBan.getValue() == null) {
+			AlertUtil.showAlert("Lỗi", "Vui lòng chọn loại bàn", Alert.AlertType.WARNING);
+			return false;
+		}
+		return true;
 	}
 
 }

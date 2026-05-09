@@ -13,6 +13,8 @@ import java.sql.Date;
 @ToString
 public class KhuyenMai_DTO implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	private String maKM;
 
 	private String tenKM;
