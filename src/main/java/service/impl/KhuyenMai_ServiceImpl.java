@@ -1,6 +1,5 @@
 package service.impl;
 
-import Mapper.mapper;
 import dao.KhuyenMai_DAO;
 import dto.KhuyenMai_DTO;
 import entity.KhuyenMai;
@@ -8,8 +7,7 @@ import service.KhuyenMai_Service;
 import config.RestaurantApplication;
 
 import java.time.LocalDate;
-import java.util.*;
-
+import java.util.HashMap;
 import java.util.List;
 
 public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
@@ -20,18 +18,56 @@ public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
 					.newEntity_DAO(KhuyenMai_DAO.class);
 
 	@Override
+	public String getMaxMaKM() {
+		return dao.getMaxMaKM();
+	}
+
+	@Override
+	public KhuyenMai_DTO timTheoMa(String maKM) {
+		KhuyenMai km = dao.timTheoMa(maKM);
+		if (km == null) {
+			return null;
+		}
+		return toDto(km);
+	}
+
+	@Override
+	public boolean sua(KhuyenMai_DTO km_DTO) {
+		return update(km_DTO);
+	}
+
+	@Override
+	public boolean xoa(String maKM) {
+		return delete(maKM);
+	}
+
+	@Override
+	public List<KhuyenMai_DTO> getDanhSach(String namedQuery) {
+		List<KhuyenMai> list = dao.getDanhSach(namedQuery, KhuyenMai.class);
+		if (list == null) {
+			return List.of();
+		}
+		return list.stream().map(this::toDto).toList();
+	}
+
+	@Override
 	public List<KhuyenMai_DTO> getAll() {
 		List<KhuyenMai> list = dao.getDanhSach(KhuyenMai.class, new HashMap<>());
-		return list.stream().map(km ->
-				KhuyenMai_DTO.builder()
-						.maKM(km.getMaKM())
-						.tenKM(km.getTenKM())
-						.loaiKM(km.getLoaiKM())
-						.ngayBatDau(km.getNgayBatDau())
-						.ngayKetThuc(km.getNgayKetThuc())
-						.phanTramGiamGia(km.getPhanTramGiamGia())
-						.build()
-		).toList();
+		return list.stream().map(this::toDto).toList();
+	}
+
+	private KhuyenMai_DTO toDto(KhuyenMai km) {
+		if (km == null) {
+			return null;
+		}
+		return KhuyenMai_DTO.builder()
+				.maKM(km.getMaKM())
+				.tenKM(km.getTenKM())
+				.loaiKM(km.getLoaiKM())
+				.ngayBatDau(km.getNgayBatDau())
+				.ngayKetThuc(km.getNgayKetThuc())
+				.phanTramGiamGia(km.getPhanTramGiamGia())
+				.build();
 	}
 
 	// ================= ADD =================

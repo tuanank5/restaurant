@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import config.RestaurantApplication;
 
 import dao.MonAn_DAO;
-import java.util.List;
 
 import dto.MonAn_DTO;
 import entity.MonAn;
@@ -18,6 +17,18 @@ public class MonAn_ServiceImpl implements MonAn_Service {
 			RestaurantApplication.getInstance()
 					.getDatabaseContext()
 					.newEntity_DAO(MonAn_DAO.class);
+
+	@Override
+	public MonAn_DTO timTheoMa(String maMon) {
+		if (maMon == null || maMon.trim().isEmpty()) {
+			throw new IllegalArgumentException("maMon không được rỗng");
+		}
+		MonAn mon = dao.timTheoMa(maMon);
+		if (mon == null) {
+			return null;
+		}
+		return MapperUtil.map(mon, MonAn_DTO.class);
+	}
 
 	@Override
 	public List<MonAn_DTO> getAll() {

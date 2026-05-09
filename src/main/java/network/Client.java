@@ -2,6 +2,7 @@ package network;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import network.common.Request;
@@ -10,20 +11,39 @@ import org.openjfx.App;
 
 public class Client {
 
+	private static final int CONNECT_TIMEOUT_MS = 15_000;
+
+	private final String host;
+	private final int port;
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 
 	public Client() throws Exception {
+		this(ClientConfig.DEFAULT_HOST, ClientConfig.DEFAULT_PORT);
+	}
+
+	public Client(String host, int port) throws Exception {
+		this.host = host;
+		this.port = port;
 		connect();
 	}
 
+	/**
+	 * Phía client: ObjectOutputStream trước, flush, rồi ObjectInputStream.
+	 * Phía server ({@code ClientHandler}) phải tạo ObjectInputStream trước, rồi ObjectOutputStream + flush
+	 * — nếu cả hai cùng OOS trước dễ deadlock / {@link java.net.SocketException Connection reset}.
+	 */
 	private void connect() throws Exception {
-		socket = new Socket("localhost", 9090);
+		closeStreamsOnly();
+		Socket s = new Socket();
+		s.connect(new InetSocketAddress(host, port), CONNECT_TIMEOUT_MS);
+		s.setTcpNoDelay(true);
+		s.setKeepAlive(true);
+		this.socket = s;
 
 		out = new ObjectOutputStream(socket.getOutputStream());
 		out.flush();
-
 		in = new ObjectInputStream(socket.getInputStream());
 	}
 
@@ -50,8 +70,7 @@ public class Client {
 
 			System.out.println("Mất kết nối server, reconnect...");
 
-			close();
-
+			closeStreamsOnly();
 			connect();
 
 			out.writeObject(request);
@@ -62,18 +81,34 @@ public class Client {
 		}
 	}
 
-	public void close() {
+	private void closeStreamsOnly() {
 		try {
-			if (in != null)
+			if (in != null) {
 				in.close();
-
-			if (out != null)
-				out.close();
-
-			if (socket != null)
-				socket.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+			}
+		} catch (Exception ignored) {
+		} finally {
+			in = null;
 		}
+		try {
+			if (out != null) {
+				out.close();
+			}
+		} catch (Exception ignored) {
+		} finally {
+			out = null;
+		}
+		try {
+			if (socket != null && !socket.isClosed()) {
+				socket.close();
+			}
+		} catch (Exception ignored) {
+		} finally {
+			socket = null;
+		}
+	}
+
+	public void close() {
+		closeStreamsOnly();
 	}
 }

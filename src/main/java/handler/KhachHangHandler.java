@@ -13,12 +13,15 @@ import network.common.CommandHandler;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
+import service.KhachHang_Service;
+import service.impl.KhachHang_ServiceImpl;
 import util.MapperUtil;
 
 public class KhachHangHandler implements CommandHandler {
 
 	private final KhachHang_DAOlmpl khDao = new KhachHang_DAOlmpl();
 	private final HangKhachHang_DAOImpl hangDao = new HangKhachHang_DAOImpl();
+	private final KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
 
 	@Override
 	public Response handle(Request request) {
@@ -53,6 +56,26 @@ public class KhachHangHandler implements CommandHandler {
 			KhachHang entity = mapToEntity(dto);
 			boolean ok = khDao.capNhat(entity);
 			yield new Response(ok, null, ok ? "OK" : "FAILED");
+		}
+
+		case KHACHHANG_GET_BY_SDT -> {
+			try {
+				String sdt = (String) request.getData();
+				KhachHang_DTO kh = khachHangService.timTheoSDT(sdt);
+				yield new Response(true, kh, "OK");
+			} catch (Exception e) {
+				yield new Response(false, null, e.getMessage());
+			}
+		}
+
+		case KHACHHANG_GET_BY_MA -> {
+			try {
+				String maKH = (String) request.getData();
+				KhachHang_DTO kh = khachHangService.timTheoMa(maKH);
+				yield new Response(true, kh, "OK");
+			} catch (Exception e) {
+				yield new Response(false, null, e.getMessage());
+			}
 		}
 
 		default -> new Response(false, null, "Invalid command");

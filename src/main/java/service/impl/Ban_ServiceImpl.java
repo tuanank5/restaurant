@@ -34,6 +34,53 @@ public class Ban_ServiceImpl implements Ban_Service {
     }
 
     @Override
+    public boolean them(Ban_DTO ban_DTO) {
+        if (ban_DTO == null) {
+            throw new IllegalArgumentException("ban_DTO không được rỗng");
+        }
+        if (ban_DTO.getMaBan() == null || ban_DTO.getMaBan().trim().isEmpty()) {
+            throw new IllegalArgumentException("ban_DTO.maBan không được rỗng");
+        }
+        if (ban_DTO.getMaLoaiBan() == null || ban_DTO.getMaLoaiBan().trim().isEmpty()) {
+            throw new IllegalArgumentException("ban_DTO.maLoaiBan không được rỗng");
+        }
+        Ban ban = new Ban();
+        ban.setMaBan(ban_DTO.getMaBan());
+        ban.setViTri(ban_DTO.getViTri());
+        ban.setTrangThai(ban_DTO.getTrangThai() != null ? ban_DTO.getTrangThai() : "Trống");
+        LoaiBan lb = new LoaiBan();
+        lb.setMaLoaiBan(ban_DTO.getMaLoaiBan());
+        ban.setLoaiBan(lb);
+        return ban_DAO.them(ban);
+    }
+
+    @Override
+    public boolean xoaTheoMa(String maBan) {
+        if (maBan == null || maBan.trim().isEmpty()) {
+            throw new IllegalArgumentException("maBan không được rỗng");
+        }
+        Ban ban = ban_DAO.timTheoMa(maBan);
+        if (ban == null) {
+            return false;
+        }
+        return ban_DAO.xoa(ban);
+    }
+
+    @Override
+    public String sinhMaBanTiepTheo() {
+        String maxMa = ban_DAO.getMaxMaBan();
+        if (maxMa == null) {
+            return "B01";
+        }
+        try {
+            int so = Integer.parseInt(maxMa.replaceAll("\\D+", ""));
+            return String.format("B%02d", so + 1);
+        } catch (Exception e) {
+            return "B01";
+        }
+    }
+
+    @Override
     public boolean sua(Ban_DTO ban_DTO) {
         if (ban_DTO == null) {
             throw new IllegalArgumentException("ban_DTO không được rỗng");

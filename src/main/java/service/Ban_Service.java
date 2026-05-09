@@ -11,5 +11,12 @@ public interface Ban_Service {
     String getMaxMaBan();
 
     boolean sua(Ban_DTO ban_DTO);
+
+    boolean them(Ban_DTO ban_DTO);
+
+    boolean xoaTheoMa(String maBan);
+
+    String sinhMaBanTiepTheo();
+
     List<Ban_DTO> getAllBan();
 }

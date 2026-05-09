@@ -7,9 +7,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
-import dao.Ban_DAO;
-import dao.impl.Ban_DAOImpl;
-import entity.Ban;
+import dto.Ban_DTO;
 import entity.KhachHang;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,13 +42,11 @@ public class ADatBanHienTai_Controller implements Initializable {
 	@FXML
 	private GridPane gridPaneBan;
 
-	// --- DAO ---
-	private Ban_DAO banDAO = new Ban_DAOImpl();
 	private Client client;
 
 	// --- Danh sách và trạng thái ---
-	private List<Ban> danhSachBan = new ArrayList<>();
-	private Ban banDangChon = null;
+	private List<Ban_DTO> danhSachBan = new ArrayList<>();
+	private Ban_DTO banDangChon = null;
 
 	private KhachHang aBanHienTai_KH;
 
@@ -92,12 +88,20 @@ public class ADatBanHienTai_Controller implements Initializable {
 		cmbTrangThai.getSelectionModel().select("Tất cả");
 		cmbLoaiBan.getItems().clear();
 		cmbLoaiBan.getItems().add("Tất cả");
-		List<Ban> danhSachBanTemp = banDAO.getDanhSach("Ban.list", Ban.class);
-		for (Ban ban : danhSachBanTemp) {
-			String tenLoai = ban.getLoaiBan().getTenLoaiBan();
-			if (!cmbLoaiBan.getItems().contains(tenLoai)) {
-				cmbLoaiBan.getItems().add(tenLoai);
+		try {
+			Response rBan = client.send(new Request(CommandType.BAN_GET_ALL, null));
+			if (rBan != null && rBan.isSuccess() && rBan.getData() != null) {
+				@SuppressWarnings("unchecked")
+				List<Ban_DTO> danhSachBanTemp = (List<Ban_DTO>) rBan.getData();
+				for (Ban_DTO ban : danhSachBanTemp) {
+					String tenLoai = ban.getTenLoaiBan();
+					if (tenLoai != null && !cmbLoaiBan.getItems().contains(tenLoai)) {
+						cmbLoaiBan.getItems().add(tenLoai);
+					}
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		cmbLoaiBan.getSelectionModel().select("Tất cả");
 	}
@@ -106,22 +110,35 @@ public class ADatBanHienTai_Controller implements Initializable {
 		gridPaneBan.getChildren().clear();
 		banDangChon = null;
 
-		danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
+		try {
+			Response rBan = client.send(new Request(CommandType.BAN_GET_ALL, null));
+			if (rBan != null && rBan.isSuccess() && rBan.getData() != null) {
+				@SuppressWarnings("unchecked")
+				List<Ban_DTO> list = (List<Ban_DTO>) rBan.getData();
+				danhSachBan = list;
+			} else {
+				danhSachBan = new ArrayList<>();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			danhSachBan = new ArrayList<>();
+		}
 		int col = 0, row = 0;
 		final int MAX_COLS = 6;
 
 		String trangThaiLoc = cmbTrangThai.getValue();
 		String loaiBanLoc = cmbLoaiBan.getValue();
 
-		for (Ban ban : danhSachBan) {
+		for (Ban_DTO ban : danhSachBan) {
 			boolean matchStatus = "Tất cả".equals(trangThaiLoc) || trangThaiLoc.equals(ban.getTrangThai());
-			boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(ban.getLoaiBan().getTenLoaiBan());
+			boolean matchType = "Tất cả".equals(loaiBanLoc)
+					|| (ban.getTenLoaiBan() != null && loaiBanLoc.equals(ban.getTenLoaiBan()));
 
 			if (matchStatus && matchType) {
 
-				Button btnBan = new Button(ban.getMaBan() + "\n" + ban.getLoaiBan().getTenLoaiBan());
+				Button btnBan = new Button(ban.getMaBan() + "\n" + (ban.getTenLoaiBan() != null ? ban.getTenLoaiBan() : ""));
 				btnBan.setPrefSize(185, 110);
-				btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+				btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getMaLoaiBan()));
 
 				btnBan.setOnMouseClicked(event -> {
 					if (event.getClickCount() == 1) {
@@ -134,10 +151,10 @@ public class ADatBanHienTai_Controller implements Initializable {
 							alert.showAndWait();
 
 							btnBan.setStyle(
-									getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+									getStyleByStatusAndType(ban.getTrangThai(), ban.getMaLoaiBan()));
 							return;
 						}
-						int soLuongChoNgoi = ban.getLoaiBan().getSoLuong();
+						int soLuongChoNgoi = 20;
 
 						Dialog<ButtonType> dialog = new Dialog<>();
 						dialog.setTitle("Xác nhận chọn bàn");
@@ -148,7 +165,7 @@ public class ADatBanHienTai_Controller implements Initializable {
 						grid.setVgap(10);
 
 						Label lblMaBan = new Label("Mã bàn: " + ban.getMaBan());
-						Label lblLoaiBan = new Label("Loại bàn: " + ban.getLoaiBan().getTenLoaiBan());
+						Label lblLoaiBan = new Label("Loại bàn: " + (ban.getTenLoaiBan() != null ? ban.getTenLoaiBan() : ""));
 
 						TextField txtSoLuong = new TextField();
 						txtSoLuong.setPromptText("Số lượng khách (tối đa " + soLuongChoNgoi + ")");
@@ -233,7 +250,7 @@ public class ADatBanHienTai_Controller implements Initializable {
 									return;
 								}
 
-								MenuNV_Controller.banDangChon = ban;
+								MenuNV_Controller.banDangChon = util.MapperUtil.map(ban, entity.Ban.class);
 								MenuNV_Controller.soLuongKhach = soLuongNhap;
 								MenuNV_Controller.khachHangDangChon = aBanHienTai_KH;
 								MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
@@ -248,7 +265,7 @@ public class ADatBanHienTai_Controller implements Initializable {
 						} else {
 							// Bấm Hủy
 							btnBan.setStyle(
-									getStyleByStatusAndType(ban.getTrangThai(), ban.getLoaiBan().getMaLoaiBan()));
+									getStyleByStatusAndType(ban.getTrangThai(), ban.getMaLoaiBan()));
 						}
 					}
 				});
@@ -309,7 +326,13 @@ public class ADatBanHienTai_Controller implements Initializable {
 		}
 		// Cập nhật trạng thái bàn
 		banDangChon.setTrangThai("Đang phục vụ");
-		boolean capNhat = banDAO.sua(banDangChon);
+		boolean capNhat = false;
+		try {
+			Response r = client.send(new Request(CommandType.BAN_UPDATE, banDangChon));
+			capNhat = r != null && r.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (capNhat) {
 			showAlert(Alert.AlertType.INFORMATION, "Bàn đã được nhận, trạng thái: Đang phục vụ");
 			loadDanhSachBan(); // Load lại UI để cập nhật màu sắc, trạng thái

@@ -77,14 +77,19 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 	@Override
 	public List<HoaDon> getAllHoaDons() {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		List<HoaDon> danhSachHoaDon = null;
 		try {
-			// Truy vấn để lấy tất cả hóa đơn
-			danhSachHoaDon = entityManager.createQuery("SELECT HD FROM HoaDon HD", HoaDon.class).getResultList();
+			String jpql = """
+					SELECT DISTINCT h FROM HoaDon h
+					JOIN FETCH h.donDatBan d
+					JOIN FETCH d.ban b
+					JOIN FETCH b.loaiBan
+					JOIN FETCH h.khachHang
+					JOIN FETCH h.nhanVien
+					""";
+			return entityManager.createQuery(jpql, HoaDon.class).getResultList();
 		} finally {
-			entityManager.close(); // Đóng EntityManager
+			entityManager.close();
 		}
-		return danhSachHoaDon;
 	}
 
 	@Override
@@ -535,7 +540,8 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 		}
 	}
 
-	public HoaDon toEntity(HoaDon_DTO dto,EntityManager entityManager) {
+	@Override
+	public HoaDon toEntity(HoaDon_DTO dto, EntityManager entityManager) {
 		if(dto == null) return null;
 
 		HoaDon hd = new HoaDon();

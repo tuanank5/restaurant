@@ -23,6 +23,4 @@ public class ChiTietHoaDon_DTO implements Serializable {
 
 	private String tenMonAn;
 
-	private double donGia;
-
 }

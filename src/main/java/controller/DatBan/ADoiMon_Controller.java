@@ -10,16 +10,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.ChiTietHoaDon_DAO;
-import dao.HoaDon_DAO;
 import dto.ChiTietHoaDon_DTO;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
 import dto.MonAn_DTO;
 import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HoaDon;
 import entity.MonAn;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -51,7 +47,6 @@ import network.Client;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
-import dao.impl.HoaDon_DAOImpl;
 
 public class ADoiMon_Controller implements Initializable {
 
@@ -106,9 +101,8 @@ public class ADoiMon_Controller implements Initializable {
 	private Client client;
 	private List<MonAn> dsMonAn;
 	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
-	private DonDatBan donDatBanHienTai;
-	private HoaDon hoaDonHienTai;
-	private final HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
+	private DonDatBan_DTO donDatBanHienTai;
+	private HoaDon_DTO hoaDonHienTai;
 
 	@FXML
 	void btnQuayLai(ActionEvent event) {
@@ -426,7 +420,7 @@ public class ADoiMon_Controller implements Initializable {
 		capNhatTongTien();
 	}
 
-	public void setDonDatBanHienTai(DonDatBan don) {
+	public void setDonDatBanHienTai(DonDatBan_DTO don) {
 		this.donDatBanHienTai = don;
 		loadMonDaDatTuHoaDon();
 	}
@@ -459,7 +453,11 @@ public class ADoiMon_Controller implements Initializable {
 		}
 
 		// ===== MÃ BÀN =====
-		txtMaBan.setText(donDatBanHienTai.getBan().getMaBan());
+		if (donDatBanHienTai.getBan() != null) {
+			txtMaBan.setText(donDatBanHienTai.getBan().getMaBan());
+		} else {
+			txtMaBan.clear();
+		}
 	}
 
 	private void updateTongTienHoaDon() {
@@ -469,7 +467,11 @@ public class ADoiMon_Controller implements Initializable {
 				.mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
 				.sum();
 		hoaDonHienTai.setTongTien(tongTienMoi);
-		hoaDonDAO.capNhat(hoaDonHienTai);
+		try {
+			client.send(new Request(CommandType.HOADON_UPDATE, hoaDonHienTai));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("unchecked")

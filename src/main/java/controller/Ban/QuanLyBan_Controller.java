@@ -2,10 +2,7 @@ package controller.Ban;
 
 import java.util.List;
 
-import config.RestaurantApplication;
-import dao.Ban_DAO;
-import dao.LoaiBan_DAO;
-import entity.LoaiBan;
+import dto.LoaiBan_DTO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -63,7 +60,7 @@ public class QuanLyBan_Controller {
 	private TextField txtViTri;
 
 	@FXML
-	private ComboBox<LoaiBan> comBoxLoaiBan;
+	private ComboBox<LoaiBan_DTO> comBoxLoaiBan;
 
 	private ObservableList<Ban_DTO> danhSachBan = FXCollections.observableArrayList();
 	private FilteredList<Ban_DTO> filteredList;
@@ -82,23 +79,27 @@ public class QuanLyBan_Controller {
 
 		setTable();
 
-		// Load dữ liệu loại bàn từ DB
-		List<LoaiBan> listLoaiBan = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(LoaiBan_DAO.class).getDanhSach(LoaiBan.class, null);
+		try {
+			Response rLb = client.send(new Request(CommandType.LOAIBAN_GET_ALL, null));
+			if (rLb != null && rLb.isSuccess() && rLb.getData() != null) {
+				@SuppressWarnings("unchecked")
+				List<LoaiBan_DTO> listLoaiBan = (List<LoaiBan_DTO>) rLb.getData();
+				comBoxLoaiBan.getItems().setAll(listLoaiBan);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		comBoxLoaiBan.getItems().setAll(listLoaiBan);
-
-		// Hiển thị tên loại bàn trên ComboBox
 		comBoxLoaiBan.setCellFactory(lv -> new javafx.scene.control.ListCell<>() {
 			@Override
-			protected void updateItem(LoaiBan item, boolean empty) {
+			protected void updateItem(LoaiBan_DTO item, boolean empty) {
 				super.updateItem(item, empty);
 				setText(empty || item == null ? "" : item.getTenLoaiBan());
 			}
 		});
 		comBoxLoaiBan.setButtonCell(new javafx.scene.control.ListCell<>() {
 			@Override
-			protected void updateItem(LoaiBan item, boolean empty) {
+			protected void updateItem(LoaiBan_DTO item, boolean empty) {
 				super.updateItem(item, empty);
 				setText(empty || item == null ? "" : item.getTenLoaiBan());
 			}
@@ -151,7 +152,7 @@ public class QuanLyBan_Controller {
 			String maLoai = c.getValue().getMaLoaiBan();
 			String tenLoai = "";
 			if (maLoai != null) {
-				for (LoaiBan lb : comBoxLoaiBan.getItems()) {
+				for (LoaiBan_DTO lb : comBoxLoaiBan.getItems()) {
 					if (maLoai.equals(lb.getMaLoaiBan())) {
 						tenLoai = lb.getTenLoaiBan();
 						break;
@@ -203,7 +204,7 @@ public class QuanLyBan_Controller {
 			filteredList.setPredicate(b -> {
 				String tenLoai = "";
 				if (b.getMaLoaiBan() != null) {
-					for (LoaiBan lb : comBoxLoaiBan.getItems()) {
+					for (LoaiBan_DTO lb : comBoxLoaiBan.getItems()) {
 						if (b.getMaLoaiBan().equals(lb.getMaLoaiBan())) {
 							tenLoai = lb.getTenLoaiBan();
 							break;
@@ -331,7 +332,7 @@ public class QuanLyBan_Controller {
 		txtViTri.setText(b.getViTri());
 
 		if (b.getMaLoaiBan() != null) {
-			for (LoaiBan lb : comBoxLoaiBan.getItems()) {
+			for (LoaiBan_DTO lb : comBoxLoaiBan.getItems()) {
 				if (b.getMaLoaiBan().equals(lb.getMaLoaiBan())) {
 					comBoxLoaiBan.setValue(lb);
 					break;

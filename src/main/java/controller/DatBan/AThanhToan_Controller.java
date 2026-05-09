@@ -28,6 +28,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import controller.Menu.MenuNV_Controller;
 import dto.*;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -51,14 +55,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import service.ChiTietHoaDon_Service;
-import service.HoaDon_Service;
-import service.KhachHang_Service;
-import service.KhuyenMai_Service;
-import service.impl.ChiTietHoaDon_ServiceImpl;
-import service.impl.HoaDon_ServiceImpl;
-import service.impl.KhachHang_ServiceImpl;
-import service.impl.KhuyenMai_ServiceImpl;
 
 public class AThanhToan_Controller {
 
@@ -125,11 +121,7 @@ public class AThanhToan_Controller {
     @FXML
     private Label lblSauGiam;
 
-    // --- SERVICE ---
-    private HoaDon_Service hoaDonService = new HoaDon_ServiceImpl();
-    private ChiTietHoaDon_Service chiTietHoaDonService = new ChiTietHoaDon_ServiceImpl();
-    private KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
-    private KhuyenMai_Service khuyenMaiService = new KhuyenMai_ServiceImpl();
+    private Client client;
 
     // --- Danh sách và trạng thái ---
     private List<HoaDon_DTO> dsHoaDon = new ArrayList<>();
@@ -152,8 +144,25 @@ public class AThanhToan_Controller {
     @FXML
     public void initialize() {
         aTT = this;
+        try {
+            client = new Client();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String maHD = MenuNV_Controller.aBanHienTai_HD.getMaHD();
-        dsCTHD_DB = chiTietHoaDonService.getChiTietTheoMaHoaDon(maHD);
+        try {
+            Response rCt = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, maHD));
+            if (rCt != null && rCt.isSuccess() && rCt.getData() != null) {
+                @SuppressWarnings("unchecked")
+                List<ChiTietHoaDon_DTO> list = (List<ChiTietHoaDon_DTO>) rCt.getData();
+                dsCTHD_DB = list;
+            } else {
+                dsCTHD_DB = new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            dsCTHD_DB = new ArrayList<>();
+        }
 
         dsMonAn = new HashMap<>();
         for (ChiTietHoaDon_DTO cthd : dsCTHD_DB) {
@@ -165,11 +174,20 @@ public class AThanhToan_Controller {
         setValueTbl();
         loadData(dsCTHD_DB);
 
-        dsHoaDon = hoaDonService.getDanhSach("HoaDon.list");
-        for (HoaDon_DTO hd : dsHoaDon) {
-            if (hd.getMaHD().equals(maHD)) {
-                hoaDonHienTai = hd;
+        try {
+            Response rAll = client.send(new Request(CommandType.HOADON_GET_ALL, null));
+            if (rAll != null && rAll.isSuccess() && rAll.getData() != null) {
+                @SuppressWarnings("unchecked")
+                List<HoaDon_DTO> all = (List<HoaDon_DTO>) rAll.getData();
+                dsHoaDon = all;
+                for (HoaDon_DTO hd : dsHoaDon) {
+                    if (hd.getMaHD().equals(maHD)) {
+                        hoaDonHienTai = hd;
+                    }
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         txtSDT.setText(hoaDonHienTai.getKhachHang().getSdt());
@@ -205,7 +223,17 @@ public class AThanhToan_Controller {
     }
 
     private void loadCmbKM() {
-        List<KhuyenMai_DTO> dsKMFull = khuyenMaiService.getDanhSach("KhuyenMai.list");
+        List<KhuyenMai_DTO> dsKMFull = new ArrayList<>();
+        try {
+            Response rKm = client.send(new Request(CommandType.KHUYENMAI_GET_ALL, null));
+            if (rKm != null && rKm.isSuccess() && rKm.getData() != null) {
+                @SuppressWarnings("unchecked")
+                List<KhuyenMai_DTO> list = (List<KhuyenMai_DTO>) rKm.getData();
+                dsKMFull = list;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<KhuyenMai_DTO> dsKM = new ArrayList<KhuyenMai_DTO>();
         Date currentDate = new Date();
 
@@ -248,8 +276,18 @@ public class AThanhToan_Controller {
                     break;
 
                 case "Ưu đãi cho khách hàng Kim Cương":
-                    KhachHang_DTO kh = khachHangService.timTheoMa(hoaDonHienTai.getKhachHang().getMaKH());
+                    KhachHang_DTO kh = null;
+                    try {
+                        Response rKh = client.send(new Request(CommandType.KHACHHANG_GET_BY_MA,
+                                hoaDonHienTai.getKhachHang().getMaKH()));
+                        if (rKh != null && rKh.isSuccess() && rKh.getData() != null) {
+                            kh = (KhachHang_DTO) rKh.getData();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     if (kh != null && kh.getMaHangKhachHang() != null
+                            && kh.getTenHang() != null
                             && kh.getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
                         tienGiam = thanhTien * km.getPhanTramGiamGia() / 100.0;
                     }

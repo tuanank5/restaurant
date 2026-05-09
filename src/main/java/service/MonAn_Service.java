@@ -6,6 +6,8 @@ import dto.MonAn_DTO;
 
 public interface MonAn_Service {
 	// CRUD giống flow KhuyenMai
+	MonAn_DTO timTheoMa(String maMon);
+
 	List<MonAn_DTO> getAll();
 
 	boolean add(MonAn_DTO mon_DTO);

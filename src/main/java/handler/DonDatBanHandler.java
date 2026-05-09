@@ -4,6 +4,7 @@ import java.util.List;
 
 import dto.Ban_DTO;
 import dto.DonDatBan_DTO;
+import dto.KhachHang_DTO;
 import dto.LoaiBan_DTO;
 import network.common.CommandHandler;
 import network.common.CommandType;
@@ -356,6 +357,15 @@ public class DonDatBanHandler implements CommandHandler {
                                 ? "Cập nhật đơn đặt bàn thành công"
                                 : "Cập nhật đơn đặt bàn thất bại")
                         .build();
+            }
+
+            case DONDATBAN_GET_KH_BY_MADATBAN -> {
+
+                String maDatBan = (String) request.getData();
+
+                KhachHang_DTO kh = donDatBanService.getKhachHangTheoMaDatBan(maDatBan);
+
+                return new Response(true, kh, "OK");
             }
         }
 

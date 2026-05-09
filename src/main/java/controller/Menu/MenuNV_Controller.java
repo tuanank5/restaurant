@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
 import dto.KhachHang_DTO;
 import dto.TaiKhoan_DTO;
 import entity.Ban;
 import entity.DonDatBan;
-import entity.HoaDon;
 import entity.KhachHang;
 import entity.MonAn;
 import entity.TaiKhoan;
@@ -42,7 +43,7 @@ import network.common.Response;
 
 public class MenuNV_Controller {
 
-	public static HoaDon aBanHienTai_HD;
+	public static HoaDon_DTO aBanHienTai_HD;
 
 	public static int getSoLuongKhach() {
 		return soLuongKhach;
@@ -60,7 +61,7 @@ public class MenuNV_Controller {
 	public static Ban banDangChon;
 	public static DonDatBan DonDatBan;
 	public static KhachHang khachHangDangChon;
-	public static DonDatBan donDatBanDangDoi;
+	public static DonDatBan_DTO donDatBanDangDoi;
 	public static ObservableList<Ban> danhSachBan = FXCollections.observableArrayList();
 
 	// Lưu món ăn tạm theo từng bàn

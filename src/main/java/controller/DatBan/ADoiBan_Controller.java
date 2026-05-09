@@ -107,10 +107,7 @@ public class ADoiBan_Controller implements Initializable {
 
 	private void thucHienDoiBan(int soLuongMoi) {
 		// 1. Kiểm tra đơn đặt bàn
-		DonDatBan_DTO don = util.MapperUtil.map(
-				MenuNV_Controller.donDatBanDangDoi,
-				DonDatBan_DTO.class
-		);
+		DonDatBan_DTO don = MenuNV_Controller.donDatBanDangDoi;
 		if (don == null) {
 			showAlert(Alert.AlertType.ERROR, "Không tìm thấy đơn đặt bàn cần đổi!");
 			return;

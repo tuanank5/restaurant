@@ -1,6 +1,7 @@
 package handler;
 
 import java.util.List;
+import java.util.Map;
 
 import dto.ChiTietHoaDon_DTO;
 import network.common.CommandHandler;
@@ -53,6 +54,18 @@ public class ChiTietHoaDonHandler implements CommandHandler {
                     return Response.builder()
                             .success(true)
                             .message("Xóa chi tiết hóa đơn thành công")
+                            .build();
+                }
+
+                case CTHD_REPLACE_BY_MAHD: {
+                    Map<String, Object> map = (Map<String, Object>) request.getData();
+                    String maHD = (String) map.get("maHD");
+                    @SuppressWarnings("unchecked")
+                    List<ChiTietHoaDon_DTO> items = (List<ChiTietHoaDon_DTO>) map.get("items");
+                    chiTietHoaDonService.replaceByMaHoaDon(maHD, items);
+                    return Response.builder()
+                            .success(true)
+                            .message("OK")
                             .build();
                 }
 

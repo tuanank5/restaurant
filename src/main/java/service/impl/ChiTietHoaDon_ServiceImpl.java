@@ -74,4 +74,18 @@ public class ChiTietHoaDon_ServiceImpl implements ChiTietHoaDon_Service {
 		chiTietHoaDon_DAO.deleteByMaHoaDon(maHD);
 	}
 
+	@Override
+	public boolean replaceByMaHoaDon(String maHD, List<ChiTietHoaDon_DTO> items) {
+		if (maHD == null || maHD.trim().isEmpty()) {
+			throw new IllegalArgumentException("maHD không được rỗng");
+		}
+		deleteByMaHoaDon(maHD);
+		if (items != null) {
+			for (ChiTietHoaDon_DTO ct : items) {
+				themChiTiet(ct);
+			}
+		}
+		return true;
+	}
+
 }

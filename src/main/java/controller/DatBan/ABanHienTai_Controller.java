@@ -10,21 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.Ban_DAO;
-import dao.ChiTietHoaDon_DAO;
-import dao.DonDatBan_DAO;
-import dao.HoaDon_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.KhachHang;
+import dto.Ban_DTO;
+import dto.ChiTietHoaDon_DTO;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import dto.KhachHang_DTO;
 import entity.MonAn;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,6 +31,10 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class ABanHienTai_Controller {
 
@@ -91,20 +86,15 @@ public class ABanHienTai_Controller {
     @FXML
     private TextField txtTongDatBan;
 
-    // --- DAO ---
-    private Ban_DAO banDAO = new Ban_DAOImpl();
-    private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-    private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
-    private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
+    private Client client;
 
-    // --- Danh sách và trạng thái ---
-    private List<HoaDon> dsHoaDon = new ArrayList<>();
-    private List<Ban> dsBan = new ArrayList<Ban>();
+    private List<HoaDon_DTO> dsHoaDon = new ArrayList<>();
+    private List<Ban_DTO> dsBan = new ArrayList<>();
     private int tongDatBan;
 
     public static ABanHienTai_Controller aBHT;
     boolean checkTTbangKo;
-    private List<ChiTietHoaDon> dsCTHD_DB;
+    private List<ChiTietHoaDon_DTO> dsCTHD_DB;
 
     Map<MonAn, Integer> dsMonAnTA = new HashMap<>();
 
@@ -128,8 +118,12 @@ public class ABanHienTai_Controller {
     public void initialize() {
         aBHT = this;
         checkTTbangKo = false;
-        dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
-        dsBan = banDAO.getDanhSach("Ban.list", Ban.class);
+        try {
+            client = new Client();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        taiLaiDuLieuTuServer();
         capNhatTrangThaiBanMacDinh();
         capNhatTrangThaiBanTheoDonDatTruoc();
         khoiTaoComboBoxes();
@@ -145,11 +139,40 @@ public class ABanHienTai_Controller {
         btnDatBan.setTooltip(toolTipDB);
     }
 
+    private void taiLaiDuLieuTuServer() {
+        try {
+            Response rHd = client.send(new Request(CommandType.HOADON_GET_ALL, null));
+            if (rHd != null && rHd.isSuccess() && rHd.getData() != null) {
+                @SuppressWarnings("unchecked")
+                List<HoaDon_DTO> listHd = (List<HoaDon_DTO>) rHd.getData();
+                dsHoaDon = listHd;
+            } else {
+                dsHoaDon = new ArrayList<>();
+            }
+            Response rBan = client.send(new Request(CommandType.BAN_GET_ALL, null));
+            if (rBan != null && rBan.isSuccess() && rBan.getData() != null) {
+                @SuppressWarnings("unchecked")
+                List<Ban_DTO> listBan = (List<Ban_DTO>) rBan.getData();
+                dsBan = listBan;
+            } else {
+                dsBan = new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            dsHoaDon = new ArrayList<>();
+            dsBan = new ArrayList<>();
+        }
+    }
+
     private void capNhatTrangThaiBanMacDinh() {
-        for (Ban ban : dsBan) {
+        for (Ban_DTO ban : dsBan) {
             if (!ban.getTrangThai().equals("Trống")) {
                 ban.setTrangThai("Trống");
-                RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+                try {
+                    client.send(new Request(CommandType.BAN_UPDATE, ban));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -158,10 +181,11 @@ public class ABanHienTai_Controller {
     private void capNhatTrangThaiBanTheoDonDatTruoc() {
         LocalDate nowDate = LocalDate.now();
         LocalTime nowHour = LocalTime.now();
-        List<DonDatBan> dsDDBnow = new ArrayList<DonDatBan>();
+        List<DonDatBan_DTO> dsDDBnow = new ArrayList<>();
 
-        for (HoaDon hd : dsHoaDon) {
-            if (hd.getTrangThai().equals("Đặt trước")) {
+        for (HoaDon_DTO hd : dsHoaDon) {
+            if (hd.getTrangThai().equals("Đặt trước") && hd.getDonDatBan() != null
+                    && hd.getDonDatBan().getNgayGioLapDon() != null) {
                 LocalDate ngayGioLapDon = hd.getDonDatBan().getNgayGioLapDon().toLocalDate();
                 if (ngayGioLapDon.equals(nowDate)) {
                     if (nowHour.isAfter(hd.getDonDatBan().getGioBatDau().minusHours(1))
@@ -172,11 +196,15 @@ public class ABanHienTai_Controller {
             }
         }
 
-        for (DonDatBan ddb : dsDDBnow) {
-            for (Ban ban : dsBan) {
-                if (ban.getMaBan().equals(ddb.getBan().getMaBan())) {
+        for (DonDatBan_DTO ddb : dsDDBnow) {
+            for (Ban_DTO ban : dsBan) {
+                if (ddb.getBan() != null && ban.getMaBan().equals(ddb.getBan().getMaBan())) {
                     ban.setTrangThai("Đã được đặt");
-                    RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+                    try {
+                        client.send(new Request(CommandType.BAN_UPDATE, ban));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -185,9 +213,9 @@ public class ABanHienTai_Controller {
     private void khoiTaoComboBoxes() {
         cmbLoaiBan.getItems().clear();
         cmbLoaiBan.getItems().add("Tất cả");
-        for (Ban ban : dsBan) {
-            String tenLoai = ban.getLoaiBan().getTenLoaiBan();
-            if (!cmbLoaiBan.getItems().contains(tenLoai)) {
+        for (Ban_DTO ban : dsBan) {
+            String tenLoai = ban.getTenLoaiBan();
+            if (tenLoai != null && !cmbLoaiBan.getItems().contains(tenLoai)) {
                 cmbLoaiBan.getItems().add(tenLoai);
             }
         }
@@ -197,6 +225,7 @@ public class ABanHienTai_Controller {
     private void loadDanhSachHoaDon() {
         tongDatBan = 0;
         gridPaneHD.getChildren().clear();
+        taiLaiDuLieuTuServer();
 
         int col = 0, row = 0;
         final int MAX_COLS = 9;
@@ -205,32 +234,35 @@ public class ABanHienTai_Controller {
         LocalDate localDate = LocalDate.now();
         Date dateNow = Date.valueOf(localDate);
 
-        for (final HoaDon hoaDon : dsHoaDon) {
+        for (final HoaDon_DTO hoaDon : dsHoaDon) {
             boolean matchType = "Tất cả".equals(loaiBanLoc)
-                    || loaiBanLoc.equals(hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan());
+                    || (hoaDon.getDonDatBan() != null && hoaDon.getDonDatBan().getBan() != null
+                            && loaiBanLoc.equals(hoaDon.getDonDatBan().getBan().getTenLoaiBan()));
 
             if (matchType && hoaDon.getNgayLap().equals(dateNow) && hoaDon.getKieuThanhToan().equals("Chưa thanh toán")
+                    && hoaDon.getDonDatBan() != null
                     && hoaDon.getDonDatBan().getTrangThai().equals("Đã nhận bàn")) {
 
                 BorderPane borderPane = new BorderPane();
 
-                // North
                 BorderPane paneNorth = new BorderPane();
                 borderPane.setTop(paneNorth);
                 paneNorth.setCenter(new Label("Hóa đơn"));
                 paneNorth.setStyle(
                         "-fx-padding: 10; -fx-background-color: lightblue; -fx-font-size: 20px; -fx-font-weight: bold;");
 
-                // West
                 BorderPane paneWest = new BorderPane();
                 borderPane.setLeft(paneWest);
-                paneWest.setStyle(getBorderStyle()); // Thêm viền cho paneWest
+                paneWest.setStyle(getBorderStyle());
 
                 BorderPane paneBan = new BorderPane();
                 paneWest.setTop(paneBan);
-                paneBan.setCenter(new Label(hoaDon.getDonDatBan().getBan().getMaBan() + "\n"
-                        + hoaDon.getDonDatBan().getBan().getLoaiBan().getTenLoaiBan()));
-                paneBan.setStyle(getBorderStyle()); // Thêm viền cho paneBan
+                String maBanTxt = hoaDon.getDonDatBan().getBan() != null ? hoaDon.getDonDatBan().getBan().getMaBan() : "";
+                String tenLoaiTxt = hoaDon.getDonDatBan().getBan() != null
+                        ? hoaDon.getDonDatBan().getBan().getTenLoaiBan()
+                        : "";
+                paneBan.setCenter(new Label(maBanTxt + "\n" + tenLoaiTxt));
+                paneBan.setStyle(getBorderStyle());
 
                 Button btnThanhToan = taoButtonIcon("TT", "/img/pay.png");
                 paneWest.setLeft(btnThanhToan);
@@ -251,10 +283,23 @@ public class ABanHienTai_Controller {
                             checkTTbangKo = true;
                             MenuNV_Controller.aBanHienTai_HD = hoaDon;
                             MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
-                            dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(hoaDon.getMaHD());
+                            try {
+                                Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, hoaDon.getMaHD()));
+                                if (res != null && res.isSuccess() && res.getData() != null) {
+                                    @SuppressWarnings("unchecked")
+                                    List<ChiTietHoaDon_DTO> dsCT = (List<ChiTietHoaDon_DTO>) res.getData();
+                                    dsCTHD_DB = dsCT;
+                                } else {
+                                    dsCTHD_DB = new ArrayList<>();
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                dsCTHD_DB = new ArrayList<>();
+                            }
                             dsMonAnTA.clear();
-                            for (ChiTietHoaDon cthd : dsCTHD_DB) {
-                                dsMonAnTA.put(cthd.getMonAn(), cthd.getSoLuong());
+                            for (ChiTietHoaDon_DTO cthd : dsCTHD_DB) {
+                                MonAn mon = new MonAn(cthd.getMaMonAn(), cthd.getTenMon(), cthd.getDonGia(), null, null);
+                                dsMonAnTA.put(mon, cthd.getSoLuong());
                             }
                         }
                     }
@@ -264,15 +309,15 @@ public class ABanHienTai_Controller {
                 paneWest.setRight(btnBan);
                 BorderPane.setMargin(btnBan, new Insets(5, 10, 5, 10));
                 btnBan.setOnMouseClicked(event -> {
-//                	MenuNV_Controller.aBanHienTai_HD = hoaDon;
-                    MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
+                    if (hoaDon.getDonDatBan() != null) {
+                        MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
+                    }
                     MenuNV_Controller.instance.readyUI("DatBan/aDoiBan");
                 });
 
-                // East
                 BorderPane paneEast = new BorderPane();
                 borderPane.setRight(paneEast);
-                paneEast.setStyle(getBorderStyle()); // Thêm viền cho paneEast
+                paneEast.setStyle(getBorderStyle());
 
                 BorderPane paneTien = new BorderPane();
                 paneEast.setTop(paneTien);
@@ -286,7 +331,9 @@ public class ABanHienTai_Controller {
                 BorderPane.setMargin(btnMonAn, new Insets(5, 10, 5, 10));
                 btnMonAn.setOnMouseClicked(event -> {
                     MenuNV_Controller.aBanHienTai_HD = hoaDon;
-                    MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
+                    if (hoaDon.getDonDatBan() != null) {
+                        MenuNV_Controller.donDatBanDangDoi = hoaDon.getDonDatBan();
+                    }
                     MenuNV_Controller.instance.readyUI("DatBan/aDoiMon");
                 });
 
@@ -304,24 +351,38 @@ public class ABanHienTai_Controller {
                     if (rs.isEmpty() || rs.get() != ButtonType.OK)
                         return;
                     try {
-                        DonDatBan ddb = hoaDon.getDonDatBan();
+                        DonDatBan_DTO ddb = hoaDon.getDonDatBan();
+                        if (ddb == null)
+                            return;
                         ddb.setTrangThai("Đã hủy");
-                        donDatBanDao.capNhat(ddb);
-
-                        if (hoaDon != null) {
-                            hoaDon.setTrangThai("Đã hủy");
-                            RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
-                                    .capNhat(hoaDon);
+                        Response r1 = client.send(new Request(CommandType.DONDATBAN_UPDATE, ddb));
+                        if (r1 == null || !r1.isSuccess()) {
+                            showAlert(Alert.AlertType.ERROR, "Không thể hủy đơn đặt bàn!");
+                            return;
                         }
 
-                        Ban ban = ddb.getBan();
+                        hoaDon.setTrangThai("Đã hủy");
+                        Response r2 = client.send(new Request(CommandType.HOADON_UPDATE, hoaDon));
+                        if (r2 == null || !r2.isSuccess()) {
+                            showAlert(Alert.AlertType.ERROR, "Không thể cập nhật hóa đơn!");
+                            return;
+                        }
+
+                        Ban_DTO ban = ddb.getBan();
                         if (ban != null) {
                             ban.setTrangThai("Trống");
-                            RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class)
-                                    .capNhat(ban);
+                            Response r3 = client.send(new Request(CommandType.BAN_UPDATE, ban));
+                            if (r3 == null || !r3.isSuccess()) {
+                                showAlert(Alert.AlertType.ERROR, "Không thể cập nhật trạng thái bàn!");
+                                return;
+                            }
                         }
 
-                        KhachHang kh = donDatBanDao.getKhachHangTheoMaDatBan(ddb.getMaDatBan());
+                        Response rKh = client.send(new Request(CommandType.DONDATBAN_GET_KH_BY_MADATBAN, ddb.getMaDatBan()));
+                        KhachHang_DTO kh = null;
+                        if (rKh != null && rKh.isSuccess()) {
+                            kh = (KhachHang_DTO) rKh.getData();
+                        }
 
                         showAlert(Alert.AlertType.INFORMATION,
                                 "Đã hủy đơn đặt bàn của khách " + (kh != null ? kh.getTenKH() : "") + " theo yêu cầu.");
@@ -348,11 +409,19 @@ public class ABanHienTai_Controller {
         txtTongDatBan.setText(tongDatBan + "");
     }
 
-    private void capNhatTrangThaiBanTheoHD(HoaDon hd) {
-        for (Ban ban : dsBan) {
-            if (hd.getDonDatBan().getBan().equals(ban)) {
+    private void capNhatTrangThaiBanTheoHD(HoaDon_DTO hd) {
+        if (hd.getDonDatBan() == null || hd.getDonDatBan().getBan() == null) {
+            return;
+        }
+        String maBanHd = hd.getDonDatBan().getBan().getMaBan();
+        for (Ban_DTO ban : dsBan) {
+            if (maBanHd != null && maBanHd.equals(ban.getMaBan())) {
                 ban.setTrangThai("Đang phục vụ");
-                RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+                try {
+                    client.send(new Request(CommandType.BAN_UPDATE, ban));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -375,15 +444,23 @@ public class ABanHienTai_Controller {
                 + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);";
     }
 
-    private double tinhTongTienMon(HoaDon hoaDon) {
-        List<ChiTietHoaDon> dsCT = RestaurantApplication.getInstance().getDatabaseContext()
-                .newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDon.getMaHD());
-
-        double tong = 0;
-        for (ChiTietHoaDon ct : dsCT) {
-            tong += ct.getSoLuong() * ct.getMonAn().getDonGia();
+    private double tinhTongTienMon(HoaDon_DTO hoaDon) {
+        try {
+            Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, hoaDon.getMaHD()));
+            if (res == null || !res.isSuccess() || res.getData() == null) {
+                return 0;
+            }
+            @SuppressWarnings("unchecked")
+            List<ChiTietHoaDon_DTO> dsCT = (List<ChiTietHoaDon_DTO>) res.getData();
+            double tong = 0;
+            for (ChiTietHoaDon_DTO ct : dsCT) {
+                tong += ct.getSoLuong() * ct.getDonGia();
+            }
+            return tong;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
-        return tong;
     }
 
     private Button taoButtonIcon(String text, String iconPath) {
@@ -398,7 +475,6 @@ public class ABanHienTai_Controller {
             icon.setFitHeight(30);
             btn.setGraphic(icon);
         } else {
-            // Fallback để tránh crash FXML khi thiếu file icon trong resources.
             btn.setText(text);
             btn.setContentDisplay(javafx.scene.control.ContentDisplay.TEXT_ONLY);
         }

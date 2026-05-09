@@ -1,9 +1,8 @@
 package service;
 
 import java.util.List;
-import dto.KhuyenMai_DTO;
 
-import java.util.List;
+import dto.KhuyenMai_DTO;
 
 public interface KhuyenMai_Service {
 	String getMaxMaKM();

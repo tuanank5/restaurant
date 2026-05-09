@@ -9,9 +9,6 @@ import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class RequestDispatcher {
 
     private Map<String, CommandHandler> handlerMap = new HashMap<>();
@@ -27,6 +24,7 @@ public class RequestDispatcher {
         handlerMap.put("CTHD", new ChiTietHoaDonHandler());
         handlerMap.put("BAN", new BanHandler());
         handlerMap.put("LOAIBAN", new LoaiBanHandler());
+        handlerMap.put("KHUYENMAI", new KhuyenMaiHandler());
     }
 
     public Response dispatch(Request request) {

@@ -43,6 +43,33 @@ public class BanHandler implements CommandHandler {
                             .build();
                 }
 
+                case BAN_ADD: {
+                    Ban_DTO ban = (Ban_DTO) request.getData();
+                    boolean result = banService.them(ban);
+                    return Response.builder()
+                            .success(result)
+                            .message(result ? "Thêm bàn thành công" : "Thêm bàn thất bại")
+                            .build();
+                }
+
+                case BAN_DELETE: {
+                    String maBan = (String) request.getData();
+                    boolean result = banService.xoaTheoMa(maBan);
+                    return Response.builder()
+                            .success(result)
+                            .message(result ? "Xóa bàn thành công" : "Xóa bàn thất bại")
+                            .build();
+                }
+
+                case BAN_GENERATE_ID: {
+                    String next = banService.sinhMaBanTiepTheo();
+                    return Response.builder()
+                            .success(true)
+                            .data(next)
+                            .message("OK")
+                            .build();
+                }
+
                 default:
                     return Response.builder()
                             .success(false)

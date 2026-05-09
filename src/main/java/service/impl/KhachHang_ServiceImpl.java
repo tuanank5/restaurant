@@ -24,6 +24,9 @@ public class KhachHang_ServiceImpl implements KhachHang_Service {
 			throw new IllegalArgumentException("sdt không được rỗng");
 		}
 		KhachHang khachHang = khachHang_DAO.timTheoSDT(sdt);
+		if (khachHang == null) {
+			return null;
+		}
 		return MapperUtil.map(khachHang, KhachHang_DTO.class);
 	}
 
@@ -33,6 +36,9 @@ public class KhachHang_ServiceImpl implements KhachHang_Service {
 			throw new IllegalArgumentException("maKH không được rỗng");
 		}
 		KhachHang khachHang = khachHang_DAO.timTheoMa(maKH);
+		if (khachHang == null) {
+			return null;
+		}
 		return MapperUtil.map(khachHang, KhachHang_DTO.class);
 	}
 

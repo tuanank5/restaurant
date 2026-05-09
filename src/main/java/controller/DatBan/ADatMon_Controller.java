@@ -297,8 +297,7 @@ public class ADatMon_Controller implements Initializable {
         } else {
             if (checkTTbangKo == true) {
                 showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
-                HoaDon_DTO hoaDonTam = MenuNV_Controller.aBanHienTai_HD == null ? null
-                        : util.MapperUtil.map(MenuNV_Controller.aBanHienTai_HD, HoaDon_DTO.class);
+                HoaDon_DTO hoaDonTam = MenuNV_Controller.aBanHienTai_HD;
                 themChiTietHoaDon(hoaDonTam, dsMonAnDat);
                 MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
             } else {

@@ -20,15 +20,10 @@ import dto.MonAn_DTO;
 
 import controller.DatBan.DatBanTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
-import dao.DonDatBan_DAO;
-import dao.KhachHang_DAO;
-import dao.MonAn_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.MonAn_DAOImpl;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 //import entity.Ban;
 //import entity.ChiTietHoaDon;
 //import entity.DonDatBan;
@@ -58,10 +53,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import service.DonDatBan_Service;
-import service.KhachHang_Service;
-import service.MonAn_Service;
-import service.impl.*;
 import util.AlertUtil;
 
 public class DatMonTruoc_Controller implements Initializable {
@@ -117,9 +108,7 @@ public class DatMonTruoc_Controller implements Initializable {
     public static List<Ban_DTO> danhSachBanChonStatic = new ArrayList<>();
 
     public static int soLuongKHStatic;
-    private KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
-    private DonDatBan_Service donDatBanService = new DonDatBan_ServiceImpl();
-    private MonAn_Service monAnService = new MonAn_ServiceImpl();
+    private Client client;
     //	private List<MonAn> dsMonAn;
 //	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
     private List<MonAn_DTO> dsMonAn;
@@ -127,6 +116,11 @@ public class DatMonTruoc_Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            client = new Client();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (danhSachBanChonStatic != null && !danhSachBanChonStatic.isEmpty()) {
             System.out.println("Số bàn được chọn: " + danhSachBanChonStatic.size());
 
@@ -135,8 +129,7 @@ public class DatMonTruoc_Controller implements Initializable {
                 System.out.println("Bàn: " + b.getMaBan());
             }
         }
-        // Lấy danh sách món ăn từ database
-        dsMonAn = monAnService.getDanhSachMonAn();
+        dsMonAn = taiDanhSachMonAnTuServer();
         // Khởi tạo ComboBox phân loại dựa trên dsMonAn
         khoiTaoComboBoxPhanLoai();
         // Hiển thị món ăn lên GridPane
@@ -180,6 +173,20 @@ public class DatMonTruoc_Controller implements Initializable {
             txtSoLuongKH.setText(String.valueOf(soLuongKHStatic));
         }
         btnTroLai.setOnAction(event -> onTroLai(event));
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<MonAn_DTO> taiDanhSachMonAnTuServer() {
+        List<MonAn_DTO> list = new ArrayList<>();
+        try {
+            Response res = client.send(new Request(CommandType.MONAN_GET_ALL, null));
+            if (res != null && res.isSuccess() && res.getData() != null) {
+                list = (List<MonAn_DTO>) res.getData();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     private void timMonTheoTen() {
@@ -375,12 +382,13 @@ public class DatMonTruoc_Controller implements Initializable {
             soLuongKH = 1;
         }
 
-        HoaDon_ServiceImpl hoaDonService = new HoaDon_ServiceImpl();
-        ChiTietHoaDon_ServiceImpl chiTietHoaDonService = new ChiTietHoaDon_ServiceImpl();
         try {
             KhachHang_DTO kh = null;
             try {
-                kh = khachHangService.timTheoSDT(sdt);
+                Response rKh = client.send(new Request(CommandType.KHACHHANG_GET_BY_SDT, sdt));
+                if (rKh != null && rKh.isSuccess() && rKh.getData() != null) {
+                    kh = (KhachHang_DTO) rKh.getData();
+                }
             } catch (Exception ex) {
                 kh = null;
             }
@@ -413,7 +421,8 @@ public class DatMonTruoc_Controller implements Initializable {
                     ex.printStackTrace();
                 }
                 ddb.setTrangThai("Chưa nhận bàn");
-                boolean okDDB = donDatBanService.them(ddb);
+                Response rDdb = client.send(new Request(CommandType.DONDATBAN_ADD, ddb));
+                boolean okDDB = rDdb != null && rDdb.isSuccess();
                 if (!okDDB) {
                     AlertUtil.showAlert("Thông báo", "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan(),
                             Alert.AlertType.ERROR);
@@ -424,7 +433,7 @@ public class DatMonTruoc_Controller implements Initializable {
 
             for (Ban_DTO ban : danhSachBanChonStatic) {
                 ban.setTrangThai("Đã được đặt");
-                new Ban_ServiceImpl().sua(ban);
+                client.send(new Request(CommandType.BAN_UPDATE, ban));
             }
 
             double tongTien = 0.0;
@@ -445,12 +454,14 @@ public class DatMonTruoc_Controller implements Initializable {
             hd.setMaKhuyenMai(null);
             hd.setMaNhanVien(MenuNV_Controller.taiKhoan.getMaNhanVien());
             hd.setMaDonDatBan(donDau.getMaDatBan());
-            boolean okHD = hoaDonService.themHoaDon(hd);
+            Response rHd = client.send(new Request(CommandType.HOADON_ADD, hd));
+            boolean okHD = rHd != null && rHd.isSuccess();
             if (!okHD) {
                 AlertUtil.showAlert("Thông báo", "Không thể lưu hóa đơn.", Alert.AlertType.ERROR);
                 return;
             }
 
+            List<ChiTietHoaDon_DTO> batchCt = new ArrayList<>();
             for (Map.Entry<MonAn_DTO, Integer> e : dsMonAnDat.entrySet()) {
                 MonAn_DTO m = e.getKey();
                 int sl = e.getValue();
@@ -459,12 +470,12 @@ public class DatMonTruoc_Controller implements Initializable {
                 cthd.setMaMonAn(m.getMaMon());
                 cthd.setSoLuong(sl);
                 cthd.setThanhTien(m.getDonGia() * sl);
-                boolean okCT = chiTietHoaDonService.themChiTiet(cthd);
-                if (!okCT) {
-                    AlertUtil.showAlert("Thông báo", "Lỗi khi lưu chi tiết hoá đơn cho món " + m.getTenMon(),
-                            Alert.AlertType.ERROR);
-                    return;
-                }
+                batchCt.add(cthd);
+            }
+            Response rCt = client.send(new Request(CommandType.CTHD_ADD_BATCH, batchCt));
+            if (rCt == null || !rCt.isSuccess()) {
+                AlertUtil.showAlert("Thông báo", "Lỗi khi lưu chi tiết hoá đơn.", Alert.AlertType.ERROR);
+                return;
             }
 
             AlertUtil.showAlert("Thông báo", "Đặt món thành công. Hóa đơn được lưu ở trạng thái 'Chưa Thanh Toán'.",
@@ -488,7 +499,11 @@ public class DatMonTruoc_Controller implements Initializable {
             return;
         }
         try {
-            KhachHang_DTO kh = khachHangService.timTheoSDT(sdt.trim());
+            Response rKh = client.send(new Request(CommandType.KHACHHANG_GET_BY_SDT, sdt.trim()));
+            KhachHang_DTO kh = null;
+            if (rKh != null && rKh.isSuccess() && rKh.getData() != null) {
+                kh = (KhachHang_DTO) rKh.getData();
+            }
             if (kh != null) {
                 txtKH.setText(kh.getTenKH());
             } else {

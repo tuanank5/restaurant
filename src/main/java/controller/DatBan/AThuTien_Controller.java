@@ -22,7 +22,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 //import entity.HoaDon;
 //import entity.KhachHang;
@@ -38,10 +37,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import service.HoaDon_Service;
-import service.KhachHang_Service;
-import service.impl.HoaDon_ServiceImpl;
-import service.impl.KhachHang_ServiceImpl;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class AThuTien_Controller {
 
@@ -107,8 +106,7 @@ public class AThuTien_Controller {
     private Map<ChiTietHoaDon_DTO, Integer> dsMonAn = AThanhToan_Controller.aTT.dsMonAn;
     private KhuyenMai_DTO kmDangChon = AThanhToan_Controller.aTT.kmDangChon;
     private double thueHD = AThanhToan_Controller.aTT.thueHD;
-    private KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
-    private HoaDon_Service hoaDonService = new HoaDon_ServiceImpl();
+    private Client client;
     private double tongThanhTienLamTron = Math.round(tongThanhTien / 1000.0) * 1000;
 
     private int tienKH = 0;
@@ -116,6 +114,11 @@ public class AThuTien_Controller {
 
     @FXML
     public void initialize() {
+        try {
+            client = new Client();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         lblTienCanThu.setText(formatTienVN(tongThanhTienLamTron));
         txtTienKH.setText(tienKH + "");
         txtTienKH.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -242,8 +245,13 @@ public class AThuTien_Controller {
                 hoaDonHienTai.setTienNhan((double) tienNhan);
                 hoaDonHienTai.setTienThua(tienTra);
                 hoaDonHienTai.setThue(thueHD);
-                boolean check = hoaDonService.capNhat(hoaDonHienTai);
-                // Kiểm tra kết quả thêm
+                boolean check = false;
+                try {
+                    Response rHd = client.send(new Request(CommandType.HOADON_UPDATE, hoaDonHienTai));
+                    check = rHd != null && rHd.isSuccess();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 if (check) {
                     capNhatDiemTichLuySauThanhToan();
                     xuatHD();
@@ -270,8 +278,13 @@ public class AThuTien_Controller {
             hoaDonHienTai.setTienNhan(tongThanhTienLamTron);
             hoaDonHienTai.setTienThua(0);
             hoaDonHienTai.setThue(thueHD);
-            boolean check = hoaDonService.capNhat(hoaDonHienTai);
-            // Kiểm tra kết quả thêm
+            boolean check = false;
+            try {
+                Response rHd = client.send(new Request(CommandType.HOADON_UPDATE, hoaDonHienTai));
+                check = rHd != null && rHd.isSuccess();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             if (check) {
                 capNhatDiemTichLuySauThanhToan();
                 xuatHDChuyenKhoan();
@@ -523,8 +536,11 @@ public class AThuTien_Controller {
 
         kh.setDiemTichLuy(diemMoi);
 
-        // cập nhật DB
-        khachHangService.capNhat(kh);
+        try {
+            client.send(new Request(CommandType.KHACHHANG_UPDATE, kh));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String content, Alert.AlertType alertType) {

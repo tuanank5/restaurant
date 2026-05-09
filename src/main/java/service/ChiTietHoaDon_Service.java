@@ -10,4 +10,6 @@ public interface ChiTietHoaDon_Service {
 	List<ChiTietHoaDon_DTO> getChiTietTheoMaHoaDon(String maHD);
 
 	void deleteByMaHoaDon(String maHD);
+
+	boolean replaceByMaHoaDon(String maHD, List<ChiTietHoaDon_DTO> items);
 }

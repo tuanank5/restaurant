@@ -304,9 +304,13 @@ public class HoaDonHandler implements CommandHandler {
 
             case HOADON_UPDATE -> {
 
+                HoaDon_DTO hd = (HoaDon_DTO) request.getData();
+
+                boolean result = hoaDonService.capNhat(hd);
+
                 return Response.builder()
-                        .success(false)
-                        .message("Service chưa hỗ trợ cập nhật hóa đơn")
+                        .success(result)
+                        .message(result ? "Cập nhật hóa đơn thành công" : "Cập nhật hóa đơn thất bại")
                         .build();
             }
         }

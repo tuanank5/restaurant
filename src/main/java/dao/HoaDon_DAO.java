@@ -52,6 +52,8 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 
     String getMaxMaHoaDon();
 
+    HoaDon timTheoMa(String maHD);
+
     HoaDon getHoaDonTheoMaDatBan(String maDatBan);
 
     public KhachHang getKhachHangTheoMaDatBan(String maDatBan);

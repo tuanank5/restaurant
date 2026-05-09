@@ -35,8 +35,10 @@ public class KhuyenMaiHandler implements CommandHandler {
                 boolean rs = service.delete((String) request.getData());
                 return new Response(rs, null, rs ? "Deleted" : "Failed");
             }
-        }
 
-        return new Response(false, null, "Invalid Command");
+            default -> {
+                return new Response(false, null, "Invalid Command");
+            }
+        }
     }
 }
