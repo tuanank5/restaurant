@@ -1,51 +1,144 @@
 package service.impl;
 
 import dao.KhuyenMai_DAO;
-import dao.impl.KhuyenMai_DAOImpl;
 import dto.KhuyenMai_DTO;
 import entity.KhuyenMai;
 import service.KhuyenMai_Service;
-import util.MapperUtil;
+import util.KhuyenMaiMapper;
+import config.RestaurantApplication;
+
+import java.time.LocalDate;
+import java.util.*;
 
 public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
 
-	private KhuyenMai_DAO khuyenMai_DAO;
+	private final KhuyenMai_DAO dao =
+			RestaurantApplication.getInstance()
+					.getDatabaseContext()
+					.newEntity_DAO(KhuyenMai_DAO.class);
 
-	public KhuyenMai_ServiceImpl() {
-		khuyenMai_DAO = new KhuyenMai_DAOImpl();
+	@Override
+	public List<KhuyenMai_DTO> getAll() {
+		List<KhuyenMai> list = dao.getDanhSach(KhuyenMai.class, new HashMap<>());
+		return list.stream().map(KhuyenMaiMapper::toDTO).toList();
+	}
+
+	// ================= ADD =================
+	@Override
+	public boolean add(KhuyenMai_DTO dto) {
+
+		KhuyenMai km = KhuyenMaiMapper.toEntity(dto);
+
+		// 🔥 AUTO ID
+		km.setMaKM(generateMaKM());
+
+		System.out.println("👉 AUTO ID: " + km.getMaKM());
+
+		if (!validateAdd(km)) return false;
+
+		return dao.them(km);
+	}
+
+	// ================= UPDATE =================
+	@Override
+	public boolean update(KhuyenMai_DTO dto) {
+
+		KhuyenMai km = KhuyenMaiMapper.toEntity(dto);
+
+		if (!validateUpdate(km)) return false;
+
+		return dao.sua(km);
 	}
 
 	@Override
-	public String getMaxMaKM() {
-		return khuyenMai_DAO.getMaxMaKM();
+	public boolean delete(String maKM) {
+		return dao.xoa(maKM);
 	}
 
-	@Override
-	public KhuyenMai_DTO timTheoMa(String maKM) {
-		if (maKM == null || maKM.trim().isEmpty()) {
-			throw new IllegalArgumentException("maKM không được rỗng");
+	// ================= AUTO ID =================
+	private String generateMaKM() {
+		String maxId = dao.getMaxMaKM();
+
+		if (maxId == null || maxId.isEmpty()) {
+			return "KM001";
 		}
-		KhuyenMai khuyenMai = khuyenMai_DAO.timTheoMa(maKM);
-		return MapperUtil.map(khuyenMai, KhuyenMai_DTO.class);
+
+		int num = Integer.parseInt(maxId.replace("KM", ""));
+		num++;
+
+		return String.format("KM%03d", num);
 	}
 
-	@Override
-	public boolean sua(KhuyenMai_DTO km_DTO) {
-		if (km_DTO == null) {
-			throw new IllegalArgumentException("km_DTO không được rỗng");
+	// ================= VALIDATE ADD =================
+	private boolean validateAdd(KhuyenMai km) {
+
+		LocalDate today = LocalDate.now();
+
+		if (km.getNgayBatDau().toLocalDate().isBefore(today)) {
+			System.out.println("❌ Ngày bắt đầu sai");
+			return false;
 		}
-		if (km_DTO.getMaKM() == null || km_DTO.getMaKM().trim().isEmpty()) {
-			throw new IllegalArgumentException("km_DTO.maKM không được rỗng");
+
+		if (!km.getNgayKetThuc().after(km.getNgayBatDau())) {
+			System.out.println("❌ Ngày kết thúc sai");
+			return false;
 		}
-		return khuyenMai_DAO.sua(MapperUtil.map(km_DTO, KhuyenMai.class));
+
+		return !isDuplicateAdd(km);
 	}
 
-	@Override
-	public boolean xoa(String maKM) {
-		if (maKM == null || maKM.trim().isEmpty()) {
-			throw new IllegalArgumentException("maKM không được rỗng");
+	// ================= VALIDATE UPDATE =================
+	private boolean validateUpdate(KhuyenMai km) {
+
+		if (!km.getNgayKetThuc().after(km.getNgayBatDau())) {
+			System.out.println("❌ Sai ngày update");
+			return false;
 		}
-		return khuyenMai_DAO.xoa(maKM);
+
+		return !isDuplicateUpdate(km);
 	}
 
+	// ================= DUPLICATE ADD =================
+	private boolean isDuplicateAdd(KhuyenMai newKM) {
+
+		List<KhuyenMai> ds = dao.getDanhSach(KhuyenMai.class, new HashMap<>());
+
+		for (KhuyenMai km : ds) {
+
+			boolean trung =
+					km.getTenKM().equalsIgnoreCase(newKM.getTenKM()) &&
+							km.getLoaiKM().equalsIgnoreCase(newKM.getLoaiKM());
+
+			boolean overlap =
+					!(newKM.getNgayKetThuc().before(km.getNgayBatDau()) ||
+							newKM.getNgayBatDau().after(km.getNgayKetThuc()));
+
+			if (trung && overlap) return true;
+		}
+
+		return false;
+	}
+
+	// ================= DUPLICATE UPDATE =================
+	private boolean isDuplicateUpdate(KhuyenMai newKM) {
+
+		List<KhuyenMai> ds = dao.getDanhSach(KhuyenMai.class, new HashMap<>());
+
+		for (KhuyenMai km : ds) {
+
+			if (km.getMaKM().equals(newKM.getMaKM())) continue;
+
+			boolean trung =
+					km.getTenKM().equalsIgnoreCase(newKM.getTenKM()) &&
+							km.getLoaiKM().equalsIgnoreCase(newKM.getLoaiKM());
+
+			boolean overlap =
+					!(newKM.getNgayKetThuc().before(km.getNgayBatDau()) ||
+							newKM.getNgayBatDau().after(km.getNgayKetThuc()));
+
+			if (trung && overlap) return true;
+		}
+
+		return false;
+	}
 }

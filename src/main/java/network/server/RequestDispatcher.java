@@ -2,12 +2,13 @@ package network.server;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import handler.KhuyenMaiHandler;
 import handler.TaiKhoanHandler;
 import network.common.CommandHandler;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
+
 
 public class RequestDispatcher {
 
@@ -15,6 +16,7 @@ public class RequestDispatcher {
 
     public RequestDispatcher() {
         handlerMap.put("TAIKHOAN", new TaiKhoanHandler());
+        handlerMap.put("KHUYENMAI", new KhuyenMaiHandler());
     }
 
     public Response dispatch(Request request) {
