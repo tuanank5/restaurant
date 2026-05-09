@@ -94,13 +94,14 @@ public class DoiMonTruoc_Controller implements Initializable {
 
 		colTenMonCu.setCellValueFactory(c -> {
 			ChiTietHoaDon_DTO ct = c.getValue();
-			return new ReadOnlyObjectWrapper<>(ct.getMaMonAn() == null ? "" : ct.getMaMonAn());
+			return new ReadOnlyObjectWrapper<>(ct.getTenMon() == null ? "" : ct.getTenMon());
 		});
 
 		colSoLuongCu.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getSoLuong()));
 
-		colDonGia.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(
-				timDonGia(c.getValue().getMaMonAn())));
+		colDonGia.setCellValueFactory(c ->
+				new ReadOnlyObjectWrapper<>(c.getValue().getDonGia())
+		);
 
 		colDonGia.setCellFactory(column -> new TableCell<>() {
 			@Override
@@ -172,8 +173,15 @@ public class DoiMonTruoc_Controller implements Initializable {
 	private void hienThiMonMoi() {
 		danhSachMon.clear();
 		for (Map.Entry<MonAn_DTO, Integer> e : dsMonAnDat.entrySet()) {
+			MonAn_DTO mon = e.getKey();
+			int soLuong = e.getValue();
 			ChiTietHoaDon_DTO ct = ChiTietHoaDon_DTO.builder()
-					.maMonAn(e.getKey() == null ? null : e.getKey().getMaMon()).soLuong(e.getValue()).build();
+					.maMonAn(mon != null ? mon.getMaMon() : null)
+					.tenMon(mon != null ? mon.getTenMon() : null)
+					.donGia(mon != null ? mon.getDonGia() : 0.0)
+					.soLuong(soLuong)
+					.thanhTien(mon != null ? mon.getDonGia() * soLuong : 0.0)
+					.build();
 			danhSachMon.add(ct);
 		}
 		tblMonCu.refresh();

@@ -26,14 +26,9 @@ public class ChiTietHoaDonHandler implements CommandHandler {
             CommandType type = request.getCommandType();
 
             switch (type) {
-
                 case CTHD_GET_BY_MAHD: {
-
                     String maHD = (String) request.getData();
-
-                    List<ChiTietHoaDon_DTO> ds =
-                            chiTietHoaDonService.getChiTietTheoMaHoaDon(maHD);
-
+                    List<ChiTietHoaDon_DTO> ds = chiTietHoaDonService.getChiTietTheoMaHoaDon(maHD);
                     return Response.builder()
                             .success(true)
                             .data(ds)
@@ -41,15 +36,11 @@ public class ChiTietHoaDonHandler implements CommandHandler {
                 }
 
                 case CTHD_ADD_BATCH: {
-
                     @SuppressWarnings("unchecked")
-                    List<ChiTietHoaDon_DTO> ds =
-                            (List<ChiTietHoaDon_DTO>) request.getData();
-
+                    List<ChiTietHoaDon_DTO> ds = (List<ChiTietHoaDon_DTO>) request.getData();
                     for (ChiTietHoaDon_DTO ct : ds) {
                         chiTietHoaDonService.themChiTiet(ct);
                     }
-
                     return Response.builder()
                             .success(true)
                             .message("Thêm chi tiết hóa đơn thành công")
@@ -57,11 +48,8 @@ public class ChiTietHoaDonHandler implements CommandHandler {
                 }
 
                 case CTHD_DELETE_BY_MAHD: {
-
                     String maHD = (String) request.getData();
-
                     chiTietHoaDonService.deleteByMaHoaDon(maHD);
-
                     return Response.builder()
                             .success(true)
                             .message("Xóa chi tiết hóa đơn thành công")
