@@ -23,5 +23,5 @@ public class Ban_DTO implements Serializable {
 
 	private String trangThai;
 	private String maLoaiBan;
-
+	private String tenLoaiBan;
 }

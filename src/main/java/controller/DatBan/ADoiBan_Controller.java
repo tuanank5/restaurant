@@ -218,7 +218,7 @@ public class ADoiBan_Controller implements Initializable {
 		cmbLoaiBan.getItems().add("Tất cả");
 		List<Ban_DTO> danhSachBanTemp = getAllBan();
 		for (Ban_DTO ban : danhSachBanTemp) {
-			String tenLoai = ban.getMaLoaiBan();
+			String tenLoai = ban.getTenLoaiBan();
 			if (!cmbLoaiBan.getItems().contains(tenLoai)) {
 				cmbLoaiBan.getItems().add(tenLoai);
 			}
@@ -241,13 +241,13 @@ public class ADoiBan_Controller implements Initializable {
 
 		for (Ban_DTO ban : danhSachBan) {
 			boolean matchStatus = "Tất cả".equals(trangThaiLoc) || trangThaiLoc.equals(ban.getTrangThai());
-			boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(ban.getMaLoaiBan());
+			boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(ban.getTenLoaiBan());
 
 			if (matchStatus && matchType) {
 
-				Button btnBan = new Button(ban.getMaBan() + "\n" + ban.getMaLoaiBan());
+				Button btnBan = new Button(ban.getMaBan() + "\n" + ban.getTenLoaiBan());
 				btnBan.setPrefSize(185, 110);
-				btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getMaLoaiBan()));
+				btnBan.setStyle(getStyleByStatusAndType(ban.getTrangThai(), ban.getTenLoaiBan()));
 
 				btnBan.setOnMouseClicked(event -> {
 					if (!"Trống".equals(ban.getTrangThai())) {
@@ -258,7 +258,7 @@ public class ADoiBan_Controller implements Initializable {
 					// Hoàn nguyên style bàn cũ
 					if (btnBanDangChonUI != null && banMoiDuocChon != null) {
 						btnBanDangChonUI.setStyle(getStyleByStatusAndType(banMoiDuocChon.getTrangThai(),
-								banMoiDuocChon.getMaLoaiBan()));
+								banMoiDuocChon.getTenLoaiBan()));
 					}
 
 					// Lưu bàn mới

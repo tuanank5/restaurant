@@ -51,9 +51,9 @@
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <right>
-            <AnchorPane prefHeight="171.0" prefWidth="164.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="44.0" prefWidth="164.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnXacNhan" layoutX="-12.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnXacNhan" prefHeight="88.0" prefWidth="176.0" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" />
+                  <Button fx:id="btnXacNhan" layoutX="70.0" layoutY="4.0" mnemonicParsing="false" onAction="#btnXacNhan" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" />
                </children>
             </AnchorPane>
          </right>

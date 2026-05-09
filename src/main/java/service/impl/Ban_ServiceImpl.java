@@ -58,6 +58,7 @@ public class Ban_ServiceImpl implements Ban_Service {
 			Ban_DTO dto = MapperUtil.map(ban, Ban_DTO.class);
 			if (ban.getLoaiBan() != null) {
 				dto.setMaLoaiBan(ban.getLoaiBan().getMaLoaiBan());
+				dto.setTenLoaiBan(ban.getLoaiBan().getTenLoaiBan());
 			}
 			return dto;
 		}).toList();
