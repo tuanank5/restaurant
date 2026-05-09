@@ -1,13 +1,8 @@
 package dto;
 
-import java.io.Serializable;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -29,11 +24,11 @@ public class KhachHang_DTO implements Serializable {
 
 	private String diaChi;
 
-	private String maHangKhachHang;
-
-	private String tenHang;
-
 	@Builder.Default
 	private int diemTichLuy = 0;
+
+	private String maHangKhachHang;
+
+    private String tenHang;
 
 }

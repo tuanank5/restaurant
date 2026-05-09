@@ -9,6 +9,9 @@ import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RequestDispatcher {
 
     private Map<String, CommandHandler> handlerMap = new HashMap<>();

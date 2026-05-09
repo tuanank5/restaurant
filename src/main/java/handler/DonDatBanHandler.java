@@ -4,12 +4,17 @@ import java.util.List;
 
 import dto.Ban_DTO;
 import dto.DonDatBan_DTO;
+import dto.LoaiBan_DTO;
 import network.common.CommandHandler;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
 import service.DonDatBan_Service;
 import service.impl.DonDatBan_ServiceImpl;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 public class DonDatBanHandler implements CommandHandler {
 
@@ -22,70 +27,344 @@ public class DonDatBanHandler implements CommandHandler {
     @Override
     public Response handle(Request request) {
 
-        try {
+        switch (request.getCommandType()) {
 
-            CommandType type = request.getCommandType();
+            case DONDATBAN_GET_ALL_DONDATBAN_NV_THEO_THANG -> {
 
-            switch (type) {
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
 
-                case DONDATBAN_GET_ALL: {
+                int thang = (int) map.get("thang");
+                int nam = (int) map.get("nam");
+                String maNV = (String) map.get("maNV");
 
-                    List<DonDatBan_DTO> ds = donDatBanService.getAllDonDatBan();
+                List<DonDatBan_DTO> list =
+                        service.getAllDonDatBanNVTheoThang(
+                                thang,
+                                nam,
+                                maNV
+                        );
 
-                    return Response.builder()
-                            .success(true)
-                            .data(ds)
-                            .message("Lấy danh sách đơn đặt bàn thành công")
-                            .build();
-                }
-
-                case DONDATBAN_GET_BY_BAN: {
-                    Ban_DTO banDTO = (Ban_DTO) request.getData();
-                    List<DonDatBan_DTO> dsDon = donDatBanService.getByBan(banDTO);
-                    return Response.builder()
-                            .success(true)
-                            .data(dsDon)
-                            .build();
-                }
-
-                case DONDATBAN_ADD: {
-                    DonDatBan_DTO dto = (DonDatBan_DTO) request.getData();
-                    boolean result = donDatBanService.them(dto);
-
-                    return Response.builder()
-                            .success(result)
-                            .message(result
-                                    ? "Thêm đơn đặt bàn thành công"
-                                    : "Thêm đơn đặt bàn thất bại")
-                            .build();
-                }
-
-                case DONDATBAN_UPDATE: {
-                    DonDatBan_DTO ddb = (DonDatBan_DTO) request.getData();
-                    boolean result = donDatBanService.sua(ddb);
-                    return Response.builder()
-                            .success(result)
-                            .message(result
-                                    ? "Cập nhật đơn đặt bàn thành công"
-                                    : "Cập nhật đơn đặt bàn thất bại")
-                            .build();
-                }
-
-                default:
-                    return Response.builder()
-                            .success(false)
-                            .message("Không hỗ trợ command: " + type)
-                            .build();
+                return new Response(true, list, "OK");
             }
 
-        } catch (Exception e) {
+            case DONDATBAN_GET_KHACHHANG_THEO_THANG_NV_CUTHE -> {
 
-            e.printStackTrace();
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
 
-            return Response.builder()
-                    .success(false)
-                    .message("Lỗi xử lý DonDatBan: " + e.getMessage())
-                    .build();
+                int thang = (int) map.get("thang");
+                int nam = (int) map.get("nam");
+                String maNV = (String) map.get("maNV");
+
+                List<String> list =
+                        service.getKhachHangTheoThangNVCuThe(
+                                thang,
+                                nam,
+                                maNV
+                        );
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_GET_ALL_DONDATBAN_THEO_NAM_NV_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int nam = (int) map.get("nam");
+                String maNV = (String) map.get("maNV");
+
+                List<DonDatBan_DTO> list =
+                        service.getAllDonDatBanTheoNamNVCuThe(
+                                nam,
+                                maNV
+                        );
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_GET_KHACHHANG_THEO_NAM_NV_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int nam = (int) map.get("nam");
+                String maNV = (String) map.get("maNV");
+
+                List<String> list =
+                        service.getKhachHangTheoNamNVCuThe(
+                                nam,
+                                maNV
+                        );
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_COUNT_DONDATBAN_THEO_NAM_NV_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int nam = (int) map.get("nam");
+                String maNV = (String) map.get("maNV");
+
+                Map<String, Integer> result =
+                        service.countDonDatBanTheoNamNVCuThe(
+                                nam,
+                                maNV
+                        );
+
+                return new Response(true, result, "OK");
+            }
+
+            case DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                LocalDate dateStart =
+                        (LocalDate) map.get("dateStart");
+
+                LocalDate dateEnd =
+                        (LocalDate) map.get("dateEnd");
+
+                String maNV = (String) map.get("maNV");
+
+                List<DonDatBan_DTO> list =
+                        service.getAllDonDatBanTheoNgayNVCuThe(
+                                dateStart,
+                                dateEnd,
+                                maNV
+                        );
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_GET_KHACHHANG_THEO_NGAY_NV_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                LocalDate dateStart =
+                        (LocalDate) map.get("dateStart");
+
+                LocalDate dateEnd =
+                        (LocalDate) map.get("dateEnd");
+
+                String maNV = (String) map.get("maNV");
+
+                List<String> list =
+                        service.getKhachHangTheoNgayNVCuThe(
+                                dateStart,
+                                dateEnd,
+                                maNV
+                        );
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_GET_ALL_DONDATBAN_THEO_THANG -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int thang = (int) map.get("thang");
+                int nam = (int) map.get("nam");
+
+                List<DonDatBan_DTO> list =
+                        service.getAllDonDatBanTheoThang(
+                                thang,
+                                nam
+                        );
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_GET_ALL_DONDATBAN_THEO_NAM -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int nam = (int) map.get("nam");
+
+                List<DonDatBan_DTO> list =
+                        service.getAllDonDatBanTheoNam(nam);
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_GET_KHACHHANG_THEO_THANG -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int thang = (int) map.get("thang");
+                int nam = (int) map.get("nam");
+
+                List<String> list =
+                        service.getKhachHangTheoThang(
+                                thang,
+                                nam
+                        );
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_COUNT_LOAIBAN_THEO_THANG -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int thang = (int) map.get("thang");
+                int nam = (int) map.get("nam");
+
+                Map<LoaiBan_DTO, Integer> result =
+                        service.countLoaiBanTheoThang(thang, nam);
+
+                return new Response(true, result, "OK");
+            }
+
+            case DONDATBAN_GET_KHACHHANG_THEO_NAM -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int nam = (int) map.get("nam");
+
+                List<String> list =
+                        service.getKhachHangTheoNam(nam);
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_COUNT_LOAIBAN_THEO_NAM -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int nam = (int) map.get("nam");
+
+                Map<LoaiBan_DTO, Integer> result =
+                        service.countLoaiBanTheoNam(nam);
+
+                return new Response(true, result, "OK");
+            }
+
+            case DONDATBAN_COUNT_DONDATBAN_THEO_NAM -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                int nam = (int) map.get("nam");
+
+                Map<String, Integer> result =
+                        service.countDonDatBanTheoNam(nam);
+
+                return new Response(true, result, "OK");
+            }
+
+            case DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                LocalDate dateStart =
+                        (LocalDate) map.get("dateStart");
+
+                LocalDate dateEnd =
+                        (LocalDate) map.get("dateEnd");
+
+                List<DonDatBan_DTO> list =
+                        service.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_GET_KHACHHANG_THEO_NGAY_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                LocalDate dateStart =
+                        (LocalDate) map.get("dateStart");
+
+                LocalDate dateEnd =
+                        (LocalDate) map.get("dateEnd");
+
+                List<String> list =
+                        service.getKhachHangTheoNgayCuThe(dateStart, dateEnd);
+
+                return new Response(true, list, "OK");
+            }
+
+            case DONDATBAN_COUNT_LOAIBAN_THEO_NGAY_CUTHE -> {
+
+                Map<String, Object> map =
+                        (Map<String, Object>) request.getData();
+
+                LocalDate dateStart =
+                        (LocalDate) map.get("dateStart");
+
+                LocalDate dateEnd =
+                        (LocalDate) map.get("dateEnd");
+
+                Map<LoaiBan_DTO, Integer> result =
+                        service.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
+
+                return new Response(true, result, "OK");
+            }
+
+            case DONDATBAN_GET_ALL: {
+
+                List<DonDatBan_DTO> ds = donDatBanService.getAllDonDatBan();
+
+                return Response.builder()
+                        .success(true)
+                        .data(ds)
+                        .message("Lấy danh sách đơn đặt bàn thành công")
+                        .build();
+            }
+
+            case DONDATBAN_GET_BY_BAN: {
+                Ban_DTO banDTO = (Ban_DTO) request.getData();
+                List<DonDatBan_DTO> dsDon = donDatBanService.getByBan(banDTO);
+                return Response.builder()
+                        .success(true)
+                        .data(dsDon)
+                        .build();
+            }
+
+            case DONDATBAN_ADD: {
+                DonDatBan_DTO dto = (DonDatBan_DTO) request.getData();
+                boolean result = donDatBanService.them(dto);
+
+                return Response.builder()
+                        .success(result)
+                        .message(result
+                                ? "Thêm đơn đặt bàn thành công"
+                                : "Thêm đơn đặt bàn thất bại")
+                        .build();
+            }
+
+            case DONDATBAN_UPDATE: {
+                DonDatBan_DTO ddb = (DonDatBan_DTO) request.getData();
+                boolean result = donDatBanService.sua(ddb);
+                return Response.builder()
+                        .success(result)
+                        .message(result
+                                ? "Cập nhật đơn đặt bàn thành công"
+                                : "Cập nhật đơn đặt bàn thất bại")
+                        .build();
+            }
+
+            default:
+                return Response.builder()
+                        .success(false)
+                        .message("Không hỗ trợ command: " + type)
+                        .build();
         }
+
+        return new Response(false, null, "Invalid command");
     }
 }

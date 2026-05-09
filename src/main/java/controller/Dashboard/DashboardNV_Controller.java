@@ -1,5 +1,20 @@
 package controller.Dashboard;
 
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import entity.NhanVien;
+import javafx.fxml.FXML;
+import javafx.scene.chart.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -28,6 +43,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import network.Client;
 
 public class DashboardNV_Controller {
 
@@ -50,26 +66,39 @@ public class DashboardNV_Controller {
 	@FXML
 	private CategoryAxis axis;
 
-	private final HoaDon_DAOImpl hoaDon_DAO;
-	private final DonDatBan_DAOImpl donDatBan_DAO;
+	private Client client;
 
-//	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
-	private String maNhanVien;
+	//	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
+	private final NhanVien nhanVien = NhanVien.builder()
+			.maNV("NV001")
+			.tenNV("Nguyen Van A")
+			.chucVu("NhanVien")
+			.email("nva@gmail.com")
+			.namSinh(Date.valueOf("2000-01-01"))
+			.diaChi("Go Vap")
+			.gioiTinh(true)
+			.ngayVaoLam(Date.valueOf("2024-01-01"))
+			.trangThai(true)
+			.build();
+    private String maNhanVien;
 
 	public DashboardNV_Controller() {
-		this.hoaDon_DAO = new HoaDon_DAOImpl();
-		this.donDatBan_DAO = new DonDatBan_DAOImpl();
+
 	}
 
 	DecimalFormat decimalFormat = new DecimalFormat("#,##0 VNĐ");
 
 	@FXML
-	public void initialize() {
-		if (MenuNV_Controller.taiKhoan != null
-				&& MenuNV_Controller.taiKhoan.getMaNhanVien() != null) {
-			maNhanVien = MenuNV_Controller.taiKhoan.getMaNhanVien();
+	public void initialize() throws Exception {
+        try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
+        if (MenuNV_Controller.taiKhoan != null
+                && MenuNV_Controller.taiKhoan.getMaNhanVien() != null) {
+            maNhanVien = MenuNV_Controller.taiKhoan.getMaNhanVien();
+        }
 		txtDateEnd.setValue(LocalDate.now());
 		txtDateStart.setValue(LocalDate.now().minusDays(6));
 		displayData();
@@ -77,27 +106,51 @@ public class DashboardNV_Controller {
 		anchorPane_main.sceneProperty().addListener((obs, oldScene, newScene) -> {
 			if (newScene != null) {
 				newScene.setOnKeyPressed(keyEvent -> {
-					if (keyEvent.getCode() == KeyCode.F5)
-						displayData();
+					if (keyEvent.getCode() == KeyCode.F5) {
+						try {
+							displayData();
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
+					}
 				});
 			}
 		});
 	}
 
-	private void displayData() {
+	private void displayData() throws Exception {
 		showCustomDateRangeData();
 	}
 
-	private void showCustomDateRangeData() {
+	private void showCustomDateRangeData() throws Exception {
 		barChart_DoanhThuNam.setVisible(false);
 		areaChart_DoanhThu.setVisible(true);
 		LocalDate dateStart = txtDateStart.getValue();
 		LocalDate dateEnd = txtDateEnd.getValue();
 
 		// UpDate 4 Ô TOP
-		List<HoaDon> dsHD = hoaDon_DAO.getHoaDonNVTheoNgayCuThe(dateStart, dateEnd, maNhanVien);
+		List<HoaDon_DTO> dsHD =
+				(List<HoaDon_DTO>) client.send(
+						new Request(
+								CommandType.HOADON_GET_HOADON_NV_THEO_NGAY_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 
-		List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayNVCuThe(dateStart, dateEnd, maNhanVien);
+		List<DonDatBan_DTO> dsDon =
+				(List<DonDatBan_DTO>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd
+								)
+						)
+				).getData();
 		// END - UpDate 4 Ô TOP
 
 		// UpDate Chart
@@ -105,7 +158,7 @@ public class DashboardNV_Controller {
 		updateChartDonDatBan(dsDon);
 	}
 
-	private void updateChartDoanhThu(List<HoaDon> dsHD) {
+	private void updateChartDoanhThu(List<HoaDon_DTO> dsHD) {
 		areaChart_DoanhThu.getData().clear();
 		axis.setAutoRanging(true);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -119,7 +172,7 @@ public class DashboardNV_Controller {
 		}
 
 		// Cập nhật doanh thu cụ thể trong Map
-		for (HoaDon hoaDon : dsHD) {
+		for (HoaDon_DTO hoaDon : dsHD) {
 			Instant instant = hoaDon.getNgayLap().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
 			ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 			LocalDate ngayLap = zonedDateTime.toLocalDate();
@@ -156,7 +209,7 @@ public class DashboardNV_Controller {
 
 	// ---
 
-	private void updateChartDonDatBan(List<DonDatBan> dsDon) {
+	private void updateChartDonDatBan(List<DonDatBan_DTO> dsDon) {
 		barChart_DonDatBan.getData().clear();
 		NumberAxis yAxis = (NumberAxis) barChart_DonDatBan.getYAxis();
 		axis.setAutoRanging(true);
@@ -172,7 +225,7 @@ public class DashboardNV_Controller {
 		}
 
 		// Cập nhật số lượng đơn bán cụ thể trong Map
-		for (DonDatBan don : dsDon) {
+		for (DonDatBan_DTO don : dsDon) {
 
 			Instant instant = don.getNgayGioLapDon().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
 			ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());

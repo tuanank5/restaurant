@@ -59,9 +59,15 @@ public interface HoaDon_Service {
 	HoaDon_DTO timHoaDonTheoDonDatBan(DonDatBan_DTO donDatBan_DTO);
 
 	List<ChiTietHoaDon_DTO> findByMaHoaDon(String maHoaDon);
+
+    Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
+
+    Map<String, Double> getDoanhThuTheoNam(int nam);
+
 	Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
 
 	boolean capNhat(HoaDon_DTO dto);
+
 	List<HoaDon_DTO> getDanhSach(String namedQuery);
 
 }

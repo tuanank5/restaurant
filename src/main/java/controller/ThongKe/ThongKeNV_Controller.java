@@ -1,29 +1,12 @@
 package controller.ThongKe;
 
-import java.text.DecimalFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
-
 import controller.Menu.MenuNV_Controller;
-//import dao.impl.DonDatBan_DAOImpl;
-//import dao.impl.HoaDon_DAOImpl;
-//import entity.DonDatBan;
-//import entity.HoaDon;
-//import entity.NhanVien;
-
-import dao.impl.DonDatBan_DAOImpl;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import entity.NhanVien;
 import dto.DonDatBan_DTO;
 import dto.HoaDon_DTO;
 import dto.NhanVien_DTO;
@@ -31,13 +14,8 @@ import service.DonDatBan_Service;
 import service.HoaDon_Service;
 import service.impl.DonDatBan_ServiceImpl;
 import service.impl.HoaDon_ServiceImpl;
-
 import javafx.fxml.FXML;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -45,6 +23,18 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+
+import java.sql.Date;
+import java.text.DecimalFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ThongKeNV_Controller {
 
@@ -102,23 +92,40 @@ public class ThongKeNV_Controller {
 	@FXML
 	private CategoryAxis axis;
 
-	private final HoaDon_ServiceImpl hoaDon_service;
-	private final DonDatBan_ServiceImpl donDatBan_service;
+	private Client client;
 
-	private NhanVien_DTO nhanVien;
-	private String maNV;
+	//	private NhanVien nhanVien = MenuNV_Controller.taiKhoan.getNhanVien();
+	private final NhanVien nhanVien = NhanVien.builder()
+			.maNV("NV001")
+			.tenNV("Nguyen Van A")
+			.chucVu("NhanVien")
+			.email("nva@gmail.com")
+			.namSinh(Date.valueOf("2000-01-01"))
+			.diaChi("Go Vap")
+			.gioiTinh(true)
+			.ngayVaoLam(Date.valueOf("2024-01-01"))
+			.trangThai(true)
+			.build();
+
+    private String maNV;
 
 	public ThongKeNV_Controller() {
-		this.hoaDon_service = new HoaDon_ServiceImpl();
-		this.donDatBan_service = new DonDatBan_ServiceImpl();
+
 	}
 
 	DecimalFormat decimalFormat = new DecimalFormat("#,##0 VNĐ");
 
 	@FXML
-	public void initialize() {
-		maNV = MenuNV_Controller.taiKhoan.getMaNhanVien();
-		btnGroup();
+	public void initialize() throws Exception {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+        maNV = MenuNV_Controller.taiKhoan.getMaNhanVien();
+
+        btnGroup();
 		setCmb();
 		displayData();
 		barChart_DoanhThuNam.setVisible(false);
@@ -131,7 +138,11 @@ public class ThongKeNV_Controller {
 			}
 		});
 		btnLoc.setOnAction(actionEvent -> {
-			displayData();
+			try {
+				displayData();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 			if (radNgay.isSelected()) {
 				checkDate();
 			}
@@ -161,7 +172,7 @@ public class ThongKeNV_Controller {
 		txtDateEnd.setValue(LocalDate.now());
 	}
 
-	private void displayData() {
+	private void displayData() throws Exception {
 		if (radThangNam.isSelected()) {
 			Integer nam = cmbNam.getValue();
 			if (cmbThang.getValue() != 0) {
@@ -197,18 +208,58 @@ public class ThongKeNV_Controller {
 		}
 	}
 
-	private void showMonthlyData(Integer nam) {
+	private void showMonthlyData(Integer nam) throws Exception {
 		barChart_DoanhThuNam.setVisible(false);
 		areaChart_DoanhThu.setVisible(true);
 
 		Integer thang = cmbThang.getValue();
 //        ============ UpDate 4 Ô TOP ==============
-		List<HoaDon_DTO> dsHD = hoaDon_service.getAllHoaDonNVTheoThang(thang, nam, nhanVien.getMaNV());
+		List<HoaDon_DTO> dsHD = (List<HoaDon_DTO>) client.send(
+				new Request(
+						CommandType.HOADON_GET_ALL_HOADON_NV_THEO_THANG,
+						Map.of(
+								"thang", thang,
+								"nam", nam,
+								"maNV", nhanVien.getMaNV()
+						)
+				)
+		).getData();
 
-		List<DonDatBan_DTO> dsDon = donDatBan_service.getAllDonDatBanNVTheoThang(thang, nam, nhanVien.getMaNV());
+		List<DonDatBan_DTO> dsDon =
+				(List<DonDatBan_DTO>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_NV_THEO_THANG,
+								Map.of(
+										"thang", thang,
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 
-		List<String> dsKH = donDatBan_service.getKhachHangTheoThangNVCuThe(thang, nam, nhanVien.getMaNV());
-		Double tongDoanhThu = hoaDon_service.getTongDoanhThuNVTheoThang(thang, nam, nhanVien.getMaNV());
+		List<String> dsKH =
+				(List<String>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_KHACHHANG_THEO_THANG_NV_CUTHE,
+								Map.of(
+										"thang", thang,
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
+
+		Double tongDoanhThu =
+				(Double) client.send(
+						new Request(
+								CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_THANG,
+								Map.of(
+										"thang", thang,
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 
 		String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
 		lblDoanhThu.setText(formattedDoanhThu);
@@ -221,16 +272,65 @@ public class ThongKeNV_Controller {
 		updateChartDonDatBan(dsDon);
 	}
 
-	private void showYearlyData(Integer nam) {
+	private void showYearlyData(Integer nam) throws Exception {
 		barChart_DoanhThuNam.setVisible(true);
 		areaChart_DoanhThu.setVisible(false);
 
-		Map<String, Double> doanhThuTungThang = hoaDon_service.getDoanhThuNVTheoNam(nam, nhanVien.getMaNV());
+		Map<String, Double> doanhThuTungThang =
+				(Map<String, Double>) client.send(
+						new Request(
+								CommandType.HOADON_GET_DOANHTHU_NV_THEO_NAM,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 		// UpDate 4 Ô TOP
-		List<HoaDon_DTO> dsHD = hoaDon_service.getHoaDonNVTheoNam(nam, nhanVien.getMaNV());
-		List<DonDatBan_DTO> dsDDB = donDatBan_service.getAllDonDatBanTheoNamNVCuThe(nam, nhanVien.getMaNV());
-		List<String> dsKH = donDatBan_service.getKhachHangTheoNamNVCuThe(nam, nhanVien.getMaNV());
-		Double tongDoanhThu = hoaDon_service.getTongDoanhThuNVTheoNam(nam, nhanVien.getMaNV());
+		List<HoaDon_DTO> dsHD =
+				(List<HoaDon_DTO>) client.send(
+						new Request(
+								CommandType.HOADON_GET_HOADON_NV_THEO_NAM,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
+
+		List<DonDatBan_DTO> dsDDB =
+				(List<DonDatBan_DTO>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NAM_NV_CUTHE,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
+
+		List<String> dsKH =
+				(List<String>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_KHACHHANG_THEO_NAM_NV_CUTHE,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
+
+		Double tongDoanhThu =
+				(Double) client.send(
+						new Request(
+								CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_NAM,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
+
 		String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
 		lblDoanhThu.setText(formattedDoanhThu);
 		updateHDInfo(dsHD);
@@ -239,25 +339,76 @@ public class ThongKeNV_Controller {
 		// END - UpDate 4 Ô TOP
 
 		// UpDate Chart
-		Map<String, Integer> countDonDatBan = donDatBan_service.countDonDatBanTheoNamNVCuThe(nam, nhanVien.getMaNV());
+		Map<String, Integer> countDonDatBan =
+				(Map<String, Integer>) client.send(
+						new Request(
+								CommandType.DONDATBAN_COUNT_DONDATBAN_THEO_NAM_NV_CUTHE,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 
 		updateChartDoanhThuTheoNam(doanhThuTungThang);
 		updateChartDonDatBanTheoNam(countDonDatBan);
 	}
 
-	private void showCustomDateRangeData() {
+	private void showCustomDateRangeData() throws Exception {
 		barChart_DoanhThuNam.setVisible(false);
 		areaChart_DoanhThu.setVisible(true);
 		LocalDate dateStart = txtDateStart.getValue();
 		LocalDate dateEnd = txtDateEnd.getValue();
 
 		// UpDate 4 Ô TOP
-		List<HoaDon_DTO> dsHD = hoaDon_service.getHoaDonNVTheoNgayCuThe(dateStart, dateEnd, nhanVien.getMaNV());
+		List<HoaDon_DTO> dsHD =
+				(List<HoaDon_DTO>) client.send(
+						new Request(
+								CommandType.HOADON_GET_HOADON_NV_THEO_NGAY_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 
-		List<DonDatBan_DTO> dsDon = donDatBan_service.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
-		List<String> dsKH = donDatBan_service.getKhachHangTheoNgayNVCuThe(dateStart, dateEnd, nhanVien.getMaNV());
+		List<DonDatBan_DTO> dsDon =
+				(List<DonDatBan_DTO>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 
-		Double tongDoanhThu = hoaDon_service.getTongDoanhThuNVTheoNgayCuThe(dateStart, dateEnd, nhanVien.getMaNV());
+		List<String> dsKH =
+				(List<String>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_KHACHHANG_THEO_NGAY_NV_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
+
+		Double tongDoanhThu =
+				(Double) client.send(
+						new Request(
+								CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_NGAY_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
+
 		String formattedDoanhThu = decimalFormat.format(tongDoanhThu);
 		lblDoanhThu.setText(formattedDoanhThu);
 		updateHDInfo(dsHD);
@@ -294,7 +445,7 @@ public class ThongKeNV_Controller {
 		}
 	}
 
-	private void updateChartDoanhThu(List<HoaDon_DTO> dsHD) {
+	private void updateChartDoanhThu(List<HoaDon_DTO> dsHD) throws Exception {
 		areaChart_DoanhThu.getData().clear();
 		axis.setAutoRanging(true);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -354,7 +505,17 @@ public class ThongKeNV_Controller {
 			List<String> daysWithMinKhac0 = new ArrayList<>();
 
 			int daysWithRevenue = 0; // Biến đếm số ngày có doanh thu khác 0
-			double previousTotalDoanhThu = hoaDon_service.getTongDoanhThuTheoThang(thang - 1, nam);
+			Double previousTotalDoanhThu =
+					(Double) client.send(
+							new Request(
+									CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_THANG,
+									Map.of(
+											"thang", thang,
+											"nam", nam,
+											"maNV", nhanVien.getMaNV()
+									)
+							)
+					).getData();
 			double revenueGrowth = 0; // Tăng trưởng doanh thu
 
 			// Duyệt qua từng ngày để tính các thông số
@@ -545,7 +706,7 @@ public class ThongKeNV_Controller {
 
 	// ---
 
-	private void updateChartDonDatBan(List<DonDatBan_DTO> dsDon) {
+	private void updateChartDonDatBan(List<DonDatBan_DTO> dsDon) throws Exception {
 		barChart_DonDatBan.getData().clear();
 		NumberAxis yAxis = (NumberAxis) barChart_DonDatBan.getYAxis();
 		axis.setAutoRanging(true);
@@ -607,7 +768,17 @@ public class ThongKeNV_Controller {
 			List<String> daysWithMinKhac0 = new ArrayList<>();
 
 			int daysWithRevenue = 0;
-			int previousTotalDoanhThu = donDatBan_service.getAllDonDatBanTheoThang(thang - 1, nam).size();
+			int previousTotalDoanhThu =
+					((List<DonDatBan_DTO>) client.send(
+							new Request(
+									CommandType.DONDATBAN_GET_ALL_DONDATBAN_NV_THEO_THANG,
+									Map.of(
+											"thang", thang,
+											"nam", nam,
+											"maNV", nhanVien.getMaNV()
+									)
+							)
+					).getData()).size();
 			double revenueGrowth = 0;
 
 			// Duyệt qua từng ngày để tính các thông số
@@ -792,7 +963,7 @@ public class ThongKeNV_Controller {
 		}
 	}
 
-	private void updateChartDoanhThuTheoNam(Map<String, Double> dsMap) {
+	private void updateChartDoanhThuTheoNam(Map<String, Double> dsMap) throws Exception {
 		barChart_DoanhThuNam.getData().clear();
 		axis.setAutoRanging(true);
 		int nam = cmbNam.getValue();
@@ -829,11 +1000,29 @@ public class ThongKeNV_Controller {
 		// ========== Cập nhật thông tin Doanh Thu =============
 		double maxDoanhThu = 0;
 		double minDoanhThu = Double.MAX_VALUE;
-		double totalDoanhThu = hoaDon_service.getTongDoanhThuTheoNam(nam);
+		Double totalDoanhThu =
+				(Double) client.send(
+						new Request(
+								CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_NAM,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 		List<String> monthWithMaxRevenue = new ArrayList<>();
 		List<String> monthWithMinRevenue = new ArrayList<>();
 
-		double previousTotalDoanhThu = hoaDon_service.getTongDoanhThuTheoNam(nam - 1);
+		Double previousTotalDoanhThu =
+				(Double) client.send(
+						new Request(
+								CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_NAM,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData();
 		double revenueGrowth = 0; // Tăng trưởng doanh thu
 
 		// Duyệt qua từng ngày để tính các thông số
@@ -881,7 +1070,7 @@ public class ThongKeNV_Controller {
 		lblThongTinDoanhThu.setText(infoText);
 	}
 
-	private void updateChartDonDatBanTheoNam(Map<String, Integer> dsMap) {
+	private void updateChartDonDatBanTheoNam(Map<String, Integer> dsMap) throws Exception {
 		barChart_DonDatBan.getData().clear();
 		NumberAxis yAxis = (NumberAxis) barChart_DonDatBan.getYAxis();
 		axis.setAutoRanging(true);
@@ -924,7 +1113,16 @@ public class ThongKeNV_Controller {
 		List<String> monthsWithMaxRevenue = new ArrayList<>();
 		List<String> monthsWithMinRevenue = new ArrayList<>();
 
-		int previousTotalDoanhThu = donDatBan_service.getAllDonDatBanTheoNam(nam - 1).size();
+		int previousTotalDoanhThu =
+				((List<DonDatBan_DTO>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NAM_NV_CUTHE,
+								Map.of(
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
+								)
+						)
+				).getData()).size();
 		double revenueGrowth = 0;
 
 		// Duyệt qua từng tháng để tính các thông số

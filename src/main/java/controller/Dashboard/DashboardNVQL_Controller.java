@@ -1,5 +1,21 @@
 package controller.Dashboard;
 
+import dao.impl.DonDatBan_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import dto.LoaiBan_DTO;
+import javafx.fxml.FXML;
+import javafx.scene.chart.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -10,24 +26,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.LoaiBan;
-import javafx.fxml.FXML;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 
 public class DashboardNVQL_Controller {
 
@@ -53,6 +51,8 @@ public class DashboardNVQL_Controller {
 	@FXML
 	private CategoryAxis axis;
 
+	private Client client;
+
 	private final HoaDon_DAOImpl hoaDon_DAO;
 	private final DonDatBan_DAOImpl donDatBan_DAO;
 
@@ -64,7 +64,12 @@ public class DashboardNVQL_Controller {
 	DecimalFormat decimalFormat = new DecimalFormat("#,##0 VNĐ");
 
 	@FXML
-	public void initialize() {
+	public void initialize() throws Exception {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		txtDateEnd.setValue(LocalDate.now());
 		txtDateStart.setValue(LocalDate.now().minusDays(6));
 		displayData();
@@ -72,37 +77,70 @@ public class DashboardNVQL_Controller {
 		anchorPane_main.sceneProperty().addListener((obs, oldScene, newScene) -> {
 			if (newScene != null) {
 				newScene.setOnKeyPressed(keyEvent -> {
-					if (keyEvent.getCode() == KeyCode.F5)
-						displayData();
+					if (keyEvent.getCode() == KeyCode.F5) {
+						try {
+							displayData();
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
+					}
 				});
 			}
 		});
 	}
 
-	private void displayData() {
+	private void displayData() throws Exception {
 		showCustomDateRangeData();
 	}
 
-	private void showCustomDateRangeData() {
+	private void showCustomDateRangeData() throws Exception {
 		barChart_DoanhThuNam.setVisible(false);
 		areaChart_DoanhThu.setVisible(true);
 		LocalDate dateStart = txtDateStart.getValue();
 		LocalDate dateEnd = txtDateEnd.getValue();
 
 		// UpDate 4 Ô TOP
-		List<HoaDon> dsHD = hoaDon_DAO.getHoaDonTheoNgayCuThe(dateStart, dateEnd);
-		List<DonDatBan> dsDon = donDatBan_DAO.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
+		List<HoaDon_DTO> dsHD =
+				(List<HoaDon_DTO>) client.send(
+						new Request(
+								CommandType.HOADON_GET_HOADON_THEO_NGAY_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd
+								)
+						)
+				).getData();
+
+		List<DonDatBan_DTO> dsDon =
+				(List<DonDatBan_DTO>) client.send(
+						new Request(
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd
+								)
+						)
+				).getData();
 		// END - UpDate 4 Ô TOP
 
 		// UpDate Chart
-		Map<LoaiBan, Integer> countLoaiGhe = donDatBan_DAO.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
+		Map<LoaiBan_DTO, Integer> countLoaiGhe =
+				(Map<LoaiBan_DTO, Integer>) client.send(
+						new Request(
+								CommandType.DONDATBAN_COUNT_LOAIBAN_THEO_NGAY_CUTHE,
+								Map.of(
+										"dateStart", dateStart,
+										"dateEnd", dateEnd
+								)
+						)
+				).getData();
 
 		updateChartDoanhThu(dsHD);
 		updateChartDonDatBan(dsDon);
 		updateChartBan(countLoaiGhe);
 	}
 
-	private void updateChartDoanhThu(List<HoaDon> dsHD) {
+	private void updateChartDoanhThu(List<HoaDon_DTO> dsHD) {
 		areaChart_DoanhThu.getData().clear();
 		axis.setAutoRanging(true);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -116,7 +154,7 @@ public class DashboardNVQL_Controller {
 		}
 
 		// Cập nhật doanh thu cụ thể trong Map
-		for (HoaDon hoaDon : dsHD) {
+		for (HoaDon_DTO hoaDon : dsHD) {
 
 			Instant instant = hoaDon.getNgayLap().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
 			ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
@@ -154,7 +192,7 @@ public class DashboardNVQL_Controller {
 
 	// ---
 
-	private void updateChartDonDatBan(List<DonDatBan> dsDon) {
+	private void updateChartDonDatBan(List<DonDatBan_DTO> dsDon) {
 		barChart_DonDatBan.getData().clear();
 		NumberAxis yAxis = (NumberAxis) barChart_DonDatBan.getYAxis();
 		axis.setAutoRanging(true);
@@ -170,7 +208,7 @@ public class DashboardNVQL_Controller {
 		}
 
 		// Cập nhật số lượng đơn bán cụ thể trong Map
-		for (DonDatBan don : dsDon) {
+		for (DonDatBan_DTO don : dsDon) {
 
 			Instant instant = don.getNgayGioLapDon().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
 			ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
@@ -250,14 +288,14 @@ public class DashboardNVQL_Controller {
 		yAxis.setUpperBound(maxSoDDB + 1);
 	}
 
-	private void updateChartBan(Map<LoaiBan, Integer> dsBan) {
+	private void updateChartBan(Map<LoaiBan_DTO, Integer> dsBan) {
 		pieChart_LoaiBan.getData().clear();
 
 		// Tính tổng giá trị của tất cả các phần trong biểu đồ
 		double total = dsBan.values().stream().mapToInt(Integer::intValue).sum();
 
 		// Lặp qua các mục trong danh sách và thêm vào biểu đồ
-		for (Map.Entry<LoaiBan, Integer> entry : dsBan.entrySet()) {
+		for (Map.Entry<LoaiBan_DTO, Integer> entry : dsBan.entrySet()) {
 			// Tạo phần của Pie chart
 			PieChart.Data slice = new PieChart.Data(entry.getKey().getTenLoaiBan(), entry.getValue());
 

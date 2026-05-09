@@ -62,5 +62,10 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 	HoaDon timHoaDonTheoDonDatBan(DonDatBan donDatBan);
 
 	List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon);
-	HoaDon toEntity(HoaDon_DTO dto, EntityManager entityManager);
+
+    HoaDon toEntity(HoaDon_DTO dto, EntityManager entityManager);
+
+    Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
+
+	public Map<String, Double> getDoanhThuTheoNam(int nam);
 }

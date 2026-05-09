@@ -66,29 +66,7 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 			hoaDon.setKhachHang(kh);
 			hoaDon.setMaKhachHang(kh.getMaKH());
 		}
-
-		if (hoaDon_DTO.getMaNhanVien() != null) {
-			NhanVien_Service nhanVienService = new NhanVien_ServiceImpl();
-			NhanVien_DTO nv = nhanVienService.findById(hoaDon_DTO.getMaNhanVien());
-			if (nv == null) {
-				throw new RuntimeException("Không tìm thấy nhân viên: " + hoaDon_DTO.getMaNhanVien());
-			}
-			hoaDon.setNhanVien(nv);
-			hoaDon.setMaNhanVien(nv.getMaNV());
-		}
-
-		if (hoaDon_DTO.getMaKhachHang() != null && !hoaDon_DTO.getMaKhachHang().trim().isEmpty()) {
-			String maKH = hoaDon_DTO.getMaKhachHang();
-			KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
-			KhachHang_DTO kh = khachHangService.timTheoMa(maKH);
-			if (kh == null) {
-				throw new RuntimeException("Không tìm thấy khách hàng: " + maKH);
-			}
-			hoaDon.setKhachHang(kh);
-			hoaDon.setMaKhachHang(maKH);
-		}
-
-		return hoaDon_DAO.themHoaDon(hoaDon);
+		return hoaDon_DAO.themHoaDon(MapperUtil.map(hoaDon_DTO, HoaDon.class));
 	}
 
 	@Override
@@ -369,5 +347,29 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 				.map(entity -> mapper.mapper(entity, HoaDon_DTO.class))
 				.toList();
 	}
+
+    @Override
+    public Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV) {
+
+        if (nam < 1900 || nam > 2100) {
+            throw new IllegalArgumentException("nam không hợp lệ");
+        }
+
+        if (maNV == null || maNV.trim().isEmpty()) {
+            throw new IllegalArgumentException("maNV không được rỗng");
+        }
+
+        return hoaDon_DAO.getDoanhThuNVTheoNam(nam, maNV);
+    }
+
+    @Override
+    public Map<String, Double> getDoanhThuTheoNam(int nam) {
+
+        if (nam < 1900 || nam > 2100) {
+            throw new IllegalArgumentException("nam không hợp lệ");
+        }
+
+        return hoaDon_DAO.getDoanhThuTheoNam(nam);
+    }
 
 }

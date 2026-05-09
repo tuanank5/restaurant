@@ -197,6 +197,7 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
 	}
 
+	@Override
 	public Map<String, Double> getDoanhThuTheoNam(int nam) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		Map<String, Double> doanhThuTheoThang = new HashMap<>();
@@ -407,6 +408,7 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 		return (tongDoanhThu != null) ? tongDoanhThu : 0.0;
 	}
 
+	@Override
 	public Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		Map<String, Double> doanhThuTheoThang = new HashMap<>();
