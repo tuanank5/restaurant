@@ -1,13 +1,9 @@
 package dto;
 
-import java.sql.Date;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -15,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class KhuyenMai_DTO {
+public class KhuyenMai_DTO implements Serializable {
 
 	private String maKM;
 

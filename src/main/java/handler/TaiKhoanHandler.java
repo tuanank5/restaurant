@@ -1,13 +1,13 @@
 package handler;
 
-import java.util.List;
-
 import dto.TaiKhoan_DTO;
 import network.common.CommandHandler;
 import network.common.Request;
 import network.common.Response;
 import service.TaiKhoan_Service;
 import service.impl.TaiKhoan_ServiceImpl;
+
+import java.util.List;
 
 public class TaiKhoanHandler implements CommandHandler {
 
@@ -18,10 +18,10 @@ public class TaiKhoanHandler implements CommandHandler {
 
 		switch (request.getCommandType()) {
 
-		case TAIKHOAN_GET_ALL -> {
-			List<TaiKhoan_DTO> list = service.getAll();
-			return new Response(true, list, "OK");
-		}
+			case TAIKHOAN_GET_ALL -> {
+				List<TaiKhoan_DTO> list = service.getAll();
+				return new Response(true, list, "OK");
+			}
 		}
 
 		return new Response(false, null, "Invalid command");

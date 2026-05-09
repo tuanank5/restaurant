@@ -3,6 +3,7 @@ package service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import dto.Ban_DTO;
 import dto.ChiTietHoaDon_DTO;
@@ -58,4 +59,8 @@ public interface HoaDon_Service {
 	HoaDon_DTO timHoaDonTheoDonDatBan(DonDatBan_DTO donDatBan_DTO);
 
 	List<ChiTietHoaDon_DTO> findByMaHoaDon(String maHoaDon);
+
+	Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
+
+	Map<String, Double> getDoanhThuTheoNam(int nam);
 }

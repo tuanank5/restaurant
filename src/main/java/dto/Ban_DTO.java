@@ -1,11 +1,8 @@
 package dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -13,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class Ban_DTO {
+public class Ban_DTO implements Serializable {
 
 	private String maBan;
 

@@ -3,6 +3,7 @@ package service.impl;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import dao.HoaDon_DAO;
 import dao.impl.HoaDon_DAOImpl;
@@ -286,4 +287,27 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 		return chiTietHoaDons.stream().map(chiTiet -> MapperUtil.map(chiTiet, ChiTietHoaDon_DTO.class)).toList();
 	}
 
+	@Override
+	public Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV) {
+
+		if (nam < 1900 || nam > 2100) {
+			throw new IllegalArgumentException("nam không hợp lệ");
+		}
+
+		if (maNV == null || maNV.trim().isEmpty()) {
+			throw new IllegalArgumentException("maNV không được rỗng");
+		}
+
+		return hoaDon_DAO.getDoanhThuNVTheoNam(nam, maNV);
+	}
+
+	@Override
+	public Map<String, Double> getDoanhThuTheoNam(int nam) {
+
+		if (nam < 1900 || nam > 2100) {
+			throw new IllegalArgumentException("nam không hợp lệ");
+		}
+
+		return hoaDon_DAO.getDoanhThuTheoNam(nam);
+	}
 }

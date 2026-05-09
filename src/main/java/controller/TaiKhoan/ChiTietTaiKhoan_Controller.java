@@ -1,8 +1,5 @@
 package controller.TaiKhoan;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import controller.Menu.MenuNVQL_Controller;
 import dto.TaiKhoan_DTO;
 import javafx.event.ActionEvent;
@@ -11,6 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class ChiTietTaiKhoan_Controller implements Initializable {
     @FXML

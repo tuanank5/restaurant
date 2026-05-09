@@ -3,6 +3,7 @@ package dao;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import entity.Ban;
 import entity.ChiTietHoaDon;
@@ -59,4 +60,7 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 
 	List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon);
 
+	Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
+
+	public Map<String, Double> getDoanhThuTheoNam(int nam);
 }

@@ -1,14 +1,10 @@
 package dto;
 
+import lombok.*;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -16,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class DonDatBan_DTO {
+public class DonDatBan_DTO implements Serializable {
 
 	private String maDatBan;
 

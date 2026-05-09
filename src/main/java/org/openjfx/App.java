@@ -16,7 +16,12 @@ public class App extends Application {
 	public void start(Stage stage) throws Exception {
 		ClientManager.init();
 
-		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/TaiKhoan/TaiKhoanTA.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/ThongKe/ThongKeNVQLScroll.fxml"));
+//		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Dashboard/DashboardNVQLScroll.fxml"));
+//		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/ThongKe/ThongKeNVScroll.fxml"));
+//		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Dashboard/DashboardNVScroll.fxml"));
+//		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/TaiKhoan/TaiKhoanTA.fxml"));
+
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Login.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));

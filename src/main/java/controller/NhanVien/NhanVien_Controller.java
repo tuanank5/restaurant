@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
 import dao.NhanVien_DAO;
-import dto.NhanVien_DTO;
 import entity.NhanVien;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -33,10 +32,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import network.Client;
-import network.common.CommandType;
-import network.common.Request;
-import network.common.Response;
 import util.AlertUtil;
 import util.ComponentUtil;
 import util.ExportExcelUtil;
@@ -64,8 +59,6 @@ public class NhanVien_Controller {
 	private List<NhanVien> danhSachNhanVienDB;
 	private final int LIMIT = 15;
 	private String status = "all";
-
-	private Client client;
 
 	@FXML
 	private void initialize() {
@@ -253,27 +246,6 @@ public class NhanVien_Controller {
 		danhSachNhanVienDB = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class)
 				.getDanhSach(NhanVien.class, new HashMap<>());
 		loadData(danhSachNhanVienDB.subList(0, Math.min(LIMIT, danhSachNhanVienDB.size())));
-
-		try {
-			Request request = new Request();
-			request.setCommandType(CommandType.NHANVIEN_GET_ALL);
-
-			Response response = client.send(request);
-
-			List<NhanVien_DTO> danhSachNhanVienDB =
-					(List<NhanVien_DTO>) response.getData();
-
-			List<NhanVien_DTO> pageData =
-					danhSachNhanVienDB.subList(
-							0,
-							Math.min(LIMIT, danhSachNhanVienDB.size())
-					);
-
-			loadData(pageData);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void loadData(List<NhanVien> list) {
