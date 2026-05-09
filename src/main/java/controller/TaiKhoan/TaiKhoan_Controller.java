@@ -15,6 +15,7 @@ import network.Client;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
+import org.openjfx.App;
 
 import java.net.URL;
 import java.sql.Date;
@@ -56,7 +57,7 @@ public class TaiKhoan_Controller implements Initializable {
         cauHinhTable();
 
         try {
-            client = new Client();
+            client = Client.tryCreate();
         } catch (Exception e) {
             e.printStackTrace();
         }

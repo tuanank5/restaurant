@@ -39,7 +39,7 @@ public class DonDatBanHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanNVTheoThang(
+                        donDatBanService.getAllDonDatBanNVTheoThang(
                                 thang,
                                 nam,
                                 maNV
@@ -58,7 +58,7 @@ public class DonDatBanHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<String> list =
-                        service.getKhachHangTheoThangNVCuThe(
+                        donDatBanService.getKhachHangTheoThangNVCuThe(
                                 thang,
                                 nam,
                                 maNV
@@ -76,7 +76,7 @@ public class DonDatBanHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoNamNVCuThe(
+                        donDatBanService.getAllDonDatBanTheoNamNVCuThe(
                                 nam,
                                 maNV
                         );
@@ -93,7 +93,7 @@ public class DonDatBanHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<String> list =
-                        service.getKhachHangTheoNamNVCuThe(
+                        donDatBanService.getKhachHangTheoNamNVCuThe(
                                 nam,
                                 maNV
                         );
@@ -110,7 +110,7 @@ public class DonDatBanHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 Map<String, Integer> result =
-                        service.countDonDatBanTheoNamNVCuThe(
+                        donDatBanService.countDonDatBanTheoNamNVCuThe(
                                 nam,
                                 maNV
                         );
@@ -132,7 +132,7 @@ public class DonDatBanHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoNgayNVCuThe(
+                        donDatBanService.getAllDonDatBanTheoNgayNVCuThe(
                                 dateStart,
                                 dateEnd,
                                 maNV
@@ -155,7 +155,7 @@ public class DonDatBanHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<String> list =
-                        service.getKhachHangTheoNgayNVCuThe(
+                        donDatBanService.getKhachHangTheoNgayNVCuThe(
                                 dateStart,
                                 dateEnd,
                                 maNV
@@ -173,7 +173,7 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoThang(
+                        donDatBanService.getAllDonDatBanTheoThang(
                                 thang,
                                 nam
                         );
@@ -189,7 +189,7 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoNam(nam);
+                        donDatBanService.getAllDonDatBanTheoNam(nam);
 
                 return new Response(true, list, "OK");
             }
@@ -203,7 +203,7 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 List<String> list =
-                        service.getKhachHangTheoThang(
+                        donDatBanService.getKhachHangTheoThang(
                                 thang,
                                 nam
                         );
@@ -220,7 +220,7 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 Map<LoaiBan_DTO, Integer> result =
-                        service.countLoaiBanTheoThang(thang, nam);
+                        donDatBanService.countLoaiBanTheoThang(thang, nam);
 
                 return new Response(true, result, "OK");
             }
@@ -233,7 +233,7 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 List<String> list =
-                        service.getKhachHangTheoNam(nam);
+                        donDatBanService.getKhachHangTheoNam(nam);
 
                 return new Response(true, list, "OK");
             }
@@ -246,7 +246,7 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 Map<LoaiBan_DTO, Integer> result =
-                        service.countLoaiBanTheoNam(nam);
+                        donDatBanService.countLoaiBanTheoNam(nam);
 
                 return new Response(true, result, "OK");
             }
@@ -259,7 +259,7 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 Map<String, Integer> result =
-                        service.countDonDatBanTheoNam(nam);
+                        donDatBanService.countDonDatBanTheoNam(nam);
 
                 return new Response(true, result, "OK");
             }
@@ -276,7 +276,7 @@ public class DonDatBanHandler implements CommandHandler {
                         (LocalDate) map.get("dateEnd");
 
                 List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
+                        donDatBanService.getAllDonDatBanTheoNgayCuThe(dateStart, dateEnd);
 
                 return new Response(true, list, "OK");
             }
@@ -293,7 +293,7 @@ public class DonDatBanHandler implements CommandHandler {
                         (LocalDate) map.get("dateEnd");
 
                 List<String> list =
-                        service.getKhachHangTheoNgayCuThe(dateStart, dateEnd);
+                        donDatBanService.getKhachHangTheoNgayCuThe(dateStart, dateEnd);
 
                 return new Response(true, list, "OK");
             }
@@ -310,12 +310,12 @@ public class DonDatBanHandler implements CommandHandler {
                         (LocalDate) map.get("dateEnd");
 
                 Map<LoaiBan_DTO, Integer> result =
-                        service.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
+                        donDatBanService.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
 
                 return new Response(true, result, "OK");
             }
 
-            case DONDATBAN_GET_ALL: {
+            case DONDATBAN_GET_ALL -> {
 
                 List<DonDatBan_DTO> ds = donDatBanService.getAllDonDatBan();
 
@@ -326,7 +326,7 @@ public class DonDatBanHandler implements CommandHandler {
                         .build();
             }
 
-            case DONDATBAN_GET_BY_BAN: {
+            case DONDATBAN_GET_BY_BAN -> {
                 Ban_DTO banDTO = (Ban_DTO) request.getData();
                 List<DonDatBan_DTO> dsDon = donDatBanService.getByBan(banDTO);
                 return Response.builder()
@@ -335,7 +335,7 @@ public class DonDatBanHandler implements CommandHandler {
                         .build();
             }
 
-            case DONDATBAN_ADD: {
+            case DONDATBAN_ADD -> {
                 DonDatBan_DTO dto = (DonDatBan_DTO) request.getData();
                 boolean result = donDatBanService.them(dto);
 
@@ -347,7 +347,7 @@ public class DonDatBanHandler implements CommandHandler {
                         .build();
             }
 
-            case DONDATBAN_UPDATE: {
+            case DONDATBAN_UPDATE -> {
                 DonDatBan_DTO ddb = (DonDatBan_DTO) request.getData();
                 boolean result = donDatBanService.sua(ddb);
                 return Response.builder()
@@ -357,12 +357,6 @@ public class DonDatBanHandler implements CommandHandler {
                                 : "Cập nhật đơn đặt bàn thất bại")
                         .build();
             }
-
-            default:
-                return Response.builder()
-                        .success(false)
-                        .message("Không hỗ trợ command: " + type)
-                        .build();
         }
 
         return new Response(false, null, "Invalid command");

@@ -17,7 +17,6 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 	long tongSoHoaDon();
 
 	boolean themHoaDon(HoaDon_DTO dto);
-	Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
 
 	List<HoaDon> getAllHoaDons();
 

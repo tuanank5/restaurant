@@ -80,6 +80,7 @@ public class DashboardNV_Controller {
 			.ngayVaoLam(Date.valueOf("2024-01-01"))
 			.trangThai(true)
 			.build();
+
     private String maNhanVien;
 
 	public DashboardNV_Controller() {
@@ -91,14 +92,16 @@ public class DashboardNV_Controller {
 	@FXML
 	public void initialize() throws Exception {
         try {
-			client = new Client();
+			client = Client.tryCreate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
         if (MenuNV_Controller.taiKhoan != null
                 && MenuNV_Controller.taiKhoan.getMaNhanVien() != null) {
-            maNhanVien = MenuNV_Controller.taiKhoan.getMaNhanVien();
+//            maNhanVien = MenuNV_Controller.taiKhoan.getMaNhanVien();
         }
+
 		txtDateEnd.setValue(LocalDate.now());
 		txtDateStart.setValue(LocalDate.now().minusDays(6));
 		displayData();

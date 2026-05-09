@@ -53,12 +53,8 @@ public class DashboardNVQL_Controller {
 
 	private Client client;
 
-	private final HoaDon_DAOImpl hoaDon_DAO;
-	private final DonDatBan_DAOImpl donDatBan_DAO;
-
 	public DashboardNVQL_Controller() {
-		this.hoaDon_DAO = new HoaDon_DAOImpl();
-		this.donDatBan_DAO = new DonDatBan_DAOImpl();
+
 	}
 
 	DecimalFormat decimalFormat = new DecimalFormat("#,##0 VNĐ");
@@ -66,7 +62,7 @@ public class DashboardNVQL_Controller {
 	@FXML
 	public void initialize() throws Exception {
 		try {
-			client = new Client();
+			client = Client.tryCreate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -6,6 +6,7 @@ import java.net.Socket;
 
 import network.common.Request;
 import network.common.Response;
+import org.openjfx.App;
 
 public class Client {
 
@@ -28,7 +29,7 @@ public class Client {
 
 	public static Client tryCreate() {
 		try {
-			return new Client();
+			return App.ClientManager.getClient();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

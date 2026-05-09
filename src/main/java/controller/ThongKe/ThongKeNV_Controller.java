@@ -118,12 +118,12 @@ public class ThongKeNV_Controller {
 	@FXML
 	public void initialize() throws Exception {
 		try {
-			client = new Client();
+			client = Client.tryCreate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-        maNV = MenuNV_Controller.taiKhoan.getMaNhanVien();
+//        maNV = MenuNV_Controller.taiKhoan.getMaNhanVien();
 
         btnGroup();
 		setCmb();

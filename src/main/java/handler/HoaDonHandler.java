@@ -37,7 +37,7 @@ public class HoaDonHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<HoaDon_DTO> list =
-                        service.getAllHoaDonNVTheoThang(thang, nam, maNV);
+                        hoaDonService.getAllHoaDonNVTheoThang(thang, nam, maNV);
 
                 return new Response(true, list, "OK");
             }
@@ -52,7 +52,7 @@ public class HoaDonHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 Double tongDoanhThu =
-                        service.getTongDoanhThuNVTheoThang(
+                        hoaDonService.getTongDoanhThuNVTheoThang(
                                 thang,
                                 nam,
                                 maNV
@@ -70,7 +70,7 @@ public class HoaDonHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 Map<String, Double> result =
-                        service.getDoanhThuNVTheoNam(
+                        hoaDonService.getDoanhThuNVTheoNam(
                                 nam,
                                 maNV
                         );
@@ -87,7 +87,7 @@ public class HoaDonHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<HoaDon_DTO> list =
-                        service.getHoaDonNVTheoNam(
+                        hoaDonService.getHoaDonNVTheoNam(
                                 nam,
                                 maNV
                         );
@@ -104,7 +104,7 @@ public class HoaDonHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 Double tongDoanhThu =
-                        service.getTongDoanhThuNVTheoNam(
+                        hoaDonService.getTongDoanhThuNVTheoNam(
                                 nam,
                                 maNV
                         );
@@ -126,7 +126,7 @@ public class HoaDonHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 List<HoaDon_DTO> list =
-                        service.getHoaDonNVTheoNgayCuThe(
+                        hoaDonService.getHoaDonNVTheoNgayCuThe(
                                 dateStart,
                                 dateEnd,
                                 maNV
@@ -149,7 +149,7 @@ public class HoaDonHandler implements CommandHandler {
                 String maNV = (String) map.get("maNV");
 
                 Double tongDoanhThu =
-                        service.getTongDoanhThuNVTheoNgayCuThe(
+                        hoaDonService.getTongDoanhThuNVTheoNgayCuThe(
                                 dateStart,
                                 dateEnd,
                                 maNV
@@ -167,7 +167,7 @@ public class HoaDonHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 Double tongDoanhThu =
-                        service.getTongDoanhThuTheoThang(
+                        hoaDonService.getTongDoanhThuTheoThang(
                                 thang,
                                 nam
                         );
@@ -183,7 +183,7 @@ public class HoaDonHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 Double tongDoanhThu =
-                        service.getTongDoanhThuTheoNam(nam);
+                        hoaDonService.getTongDoanhThuTheoNam(nam);
 
                 return new Response(true, tongDoanhThu, "OK");
             }
@@ -197,7 +197,7 @@ public class HoaDonHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 List<HoaDon_DTO> list =
-                        service.getAllHoaDonTheoThang(
+                        hoaDonService.getAllHoaDonTheoThang(
                                 thang,
                                 nam
                         );
@@ -213,7 +213,7 @@ public class HoaDonHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 Map<String, Double> result =
-                        service.getDoanhThuTheoNam(nam);
+                        hoaDonService.getDoanhThuTheoNam(nam);
 
                 return new Response(true, result, "OK");
             }
@@ -226,7 +226,7 @@ public class HoaDonHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
 
                 List<HoaDon_DTO> list =
-                        service.getHoaDonTheoNam(nam);
+                        hoaDonService.getHoaDonTheoNam(nam);
 
                 return new Response(true, list, "OK");
             }
@@ -243,7 +243,7 @@ public class HoaDonHandler implements CommandHandler {
                         (LocalDate) map.get("dateEnd");
 
                 List<HoaDon_DTO> list =
-                        service.getHoaDonTheoNgayCuThe(dateStart, dateEnd);
+                        hoaDonService.getHoaDonTheoNgayCuThe(dateStart, dateEnd);
 
                 return new Response(true, list, "OK");
             }
@@ -260,12 +260,12 @@ public class HoaDonHandler implements CommandHandler {
                         (LocalDate) map.get("dateEnd");
 
                 Double tongDoanhThu =
-                        service.getTongDoanhThuTheoNgayCuThe(dateStart, dateEnd);
+                        hoaDonService.getTongDoanhThuTheoNgayCuThe(dateStart, dateEnd);
 
                 return new Response(true, tongDoanhThu, "OK");
             }
 
-            case HOADON_GET_ALL: {
+            case HOADON_GET_ALL -> {
 
                 List<HoaDon_DTO> ds = hoaDonService.getAllHoaDons();
 
@@ -276,7 +276,7 @@ public class HoaDonHandler implements CommandHandler {
                         .build();
             }
 
-            case HOADON_GET_BY_MADATBAN: {
+            case HOADON_GET_BY_MADATBAN -> {
 
                 String maDatBan = (String) request.getData();
 
@@ -288,7 +288,7 @@ public class HoaDonHandler implements CommandHandler {
                         .build();
             }
 
-            case HOADON_ADD: {
+            case HOADON_ADD -> {
 
                 HoaDon_DTO hd = (HoaDon_DTO) request.getData();
 
@@ -302,19 +302,13 @@ public class HoaDonHandler implements CommandHandler {
                         .build();
             }
 
-            case HOADON_UPDATE: {
+            case HOADON_UPDATE -> {
 
                 return Response.builder()
                         .success(false)
                         .message("Service chưa hỗ trợ cập nhật hóa đơn")
                         .build();
             }
-
-            default:
-                return Response.builder()
-                        .success(false)
-                        .message("Không hỗ trợ command: " + type)
-                        .build();
         }
 
         return new Response(false, null, "Invalid command");

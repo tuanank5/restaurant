@@ -60,8 +60,6 @@ public interface HoaDon_Service {
 
 	List<ChiTietHoaDon_DTO> findByMaHoaDon(String maHoaDon);
 
-    Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
-
     Map<String, Double> getDoanhThuTheoNam(int nam);
 
 	Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);

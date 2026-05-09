@@ -97,7 +97,7 @@ public class ThongKeNVQL_Controller {
 	@FXML
 	public void initialize() throws Exception {
 		try {
-			client = new Client();
+			client = Client.tryCreate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

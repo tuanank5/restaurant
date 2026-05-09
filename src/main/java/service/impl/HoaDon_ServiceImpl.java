@@ -66,7 +66,8 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 			hoaDon.setKhachHang(kh);
 			hoaDon.setMaKhachHang(kh.getMaKH());
 		}
-		return hoaDon_DAO.themHoaDon(MapperUtil.map(hoaDon_DTO, HoaDon.class));
+
+		return hoaDon_DAO.themHoaDon(hoaDon);
 	}
 
 	@Override
@@ -310,11 +311,6 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 		}
 		List<ChiTietHoaDon> chiTietHoaDons = hoaDon_DAO.findByMaHoaDon(maHoaDon);
 		return chiTietHoaDons.stream().map(chiTiet -> MapperUtil.map(chiTiet, ChiTietHoaDon_DTO.class)).toList();
-	}
-
-	@Override
-	public Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV) {
-		return hoaDon_DAO.getDoanhThuNVTheoNam(nam,maNV);
 	}
 
 	@Override
