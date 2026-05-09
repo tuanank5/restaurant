@@ -27,20 +27,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import controller.Menu.MenuNV_Controller;
-import dao.ChiTietHoaDon_DAO;
-import dao.HoaDon_DAO;
-import dao.KhachHang_DAO;
-import dao.KhuyenMai_DAO;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.KhuyenMai_DAOImpl;
 import dto.*;
-import entity.ChiTietHoaDon;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.KhuyenMai;
-import entity.MonAn;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -138,7 +125,7 @@ public class AThanhToan_Controller {
 	@FXML
 	private Label lblSauGiam;
 
-	// --- DAO ---
+	// --- SERVICE ---
 	private HoaDon_Service hoaDonService = new HoaDon_ServiceImpl();
 	private ChiTietHoaDon_Service chiTietHoaDonService = new ChiTietHoaDon_ServiceImpl();
 	private KhachHang_Service khachHangService = new KhachHang_ServiceImpl();

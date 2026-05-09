@@ -135,7 +135,7 @@ public class DatBanTruoc_Controller implements Initializable {
 		LocalTime gioChon = (gioStr != null ? LocalTime.parse(gioStr) : null);
 		for (Ban_DTO ban : danhSachBan) {
 			if (loaiBanChon != null && !loaiBanChon.equals("Tất cả")) {
-				if (!loaiBanChon.equalsIgnoreCase(getTenLoaiBan(ban.getMaLoaiBan()))) {
+				if (!loaiBanChon.equalsIgnoreCase(getTenLoaiBan(ban.getTenLoaiBan()))) {
 					continue;
 				}
 			}
@@ -153,7 +153,7 @@ public class DatBanTruoc_Controller implements Initializable {
 			default:
 				bgColor = "#00aa00"; // xanh
 			}
-			Button btn = new Button(ban.getMaBan() + "\n(" + getTenLoaiBan(ban.getMaLoaiBan()) + ")");
+			Button btn = new Button(ban.getMaBan() + "\n(" + getTenLoaiBan(ban.getTenLoaiBan()) + ")");
 			btn.setPrefSize(170, 110);
 			btn.setStyle(buildStyle(bgColor));
 			final boolean isDangPhucVu = "Đang phục vụ".equals(trangThai);
@@ -216,14 +216,14 @@ public class DatBanTruoc_Controller implements Initializable {
 			danhSachBanDangChon.clear();
 			danhSachButtonDangChonUI.clear();
 			btnBan.setStyle(buildStyle("#00aa00"));
-			btnBan.setText(ban.getMaBan() + "\n(" + ban.getMaLoaiBan() + ")");
+			btnBan.setText(ban.getMaBan() + "\n(" + ban.getTenLoaiBan() + ")");
 		} else {
 			danhSachBanDangChon.clear();
 			danhSachButtonDangChonUI.clear();
 			danhSachBanDangChon.add(ban);
 			danhSachButtonDangChonUI.add(btnBan);
 			btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
-			btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getMaLoaiBan() + ")");
+			btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getTenLoaiBan() + ")");
 		}
 	}
 
@@ -280,7 +280,7 @@ public class DatBanTruoc_Controller implements Initializable {
 			bgColor = "#00aa00"; // xanh
 		}
 
-		Button btn = new Button(ban.getMaBan() + "\n(" + ban.getMaLoaiBan() + ")");
+		Button btn = new Button(ban.getMaBan() + "\n(" + ban.getTenLoaiBan() + ")");
 		btn.setPrefSize(170, 110);
 		btn.setStyle(buildStyle(bgColor));
 

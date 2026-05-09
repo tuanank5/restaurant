@@ -24,9 +24,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.HoaDon_DAO;
-import dao.KhachHang_DAO;
-import dao.impl.KhachHang_DAOlmpl;
 //import entity.HoaDon;
 //import entity.KhachHang;
 //import entity.KhuyenMai;

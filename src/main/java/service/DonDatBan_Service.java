@@ -59,4 +59,6 @@ public interface DonDatBan_Service {
 	List<DonDatBan_DTO> getAllDonDatBanTheoNamNVCuThe(int nam, String maNV);
 
 	List<DonDatBan_DTO> getAllDonDatBanTheoNgayNVCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
+
+    List<DonDatBan_DTO> getByBan(Ban_DTO ban_DTO);
 }

@@ -41,12 +41,10 @@ public class DonDatBanHandler implements CommandHandler {
 
                 case DONDATBAN_GET_BY_BAN: {
                     Ban_DTO banDTO = (Ban_DTO) request.getData();
-
-                    DonDatBan_DTO ddb = donDatBanService.layDonDatTheoBan(banDTO.getMaBan());
-
+                    List<DonDatBan_DTO> dsDon = donDatBanService.getByBan(banDTO);
                     return Response.builder()
                             .success(true)
-                            .data(ddb)
+                            .data(dsDon)
                             .build();
                 }
 
