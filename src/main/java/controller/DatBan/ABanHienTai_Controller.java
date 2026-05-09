@@ -11,22 +11,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.net.URL;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.Ban_DAO;
-import dao.ChiTietHoaDon_DAO;
-import dao.DonDatBan_DAO;
-import dao.HoaDon_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
 import entity.Ban;
-import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
-import entity.MonAn;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -97,11 +86,6 @@ public class ABanHienTai_Controller {
 	@FXML
 	private TextField txtTongDatBan;
 
-	// --- DAO ---
-	private Ban_DAO banDAO = new Ban_DAOImpl();
-	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-	private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
-	private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
 	private Client client;
 
 	// --- Danh sách và trạng thái ---
@@ -111,9 +95,6 @@ public class ABanHienTai_Controller {
 
 	public static ABanHienTai_Controller aBHT;
 	boolean checkTTbangKo;
-	private List<ChiTietHoaDon> dsCTHD_DB;
-
-	Map<MonAn, Integer> dsMonAnTA = new HashMap<>();
 
 	@FXML
 	private void controller(ActionEvent event) throws IOException {
@@ -140,8 +121,7 @@ public class ABanHienTai_Controller {
 		}
 		aBHT = this;
 		checkTTbangKo = false;
-		dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
-		dsBan = banDAO.getDanhSach("Ban.list", Ban.class);
+		refreshData();
 		capNhatTrangThaiBanMacDinh();
 		capNhatTrangThaiBanTheoDonDatTruoc();
 		khoiTaoComboBoxes();
@@ -161,7 +141,7 @@ public class ABanHienTai_Controller {
 		for (Ban ban : dsBan) {
 			if (!ban.getTrangThai().equals("Trống")) {
 				ban.setTrangThai("Trống");
-				RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+				updateBan(ban);
 			}
 		}
 
@@ -188,7 +168,7 @@ public class ABanHienTai_Controller {
 			for (Ban ban : dsBan) {
 				if (ban.getMaBan().equals(ddb.getBan().getMaBan())) {
 					ban.setTrangThai("Đã được đặt");
-					RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+					updateBan(ban);
 				}
 			}
 		}
@@ -207,6 +187,7 @@ public class ABanHienTai_Controller {
 	}
 
 	private void loadDanhSachHoaDon() {
+		refreshData();
 		tongDatBan = 0;
 		gridPaneHD.getChildren().clear();
 
@@ -263,11 +244,6 @@ public class ABanHienTai_Controller {
 							checkTTbangKo = true;
 							MenuNV_Controller.aBanHienTai_HD = hoaDon;
 							MenuNV_Controller.instance.readyUI("DatBan/aDatMon");
-							dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(hoaDon.getMaHD());
-							dsMonAnTA.clear();
-							for (ChiTietHoaDon cthd : dsCTHD_DB) {
-								dsMonAnTA.put(cthd.getMonAn(), cthd.getSoLuong());
-							}
 						}
 					}
 				});
@@ -318,22 +294,19 @@ public class ABanHienTai_Controller {
 					try {
 						DonDatBan ddb = hoaDon.getDonDatBan();
 						ddb.setTrangThai("Đã hủy");
-						donDatBanDao.capNhat(ddb);
+						updateDonDatBan(ddb);
 
 						if (hoaDon != null) {
-							hoaDon.setTrangThai("Đã hủy");
-							RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
-									.capNhat(hoaDon);
+							updateHoaDonStatus(hoaDon.getMaHD(), "Đã hủy");
 						}
 
 						Ban ban = ddb.getBan();
 						if (ban != null) {
 							ban.setTrangThai("Trống");
-							RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class)
-									.capNhat(ban);
+							updateBan(ban);
 						}
 
-						KhachHang kh = donDatBanDao.getKhachHangTheoMaDatBan(ddb.getMaDatBan());
+						KhachHang kh = getKhachHangTheoMaDatBan(ddb.getMaDatBan());
 
 						showAlert(Alert.AlertType.INFORMATION,
 								"Đã hủy đơn đặt bàn của khách " + (kh != null ? kh.getTenKH() : "") + " theo yêu cầu.");
@@ -364,7 +337,7 @@ public class ABanHienTai_Controller {
 		for (Ban ban : dsBan) {
 			if (hd.getDonDatBan().getBan().equals(ban)) {
 				ban.setTrangThai("Đang phục vụ");
-				RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(Ban_DAO.class).capNhat(ban);
+				updateBan(ban);
 			}
 		}
 	}
@@ -422,6 +395,71 @@ public class ABanHienTai_Controller {
 		btn.setGraphicTextGap(5);
 
 		return btn;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void refreshData() {
+		try {
+			Response hoaDonRes = client.send(new Request(CommandType.HOADON_GET_ALL, null));
+			if (hoaDonRes != null && hoaDonRes.isSuccess() && hoaDonRes.getData() != null) {
+				dsHoaDon = (List<HoaDon>) hoaDonRes.getData();
+			}
+
+			Response banRes = client.send(new Request(CommandType.BAN_GET_ALL_ENTITY, null));
+			if (banRes != null && banRes.isSuccess() && banRes.getData() != null) {
+				dsBan = (List<Ban>) banRes.getData();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateBan(Ban ban) {
+		try {
+			client.send(new Request(CommandType.BAN_UPDATE, dtoFromBan(ban)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateHoaDonStatus(String maHD, String trangThai) {
+		try {
+			Map<String, Object> payload = new HashMap<>();
+			payload.put("maHD", maHD);
+			payload.put("trangThai", trangThai);
+			client.send(new Request(CommandType.HOADON_UPDATE_STATUS, payload));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateDonDatBan(DonDatBan ddb) {
+		try {
+			client.send(new Request(CommandType.DONDATBAN_UPDATE, ddb));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private KhachHang getKhachHangTheoMaDatBan(String maDatBan) {
+		try {
+			Response res = client.send(new Request(CommandType.DONDATBAN_GET_KH_BY_MADATBAN, maDatBan));
+			if (res != null && res.isSuccess()) {
+				return (KhachHang) res.getData();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private dto.Ban_DTO dtoFromBan(Ban ban) {
+		return dto.Ban_DTO.builder()
+				.maBan(ban.getMaBan())
+				.viTri(ban.getViTri())
+				.trangThai(ban.getTrangThai())
+				.maLoaiBan(ban.getLoaiBan() != null ? ban.getLoaiBan().getMaLoaiBan() : null)
+				.build();
 	}
 
 }
