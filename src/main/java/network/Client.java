@@ -1,9 +1,11 @@
 package network;
 
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 
 import network.common.Request;
 import network.common.Response;
@@ -12,6 +14,9 @@ import org.openjfx.App;
 public class Client {
 
 	private static final int CONNECT_TIMEOUT_MS = 15_000;
+
+	/** Một lần gửi + tối đa một lần kết nối lại nếu EOF/socket lỗi khi đọc phản hồi. */
+	private static final int MAX_SEND_ATTEMPTS = 2;
 
 	private final String host;
 	private final int port;
@@ -32,7 +37,7 @@ public class Client {
 	/**
 	 * Phía client: ObjectOutputStream trước, flush, rồi ObjectInputStream.
 	 * Phía server ({@code ClientHandler}) phải tạo ObjectInputStream trước, rồi ObjectOutputStream + flush
-	 * — nếu cả hai cùng OOS trước dễ deadlock / {@link java.net.SocketException Connection reset}.
+	 * — nếu cả hai cùng OOS trước dễ deadlock / {@link java.net.SocketException} / connection reset.
 	 */
 	private void connect() throws Exception {
 		closeStreamsOnly();
@@ -57,28 +62,43 @@ public class Client {
 	}
 
 	public synchronized Response send(Request request) throws Exception {
+		Exception lastFailure = null;
 
-		try {
+		for (int attempt = 0; attempt < MAX_SEND_ATTEMPTS; attempt++) {
+			try {
+				if (socket == null || socket.isClosed() || out == null || in == null) {
+					connect();
+				}
 
-			out.writeObject(request);
-			out.flush();
-			out.reset();
+				out.writeObject(request);
+				out.flush();
+				out.reset();
 
-			return (Response) in.readObject();
+				return (Response) in.readObject();
 
-		} catch (Exception e) {
+			} catch (EOFException e) {
+				lastFailure = e;
+				closeStreamsOnly();
+				if (attempt + 1 < MAX_SEND_ATTEMPTS) {
+					System.err.println("Client: EOF khi đọc phản hồi — server có thể đã đóng socket. Kết nối lại và gửi lại request.");
+					connect();
+					continue;
+				}
+				throw new java.io.IOException("Server đóng kết nối trước khi gửi xong phản hồi (EOF).", e);
 
-			System.out.println("Mất kết nối server, reconnect...");
-
-			closeStreamsOnly();
-			connect();
-
-			out.writeObject(request);
-			out.flush();
-			out.reset();
-
-			return (Response) in.readObject();
+			} catch (SocketException e) {
+				lastFailure = e;
+				closeStreamsOnly();
+				if (attempt + 1 < MAX_SEND_ATTEMPTS) {
+					System.err.println("Client: lỗi socket — kết nối lại và gửi lại request.");
+					connect();
+					continue;
+				}
+				throw e;
+			}
 		}
+
+		throw new java.io.IOException("Không nhận được phản hồi sau " + MAX_SEND_ATTEMPTS + " lần thử.", lastFailure);
 	}
 
 	private void closeStreamsOnly() {

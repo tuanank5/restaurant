@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
+import session.SessionManager;
 import dto.Ban_DTO;
 import dto.ChiTietHoaDon_DTO;
 import dto.DonDatBan_DTO;
@@ -283,7 +284,11 @@ public class ADatMon_Controller implements Initializable {
             // Cập nhật giao diện danh sách bàn trong MenuNV
             MenuNV_Controller.instance.refreshBanUI();
             // Mở UI hóa đơn
-            MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
+            if (MenuNV_Controller.aBanHienTai_HD != null) {
+                MenuNV_Controller.instance.openHoaDonChiTiet(MenuNV_Controller.aBanHienTai_HD);
+            } else {
+                MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -330,8 +335,7 @@ public class ADatMon_Controller implements Initializable {
         HoaDon_DTO hd = HoaDon_DTO.builder().maHD(AutoIDUitl.sinhMaHoaDon())
                 .ngayLap(java.sql.Date.valueOf(LocalDate.now())).trangThai("Hiện tại").kieuThanhToan("Chưa thanh toán")
                 .maKhachHang(MenuNV_Controller.khachHangDangChon == null ? null : MenuNV_Controller.khachHangDangChon.getMaKH())
-                .maNhanVien(MenuNV_Controller.taiKhoan == null || MenuNV_Controller.taiKhoan.getMaNhanVien() == null ? null
-                        : MenuNV_Controller.taiKhoan.getMaNhanVien())
+                .maNhanVien(SessionManager.resolveMaNV(MenuNV_Controller.taiKhoan))
                 .maDonDatBan(ddb == null ? null : ddb.getMaDatBan()).build();
         try {
             Request req = Request.builder().commandType(CommandType.HOADON_ADD).data(hd).build();

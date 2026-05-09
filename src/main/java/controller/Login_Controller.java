@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
+import dto.NhanVien_DTO;
 import dto.TaiKhoan_DTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +29,7 @@ import network.Client;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
+import session.SessionManager;
 import util.AlertUtil;
 import util.EmailUtil;
 
@@ -84,6 +86,9 @@ public class Login_Controller implements Initializable {
 						Date dateNow = Date.valueOf(localDate);
 						this.taiKhoan.setNgayDangNhap(dateNow);
 						capNhatTaiKhoanTaiServer(this.taiKhoan);
+
+						SessionManager.setCurrentNhanVien(NhanVien_DTO.builder().maNV(taiKhoan.getMaNhanVien())
+								.tenNV(taiKhoan.getTenNhanVien()).build());
 
 						// PHÂN QUYỀN GIAO DIỆN
 						String chucVu = taiKhoan.getTenTaiKhoan() != null && taiKhoan.getTenTaiKhoan().startsWith("QL")

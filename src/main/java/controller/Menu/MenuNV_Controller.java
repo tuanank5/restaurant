@@ -9,9 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import controller.Dashboard.DashboardNVScroll_Controller;
+import controller.HoaDon.ChiTietHoaDon_Controller;
 import dto.DonDatBan_DTO;
 import dto.HoaDon_DTO;
 import dto.KhachHang_DTO;
+import dto.NhanVien_DTO;
 import dto.TaiKhoan_DTO;
 import entity.Ban;
 import entity.DonDatBan;
@@ -40,6 +43,7 @@ import network.Client;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
+import session.SessionManager;
 
 public class MenuNV_Controller {
 
@@ -107,8 +111,28 @@ public class MenuNV_Controller {
 		return fxmlLoader;
 	}
 
+	/** Mở màn chi tiết hóa đơn (tra cứu) với DTO đã có từ server. */
+	public void openHoaDonChiTiet(HoaDon_DTO hd) {
+		if (hd == null) {
+			return;
+		}
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/HoaDon/ChiTiet.fxml"));
+			Parent root = fxmlLoader.load();
+			borderPane.setCenter(root);
+			ChiTietHoaDon_Controller c = fxmlLoader.getController();
+			if (c != null) {
+				c.setHoaDonDto(hd);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void setThongTin(TaiKhoan_DTO taiKhoan) {
 		MenuNV_Controller.taiKhoan = taiKhoan;
+		SessionManager.setCurrentNhanVien(NhanVien_DTO.builder().maNV(taiKhoan.getMaNhanVien())
+				.tenNV(taiKhoan.getTenNhanVien()).build());
 		String hoTen = taiKhoan.getTenNhanVien() + " - " + taiKhoan.getMaNhanVien();
 		txtThongTin.setText(hoTen);
 		dashBoard();
@@ -121,6 +145,7 @@ public class MenuNV_Controller {
 			return;
 		}
 		if (buttonType.isPresent() && buttonType.get().getButtonData() == ButtonBar.ButtonData.YES) {
+			SessionManager.clear();
 			// Cập nhật lại ngày giờ đăng nhập
 			LocalDate localDate = LocalDate.now();
 			Date dateNow = Date.valueOf(localDate);
@@ -159,7 +184,10 @@ public class MenuNV_Controller {
 	}
 
 	public void dashBoard() {
-		readyUI("Dashboard/DashboardNVScroll");
+		FXMLLoader loader = readyUI("Dashboard/DashboardNVScroll");
+		if (loader != null && loader.getController() instanceof DashboardNVScroll_Controller scroll) {
+			scroll.loadDashboardContent();
+		}
 	}
 
 	public void refreshBanUI() {
@@ -187,7 +215,7 @@ public class MenuNV_Controller {
 
 	@FXML
 	void btnDashboard(ActionEvent event) {
-		readyUI("Dashboard/DashboardNVScroll");
+		dashBoard();
 	}
 
 	@FXML

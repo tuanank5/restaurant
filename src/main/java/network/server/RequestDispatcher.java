@@ -41,6 +41,15 @@ public class RequestDispatcher {
                     .build();
         }
 
-        return handler.handle(request);
+        try {
+            return handler.handle(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String msg = e.getMessage();
+            return Response.builder()
+                    .success(false)
+                    .message(msg != null && !msg.isBlank() ? msg : "Lỗi xử lý yêu cầu trên server")
+                    .build();
+        }
     }
 }

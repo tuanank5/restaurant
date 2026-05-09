@@ -1,5 +1,8 @@
 package controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 import controller.Menu.MenuNVQL_Controller;
 import dto.TaiKhoan_DTO;
 import javafx.event.ActionEvent;
@@ -58,14 +61,18 @@ public class DoiMatKhauQL_Controller {
 
 	@FXML
 	void btnLuuLai(ActionEvent event) {
-		Object tkObj = MenuNVQL_Controller.taiKhoan;
-		TaiKhoan_DTO taiKhoan = tkObj == null ? null : MapperUtil.map(tkObj, TaiKhoan_DTO.class);
-		String mkCu = mkCuTextField.getText();
-		String mkMoi = mkMoiTextField.getText();
-		String mkNhapLai = mkNhapLaiTextField.getText();
+		TaiKhoan_DTO taiKhoan = MenuNVQL_Controller.taiKhoan;
+		String mkCu = mkCuTextField.getText().trim();
+		String mkMoi = mkMoiTextField.getText().trim();
+		String mkNhapLai = mkNhapLaiTextField.getText().trim();
 
 		if (taiKhoan == null) {
 			AlertUtil.showAlert("Thông báo", "Không tìm thấy tài khoản", Alert.AlertType.WARNING);
+			return;
+		}
+
+		if (taiKhoan.getMaTaiKhoan() == null || taiKhoan.getMaTaiKhoan().isBlank()) {
+			AlertUtil.showAlert("Thông báo", "Không xác định được mã tài khoản. Đăng nhập lại.", Alert.AlertType.WARNING);
 			return;
 		}
 
@@ -92,12 +99,16 @@ public class DoiMatKhauQL_Controller {
 			return;
 		}
 
-		taiKhoan.setMatKhau(mkMoi);
-		if (!capNhatMatKhau(taiKhoan)) {
+		TaiKhoan_DTO dtoGui = MapperUtil.map(taiKhoan, TaiKhoan_DTO.class);
+		dtoGui.setMatKhau(mkMoi);
+		dtoGui.setNgaySuaDoi(Date.valueOf(LocalDate.now()));
+		if (!capNhatMatKhau(dtoGui)) {
 			AlertUtil.showAlert("Thông báo", "Đổi mật khẩu thất bại", Alert.AlertType.ERROR);
 			return;
 		}
 
+		taiKhoan.setMatKhau(mkMoi);
+		taiKhoan.setNgaySuaDoi(dtoGui.getNgaySuaDoi());
 		AlertUtil.showAlert("Thông báo", "Đổi mật khẩu thành công", Alert.AlertType.INFORMATION);
 		lamMoi();
 	}

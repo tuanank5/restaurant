@@ -3,14 +3,9 @@ package controller.ThongKe;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
-import controller.Menu.MenuNV_Controller;
-import dto.DonDatBan_DTO;
-import dto.HoaDon_DTO;
-import entity.NhanVien;
 import dto.DonDatBan_DTO;
 import dto.HoaDon_DTO;
 import dto.NhanVien_DTO;
-import network.common.Response;
 import service.DonDatBan_Service;
 import service.HoaDon_Service;
 import service.impl.DonDatBan_ServiceImpl;
@@ -95,8 +90,6 @@ public class ThongKeNV_Controller {
 
 	private Client client;
 
-    private String maNV;
-
 	public ThongKeNV_Controller() {
 
 	}
@@ -108,41 +101,13 @@ public class ThongKeNV_Controller {
 	@FXML
 	public void initialize() throws Exception {
 		try {
-
 			client = Client.tryCreate();
-
-			maNV =
-					MenuNV_Controller
-							.taiKhoan
-							.getMaNhanVien();
-
-			Request request = new Request(
-					CommandType.THONGKE_FINDBYID,
-					maNV);
-
-			Response response =
-					client.send(request);
-
-			if (response != null
-					&& response.isSuccess()) {
-
-				nhanVien =
-						(NhanVien_DTO)
-								response.getData();
-
-			} else {
-
-				System.out.println(
-						response.getMessage());
-			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-        btnGroup();
+		btnGroup();
 		setCmb();
-		displayData();
 		barChart_DoanhThuNam.setVisible(false);
 		anchorPane_main.sceneProperty().addListener((obs, oldScene, newScene) -> {
 			if (newScene != null) {
@@ -163,6 +128,15 @@ public class ThongKeNV_Controller {
 			}
 
 		});
+	}
+
+	public void setNhanVien(NhanVien_DTO nhanVien) {
+		this.nhanVien = nhanVien;
+		try {
+			displayData();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void btnGroup() {
@@ -188,6 +162,9 @@ public class ThongKeNV_Controller {
 	}
 
 	private void displayData() throws Exception {
+		if (nhanVien == null || nhanVien.getMaNV() == null || nhanVien.getMaNV().isBlank()) {
+			return;
+		}
 		if (radThangNam.isSelected()) {
 			Integer nam = cmbNam.getValue();
 			if (cmbThang.getValue() != 0) {

@@ -4,7 +4,9 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.ResourceBundle;
 
 import controller.DatMon.DoiMonTruoc_Controller;
@@ -89,6 +91,7 @@ public class DonDatBan_Controller implements Initializable {
 	private Client client;
 	private ObservableList<DonDatBan_DTO> danhSachDonDatBan = FXCollections.observableArrayList();
 	private List<DonDatBan_DTO> danhSachDonDatBanDB = List.of();
+	private final Map<String, KhachHang_DTO> cacheKhTheoMaDatBan = new ConcurrentHashMap<>();
 
 	private void capNhatTongDon() {
 		txtTongDonDat.setText(String.valueOf(tblView.getItems().size()));
@@ -185,6 +188,7 @@ public class DonDatBan_Controller implements Initializable {
 		} catch (Exception e) {
 			danhSachDonDatBanDB = List.of();
 		}
+		cacheKhTheoMaDatBan.clear();
 		danhSachDonDatBan.clear();
 		danhSachDonDatBan.addAll(danhSachDonDatBanDB);
 
@@ -393,7 +397,22 @@ public class DonDatBan_Controller implements Initializable {
 	}
 
 	private KhachHang_DTO getKhachHangByMaDatBan(String maDatBan) {
-		return null;
+		if (maDatBan == null || maDatBan.isBlank()) {
+			return null;
+		}
+		return cacheKhTheoMaDatBan.computeIfAbsent(maDatBan, this::taiKhachHangTheoMaDatBan);
+	}
+
+	private KhachHang_DTO taiKhachHangTheoMaDatBan(String maDatBan) {
+		try {
+			Request request = Request.builder().commandType(CommandType.DONDATBAN_GET_KH_BY_MADATBAN).data(maDatBan)
+					.build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			return data instanceof KhachHang_DTO dto ? dto : null;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	private HoaDon_DTO getHoaDonByMaDatBan(String maDatBan) {

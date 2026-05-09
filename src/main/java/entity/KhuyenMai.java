@@ -45,7 +45,8 @@ public class KhuyenMai {
 
 	@Override
 	public String toString() {
-		return phanTramGiamGia + "% - " + tenKM;
+		String loai = loaiKM != null ? loaiKM : "";
+		return loai + " — " + phanTramGiamGia + "%";
 	}
 
 }

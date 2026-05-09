@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import controller.DatMon.DatMonTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
+import session.SessionManager;
 import dto.Ban_DTO;
 import dto.DonDatBan_DTO;
 import dto.HoaDon_DTO;
@@ -552,9 +553,7 @@ public class DatBanTruoc_Controller implements Initializable {
 					.ngayLap(java.sql.Date.valueOf(LocalDate.now())).tongTien(0.0).thue(0.0).trangThai("Đặt trước")
 					.kieuThanhToan("Chưa thanh toán").tienNhan(0.0).tienThua(0.0)
 					.maKhachHang(kh == null ? null : kh.getMaKH())
-					.maNhanVien(MenuNV_Controller.taiKhoan == null || MenuNV_Controller.taiKhoan.getMaNhanVien() == null
-							? null
-							: MenuNV_Controller.taiKhoan.getMaNhanVien())
+					.maNhanVien(SessionManager.resolveMaNV(MenuNV_Controller.taiKhoan))
 					.maDonDatBan(donDau.getMaDatBan()).build();
 			boolean okHD = addHoaDon(hd);
 			if (!okHD) {

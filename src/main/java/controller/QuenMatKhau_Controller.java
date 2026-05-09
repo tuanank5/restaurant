@@ -71,7 +71,7 @@ public class QuenMatKhau_Controller {
 		}
 
 		LocalDateTime now = LocalDateTime.now();
-		if (otpTime.plusMinutes(1).isBefore(now)) {
+		if (otpTime.plusMinutes(10).isBefore(now)) {
 			AlertUtil.showAlert("Lỗi", "Mã OTP đã hết hạn. Vui lòng gửi lại.", Alert.AlertType.ERROR);
 			return;
 		}

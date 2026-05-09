@@ -12,10 +12,13 @@ import dto.Ban_DTO;
 import dto.DonDatBan_DTO;
 import dto.KhachHang_DTO;
 import dto.LoaiBan_DTO;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -56,6 +59,8 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		client = Client.tryCreate();
+		ganGridPaneRongTheoScroll();
+		damBaoTenLoaiChoBanTrongDon();
 		cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
 		cmbTrangThai.setValue("Tất cả");
 		cmbTrangThai.setOnAction(e -> loadDanhSachBan());
@@ -83,6 +88,40 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		dpNgayDatBan.setTooltip(new Tooltip("Lọc theo ngày đặt bàn!"));
 		btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
 
+	}
+
+	private void ganGridPaneRongTheoScroll() {
+		Parent p = gridPaneBan.getParent();
+		while (p != null && !(p instanceof ScrollPane)) {
+			p = p.getParent();
+		}
+		if (p instanceof ScrollPane sp) {
+			gridPaneBan.prefWidthProperty().bind(Bindings.createDoubleBinding(
+					() -> Math.max(400, sp.getViewportBounds().getWidth() - 16),
+					sp.viewportBoundsProperty()));
+		}
+	}
+
+	/** Đơn từ server có thể thiếu {@link Ban_DTO#getTenLoaiBan()} — đồng bộ từ danh sách bàn. */
+	private void damBaoTenLoaiChoBanTrongDon() {
+		if (donDatBanDuocChon == null || donDatBanDuocChon.getBan() == null) {
+			return;
+		}
+		Ban_DTO b = donDatBanDuocChon.getBan();
+		if (b.getTenLoaiBan() != null && !b.getTenLoaiBan().isBlank()) {
+			return;
+		}
+		String ma = b.getMaBan();
+		if (ma == null) {
+			return;
+		}
+		for (Ban_DTO x : getAllBan()) {
+			if (ma.equals(x.getMaBan())) {
+				b.setTenLoaiBan(x.getTenLoaiBan());
+				b.setMaLoaiBan(x.getMaLoaiBan());
+				break;
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")

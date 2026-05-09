@@ -20,6 +20,7 @@ import dto.MonAn_DTO;
 
 import controller.DatBan.DatBanTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
+import session.SessionManager;
 import network.Client;
 import network.common.CommandType;
 import network.common.Request;
@@ -452,7 +453,7 @@ public class DatMonTruoc_Controller implements Initializable {
             hd.setTienThua(0.0);
             hd.setMaKhachHang(kh.getMaKH());
             hd.setMaKhuyenMai(null);
-            hd.setMaNhanVien(MenuNV_Controller.taiKhoan.getMaNhanVien());
+            hd.setMaNhanVien(SessionManager.resolveMaNV(MenuNV_Controller.taiKhoan));
             hd.setMaDonDatBan(donDau.getMaDatBan());
             Response rHd = client.send(new Request(CommandType.HOADON_ADD, hd));
             boolean okHD = rHd != null && rHd.isSuccess();

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import dto.NhanVien_DTO;
 import dto.TaiKhoan_DTO;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -28,6 +29,7 @@ import network.Client;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
+import session.SessionManager;
 
 public class MenuNVQL_Controller {
 	@FXML
@@ -50,6 +52,8 @@ public class MenuNVQL_Controller {
 		if (!buttonType.isPresent() || buttonType.get().getButtonData() != ButtonBar.ButtonData.YES) {
 			return;
 		}
+
+		SessionManager.clear();
 
 		try {
 			Date dateNow = Date.valueOf(LocalDate.now());
@@ -138,6 +142,8 @@ public class MenuNVQL_Controller {
 
 	public void setThongTin(TaiKhoan_DTO taiKhoan) {
 		MenuNVQL_Controller.taiKhoan = taiKhoan;
+		SessionManager.setCurrentNhanVien(NhanVien_DTO.builder().maNV(taiKhoan.getMaNhanVien())
+				.tenNV(taiKhoan.getTenNhanVien()).build());
 		String hoTen = taiKhoan.getTenNhanVien() + " - " + taiKhoan.getMaNhanVien();
 		txtThongTin.setText(hoTen);
 		dashBoard();

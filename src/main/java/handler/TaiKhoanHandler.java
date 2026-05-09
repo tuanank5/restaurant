@@ -10,11 +10,6 @@ import network.common.Response;
 import service.TaiKhoan_Service;
 import service.impl.TaiKhoan_ServiceImpl;
 import dao.impl.TaiKhoan_DAOImpl;
-import entity.TaiKhoan;
-import util.MapperUtil;
-
-import java.util.List;
-
 public class TaiKhoanHandler implements CommandHandler {
 
 	private TaiKhoan_Service service = new TaiKhoan_ServiceImpl();
@@ -34,8 +29,10 @@ public class TaiKhoanHandler implements CommandHandler {
 			if (!(request.getData() instanceof TaiKhoan_DTO dto)) {
 				return new Response(false, null, "Invalid data type for TAIKHOAN_UPDATE_PASSWORD");
 			}
-			TaiKhoan entity = MapperUtil.map(dto, TaiKhoan.class);
-			boolean ok = dao.capNhat(entity);
+			if (dto.getMaTaiKhoan() == null || dto.getMaTaiKhoan().isBlank()) {
+				return new Response(false, null, "Ma tai khoan is required");
+			}
+			boolean ok = dao.capNhatBangDto(dto);
 			return new Response(ok, null, ok ? "OK" : "FAILED");
 		}
 		}

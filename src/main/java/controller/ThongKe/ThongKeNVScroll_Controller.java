@@ -2,10 +2,12 @@ package controller.ThongKe;
 
 import java.io.IOException;
 
+import dto.NhanVien_DTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import session.SessionManager;
 
 public class ThongKeNVScroll_Controller {
 	@FXML
@@ -23,6 +25,11 @@ public class ThongKeNVScroll_Controller {
 			pane.setContent(content);
 			pane.setFitToHeight(true);
 			pane.setFitToWidth(true);
+			ThongKeNV_Controller controller = loader.getController();
+			NhanVien_DTO nv = SessionManager.getCurrentNhanVien();
+			if (controller != null && nv != null) {
+				controller.setNhanVien(nv);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -85,7 +85,7 @@ public class HoaDon_Controller implements Initializable {
 		BeforDay.setTooltip(new Tooltip("Lọc hoá đơn từ ngày!"));
 		AfterDay.setTooltip(new Tooltip("Lọc hoá đơn đến ngày!"));
 		cmbLoc.setTooltip(new Tooltip("Lọc theo trạng thái hoá đơn!"));
-		txtTimKiem.setTooltip(new Tooltip("Tìm kiếm hoá đơn theo tên Khách hàng!"));
+		txtTimKiem.setTooltip(new Tooltip("Tìm theo mã HĐ, mã KH hoặc tên khách hàng / nhân viên"));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,11 +119,25 @@ public class HoaDon_Controller implements Initializable {
 		colNgayLap.setCellValueFactory(data -> new SimpleStringProperty(
 				data.getValue().getNgayLap() != null ? data.getValue().getNgayLap().toString() : ""));
 
-		colKH.setCellValueFactory(data -> new SimpleStringProperty(
-				data.getValue().getMaKhachHang() != null ? data.getValue().getMaKhachHang() : ""));
+		colKH.setCellValueFactory(data -> {
+			HoaDon_DTO hd = data.getValue();
+			String ten = hd.getKhachHang() != null && hd.getKhachHang().getTenKH() != null
+					? hd.getKhachHang().getTenKH()
+					: null;
+			String hienThi = ten != null && !ten.isBlank() ? ten
+					: (hd.getMaKhachHang() != null ? hd.getMaKhachHang() : "");
+			return new SimpleStringProperty(hienThi);
+		});
 
-		colNV.setCellValueFactory(data -> new SimpleStringProperty(
-				data.getValue().getMaNhanVien() != null ? data.getValue().getMaNhanVien() : ""));
+		colNV.setCellValueFactory(data -> {
+			HoaDon_DTO hd = data.getValue();
+			String ten = hd.getNhanVien() != null && hd.getNhanVien().getTenNV() != null
+					? hd.getNhanVien().getTenNV()
+					: null;
+			String hienThi = ten != null && !ten.isBlank() ? ten
+					: (hd.getMaNhanVien() != null ? hd.getMaNhanVien() : "");
+			return new SimpleStringProperty(hienThi);
+		});
 
 		colKM.setCellValueFactory(data -> new SimpleStringProperty(
 				data.getValue().getMaKhuyenMai() != null ? data.getValue().getMaKhuyenMai() : "Không có"));
@@ -154,8 +168,8 @@ public class HoaDon_Controller implements Initializable {
 	private boolean locTheoNgay(HoaDon_DTO hd) {
 		if (hd.getNgayLap() == null)
 			return false;
-		LocalDate from = AfterDay.getValue();
-		LocalDate to = BeforDay.getValue();
+		LocalDate from = BeforDay.getValue();
+		LocalDate to = AfterDay.getValue();
 		LocalDate ngayLap = hd.getNgayLap().toLocalDate();
 
 		if (from == null && to == null)
@@ -199,11 +213,31 @@ public class HoaDon_Controller implements Initializable {
 			String keyword = newText.toLowerCase().trim();
 
 			danhSachHoaDon.setAll(danhSachHoaDonDB.stream()
-					.filter(hd -> hd.getMaHD().toLowerCase().contains(keyword)
-							|| (hd.getMaKhachHang() != null && hd.getMaKhachHang().toLowerCase().contains(keyword)))
-					.filter(this::locTheoNgay).filter(this::locTheoTrangThai)
+					.filter(hd -> khopTuKhoaTimKiem(hd, keyword)).filter(this::locTheoNgay)
+					.filter(this::locTheoTrangThai)
 					.collect(java.util.stream.Collectors.toList()));
 		});
+	}
+
+	private boolean khopTuKhoaTimKiem(HoaDon_DTO hd, String keyword) {
+		if (keyword.isEmpty()) {
+			return true;
+		}
+		if (hd.getMaHD() != null && hd.getMaHD().toLowerCase().contains(keyword)) {
+			return true;
+		}
+		if (hd.getMaKhachHang() != null && hd.getMaKhachHang().toLowerCase().contains(keyword)) {
+			return true;
+		}
+		String tenKh = hd.getKhachHang() != null ? hd.getKhachHang().getTenKH() : null;
+		if (tenKh != null && tenKh.toLowerCase().contains(keyword)) {
+			return true;
+		}
+		if (hd.getMaNhanVien() != null && hd.getMaNhanVien().toLowerCase().contains(keyword)) {
+			return true;
+		}
+		String tenNv = hd.getNhanVien() != null ? hd.getNhanVien().getTenNV() : null;
+		return tenNv != null && tenNv.toLowerCase().contains(keyword);
 	}
 
 }

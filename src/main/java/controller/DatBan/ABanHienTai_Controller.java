@@ -210,6 +210,29 @@ public class ABanHienTai_Controller {
         }
     }
 
+    /**
+     * Tên loại bàn: ưu tiên DTO từ hóa đơn (sau khi server enrich), fallback theo {@link #dsBan}.
+     */
+    private String tenLoaiBanTuHoaDon(HoaDon_DTO hoaDon) {
+        if (hoaDon == null || hoaDon.getDonDatBan() == null || hoaDon.getDonDatBan().getBan() == null) {
+            return "";
+        }
+        Ban_DTO b = hoaDon.getDonDatBan().getBan();
+        if (b.getTenLoaiBan() != null && !b.getTenLoaiBan().isBlank()) {
+            return b.getTenLoaiBan();
+        }
+        String maBan = b.getMaBan();
+        if (maBan == null) {
+            return "";
+        }
+        for (Ban_DTO ban : dsBan) {
+            if (maBan.equals(ban.getMaBan()) && ban.getTenLoaiBan() != null && !ban.getTenLoaiBan().isBlank()) {
+                return ban.getTenLoaiBan();
+            }
+        }
+        return "";
+    }
+
     private void khoiTaoComboBoxes() {
         cmbLoaiBan.getItems().clear();
         cmbLoaiBan.getItems().add("Tất cả");
@@ -235,9 +258,8 @@ public class ABanHienTai_Controller {
         Date dateNow = Date.valueOf(localDate);
 
         for (final HoaDon_DTO hoaDon : dsHoaDon) {
-            boolean matchType = "Tất cả".equals(loaiBanLoc)
-                    || (hoaDon.getDonDatBan() != null && hoaDon.getDonDatBan().getBan() != null
-                            && loaiBanLoc.equals(hoaDon.getDonDatBan().getBan().getTenLoaiBan()));
+            String tenLoaiHd = tenLoaiBanTuHoaDon(hoaDon);
+            boolean matchType = "Tất cả".equals(loaiBanLoc) || loaiBanLoc.equals(tenLoaiHd);
 
             if (matchType && hoaDon.getNgayLap().equals(dateNow) && hoaDon.getKieuThanhToan().equals("Chưa thanh toán")
                     && hoaDon.getDonDatBan() != null
@@ -258,9 +280,7 @@ public class ABanHienTai_Controller {
                 BorderPane paneBan = new BorderPane();
                 paneWest.setTop(paneBan);
                 String maBanTxt = hoaDon.getDonDatBan().getBan() != null ? hoaDon.getDonDatBan().getBan().getMaBan() : "";
-                String tenLoaiTxt = hoaDon.getDonDatBan().getBan() != null
-                        ? hoaDon.getDonDatBan().getBan().getTenLoaiBan()
-                        : "";
+                String tenLoaiTxt = tenLoaiBanTuHoaDon(hoaDon);
                 paneBan.setCenter(new Label(maBanTxt + "\n" + tenLoaiTxt));
                 paneBan.setStyle(getBorderStyle());
 

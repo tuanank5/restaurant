@@ -19,7 +19,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import controller.Menu.MenuNV_Controller;
 import dto.ChiTietHoaDon_DTO;
-import entity.ChiTietHoaDon;
+import dto.HoaDon_DTO;
+import dto.KhachHang_DTO;
+import dto.NhanVien_DTO;
 import entity.HoaDon;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -89,6 +91,7 @@ public class ChiTietHoaDon_Controller {
 	private TextField txtKieuThanhToan;
 
 	private HoaDon hoaDon;
+	private HoaDon_DTO hoaDonDto;
 	private final ObservableList<ChiTietHoaDon_DTO> danhSachCTHD = FXCollections.observableArrayList();
 	private Client client;
 
@@ -116,25 +119,61 @@ public class ChiTietHoaDon_Controller {
 
 	public void setHoaDon(HoaDon hoaDon) {
 		this.hoaDon = hoaDon;
+		this.hoaDonDto = null;
 		hienThiThongTinHoaDon();
 		loadChiTietHoaDon();
 	}
 
-	private void hienThiThongTinHoaDon() {
-		txtMaHoaDon.setText(hoaDon.getMaHD());
-		txtTenKH.setText(hoaDon.getKhachHang().getTenKH());
-		txtSDT.setText(hoaDon.getKhachHang().getSdt());
-		txtNV.setText(hoaDon.getNhanVien().getTenNV());
-		txtNgay.setText(hoaDon.getNgayLap().toString());
+	public void setHoaDonDto(HoaDon_DTO dto) {
+		this.hoaDonDto = dto;
+		this.hoaDon = null;
+		hienThiThongTinHoaDon();
+		loadChiTietHoaDon();
+	}
 
-		lblTongThanhToan.setText(formatTienVN(hoaDon.getTongTien()));
-		txtKieuThanhToan.setText(hoaDon.getKieuThanhToan());
-		lblTienTra.setText(formatTienVN(hoaDon.getTienThua()));
+	private String maHoaDonHienTai() {
+		if (hoaDonDto != null) {
+			return hoaDonDto.getMaHD();
+		}
+		if (hoaDon != null) {
+			return hoaDon.getMaHD();
+		}
+		return "";
+	}
+
+	private void hienThiThongTinHoaDon() {
+		if (hoaDonDto != null) {
+			txtMaHoaDon.setText(hoaDonDto.getMaHD() != null ? hoaDonDto.getMaHD() : "");
+			KhachHang_DTO kh = hoaDonDto.getKhachHang();
+			txtTenKH.setText(kh != null && kh.getTenKH() != null ? kh.getTenKH() : "");
+			txtSDT.setText(kh != null && kh.getSdt() != null ? kh.getSdt() : "");
+			NhanVien_DTO nv = hoaDonDto.getNhanVien();
+			txtNV.setText(nv != null && nv.getTenNV() != null ? nv.getTenNV() : "");
+			txtNgay.setText(hoaDonDto.getNgayLap() != null ? hoaDonDto.getNgayLap().toString() : "");
+			lblTongThanhToan.setText(formatTienVN(hoaDonDto.getTongTien()));
+			txtKieuThanhToan.setText(hoaDonDto.getKieuThanhToan() != null ? hoaDonDto.getKieuThanhToan() : "");
+			lblTienTra.setText(formatTienVN(hoaDonDto.getTienThua()));
+			return;
+		}
+		if (hoaDon != null) {
+			txtMaHoaDon.setText(hoaDon.getMaHD());
+			txtTenKH.setText(hoaDon.getKhachHang() != null ? hoaDon.getKhachHang().getTenKH() : "");
+			txtSDT.setText(hoaDon.getKhachHang() != null ? hoaDon.getKhachHang().getSdt() : "");
+			txtNV.setText(hoaDon.getNhanVien() != null ? hoaDon.getNhanVien().getTenNV() : "");
+			txtNgay.setText(hoaDon.getNgayLap() != null ? hoaDon.getNgayLap().toString() : "");
+			lblTongThanhToan.setText(formatTienVN(hoaDon.getTongTien()));
+			txtKieuThanhToan.setText(hoaDon.getKieuThanhToan());
+			lblTienTra.setText(formatTienVN(hoaDon.getTienThua()));
+		}
 	}
 
 	private void loadChiTietHoaDon() {
+		String ma = maHoaDonHienTai();
+		if (ma == null || ma.isBlank()) {
+			return;
+		}
 		try {
-			Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, hoaDon.getMaHD()));
+			Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, ma));
 			if (res != null && res.isSuccess()) {
 				@SuppressWarnings("unchecked")
 				var list = (java.util.List<ChiTietHoaDon_DTO>) res.getData();
@@ -159,10 +198,14 @@ public class ChiTietHoaDon_Controller {
 
 	private void xuatHoaDonPDF() {
 		try {
+			String ma = maHoaDonHienTai();
+			if (ma.isBlank()) {
+				return;
+			}
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Lưu hóa đơn");
 			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-			fileChooser.setInitialFileName("HoaDon_" + hoaDon.getMaHD() + ".pdf");
+			fileChooser.setInitialFileName("HoaDon_" + ma + ".pdf");
 
 			Stage stage = (Stage) btnXuatHD.getScene().getWindow();
 			File file = fileChooser.showSaveDialog(stage);
@@ -173,7 +216,6 @@ public class ChiTietHoaDon_Controller {
 			PdfWriter.getInstance(document, new FileOutputStream(file));
 			document.open();
 
-			// ===== FONT TIẾNG VIỆT =====
 			BaseFont bf = BaseFont.createFont("c:/windows/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 			Font titleFont = new Font(bf, 18, Font.BOLD);
 			Font headerFont = new Font(bf, 12, Font.BOLD);
@@ -183,12 +225,40 @@ public class ChiTietHoaDon_Controller {
 			title.setAlignment(Element.ALIGN_CENTER);
 			document.add(title);
 
-			document.add(new Paragraph("Mã hóa đơn: " + hoaDon.getMaHD(), normalFont));
-			document.add(new Paragraph("Ngày lập: " + hoaDon.getNgayLap(), normalFont));
-			document.add(new Paragraph("Nhân viên: " + hoaDon.getNhanVien().getTenNV(), normalFont));
-			document.add(new Paragraph("Khách hàng: " + hoaDon.getKhachHang().getTenKH(), normalFont));
-			document.add(new Paragraph("SĐT: " + hoaDon.getKhachHang().getSdt(), normalFont));
-			document.add(new Paragraph("Thanh toán: " + hoaDon.getKieuThanhToan(), normalFont));
+			String tenKH = "";
+			String sdt = "";
+			String tenNV = "";
+			String ngayLapStr = "";
+			String kieuTT = "";
+			double tong = 0;
+			double tienThua = 0;
+
+			if (hoaDonDto != null) {
+				KhachHang_DTO kh = hoaDonDto.getKhachHang();
+				tenKH = kh != null && kh.getTenKH() != null ? kh.getTenKH() : "";
+				sdt = kh != null && kh.getSdt() != null ? kh.getSdt() : "";
+				NhanVien_DTO nv = hoaDonDto.getNhanVien();
+				tenNV = nv != null && nv.getTenNV() != null ? nv.getTenNV() : "";
+				ngayLapStr = hoaDonDto.getNgayLap() != null ? hoaDonDto.getNgayLap().toString() : "";
+				kieuTT = hoaDonDto.getKieuThanhToan() != null ? hoaDonDto.getKieuThanhToan() : "";
+				tong = hoaDonDto.getTongTien();
+				tienThua = hoaDonDto.getTienThua();
+			} else if (hoaDon != null) {
+				tenKH = hoaDon.getKhachHang() != null ? hoaDon.getKhachHang().getTenKH() : "";
+				sdt = hoaDon.getKhachHang() != null ? hoaDon.getKhachHang().getSdt() : "";
+				tenNV = hoaDon.getNhanVien() != null ? hoaDon.getNhanVien().getTenNV() : "";
+				ngayLapStr = hoaDon.getNgayLap() != null ? hoaDon.getNgayLap().toString() : "";
+				kieuTT = hoaDon.getKieuThanhToan() != null ? hoaDon.getKieuThanhToan() : "";
+				tong = hoaDon.getTongTien();
+				tienThua = hoaDon.getTienThua();
+			}
+
+			document.add(new Paragraph("Mã hóa đơn: " + ma, normalFont));
+			document.add(new Paragraph("Ngày lập: " + ngayLapStr, normalFont));
+			document.add(new Paragraph("Nhân viên: " + tenNV, normalFont));
+			document.add(new Paragraph("Khách hàng: " + tenKH, normalFont));
+			document.add(new Paragraph("SĐT: " + sdt, normalFont));
+			document.add(new Paragraph("Thanh toán: " + kieuTT, normalFont));
 
 			document.add(new Paragraph(" "));
 
@@ -220,8 +290,8 @@ public class ChiTietHoaDon_Controller {
 			document.add(table);
 
 			document.add(new Paragraph(" "));
-			document.add(new Paragraph("Tổng thanh toán: " + formatTienVN(hoaDon.getTongTien()), headerFont));
-			document.add(new Paragraph("Tiền thừa: " + formatTienVN(hoaDon.getTienThua()), headerFont));
+			document.add(new Paragraph("Tổng thanh toán: " + formatTienVN(tong), headerFont));
+			document.add(new Paragraph("Tiền thừa: " + formatTienVN(tienThua), headerFont));
 
 			Paragraph thanks = new Paragraph("Cảm ơn quý khách đã sử dụng dịch vụ!", normalFont);
 			thanks.setAlignment(Element.ALIGN_CENTER);

@@ -59,6 +59,7 @@ public class TaiKhoan_ServiceImpl implements TaiKhoan_Service {
 			if (tk.getNhanVien() != null) {
 				dto.setMaNhanVien(tk.getNhanVien().getMaNV());
 				dto.setTenNhanVien(tk.getNhanVien().getTenNV());
+				dto.setChucVu(tk.getNhanVien().getChucVu());
 			}
 
 			return dto;

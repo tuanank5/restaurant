@@ -10,7 +10,6 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class KhuyenMai_DTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -26,5 +25,11 @@ public class KhuyenMai_DTO implements Serializable {
 	private Date ngayKetThuc;
 
 	private int phanTramGiamGia;
+
+	@Override
+	public String toString() {
+		String loai = loaiKM != null ? loaiKM : "";
+		return loai + " — " + phanTramGiamGia + "%";
+	}
 
 }

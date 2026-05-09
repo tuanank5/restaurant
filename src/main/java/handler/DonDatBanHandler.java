@@ -1,7 +1,5 @@
 package handler;
 
-import java.util.List;
-
 import dto.Ban_DTO;
 import dto.DonDatBan_DTO;
 import dto.KhachHang_DTO;
@@ -14,6 +12,7 @@ import service.DonDatBan_Service;
 import service.impl.DonDatBan_ServiceImpl;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +22,26 @@ public class DonDatBanHandler implements CommandHandler {
 
     public DonDatBanHandler() {
         donDatBanService = new DonDatBan_ServiceImpl();
+    }
+
+    private static boolean maNVInvalid(String maNV) {
+        return maNV == null || maNV.isBlank();
+    }
+
+    private static Response responseMissingMaNVList() {
+        return Response.builder()
+                .success(false)
+                .message("Thiếu mã nhân viên (maNV)")
+                .data(List.of())
+                .build();
+    }
+
+    private static Response responseMissingMaNVMap() {
+        return Response.builder()
+                .success(false)
+                .message("Thiếu mã nhân viên (maNV)")
+                .data(Collections.emptyMap())
+                .build();
     }
 
     @Override
@@ -38,6 +57,10 @@ public class DonDatBanHandler implements CommandHandler {
                 int thang = (int) map.get("thang");
                 int nam = (int) map.get("nam");
                 String maNV = (String) map.get("maNV");
+
+                if (maNVInvalid(maNV)) {
+                    return responseMissingMaNVList();
+                }
 
                 List<DonDatBan_DTO> list =
                         donDatBanService.getAllDonDatBanNVTheoThang(
@@ -58,6 +81,10 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
                 String maNV = (String) map.get("maNV");
 
+                if (maNVInvalid(maNV)) {
+                    return responseMissingMaNVList();
+                }
+
                 List<String> list =
                         donDatBanService.getKhachHangTheoThangNVCuThe(
                                 thang,
@@ -76,6 +103,10 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
                 String maNV = (String) map.get("maNV");
 
+                if (maNVInvalid(maNV)) {
+                    return responseMissingMaNVList();
+                }
+
                 List<DonDatBan_DTO> list =
                         donDatBanService.getAllDonDatBanTheoNamNVCuThe(
                                 nam,
@@ -93,6 +124,10 @@ public class DonDatBanHandler implements CommandHandler {
                 int nam = (int) map.get("nam");
                 String maNV = (String) map.get("maNV");
 
+                if (maNVInvalid(maNV)) {
+                    return responseMissingMaNVList();
+                }
+
                 List<String> list =
                         donDatBanService.getKhachHangTheoNamNVCuThe(
                                 nam,
@@ -109,6 +144,10 @@ public class DonDatBanHandler implements CommandHandler {
 
                 int nam = (int) map.get("nam");
                 String maNV = (String) map.get("maNV");
+
+                if (maNVInvalid(maNV)) {
+                    return responseMissingMaNVMap();
+                }
 
                 Map<String, Integer> result =
                         donDatBanService.countDonDatBanTheoNamNVCuThe(
@@ -132,6 +171,10 @@ public class DonDatBanHandler implements CommandHandler {
 
                 String maNV = (String) map.get("maNV");
 
+                if (maNVInvalid(maNV)) {
+                    return responseMissingMaNVList();
+                }
+
                 List<DonDatBan_DTO> list =
                         donDatBanService.getAllDonDatBanTheoNgayNVCuThe(
                                 dateStart,
@@ -154,6 +197,10 @@ public class DonDatBanHandler implements CommandHandler {
                         (LocalDate) map.get("dateEnd");
 
                 String maNV = (String) map.get("maNV");
+
+                if (maNVInvalid(maNV)) {
+                    return responseMissingMaNVList();
+                }
 
                 List<String> list =
                         donDatBanService.getKhachHangTheoNgayNVCuThe(

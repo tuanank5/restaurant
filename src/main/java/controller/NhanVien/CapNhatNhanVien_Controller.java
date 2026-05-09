@@ -130,7 +130,7 @@ public class CapNhatNhanVien_Controller implements Initializable {
 		if (check) {
 			AlertUtil.showAlert("Thông báo", "Cập nhật nhân viên thành công!", Alert.AlertType.INFORMATION);
 			this.nhanVien = nhanVienNew;
-			quayLai();
+			MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
 		} else {
 			AlertUtil.showAlert("Lỗi", "Cập nhật thất bại!", Alert.AlertType.ERROR);
 		}

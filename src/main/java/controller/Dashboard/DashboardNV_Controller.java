@@ -1,21 +1,5 @@
 package controller.Dashboard;
 
-import dto.DonDatBan_DTO;
-import dto.HoaDon_DTO;
-import dto.NhanVien_DTO;
-import entity.NhanVien;
-import javafx.fxml.FXML;
-import javafx.scene.chart.*;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
-import network.Client;
-import network.common.CommandType;
-import network.common.Request;
-
-import java.sql.Date;
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -27,12 +11,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import controller.Menu.MenuNV_Controller;
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.NhanVien;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import dto.NhanVien_DTO;
+import network.common.Response;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
@@ -45,7 +27,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import network.Client;
-import network.common.Response;
+import network.common.CommandType;
+import network.common.Request;
 
 public class DashboardNV_Controller {
 
@@ -70,78 +53,57 @@ public class DashboardNV_Controller {
 
 	private Client client;
 
-    private String maNhanVien;
-
-	NhanVien_DTO nhanVien;
+	private NhanVien_DTO nhanVien;
 
 	public DashboardNV_Controller() {
-
 	}
 
 	DecimalFormat decimalFormat = new DecimalFormat("#,##0 VNĐ");
 
 	@FXML
-	public void initialize() throws Exception {
+	public void initialize() {
 		try {
-
 			client = Client.tryCreate();
-
-			if (MenuNV_Controller.taiKhoan != null
-					&& MenuNV_Controller
-					.taiKhoan
-					.getMaNhanVien() != null) {
-
-				maNhanVien =
-						MenuNV_Controller
-								.taiKhoan
-								.getMaNhanVien();
-
-				Request request = new Request(
-						CommandType.THONGKE_FINDBYID,
-						maNhanVien);
-
-				Response response =
-						client.send(request);
-
-				if (response != null
-						&& response.isSuccess()) {
-
-					nhanVien =
-							(NhanVien_DTO)
-									response.getData();
-
-				} else {
-
-					System.out.println(
-							response.getMessage());
-				}
-			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		txtDateEnd.setValue(LocalDate.now());
 		txtDateStart.setValue(LocalDate.now().minusDays(6));
-		displayData();
 		barChart_DoanhThuNam.setVisible(false);
 		anchorPane_main.sceneProperty().addListener((obs, oldScene, newScene) -> {
 			if (newScene != null) {
 				newScene.setOnKeyPressed(keyEvent -> {
 					if (keyEvent.getCode() == KeyCode.F5) {
-						try {
-							displayData();
-						} catch (Exception e) {
-							throw new RuntimeException(e);
-						}
+						displayData();
 					}
 				});
 			}
 		});
 	}
 
-	private void displayData() throws Exception {
-		showCustomDateRangeData();
+	/**
+	 * Call after FXML load once the logged-in staff is known.
+	 */
+	public void setNhanVien(NhanVien_DTO nhanVien) {
+		if (nhanVien == null || nhanVien.getMaNV() == null || nhanVien.getMaNV().isBlank()) {
+			System.err.println("DashboardNV: NhanVien chưa được set hoặc thiếu maNV — không gọi API.");
+			return;
+		}
+		this.nhanVien = nhanVien;
+		displayData();
+	}
+
+	private void displayData() {
+		if (nhanVien == null || nhanVien.getMaNV() == null || nhanVien.getMaNV().isBlank()) {
+			return;
+		}
+		try {
+			showCustomDateRangeData();
+		} catch (Exception e) {
+			System.err.println("DashboardNV: lỗi tải dữ liệu — " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	private void showCustomDateRangeData() throws Exception {
@@ -150,34 +112,58 @@ public class DashboardNV_Controller {
 		LocalDate dateStart = txtDateStart.getValue();
 		LocalDate dateEnd = txtDateEnd.getValue();
 
-		// UpDate 4 Ô TOP
-		List<HoaDon_DTO> dsHD =
-				(List<HoaDon_DTO>) client.send(
-						new Request(
-								CommandType.HOADON_GET_HOADON_NV_THEO_NGAY_CUTHE,
-								Map.of(
-										"dateStart", dateStart,
-										"dateEnd", dateEnd,
-										"maNV", nhanVien.getMaNV()
-								)
-						)
-				).getData();
+		List<HoaDon_DTO> dsHD = sendHoaDonList(
+				new Request(CommandType.HOADON_GET_HOADON_NV_THEO_NGAY_CUTHE,
+						Map.of("dateStart", dateStart, "dateEnd", dateEnd, "maNV", nhanVien.getMaNV())));
 
-		List<DonDatBan_DTO> dsDon =
-				(List<DonDatBan_DTO>) client.send(
-						new Request(
-								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE,
-								Map.of(
-										"dateStart", dateStart,
-										"dateEnd", dateEnd
-								)
-						)
-				).getData();
-		// END - UpDate 4 Ô TOP
+		List<DonDatBan_DTO> dsDon = sendDonDatBanList(
+				new Request(CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE,
+						Map.of("dateStart", dateStart, "dateEnd", dateEnd, "maNV", nhanVien.getMaNV())));
 
-		// UpDate Chart
 		updateChartDoanhThu(dsHD);
 		updateChartDonDatBan(dsDon);
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<HoaDon_DTO> sendHoaDonList(Request req) {
+		try {
+			if (client == null) {
+				return List.of();
+			}
+			Response r = client.send(req);
+			if (r == null || !r.isSuccess()) {
+				if (r != null && r.getMessage() != null) {
+					System.err.println("DashboardNV: " + r.getMessage());
+				}
+				return List.of();
+			}
+			Object d = r.getData();
+			return d instanceof List<?> ? (List<HoaDon_DTO>) d : List.of();
+		} catch (Exception e) {
+			System.err.println("DashboardNV: request HoaDon thất bại — " + e.getMessage());
+			return List.of();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<DonDatBan_DTO> sendDonDatBanList(Request req) {
+		try {
+			if (client == null) {
+				return List.of();
+			}
+			Response r = client.send(req);
+			if (r == null || !r.isSuccess()) {
+				if (r != null && r.getMessage() != null) {
+					System.err.println("DashboardNV: " + r.getMessage());
+				}
+				return List.of();
+			}
+			Object d = r.getData();
+			return d instanceof List<?> ? (List<DonDatBan_DTO>) d : List.of();
+		} catch (Exception e) {
+			System.err.println("DashboardNV: request DonDatBan thất bại — " + e.getMessage());
+			return List.of();
+		}
 	}
 
 	private void updateChartDoanhThu(List<HoaDon_DTO> dsHD) {
@@ -186,14 +172,12 @@ public class DashboardNV_Controller {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
 		LocalDate dateStart = txtDateStart.getValue();
 		LocalDate dateEnd = txtDateEnd.getValue();
-		// Tạo danh sách các ngày trong khoảng thời gian đã chọn
 		Map<String, Double> doanhThuTheoNgay = new LinkedHashMap<>();
 		while (!dateStart.isAfter(dateEnd)) {
-			doanhThuTheoNgay.put(dateStart.format(formatter), 0.0); // Set doanh thu là 0 cho mọi ngày trước tiên
-			dateStart = dateStart.plusDays(1); // Chuyển đến ngày tiếp theo
+			doanhThuTheoNgay.put(dateStart.format(formatter), 0.0);
+			dateStart = dateStart.plusDays(1);
 		}
 
-		// Cập nhật doanh thu cụ thể trong Map
 		for (HoaDon_DTO hoaDon : dsHD) {
 			Instant instant = hoaDon.getNgayLap().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
 			ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
@@ -205,31 +189,25 @@ public class DashboardNV_Controller {
 				doanhThuTheoNgay.put(ngay, doanhThuTheoNgay.get(ngay) + tongTien);
 			}
 		}
-		// Tạo Series cho biểu đồ
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
 		series.setName("Doanh thu theo ngày");
-		areaChart_DoanhThu
-				.setTitle("DOANH THU TUẦN TỪ " + txtDateStart.getValue().format(DateTimeFormatter.ofPattern("dd/MM"))
-						+ " ĐẾN " + txtDateEnd.getValue().format(DateTimeFormatter.ofPattern("dd/MM")));
+		areaChart_DoanhThu.setTitle("DOANH THU TUẦN TỪ " + txtDateStart.getValue().format(DateTimeFormatter.ofPattern("dd/MM"))
+				+ " ĐẾN " + txtDateEnd.getValue().format(DateTimeFormatter.ofPattern("dd/MM")));
 
 		for (Map.Entry<String, Double> entry : doanhThuTheoNgay.entrySet()) {
 			XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
 			series.getData().add(data);
-			// Lắng nghe sự kiện khi Node được tạo
 			data.nodeProperty().addListener((observable, oldNode, newNode) -> {
-				if (newNode != null) { // Khi Node được tạo
+				if (newNode != null) {
 					Tooltip tooltip = new Tooltip("Doanh Thu: " + decimalFormat.format(entry.getValue()));
 					tooltip.setShowDelay(Duration.millis(100));
 					tooltip.setHideDelay(Duration.millis(200));
-					Tooltip.install(newNode, tooltip); // Gắn Tooltip vào Node
+					Tooltip.install(newNode, tooltip);
 				}
 			});
 		}
-		// Cập nhật biểu đồ
 		areaChart_DoanhThu.getData().add(series);
 	}
-
-	// ---
 
 	private void updateChartDonDatBan(List<DonDatBan_DTO> dsDon) {
 		barChart_DonDatBan.getData().clear();
@@ -239,14 +217,12 @@ public class DashboardNV_Controller {
 		LocalDate dateStart = txtDateStart.getValue();
 		LocalDate dateEnd = txtDateEnd.getValue();
 
-		// Tạo danh sách các ngày trong khoảng thời gian đã chọn
 		Map<String, Integer> donDatTheoNgay = new LinkedHashMap<>();
 		while (!dateStart.isAfter(dateEnd)) {
-			donDatTheoNgay.put(dateStart.format(formatter), 0); // Set số lượng đơn là 0 cho mọi ngày trước tiên
-			dateStart = dateStart.plusDays(1); // Chuyển đến ngày tiếp theo
+			donDatTheoNgay.put(dateStart.format(formatter), 0);
+			dateStart = dateStart.plusDays(1);
 		}
 
-		// Cập nhật số lượng đơn bán cụ thể trong Map
 		for (DonDatBan_DTO don : dsDon) {
 
 			Instant instant = don.getNgayGioLapDon().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
@@ -255,11 +231,10 @@ public class DashboardNV_Controller {
 
 			String ngay = ngayGioLapDon.format(formatter);
 			if (donDatTheoNgay.containsKey(ngay)) {
-				donDatTheoNgay.put(ngay, donDatTheoNgay.get(ngay) + 1); // Tăng số lượng đơn bán
+				donDatTheoNgay.put(ngay, donDatTheoNgay.get(ngay) + 1);
 			}
 		}
 
-		// Tạo Series cho biểu đồ
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
 		series.setName("Số lượng đơn đặt bàn theo ngày");
 		barChart_DonDatBan.setTitle("SỐ LƯỢNG ĐƠN ĐẶT BÀN THEO TUẦN TỪ "
@@ -269,21 +244,18 @@ public class DashboardNV_Controller {
 		for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
 			XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
 			series.getData().add(data);
-			// Lắng nghe sự kiện khi Node được tạo
 			data.nodeProperty().addListener((observable, oldNode, newNode) -> {
-				if (newNode != null) { // Khi Node được tạo
+				if (newNode != null) {
 					Tooltip tooltip = new Tooltip("Số đơn đặt bàn: " + entry.getValue());
 					tooltip.setShowDelay(Duration.millis(100));
 					tooltip.setHideDelay(Duration.millis(200));
-					Tooltip.install(newNode, tooltip); // Gắn Tooltip vào Node
+					Tooltip.install(newNode, tooltip);
 				}
 			});
 		}
 
-		// Cập nhật biểu đồ
 		barChart_DonDatBan.getData().add(series);
 
-		// ========== Cập nhật thông tin Doanh Thu =============
 		int maxSoDDB = 0;
 		int minSoDDB = Integer.MAX_VALUE;
 		int minSoDDB2 = Integer.MAX_VALUE;
@@ -291,21 +263,18 @@ public class DashboardNV_Controller {
 		List<String> daysWithMinRevenue = new ArrayList<>();
 		List<String> daysWithMinKhac0 = new ArrayList<>();
 
-		// Duyệt qua từng ngày để tính các thông số
 		for (Map.Entry<String, Integer> entry : donDatTheoNgay.entrySet()) {
 			String ngay = entry.getKey();
 			double soDDB = entry.getValue();
 
-			// Kiểm tra và cập nhật mức doanh thu cao nhất
 			if (soDDB > maxSoDDB) {
 				maxSoDDB = (int) soDDB;
-				daysWithMaxRevenue.clear(); // Xóa danh sách cũ nếu tìm thấy doanh thu cao hơn
-				daysWithMaxRevenue.add(ngay); // Thêm ngày hiện tại vào danh sách
+				daysWithMaxRevenue.clear();
+				daysWithMaxRevenue.add(ngay);
 			} else if (soDDB == maxSoDDB) {
-				daysWithMaxRevenue.add(ngay); // Thêm ngày vào danh sách nếu doanh thu bằng mức cao nhất
+				daysWithMaxRevenue.add(ngay);
 			}
 
-			// Kiểm tra và cập nhật mức doanh thu thấp nhất
 			if (soDDB < minSoDDB) {
 				minSoDDB = (int) soDDB;
 				daysWithMinRevenue.clear();
@@ -314,7 +283,6 @@ public class DashboardNV_Controller {
 				daysWithMinRevenue.add(ngay);
 			}
 
-			// Kiểm tra và cập nhật mức doanh thu thấp nhất khác 0
 			if (soDDB < minSoDDB2 && soDDB != 0) {
 				minSoDDB2 = (int) soDDB;
 				daysWithMinKhac0.clear();
