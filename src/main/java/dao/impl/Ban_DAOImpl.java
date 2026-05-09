@@ -25,6 +25,32 @@ public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
 	}
 
 	@Override
+	public Ban timTheoMa(String maBan) {
+
+		EntityManager em = emf.createEntityManager();
+
+		try {
+			return em.find(Ban.class, maBan);
+
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public LoaiBan timLoaiBanTheoMa(String maLoaiBan) {
+
+		EntityManager em = emf.createEntityManager();
+
+		try {
+			return em.find(LoaiBan.class, maLoaiBan);
+
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
 	public String getMaxMaBan() {
 		EntityManager em = emf.createEntityManager();
 		try {

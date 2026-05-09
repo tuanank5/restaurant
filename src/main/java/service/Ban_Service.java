@@ -1,12 +1,19 @@
 package service;
 
 import dto.Ban_DTO;
-import dto.LoaiBan_DTO;
+
+import java.util.List;
 
 public interface Ban_Service {
-	LoaiBan_DTO timLoaiBanTheoTen(String tenLoaiBan);
 
-	String getMaxMaBan();
+	// CRUD giống flow KhuyenMai
+	List<Ban_DTO> getAll();
 
-	boolean sua(Ban_DTO ban_DTO);
+	boolean add(Ban_DTO dto);
+
+	boolean update(Ban_DTO dto);
+
+	boolean delete(String maBan);
+
+	String generateId();
 }

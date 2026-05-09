@@ -1,5 +1,7 @@
 package dto;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +15,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class ChiTietHoaDon_DTO {
+public class ChiTietHoaDon_DTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String maHoaDon;
 
@@ -21,7 +25,10 @@ public class ChiTietHoaDon_DTO {
 
 	private int soLuong;
 
-	// thanhTien cần xóa
 	private double thanhTien;
+
+	private String tenMonAn;
+
+	private double donGia;
 
 }

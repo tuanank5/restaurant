@@ -8,9 +8,7 @@ import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
 import dao.Ban_DAO;
-import dao.KhachHang_DAO;
 import dao.impl.Ban_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
 import entity.Ban;
 import entity.KhachHang;
 import javafx.event.ActionEvent;
@@ -26,6 +24,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
+import dto.KhachHang_DTO;
 
 public class ADatBanHienTai_Controller implements Initializable {
 
@@ -43,7 +46,7 @@ public class ADatBanHienTai_Controller implements Initializable {
 
 	// --- DAO ---
 	private Ban_DAO banDAO = new Ban_DAOImpl();
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
+	private Client client;
 
 	// --- Danh sách và trạng thái ---
 	private List<Ban> danhSachBan = new ArrayList<>();
@@ -58,6 +61,11 @@ public class ADatBanHienTai_Controller implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		khoiTaoComboBoxes();
 		loadDanhSachBan();
 		cmbTrangThai.setOnAction(e -> loadDanhSachBan());
@@ -166,7 +174,7 @@ public class ADatBanHienTai_Controller implements Initializable {
 								return;
 							}
 							if (newV.length() == 10) {
-								KhachHang kh = khachHangDAO.timTheoSDT(newV);
+								KhachHang kh = getKhachHangBySDT(newV);
 								if (kh == null) {
 									showAlert(Alert.AlertType.WARNING, "Không tìm thấy khách hàng!");
 									txtKH.setText("Không tìm thấy");
@@ -307,6 +315,24 @@ public class ADatBanHienTai_Controller implements Initializable {
 		} else {
 			showAlert(Alert.AlertType.ERROR, "Cập nhật trạng thái thất bại!");
 		}
+	}
+
+	private KhachHang getKhachHangBySDT(String sdt) {
+		try {
+			Response res = client.send(new Request(CommandType.KHACHHANG_GET_BY_SDT, sdt));
+			if (res != null && res.isSuccess() && res.getData() != null) {
+				KhachHang_DTO dto = (KhachHang_DTO) res.getData();
+				return KhachHang.builder()
+						.maKH(dto.getMaKH())
+						.tenKH(dto.getTenKH())
+						.sdt(dto.getSdt())
+						.diemTichLuy(dto.getDiemTichLuy())
+						.build();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

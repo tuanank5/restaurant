@@ -35,6 +35,7 @@ import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.KhuyenMai_DAOImpl;
+import dto.ChiTietHoaDon_DTO;
 import entity.ChiTietHoaDon;
 import entity.HoaDon;
 import entity.KhachHang;
@@ -63,6 +64,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class AThanhToan_Controller {
 
@@ -139,6 +144,7 @@ public class AThanhToan_Controller {
 	private List<HoaDon> dsHoaDon = new ArrayList<>();
 	private ObservableList<ChiTietHoaDon> dsCTHD = FXCollections.observableArrayList();
 	private List<ChiTietHoaDon> dsCTHD_DB;
+	private Client client;
 
 	private double thanhTien = 0;
 	private double Vat_Rate = 0.1;
@@ -155,9 +161,14 @@ public class AThanhToan_Controller {
 
 	@FXML
 	public void initialize() {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		aTT = this;
 		String maHD = MenuNV_Controller.aBanHienTai_HD.getMaHD();
-		dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(maHD);
+		dsCTHD_DB = loadChiTietTuServer(maHD);
 
 		dsMonAn = new HashMap<>();
 		for (ChiTietHoaDon cthd : dsCTHD_DB) {
@@ -191,6 +202,32 @@ public class AThanhToan_Controller {
 
 		btnTamTinh.setTooltip(new Tooltip("In hóa đơn tạm tính"));
 		btnThuTien.setTooltip(new Tooltip("Thanh toán hóa đơn"));
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<ChiTietHoaDon> loadChiTietTuServer(String maHD) {
+		List<ChiTietHoaDon> list = new ArrayList<>();
+		try {
+			Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, maHD));
+			if (res != null && res.isSuccess()) {
+				List<ChiTietHoaDon_DTO> ds = (List<ChiTietHoaDon_DTO>) res.getData();
+				for (ChiTietHoaDon_DTO dto : ds) {
+					MonAn mon = MonAn.builder()
+							.maMon(dto.getMaMonAn())
+							.tenMon(dto.getTenMonAn())
+							.donGia(dto.getDonGia())
+							.build();
+					ChiTietHoaDon ct = new ChiTietHoaDon();
+					ct.setMonAn(mon);
+					ct.setSoLuong(dto.getSoLuong());
+					ct.setThanhTien(dto.getThanhTien());
+					list.add(ct);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	@FXML

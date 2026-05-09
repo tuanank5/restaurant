@@ -24,4 +24,17 @@ public class NhanVien_DAOImpl extends Entity_DAOImpl<NhanVien> implements NhanVi
 		}
 	}
 
+	@Override
+	public NhanVien timTheoMa(String maNV) {
+		if (maNV == null || maNV.isBlank()) {
+			return null;
+		}
+		EntityManager em = getEntityManager();
+		try {
+			return em.find(NhanVien.class, maNV);
+		} finally {
+			em.close();
+		}
+	}
+
 }

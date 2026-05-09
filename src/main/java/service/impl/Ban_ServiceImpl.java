@@ -1,45 +1,130 @@
 package service.impl;
 
+import config.RestaurantApplication;
 import dao.Ban_DAO;
-import dao.impl.Ban_DAOImpl;
 import dto.Ban_DTO;
-import dto.LoaiBan_DTO;
 import entity.Ban;
 import entity.LoaiBan;
 import service.Ban_Service;
-import util.MapperUtil;
+import util.BanMapper;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Ban_ServiceImpl implements Ban_Service {
 
-	private Ban_DAO ban_DAO;
+	private final Ban_DAO dao =
+			RestaurantApplication.getInstance()
+					.getDatabaseContext()
+					.newEntity_DAO(Ban_DAO.class);
 
-	public Ban_ServiceImpl() {
-		ban_DAO = new Ban_DAOImpl();
+	@Override
+	public List<Ban_DTO> getAll() {
+		List<Ban> list = dao.getDanhSach(Ban.class, new HashMap<>());
+		return list.stream().map(BanMapper::toDTO).toList();
 	}
 
 	@Override
-	public LoaiBan_DTO timLoaiBanTheoTen(String tenLoaiBan) {
-		if (tenLoaiBan == null || tenLoaiBan.trim().isEmpty()) {
-			throw new IllegalArgumentException("tenLoaiBan không được rỗng");
-		}
-		LoaiBan loaiBan = ban_DAO.timLoaiBanTheoTen(tenLoaiBan);
-		return MapperUtil.map(loaiBan, LoaiBan_DTO.class);
+	public boolean add(Ban_DTO dto) {
+
+		Ban ban = toEntityWithLoai(dto);
+
+		if (ban == null) return false;
+
+		// AUTO ID (server)
+		ban.setMaBan(generateId());
+
+		if (!validateAdd(ban))
+			return false;
+
+		return dao.them(ban);
 	}
 
 	@Override
-	public String getMaxMaBan() {
-		return ban_DAO.getMaxMaBan();
+	public boolean update(Ban_DTO dto) {
+
+		Ban ban = toEntityWithLoai(dto);
+
+		if (!validateUpdate(ban))
+			return false;
+
+		return dao.sua(ban);
 	}
 
 	@Override
-	public boolean sua(Ban_DTO ban_DTO) {
-		if (ban_DTO == null) {
-			throw new IllegalArgumentException("ban_DTO không được rỗng");
-		}
-		if (ban_DTO.getMaBan() == null || ban_DTO.getMaBan().trim().isEmpty()) {
-			throw new IllegalArgumentException("ban_DTO.maBan không được rỗng");
-		}
-		return ban_DAO.sua(MapperUtil.map(ban_DTO, Ban.class));
+	public boolean delete(String maBan) {
+
+		if (maBan == null || maBan.isBlank())
+			return false;
+
+		Ban ban = dao.timTheoMa(maBan);
+
+		if (ban == null)
+			return false;
+
+		return dao.xoa(ban);
 	}
 
+	@Override
+	public String generateId() {
+
+		String max = dao.getMaxMaBan();
+
+		if (max == null)
+			return "B01";
+
+		try {
+
+			int so = Integer.parseInt(max.replaceAll("\\D+", ""));
+
+			return String.format("B%02d", so + 1);
+
+		} catch (Exception e) {
+
+			return "B01";
+		}
+	}
+
+	private Ban toEntityWithLoai(Ban_DTO dto) {
+
+		if (dto == null)
+			return null;
+
+		LoaiBan loaiBan = null;
+
+		if (dto.getMaLoaiBan() != null && !dto.getMaLoaiBan().isBlank()) {
+
+			loaiBan = dao.timLoaiBanTheoMa(dto.getMaLoaiBan());
+		}
+
+		return BanMapper.toEntity(dto, loaiBan);
+	}
+
+	private boolean validateAdd(Ban ban) {
+
+		if (ban == null)
+			return false;
+
+		if (ban.getViTri() == null || ban.getViTri().isBlank())
+			return false;
+
+		if (ban.getLoaiBan() == null)
+			return false;
+
+		if (ban.getTrangThai() == null || ban.getTrangThai().isBlank())
+			return false;
+
+		return true;
+	}
+
+	private boolean validateUpdate(Ban ban) {
+
+		if (!validateAdd(ban))
+			return false;
+
+		if (ban.getMaBan() == null || ban.getMaBan().isBlank())
+			return false;
+
+		return dao.timTheoMa(ban.getMaBan()) != null;
+	}
 }

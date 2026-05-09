@@ -2,6 +2,10 @@ package network.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import handler.BanHandler;
+import handler.ChiTietHoaDonHandler;
+import handler.HoaDonHandler;
+import handler.KhachHangHandler;
 import handler.KhuyenMaiHandler;
 import handler.MonAnHandler;
 import handler.TaiKhoanHandler;
@@ -19,6 +23,10 @@ public class RequestDispatcher {
         handlerMap.put("TAIKHOAN", new TaiKhoanHandler());
         handlerMap.put("KHUYENMAI", new KhuyenMaiHandler());
         handlerMap.put("MONAN", new MonAnHandler());
+        handlerMap.put("BAN", new BanHandler());
+        handlerMap.put("CTHD", new ChiTietHoaDonHandler());
+        handlerMap.put("HOADON", new HoaDonHandler());
+        handlerMap.put("KHACHHANG", new KhachHangHandler());
     }
 
     public Response dispatch(Request request) {

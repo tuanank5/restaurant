@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -25,8 +26,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.HoaDon_DAO;
-import dao.KhachHang_DAO;
-import dao.impl.KhachHang_DAOlmpl;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.KhuyenMai;
@@ -40,6 +39,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class AThuTien_Controller {
 
@@ -105,7 +108,7 @@ public class AThuTien_Controller {
 	private Map<MonAn, Integer> dsMonAn = AThanhToan_Controller.aTT.dsMonAn;
 	private KhuyenMai kmDangChon = AThanhToan_Controller.aTT.kmDangChon;
 	private double thueHD = AThanhToan_Controller.aTT.thueHD;
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
+	private Client client;
 	private double tongThanhTienLamTron = Math.round(tongThanhTien / 1000.0) * 1000;
 
 	private int tienKH = 0;
@@ -113,6 +116,11 @@ public class AThuTien_Controller {
 
 	@FXML
 	public void initialize() {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		lblTienCanThu.setText(formatTienVN(tongThanhTienLamTron));
 		txtTienKH.setText(tienKH + "");
 		txtTienKH.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -239,8 +247,7 @@ public class AThuTien_Controller {
 				hoaDonHienTai.setTienNhan((double) tienNhan);
 				hoaDonHienTai.setTienThua(tienTra);
 				hoaDonHienTai.setThue(thueHD);
-				boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
-						.capNhat(hoaDonHienTai);
+				boolean check = capNhatHoaDon("Tiền mặt", tienNhan, tienTra);
 				// Kiểm tra kết quả thêm
 				if (check) {
 					capNhatDiemTichLuySauThanhToan();
@@ -268,8 +275,7 @@ public class AThuTien_Controller {
 			hoaDonHienTai.setTienNhan(tongThanhTienLamTron);
 			hoaDonHienTai.setTienThua(0);
 			hoaDonHienTai.setThue(thueHD);
-			boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(HoaDon_DAO.class)
-					.capNhat(hoaDonHienTai);
+			boolean check = capNhatHoaDon("Chuyển khoản", tongThanhTienLamTron, 0);
 			// Kiểm tra kết quả thêm
 			if (check) {
 				capNhatDiemTichLuySauThanhToan();
@@ -523,7 +529,18 @@ public class AThuTien_Controller {
 		kh.setDiemTichLuy(diemMoi);
 
 		// cập nhật DB
-		khachHangDAO.capNhat(kh);
+		try {
+			Map<String, Object> payload = new HashMap<>();
+			payload.put("maKH", kh.getMaKH());
+			payload.put("diemTichLuy", diemMoi);
+			Response res = client.send(new Request(CommandType.KHACHHANG_UPDATE_DIEM, payload));
+			if (res == null || !res.isSuccess()) {
+				showAlert("Thông báo", "Không thể cập nhật điểm tích lũy!", Alert.AlertType.WARNING);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			showAlert("Thông báo", "Không thể cập nhật điểm tích lũy!", Alert.AlertType.WARNING);
+		}
 	}
 
 	private void showAlert(String title, String content, Alert.AlertType alertType) {
@@ -531,5 +548,26 @@ public class AThuTien_Controller {
 		alert.setTitle(title);
 		alert.setHeaderText(content);
 		alert.show();
+	}
+
+	private boolean capNhatHoaDon(String kieuThanhToan, double tienNhan, double tienThua) {
+		try {
+			Map<String, Object> payload = new HashMap<>();
+			payload.put("maHD", hoaDonHienTai.getMaHD());
+			payload.put("ngayLap", hoaDonHienTai.getNgayLap());
+			payload.put("kieuThanhToan", kieuThanhToan);
+			payload.put("maKhuyenMai", kmDangChon != null ? kmDangChon.getMaKM() : null);
+			payload.put("maNhanVien", MenuNV_Controller.taiKhoan.getNhanVien().getMaNV());
+			payload.put("tongTien", tongThanhTienLamTron);
+			payload.put("tienNhan", tienNhan);
+			payload.put("tienThua", tienThua);
+			payload.put("thue", thueHD);
+
+			Response res = client.send(new Request(CommandType.HOADON_UPDATE_PAYMENT, payload));
+			return res != null && res.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

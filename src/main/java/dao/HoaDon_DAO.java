@@ -13,6 +13,16 @@ import entity.KhachHang;
 public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 	long tongSoHoaDon();
 
+	HoaDon timTheoMa(String maHD);
+
+	default HoaDon timTheoMa(Class<HoaDon> entityType, String maHD) {
+		return timTheoMa(maHD);
+	}
+
+	default HoaDon timT(String maHD) {
+		return timTheoMa(maHD);
+	}
+
 	boolean themHoaDon(HoaDon hoaDon);
 
 	List<HoaDon> getAllHoaDons();

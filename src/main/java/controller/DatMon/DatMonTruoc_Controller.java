@@ -13,14 +13,12 @@ import java.util.ResourceBundle;
 import controller.DatBan.DatBanTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.DonDatBan_DAO;
-import dao.KhachHang_DAO;
-import dao.MonAn_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.ChiTietHoaDon_DAOImpl;
 import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.MonAn_DAOImpl;
+import dto.KhachHang_DTO;
+import dto.MonAn_DTO;
 import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
@@ -50,6 +48,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AlertUtil;
 
 public class DatMonTruoc_Controller implements Initializable {
@@ -95,14 +97,18 @@ public class DatMonTruoc_Controller implements Initializable {
 	public static KhachHang khachHangStatic;
 	public static int soLuongKHStatic;
 	public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
 	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
+	private Client client;
 	private List<MonAn> dsMonAn;
 	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (danhSachBanChonStatic != null && !danhSachBanChonStatic.isEmpty()) {
 			System.out.println("Số bàn được chọn: " + danhSachBanChonStatic.size());
 
@@ -112,7 +118,7 @@ public class DatMonTruoc_Controller implements Initializable {
 			}
 		}
 		// Lấy danh sách món ăn từ database
-		dsMonAn = monAnDAO.getDanhSachMonAn();
+		dsMonAn = loadMonAnFromServer();
 		// Khởi tạo ComboBox phân loại dựa trên dsMonAn
 		khoiTaoComboBoxPhanLoai();
 		// Hiển thị món ăn lên GridPane
@@ -356,7 +362,7 @@ public class DatMonTruoc_Controller implements Initializable {
 		try {
 			KhachHang kh = null;
 			try {
-				kh = khachHangDAO.timTheoSDT(sdt);
+				kh = getKhachHangBySDT(sdt);
 			} catch (Exception ex) {
 				kh = null;
 			}
@@ -464,7 +470,7 @@ public class DatMonTruoc_Controller implements Initializable {
 			return;
 		}
 		try {
-			KhachHang kh = khachHangDAO.timTheoSDT(sdt.trim());
+			KhachHang kh = getKhachHangBySDT(sdt.trim());
 			if (kh != null) {
 				txtKH.setText(kh.getTenKH());
 			} else {
@@ -482,5 +488,46 @@ public class DatMonTruoc_Controller implements Initializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<MonAn> loadMonAnFromServer() {
+		List<MonAn> result = new ArrayList<>();
+		try {
+			Response res = client.send(new Request(CommandType.MONAN_GET_ALL, null));
+			if (res != null && res.isSuccess()) {
+				List<MonAn_DTO> list = (List<MonAn_DTO>) res.getData();
+				for (MonAn_DTO dto : list) {
+					result.add(new MonAn(
+							dto.getMaMon(),
+							dto.getTenMon(),
+							dto.getDonGia(),
+							dto.getDuongDanAnh(),
+							dto.getLoaiMon()
+					));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private KhachHang getKhachHangBySDT(String sdt) {
+		try {
+			Response res = client.send(new Request(CommandType.KHACHHANG_GET_BY_SDT, sdt));
+			if (res != null && res.isSuccess() && res.getData() != null) {
+				KhachHang_DTO dto = (KhachHang_DTO) res.getData();
+				return KhachHang.builder()
+						.maKH(dto.getMaKH())
+						.tenKH(dto.getTenKH())
+						.sdt(dto.getSdt())
+						.diemTichLuy(dto.getDiemTichLuy())
+						.build();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

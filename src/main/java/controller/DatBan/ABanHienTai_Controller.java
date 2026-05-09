@@ -40,6 +40,11 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
+import dto.ChiTietHoaDon_DTO;
 
 public class ABanHienTai_Controller {
 
@@ -96,6 +101,7 @@ public class ABanHienTai_Controller {
 	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 	private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
 	private DonDatBan_DAO donDatBanDao = new DonDatBan_DAOImpl();
+	private Client client;
 
 	// --- Danh sách và trạng thái ---
 	private List<HoaDon> dsHoaDon = new ArrayList<>();
@@ -126,6 +132,11 @@ public class ABanHienTai_Controller {
 
 	@FXML
 	public void initialize() {
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		aBHT = this;
 		checkTTbangKo = false;
 		dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
@@ -376,14 +387,21 @@ public class ABanHienTai_Controller {
 	}
 
 	private double tinhTongTienMon(HoaDon hoaDon) {
-		List<ChiTietHoaDon> dsCT = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(ChiTietHoaDon_DAO.class).getChiTietTheoMaHoaDon(hoaDon.getMaHD());
-
-		double tong = 0;
-		for (ChiTietHoaDon ct : dsCT) {
-			tong += ct.getSoLuong() * ct.getMonAn().getDonGia();
+		try {
+			Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, hoaDon.getMaHD()));
+			if (res != null && res.isSuccess()) {
+				@SuppressWarnings("unchecked")
+				List<ChiTietHoaDon_DTO> dsCT = (List<ChiTietHoaDon_DTO>) res.getData();
+				double tong = 0;
+				for (ChiTietHoaDon_DTO ct : dsCT) {
+					tong += ct.getSoLuong() * ct.getDonGia();
+				}
+				return tong;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return tong;
+		return 0;
 	}
 
 	private Button taoButtonIcon(String text, String iconPath) {

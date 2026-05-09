@@ -1,5 +1,7 @@
 package dto;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +15,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class Ban_DTO {
+public class Ban_DTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String maBan;
 
