@@ -4,6 +4,7 @@ import java.util.List;
 
 import dao.KhachHang_DAO;
 import dao.impl.KhachHang_DAOlmpl;
+import dto.HoaDon_DTO;
 import dto.KhachHang_DTO;
 import entity.KhachHang;
 import service.KhachHang_Service;
@@ -49,5 +50,12 @@ public class KhachHang_ServiceImpl implements KhachHang_Service {
 		KhachHang khachHang = khachHang_DAO.getKhachHangTheoSDT(sdt);
 		return MapperUtil.map(khachHang, KhachHang_DTO.class);
 	}
+
+	@Override
+	public boolean capNhat(KhachHang_DTO dto) {
+		KhachHang khachHang = MapperUtil.map(dto,KhachHang.class);
+		return khachHang_DAO.capNhat(khachHang);
+	}
+
 
 }

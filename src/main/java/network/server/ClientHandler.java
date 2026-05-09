@@ -18,19 +18,22 @@ public class ClientHandler implements Runnable {
 
 	@Override
 	public void run() {
-
-		try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());) {
-
+		try (
+				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream in = new ObjectInputStream(socket.getInputStream())
+		) {
 			while (true) {
 				Request request = (Request) in.readObject();
-
+				System.out.println("RECEIVED = " + request);
 				Response response = requestDispatcher.dispatch(request);
+				System.out.println("RESPONSE = " + response);
 
 				out.writeObject(response);
 				out.flush();
+				out.reset();
 			}
-
+		} catch (java.io.EOFException | java.net.SocketException e) {
+			System.out.println("Client disconnected");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

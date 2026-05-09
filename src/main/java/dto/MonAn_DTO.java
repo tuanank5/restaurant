@@ -7,14 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-public class MonAn_DTO {
-
+public class MonAn_DTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String maMon;
 
 	private String tenMon;

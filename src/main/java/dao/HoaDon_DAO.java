@@ -3,17 +3,21 @@ package dao;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
+import dto.HoaDon_DTO;
 import entity.Ban;
 import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
+import jakarta.persistence.EntityManager;
 
 public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 	long tongSoHoaDon();
 
-	boolean themHoaDon(HoaDon hoaDon);
+	boolean themHoaDon(HoaDon_DTO dto);
+	Map<String, Double> getDoanhThuNVTheoNam(int nam, String maNV);
 
 	List<HoaDon> getAllHoaDons();
 
@@ -58,5 +62,5 @@ public interface HoaDon_DAO extends Entity_DAO<HoaDon> {
 	HoaDon timHoaDonTheoDonDatBan(DonDatBan donDatBan);
 
 	List<ChiTietHoaDon> findByMaHoaDon(String maHoaDon);
-
+	HoaDon toEntity(HoaDon_DTO dto, EntityManager entityManager);
 }

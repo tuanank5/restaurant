@@ -12,14 +12,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import config.DatabaseContext;
-import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import dao.NhanVien_DAO;
-import dao.TaiKhoan_DAO;
-import dao.impl.TaiKhoan_DAOImpl;
-import entity.NhanVien;
-import entity.TaiKhoan;
+import dto.NhanVien_DTO;
+import dto.TaiKhoan_DTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,6 +37,10 @@ import util.AlertUtil;
 import util.AutoIDUitl;
 import util.ComponentUtil;
 import util.EmailUtil;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class ThemNhanVien_Controller implements Initializable {
 	@FXML
@@ -69,34 +68,34 @@ public class ThemNhanVien_Controller implements Initializable {
 	private ComboBox<String> cmbGioiTinh;
 
 	@FXML
-	private TableColumn<NhanVien, String> tblChucVu;
+	private TableColumn<NhanVien_DTO, String> tblChucVu;
 
 	@FXML
-	private TableColumn<NhanVien, String> tblDiaChi;
+	private TableColumn<NhanVien_DTO, String> tblDiaChi;
 
 	@FXML
-	private TableColumn<NhanVien, String> tblEmail;
+	private TableColumn<NhanVien_DTO, String> tblEmail;
 
 	@FXML
-	private TableColumn<NhanVien, String> tblGioiTinh;
+	private TableColumn<NhanVien_DTO, String> tblGioiTinh;
 
 	@FXML
-	private TableColumn<NhanVien, String> tblMaNV;
+	private TableColumn<NhanVien_DTO, String> tblMaNV;
 
 	@FXML
-	private TableColumn<NhanVien, Date> tblNamSinh;
+	private TableColumn<NhanVien_DTO, Date> tblNamSinh;
 
 	@FXML
 	private DatePicker txtNgayVaoLam;
 
 	@FXML
-	private TableColumn<NhanVien, String> tblTenNV;
+	private TableColumn<NhanVien_DTO, String> tblTenNV;
 
 	@FXML
-	private TableView<NhanVien> tblThemNV;
+	private TableView<NhanVien_DTO> tblThemNV;
 
 	@FXML
-	private TableColumn<NhanVien, String> tblTrangThai;
+	private TableColumn<NhanVien_DTO, String> tblTrangThai;
 
 	@FXML
 	private TextField txtDiaChi;
@@ -113,20 +112,26 @@ public class ThemNhanVien_Controller implements Initializable {
 	@FXML
 	private HBox hBox;
 
-	private ObservableList<NhanVien> danhSachNhanVien = FXCollections.observableArrayList();
-	private List<NhanVien> danhSachNhanVienDB;
+	private ObservableList<NhanVien_DTO> danhSachNhanVien = FXCollections.observableArrayList();
+	private List<NhanVien_DTO> danhSachNhanVienDB = List.of();
 	private final int LIMIT = 15;
 	private String status = "all";
 
+	private Client client;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		setValueTable();
+
+		client = Client.tryCreate();
+
 		loadData();
 		loadDataNV();
 		hienThiMaNhanVienMoi();
 		resetAllField();
-		phanTrang(danhSachNhanVienDB.size());
+		if (danhSachNhanVienDB != null) {
+			phanTrang(danhSachNhanVienDB.size());
+		}
 		borderPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
 			if (newScene != null) {
 				newScene.setOnKeyPressed(event -> {
@@ -173,7 +178,7 @@ public class ThemNhanVien_Controller implements Initializable {
 		}
 	}
 
-	private NhanVien getNhanVienNew() {
+	private NhanVien_DTO getNhanVienNew() {
 		String tenNV = txtTenNV.getText().trim();
 		String email = txtEmail.getText().trim();
 		LocalDate namSinh = txtNamSinh.getValue();
@@ -181,8 +186,6 @@ public class ThemNhanVien_Controller implements Initializable {
 		String gioiTinhStr = cmbGioiTinh.getValue();
 		String chucVu = cmbChucVu.getValue();
 		LocalDate ngayVaoLam = txtNgayVaoLam.getValue();
-
-		DatabaseContext db = RestaurantApplication.getInstance().getDatabaseContext();
 
 		if (tenNV.isEmpty()) {
 			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập tên nhân viên!", Alert.AlertType.WARNING);
@@ -196,9 +199,7 @@ public class ThemNhanVien_Controller implements Initializable {
 			return null;
 		}
 
-		Map<String, Object> filter = new HashMap<>();
-		filter.put("email", email);
-		if (!db.newEntity_DAO(NhanVien_DAO.class).getDanhSach(NhanVien.class, filter).isEmpty()) {
+		if (emailDaTonTai(email)) {
 			AlertUtil.showAlert("Cảnh báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
 			return null;
 		}
@@ -223,63 +224,31 @@ public class ThemNhanVien_Controller implements Initializable {
 			return null;
 		}
 
-		NhanVien nv = new NhanVien();
-		nv.setMaNV(txtMaNV.getText());
-		nv.setTenNV(tenNV);
-		nv.setNamSinh(Date.valueOf(namSinh));
-		nv.setGioiTinh(gioiTinhStr.equals("Nữ"));
-		nv.setEmail(email);
-		nv.setDiaChi(diaChi);
-		nv.setChucVu(chucVu);
-		nv.setTrangThai(true);
-		nv.setNgayVaoLam(Date.valueOf(ngayVaoLam));
-		return nv;
+		return NhanVien_DTO.builder().maNV(txtMaNV.getText()).tenNV(tenNV).namSinh(Date.valueOf(namSinh))
+				.gioiTinh(gioiTinhStr.equals("Nữ")).email(email).diaChi(diaChi).chucVu(chucVu).trangThai(true)
+				.ngayVaoLam(Date.valueOf(ngayVaoLam)).build();
 	}
 
 	public void luuLai() {
-		NhanVien nvNew = getNhanVienNew();
+		NhanVien_DTO nvNew = getNhanVienNew();
 		try {
 			if (nvNew != null) {
-				DatabaseContext db = RestaurantApplication.getInstance().getDatabaseContext();
-
-				boolean check = db.newEntity_DAO(NhanVien_DAO.class).them(nvNew);
-
-				if (check) {
-					TaiKhoan_DAO tkDAO = new TaiKhoan_DAOImpl();
-
-					String chucVu = nvNew.getChucVu();
-					int soThuTu = tkDAO.demSoTaiKhoanTheoChucVu(chucVu) + 1;
-
-					String username;
-					String password;
-
-					if (chucVu.equalsIgnoreCase("Quản lý")) {
-						username = String.format("QL%04d", soThuTu);
-						password = "ql_pass" + String.format("%02d", soThuTu);
-					} else {
-						username = String.format("NV%04d", soThuTu);
-						password = "nv_pass" + String.format("%02d", soThuTu);
-					}
-
-					TaiKhoan tk = new TaiKhoan();
-					tk.setMaTaiKhoan(AutoIDUitl.sinhMaTaiKhoan());
-					tk.setTenTaiKhoan(username);
-					tk.setMatKhau(password);
-					tk.setNhanVien(nvNew);
-					tkDAO.themTaiKhoan(tk);
-
+				TaiKhoan_DTO taiKhoanMoi = themNhanVienVaTaoTaiKhoan(nvNew);
+				if (taiKhoanMoi != null) {
 					String noiDungMail = "Chào " + nvNew.getTenNV() + ",\n\n"
-							+ "Tài khoản đăng nhập hệ thống của bạn:\n" + "Tên đăng nhập: " + username + "\n"
-							+ "Mật khẩu: " + password + "\n\n" + "Vui lòng đổi mật khẩu sau khi đăng nhập.";
+							+ "Tài khoản đăng nhập hệ thống của bạn:\n" + "Tên đăng nhập: " + taiKhoanMoi.getTenTaiKhoan()
+							+ "\n" + "Mật khẩu: " + taiKhoanMoi.getMatKhau() + "\n\n"
+							+ "Vui lòng đổi mật khẩu sau khi đăng nhập.";
 
 					EmailUtil.sendEmail(nvNew.getEmail(), "Thông tin tài khoản nhân viên", noiDungMail);
-					AlertUtil.showAlert("Thông báo", "Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.",
-							Alert.AlertType.INFORMATION);
+					AlertUtil.showAlert("Thông báo",
+							"Thêm nhân viên thành công!\nTài khoản đã được gửi qua email.", Alert.AlertType.INFORMATION);
 
 					if (!lblDanhSachNhanVien.getText().equalsIgnoreCase("Danh Sách Nhân Viên")) {
 						MenuNVQL_Controller.instance.readyUI("NhanVien/NhanVien");
 					}
 					resetAllField();
+					loadData();
 				} else {
 					AlertUtil.showAlert("Thông báo", "Thêm nhân viên thất bại!", Alert.AlertType.WARNING);
 				}
@@ -312,26 +281,40 @@ public class ThemNhanVien_Controller implements Initializable {
 		cmbChucVu.getSelectionModel().selectFirst();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadData() {
-		Map<String, Object> filter = new HashMap<>();
-		filter.put("trangThai", true);
-		danhSachNhanVienDB = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class)
-				.getDanhSach(NhanVien.class, filter);
-		List<NhanVien> topLimitNhanVien = danhSachNhanVienDB.subList(0, Math.min(danhSachNhanVienDB.size(), LIMIT));
-		danhSachNhanVien.addAll(topLimitNhanVien);
-		tblThemNV.setItems(danhSachNhanVien);
+		try {
+			Request request = Request.builder().commandType(CommandType.NHANVIEN_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+
+			if (!(data instanceof List<?> rawList)) {
+				danhSachNhanVienDB = List.of();
+				danhSachNhanVien.clear();
+				tblThemNV.setItems(danhSachNhanVien);
+				return;
+			}
+
+			List<NhanVien_DTO> list = (List<NhanVien_DTO>) rawList;
+			danhSachNhanVienDB = list == null ? List.of() : list;
+
+			List<NhanVien_DTO> filtered = danhSachNhanVienDB.stream().filter(nv -> nv != null && nv.isTrangThai())
+					.toList();
+
+			List<NhanVien_DTO> topLimitNhanVien = filtered.subList(0, Math.min(filtered.size(), LIMIT));
+			danhSachNhanVien.setAll(topLimitNhanVien);
+			tblThemNV.setItems(danhSachNhanVien);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void setValueTable() {
 		tblMaNV.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getMaNV()));
-		tblTenNV.setCellValueFactory(
-				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getTenNV()));
-		tblEmail.setCellValueFactory(
-				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmail()));
-		tblDiaChi.setCellValueFactory(
-				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getDiaChi()));
-		tblChucVu.setCellValueFactory(
-				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getChucVu()));
+		tblTenNV.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getTenNV()));
+		tblEmail.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmail()));
+		tblDiaChi.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getDiaChi()));
+		tblChucVu.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getChucVu()));
 
 		tblGioiTinh.setCellValueFactory(
 				cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().isGioiTinh() ? "Nữ" : "Nam"));
@@ -342,7 +325,7 @@ public class ThemNhanVien_Controller implements Initializable {
 				cell -> new javafx.beans.property.SimpleObjectProperty<>(cell.getValue().getNamSinh()));
 	}
 
-	private void loadData(List<NhanVien> nhanViens) {
+	private void loadData(List<NhanVien_DTO> nhanViens) {
 		danhSachNhanVien.clear();
 		danhSachNhanVien.addAll(nhanViens);
 		tblThemNV.setItems(danhSachNhanVien);
@@ -359,10 +342,10 @@ public class ThemNhanVien_Controller implements Initializable {
 				// Giới hạn phần tử cuối cùng để tránh vượt quá kích thước của danh sách
 				if (status.equalsIgnoreCase("all")) {
 					int endIndex = Math.min(skip + LIMIT, danhSachNhanVienDB.size());
-					List<NhanVien> nhanViens = danhSachNhanVienDB.subList(skip, endIndex);
+					List<NhanVien_DTO> nhanViens = danhSachNhanVienDB.subList(skip, endIndex);
 					loadData(nhanViens);
 				} else {
-					List<NhanVien> nhanViens = danhSachNhanVienDB.stream()
+					List<NhanVien_DTO> nhanViens = danhSachNhanVienDB.stream()
 							.filter(nhanVien -> nhanVien.isTrangThai() == (status.equalsIgnoreCase("active")))
 							.collect(Collectors.toCollection(ArrayList::new));
 					int endIndex = Math.min(skip + LIMIT, nhanViens.size());
@@ -381,4 +364,21 @@ public class ThemNhanVien_Controller implements Initializable {
 		}
 	}
 
+	private boolean emailDaTonTai(String email) {
+		if (email == null || email.isBlank())
+			return false;
+		return danhSachNhanVienDB != null && danhSachNhanVienDB.stream().anyMatch(nv -> nv != null && email.equalsIgnoreCase(nv.getEmail()));
+	}
+
+	private TaiKhoan_DTO themNhanVienVaTaoTaiKhoan(NhanVien_DTO nv) throws Exception {
+		Request request = Request.builder().commandType(CommandType.NHANVIEN_ADD_WITH_ACCOUNT).data(nv).build();
+		Response response = client == null ? null : client.send(request);
+		if (response == null || !response.isSuccess()) {
+			return null;
+		}
+		if (response.getData() instanceof TaiKhoan_DTO tk) {
+			return tk;
+		}
+		return null;
+	}
 }

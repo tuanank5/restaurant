@@ -10,6 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+
+import dto.Ban_DTO;
+import dto.ChiTietHoaDon_DTO;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import dto.KhachHang_DTO;
+import dto.MonAn_DTO;
+
 import controller.DatBan.DatBanTruoc_Controller;
 import controller.Menu.MenuNV_Controller;
 import dao.DonDatBan_DAO;
@@ -21,12 +29,12 @@ import dao.impl.DonDatBan_DAOImpl;
 import dao.impl.HoaDon_DAOImpl;
 import dao.impl.KhachHang_DAOlmpl;
 import dao.impl.MonAn_DAOImpl;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.MonAn;
+//import entity.Ban;
+//import entity.ChiTietHoaDon;
+//import entity.DonDatBan;
+//import entity.HoaDon;
+//import entity.KhachHang;
+//import entity.MonAn;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -50,6 +58,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import service.DonDatBan_Service;
+import service.KhachHang_Service;
+import service.MonAn_Service;
+import service.impl.*;
 import util.AlertUtil;
 
 public class DatMonTruoc_Controller implements Initializable {
@@ -60,22 +72,27 @@ public class DatMonTruoc_Controller implements Initializable {
 	private Button btnTroLai;
 
 	@FXML
-	private TableColumn<MonAn, Integer> colSTT;
+//	private TableColumn<MonAn, Integer> colSTT;
+	private TableColumn<MonAn_DTO, Integer> colSTT;
 
 	@FXML
-	private TableColumn<MonAn, String> colTenMon;
+//	private TableColumn<MonAn, String> colTenMon;
+	private TableColumn<MonAn_DTO, String> colTenMon;
 
 	@FXML
-	private TableColumn<MonAn, Double> colDonGia;
+//	private TableColumn<MonAn, Double> colDonGia;
+	private TableColumn<MonAn_DTO, Double> colDonGia;
 
 	@FXML
-	private TableColumn<MonAn, Integer> colSoLuong;
+//	private TableColumn<MonAn, Integer> colSoLuong;
+	private TableColumn<MonAn_DTO, Integer> colSoLuong;
 
 	@FXML
 	private ComboBox<String> comBoxPhanLoai;
 
 	@FXML
-	private TableView<MonAn> tblDS;
+//	private TableView<MonAn> tblDS;
+	private TableView<MonAn_DTO> tblDS;
 
 	@FXML
 	private TextField txtKH;
@@ -91,15 +108,22 @@ public class DatMonTruoc_Controller implements Initializable {
 
 	@FXML
 	private GridPane gridPaneMon;
-	public static Ban banChonStatic;
-	public static KhachHang khachHangStatic;
+//	public static Ban banChonStatic;
+//	public static KhachHang khachHangStatic;
+//	public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
+
+	public static Ban_DTO banChonStatic;
+	public static KhachHang_DTO khachHangStatic;
+	public static List<Ban_DTO> danhSachBanChonStatic = new ArrayList<>();
+
 	public static int soLuongKHStatic;
-	public static List<Ban> danhSachBanChonStatic = new ArrayList<>();
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-	private List<MonAn> dsMonAn;
-	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+	private KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
+	private DonDatBan_Service donDatBanService = new DonDatBan_ServiceImpl();
+	private MonAn_Service monAnService = new MonAn_ServiceImpl();
+//	private List<MonAn> dsMonAn;
+//	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+	private List<MonAn_DTO> dsMonAn;
+	private Map<MonAn_DTO, Integer> dsMonAnDat = new LinkedHashMap<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -107,12 +131,12 @@ public class DatMonTruoc_Controller implements Initializable {
 			System.out.println("Số bàn được chọn: " + danhSachBanChonStatic.size());
 
 			// Ví dụ hiển thị lên UI
-			for (Ban b : danhSachBanChonStatic) {
+			for (Ban_DTO b : danhSachBanChonStatic) {
 				System.out.println("Bàn: " + b.getMaBan());
 			}
 		}
 		// Lấy danh sách món ăn từ database
-		dsMonAn = monAnDAO.getDanhSachMonAn();
+		dsMonAn = monAnService.getDanhSachMonAn();
 		// Khởi tạo ComboBox phân loại dựa trên dsMonAn
 		khoiTaoComboBoxPhanLoai();
 		// Hiển thị món ăn lên GridPane
@@ -125,7 +149,7 @@ public class DatMonTruoc_Controller implements Initializable {
 		colSTT.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(tblDS.getItems().indexOf(col.getValue()) + 1));
 		colTenMon.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
 		colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-		colDonGia.setCellFactory(col -> new TableCell<MonAn, Double>() {
+		colDonGia.setCellFactory(col -> new TableCell<MonAn_DTO, Double>() {
 			@Override
 			protected void updateItem(Double item, boolean empty) {
 				super.updateItem(item, empty);
@@ -160,12 +184,12 @@ public class DatMonTruoc_Controller implements Initializable {
 
 	private void timMonTheoTen() {
 		String tuKhoa = txtTim.getText().trim().toLowerCase(); // chuyển về chữ thường
-		List<MonAn> dsLoc = new ArrayList<>();
+		List<MonAn_DTO> dsLoc = new ArrayList<>();
 
 		if (tuKhoa.isEmpty()) {
 			dsLoc = dsMonAn; // nếu rỗng thì hiển thị tất cả
 		} else {
-			for (MonAn mon : dsMonAn) {
+			for (MonAn_DTO mon : dsMonAn) {
 				if (mon.getTenMon().toLowerCase().contains(tuKhoa)) {
 					dsLoc.add(mon);
 				}
@@ -177,12 +201,12 @@ public class DatMonTruoc_Controller implements Initializable {
 
 	private void locMonTheoLoai() {
 		String loaiChon = comBoxPhanLoai.getValue();
-		List<MonAn> dsLoc = new ArrayList<>();
+		List<MonAn_DTO> dsLoc = new ArrayList<>();
 
 		if (loaiChon.equals("Tất cả")) {
 			dsLoc = dsMonAn;
 		} else {
-			for (MonAn mon : dsMonAn) {
+			for (MonAn_DTO mon : dsMonAn) {
 				if (loaiChon.equals(mon.getLoaiMon())) {
 					dsLoc.add(mon);
 				}
@@ -196,7 +220,7 @@ public class DatMonTruoc_Controller implements Initializable {
 		// Lấy danh sách loại món duy nhất
 		List<String> danhSachLoai = new ArrayList<>();
 		danhSachLoai.add("Tất cả"); // để hiển thị toàn bộ món
-		for (MonAn mon : dsMonAn) {
+		for (MonAn_DTO mon : dsMonAn) {
 			String loai = mon.getLoaiMon();
 			if (loai != null && !danhSachLoai.contains(loai)) {
 				danhSachLoai.add(loai);
@@ -209,7 +233,7 @@ public class DatMonTruoc_Controller implements Initializable {
 		comBoxPhanLoai.setOnAction(e -> locMonTheoLoai());
 	}
 
-	private void loadMonAnToGrid(List<MonAn> danhSach) {
+	private void loadMonAnToGrid(List<MonAn_DTO> danhSach) {
 		gridPaneMon.getChildren().clear();
 		gridPaneMon.getColumnConstraints().clear();
 		gridPaneMon.getRowConstraints().clear();
@@ -231,7 +255,7 @@ public class DatMonTruoc_Controller implements Initializable {
 		for (int i = 0; i < totalRows; i++) {
 			gridPaneMon.getRowConstraints().add(new RowConstraints(220));
 		}
-		for (MonAn mon : danhSach) {
+		for(MonAn_DTO mon : danhSach) {
 			// Ảnh
 			ImageView img = new ImageView();
 			String path = mon.getDuongDanAnh();
@@ -273,7 +297,7 @@ public class DatMonTruoc_Controller implements Initializable {
 		return String.format("%,.0f", soTien); // định dạng kiểu 1,000,000
 	}
 
-	private void chonMon(MonAn mon) {
+	private void chonMon(MonAn_DTO mon) {
 		if (dsMonAnDat.containsKey(mon)) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle("Món đã chọn");
@@ -351,12 +375,12 @@ public class DatMonTruoc_Controller implements Initializable {
 			soLuongKH = 1;
 		}
 
-		HoaDon_DAOImpl hoaDonDAO = new HoaDon_DAOImpl();
-		ChiTietHoaDon_DAOImpl cthdDAO = new ChiTietHoaDon_DAOImpl();
+		HoaDon_ServiceImpl hoaDonService = new HoaDon_ServiceImpl();
+		ChiTietHoaDon_ServiceImpl chiTietHoaDonService = new ChiTietHoaDon_ServiceImpl();
 		try {
-			KhachHang kh = null;
+			KhachHang_DTO kh = null;
 			try {
-				kh = khachHangDAO.timTheoSDT(sdt);
+				kh = khachHangService.timTheoSDT(sdt);
 			} catch (Exception ex) {
 				kh = null;
 			}
@@ -366,9 +390,9 @@ public class DatMonTruoc_Controller implements Initializable {
 				return;
 			}
 
-			List<DonDatBan> danhSachDatBanDaTao = new ArrayList<>();
-			for (Ban ban : danhSachBanChonStatic) {
-				DonDatBan ddb = new DonDatBan();
+			List<DonDatBan_DTO> danhSachDatBanDaTao = new ArrayList<>();
+			for (Ban_DTO ban : danhSachBanChonStatic) {
+				DonDatBan_DTO ddb = new DonDatBan_DTO();
 				ddb.setMaDatBan(util.AutoIDUitl.sinhMaDonDatBan());
 				try {
 					LocalDate date = DatBanTruoc_Controller.ngayDatBanStatic;
@@ -389,7 +413,7 @@ public class DatMonTruoc_Controller implements Initializable {
 					ex.printStackTrace();
 				}
 				ddb.setTrangThai("Chưa nhận bàn");
-				boolean okDDB = donDatBanDAO.them(ddb);
+				boolean okDDB = donDatBanService.them(ddb);
 				if (!okDDB) {
 					AlertUtil.showAlert("Thông báo", "Lỗi khi lưu đơn đặt bàn cho bàn " + ban.getMaBan(),
 							Alert.AlertType.ERROR);
@@ -398,17 +422,17 @@ public class DatMonTruoc_Controller implements Initializable {
 				danhSachDatBanDaTao.add(ddb);
 			}
 
-			for (Ban ban : danhSachBanChonStatic) {
+			for (Ban_DTO ban : danhSachBanChonStatic) {
 				ban.setTrangThai("Đã được đặt");
-				new Ban_DAOImpl().capNhat(ban);
+				new Ban_ServiceImpl().sua(ban);
 			}
 
 			double tongTien = 0.0;
-			for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
+			for (Map.Entry<MonAn_DTO, Integer> e : dsMonAnDat.entrySet()) {
 				tongTien += e.getKey().getDonGia() * e.getValue();
 			}
-			DonDatBan donDau = danhSachDatBanDaTao.get(0);
-			HoaDon hd = new HoaDon();
+			DonDatBan_DTO donDau = danhSachDatBanDaTao.get(0);
+			HoaDon_DTO hd = new HoaDon_DTO();
 			hd.setMaHD(util.AutoIDUitl.sinhMaHoaDon());
 			hd.setNgayLap(java.sql.Date.valueOf(LocalDate.now()));
 			hd.setTongTien(tongTien);
@@ -417,25 +441,25 @@ public class DatMonTruoc_Controller implements Initializable {
 			hd.setKieuThanhToan("Chưa thanh toán");
 			hd.setTienNhan(0.0);
 			hd.setTienThua(0.0);
-			hd.setKhachHang(kh);
-			hd.setKhuyenMai(null);
-			hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
-			hd.setDonDatBan(donDau);
-			boolean okHD = hoaDonDAO.them(hd);
+			hd.setMaKhachHang(kh.getMaKH());
+			hd.setMaKhuyenMai(null);
+			hd.setMaNhanVien(MenuNV_Controller.taiKhoan.getMaNhanVien());
+			hd.setMaDonDatBan(donDau.getMaDatBan());
+			boolean okHD = hoaDonService.themHoaDon(hd);
 			if (!okHD) {
 				AlertUtil.showAlert("Thông báo", "Không thể lưu hóa đơn.", Alert.AlertType.ERROR);
 				return;
 			}
 
-			for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
-				MonAn m = e.getKey();
+			for (Map.Entry<MonAn_DTO, Integer> e : dsMonAnDat.entrySet()) {
+				MonAn_DTO m = e.getKey();
 				int sl = e.getValue();
-				ChiTietHoaDon cthd = new ChiTietHoaDon();
-				cthd.setHoaDon(hd);
-				cthd.setMonAn(m);
+				ChiTietHoaDon_DTO cthd = new ChiTietHoaDon_DTO();
+				cthd.setMaHoaDon(hd.getMaHD());
+				cthd.setMaMonAn(m.getMaMon());
 				cthd.setSoLuong(sl);
 				cthd.setThanhTien(m.getDonGia() * sl);
-				boolean okCT = cthdDAO.themChiTiet(cthd);
+				boolean okCT = chiTietHoaDonService.themChiTiet(cthd);
 				if (!okCT) {
 					AlertUtil.showAlert("Thông báo", "Lỗi khi lưu chi tiết hoá đơn cho món " + m.getTenMon(),
 							Alert.AlertType.ERROR);
@@ -464,7 +488,7 @@ public class DatMonTruoc_Controller implements Initializable {
 			return;
 		}
 		try {
-			KhachHang kh = khachHangDAO.timTheoSDT(sdt.trim());
+			KhachHang_DTO kh = khachHangService.timTheoSDT(sdt.trim());
 			if (kh != null) {
 				txtKH.setText(kh.getTenKH());
 			} else {

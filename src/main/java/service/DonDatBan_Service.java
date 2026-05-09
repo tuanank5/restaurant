@@ -11,6 +11,8 @@ import dto.LoaiBan_DTO;
 
 public interface DonDatBan_Service {
 	DonDatBan_DTO layDonDatTheoBan(String maBan);
+	boolean them(DonDatBan_DTO dto);
+	boolean sua(DonDatBan_DTO dto);
 
 	List<DonDatBan_DTO> timTheoKhachHang(KhachHang_DTO kh_DTO);
 
@@ -57,4 +59,6 @@ public interface DonDatBan_Service {
 	List<DonDatBan_DTO> getAllDonDatBanTheoNamNVCuThe(int nam, String maNV);
 
 	List<DonDatBan_DTO> getAllDonDatBanTheoNgayNVCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
+
+    List<DonDatBan_DTO> getByBan(Ban_DTO ban_DTO);
 }

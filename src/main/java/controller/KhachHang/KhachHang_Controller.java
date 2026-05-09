@@ -5,11 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
-import dao.KhachHang_DAO;
-import entity.HangKhachHang;
-import entity.KhachHang;
+import dto.HangKhachHang_DTO;
+import dto.KhachHang_DTO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -32,7 +31,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.ExportExcelUtil;
+import util.AlertUtil;
 
 public class KhachHang_Controller {
 
@@ -43,28 +47,28 @@ public class KhachHang_Controller {
 	private HBox hBoxPage;
 
 	@FXML
-	private TableView<KhachHang> tableView;
+	private TableView<KhachHang_DTO> tableView;
 
 	@FXML
-	private TableColumn<KhachHang, String> tblDiaChi;
+	private TableColumn<KhachHang_DTO, String> tblDiaChi;
 
 	@FXML
-	private TableColumn<KhachHang, Integer> tblDiemTichLuy;
+	private TableColumn<KhachHang_DTO, Integer> tblDiemTichLuy;
 
 	@FXML
-	private TableColumn<KhachHang, String> tblEmail;
+	private TableColumn<KhachHang_DTO, String> tblEmail;
 
 	@FXML
-	private TableColumn<KhachHang, String> tblHangKH;
+	private TableColumn<KhachHang_DTO, String> tblHangKH;
 
 	@FXML
-	private TableColumn<KhachHang, String> tblKhachHang;
+	private TableColumn<KhachHang_DTO, String> tblKhachHang;
 
 	@FXML
-	private TableColumn<KhachHang, String> tblSoDienThoai;
+	private TableColumn<KhachHang_DTO, String> tblSoDienThoai;
 
 	@FXML
-	private TableColumn<KhachHang, String> tblTenKH;
+	private TableColumn<KhachHang_DTO, String> tblTenKH;
 
 	@FXML
 	private Button btnTC;
@@ -77,17 +81,29 @@ public class KhachHang_Controller {
 
 	@FXML
 	private TextField txtTimKiem;
-	private ObservableList<KhachHang> danhSachKhachHang = FXCollections.observableArrayList();
-	private List<KhachHang> danhSachKhachHangDB;
+
+	private final ObservableList<KhachHang_DTO> danhSachKhachHang = FXCollections.observableArrayList();
+	private List<KhachHang_DTO> danhSachKhachHangDB = List.of();
+
 	private final int LIMIT = 15;
 	private String status = "all";
+
+	private final Map<String, String> tenHangByMaHang = new HashMap<>();
+	private Client client;
+	private boolean daCanhBaoMatKetNoi;
 
 	@FXML
 	private void initialize() {
 		setValueTable();
+
+		client = Client.tryCreate();
+
+		loadHangKhachHang();
 		loadData();
-		System.out.println("TableView items: " + tableView.getItems().size());
-		phanTrang(danhSachKhachHangDB.size());
+
+		if (danhSachKhachHangDB != null) {
+			phanTrang(danhSachKhachHangDB.size());
+		}
 		borderPane.requestFocus();
 		btnXuat.setTooltip(new Tooltip("Thông báo cho nút Xuất Excel!"));
 		btnTC.setTooltip(new Tooltip("Thông báo cho nút Tất cả!"));
@@ -130,7 +146,9 @@ public class KhachHang_Controller {
 
 			// Sau khi đóng dialog → reload danh sách
 			loadData();
-			phanTrang(danhSachKhachHangDB.size());
+			if (danhSachKhachHangDB != null) {
+				phanTrang(danhSachKhachHangDB.size());
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -141,7 +159,9 @@ public class KhachHang_Controller {
 	void btnXuatExcel(ActionEvent event) throws IOException {
 		Stage stage = (Stage) tableView.getScene().getWindow();
 		danhSachKhachHang.clear();
-		danhSachKhachHang.addAll(danhSachKhachHangDB);
+		if (danhSachKhachHangDB != null) {
+			danhSachKhachHang.addAll(danhSachKhachHangDB);
+		}
 		tableView.setItems(danhSachKhachHang);
 		ExportExcelUtil.exportTableViewToExcel(tableView, stage);
 		danhSachKhachHang.clear();
@@ -160,7 +180,9 @@ public class KhachHang_Controller {
 			status = "all";
 			hBoxPage.setVisible(true);
 			loadData();
-			phanTrang(danhSachKhachHangDB.size());
+			if (danhSachKhachHangDB != null) {
+				phanTrang(danhSachKhachHangDB.size());
+			}
 		}
 	}
 
@@ -178,10 +200,12 @@ public class KhachHang_Controller {
 
 	private void timKiem() {
 		// Tạo một danh sách mới để tránh ảnh hưởng danh sách gốc
-		ObservableList<KhachHang> newDanhSachKhachHang = FXCollections.observableArrayList();
-		newDanhSachKhachHang.addAll(danhSachKhachHangDB);
+		ObservableList<KhachHang_DTO> newDanhSachKhachHang = FXCollections.observableArrayList();
+		if (danhSachKhachHangDB != null) {
+			newDanhSachKhachHang.addAll(danhSachKhachHangDB);
+		}
 		hBoxPage.setVisible(false);
-		FilteredList<KhachHang> filteredData = new FilteredList<>(newDanhSachKhachHang, p -> true);
+		FilteredList<KhachHang_DTO> filteredData = new FilteredList<>(newDanhSachKhachHang, p -> true);
 		txtTimKiem.textProperty().addListener((observable, oldValue, newValue) -> {
 			filteredData.setPredicate(kh -> {
 				// Nếu ô tìm kiếm rỗng thì hiển thị tất cả
@@ -200,9 +224,8 @@ public class KhachHang_Controller {
 					return true;
 				if (kh.getDiemTichLuy() != 0 && String.valueOf(kh.getDiemTichLuy()).contains(lowerCaseFilter))
 					return true;
-				HangKhachHang hang = kh.getHangKhachHang();
-				if (hang != null && hang.getTenHang() != null
-						&& hang.getTenHang().toLowerCase().contains(lowerCaseFilter))
+				String tenHang = tenHangByMaHang.get(kh.getMaHangKhachHang());
+				if (tenHang != null && tenHang.toLowerCase().contains(lowerCaseFilter))
 					return true;
 				return false;
 			});
@@ -230,7 +253,7 @@ public class KhachHang_Controller {
 		});
 	}
 
-	private void phanTrang(FilteredList<KhachHang> danhSachPhanTrang) {
+	private void phanTrang(FilteredList<KhachHang_DTO> danhSachPhanTrang) {
 		hBoxPage.getChildren().clear();
 		loadCountPage(danhSachPhanTrang.size());
 		hBoxPage.getChildren().forEach(button -> {
@@ -244,8 +267,10 @@ public class KhachHang_Controller {
 
 	private int locDuLieuTheoTrangThai(String status) {
 		danhSachKhachHang.clear();
-		int soLuongBanGhi = danhSachKhachHangDB.size();
-		danhSachKhachHang.addAll(danhSachKhachHangDB.subList(0, Math.min(LIMIT, danhSachKhachHangDB.size())));
+		int soLuongBanGhi = danhSachKhachHangDB == null ? 0 : danhSachKhachHangDB.size();
+		if (danhSachKhachHangDB != null) {
+			danhSachKhachHang.addAll(danhSachKhachHangDB.subList(0, Math.min(LIMIT, danhSachKhachHangDB.size())));
+		}
 		tableView.refresh();
 		tableView.setItems(danhSachKhachHang);
 		return soLuongBanGhi;
@@ -262,15 +287,39 @@ public class KhachHang_Controller {
 	}
 
 	private void loadData() {
-		Map<String, Object> filter = new HashMap<>();
-		danhSachKhachHangDB = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(KhachHang_DAO.class).getDanhSach(KhachHang.class, filter);
-		danhSachKhachHang.clear();
-		danhSachKhachHang.addAll(danhSachKhachHangDB);
-		tableView.setItems(danhSachKhachHang);
+		try {
+			if (!ensureClientConnection()) {
+				danhSachKhachHangDB = List.of();
+				danhSachKhachHang.setAll(danhSachKhachHangDB);
+				tableView.setItems(danhSachKhachHang);
+				return;
+			}
+
+			Request request = Request.builder().commandType(CommandType.KHACHHANG_GET_ALL).build();
+			Response response = client.send(request);
+
+			Object data = response == null ? null : response.getData();
+			if (!(data instanceof List<?> rawList)) {
+				danhSachKhachHangDB = List.of();
+				danhSachKhachHang.setAll(danhSachKhachHangDB);
+				tableView.setItems(danhSachKhachHang);
+				return;
+			}
+
+			@SuppressWarnings("unchecked")
+			List<KhachHang_DTO> list = (List<KhachHang_DTO>) rawList;
+			danhSachKhachHangDB = list == null ? List.of() : list;
+
+			danhSachKhachHang.setAll(danhSachKhachHangDB);
+			tableView.setItems(danhSachKhachHang);
+			daCanhBaoMatKetNoi = false;
+
+		} catch (Exception e) {
+			client = null;
+		}
 	}
 
-	private void loadData(List<KhachHang> khachHang) {
+	private void loadData(List<KhachHang_DTO> khachHang) {
 		danhSachKhachHang.clear();
 		danhSachKhachHang.addAll(khachHang);
 		tableView.setItems(danhSachKhachHang);
@@ -284,8 +333,8 @@ public class KhachHang_Controller {
 		tblDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
 		tblDiemTichLuy.setCellValueFactory(new PropertyValueFactory<>("diemTichLuy"));
 		tblHangKH.setCellValueFactory(cellData -> {
-			HangKhachHang hang = cellData.getValue().getHangKhachHang();
-			return new SimpleStringProperty(hang != null ? hang.getTenHang() : "");
+			String maHang = cellData.getValue() == null ? null : cellData.getValue().getMaHangKhachHang();
+			return new SimpleStringProperty(maHang == null ? "" : tenHangByMaHang.getOrDefault(maHang, ""));
 		});
 	}
 
@@ -295,12 +344,54 @@ public class KhachHang_Controller {
 
 	private void showThongTin(int countClick) {
 		if (countClick == 2) {
-			KhachHang khachHang = tableView.getSelectionModel().getSelectedItem();
+			KhachHang_DTO khachHang = tableView.getSelectionModel().getSelectedItem();
 			if (khachHang != null) {
 				ThongTinKhachHang_Controller thongTinKhachHang = MenuNV_Controller.instance
 						.readyUI("KhachHang/ThongTinChiTietKhachHang").getController();
 				thongTinKhachHang.setKhachHang(khachHang);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void loadHangKhachHang() {
+		try {
+			if (!ensureClientConnection()) {
+				return;
+			}
+
+			Request request = Request.builder().commandType(CommandType.HANGKHACHHANG_GET_ALL).build();
+			Response response = client.send(request);
+			Object data = response == null ? null : response.getData();
+
+			if (!(data instanceof List<?> rawList)) {
+				return;
+			}
+
+			List<HangKhachHang_DTO> list = (List<HangKhachHang_DTO>) rawList;
+			tenHangByMaHang.clear();
+			if (list != null) {
+				for (HangKhachHang_DTO dto : list) {
+					if (dto != null && dto.getMaHang() != null) {
+						tenHangByMaHang.put(dto.getMaHang(), dto.getTenHang());
+					}
+				}
+			}
+		} catch (Exception e) {
+			client = null;
+		}
+	}
+
+	private boolean ensureClientConnection() {
+		if (client != null) {
+			return true;
+		}
+
+		client = Client.tryCreate();
+		if (client == null && !daCanhBaoMatKetNoi) {
+			daCanhBaoMatKetNoi = true;
+			AlertUtil.showAlert("Mất kết nối", "Không thể kết nối server tại localhost:9090", Alert.AlertType.WARNING);
+		}
+		return client != null;
 	}
 }

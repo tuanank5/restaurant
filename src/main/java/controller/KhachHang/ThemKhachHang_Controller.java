@@ -5,12 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import config.DatabaseContext;
-import config.RestaurantApplication;
-import dao.HangKhachHang_DAO;
-import dao.KhachHang_DAO;
-import entity.HangKhachHang;
-import entity.KhachHang;
+import dto.HangKhachHang_DTO;
+import dto.KhachHang_DTO;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +22,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AlertUtil;
 import util.AutoIDUitl;
 
@@ -65,11 +65,15 @@ public class ThemKhachHang_Controller {
 
 	private String ui;
 
-	private List<HangKhachHang> danhSachHangKhachHangDB;
+	private List<HangKhachHang_DTO> danhSachHangKhachHangDB = List.of();
+	private Client client;
 
 	@FXML
 	public void initialize() {
 		Platform.runLater(() -> txtKhachHang.requestFocus());
+
+		client = Client.tryCreate();
+
 		loadData();
 	}
 
@@ -126,11 +130,10 @@ public class ThemKhachHang_Controller {
 	}
 
 	public void luuLai() {
-		KhachHang khachHangNew = getKhachHangNew();
+		KhachHang_DTO khachHangNew = getKhachHangNew();
 		try {
 			if (khachHangNew != null) {
-				boolean check = RestaurantApplication.getInstance().getDatabaseContext()
-						.newEntity_DAO(KhachHang_DAO.class).them(khachHangNew);
+				boolean check = themKhachHang(khachHangNew);
 				// Kiểm tra kết quả thêm
 				if (check) {
 					AlertUtil.showAlert("Thông báo", "Thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
@@ -146,7 +149,7 @@ public class ThemKhachHang_Controller {
 				}
 			}
 		} catch (Exception e) {
-			if (e.getCause() != null && e.getCause().getMessage().contains("UNIQUE")) {
+			if (e.getCause() != null && e.getCause().getMessage() != null && e.getCause().getMessage().contains("UNIQUE")) {
 				AlertUtil.showAlert("Cảnh Báo", "Dữ liệu bị trùng (SĐT hoặc Email)!", Alert.AlertType.WARNING);
 			} else {
 				AlertUtil.showAlert("Lỗi", "Xảy ra lỗi khi thêm khách hàng!", Alert.AlertType.ERROR);
@@ -154,14 +157,13 @@ public class ThemKhachHang_Controller {
 		}
 	}
 
-	private KhachHang getKhachHangNew() {
+	private KhachHang_DTO getKhachHangNew() {
 		String tenKH = txtKhachHang.getText().trim();
 		String sdt = txtSDT.getText().trim();
 		String email = txtEmail.getText().trim();
 		String diaChi = txtDiaChi.getText().trim();
 		String diemStr = txtDiemTichLuy.getText().trim();
 		String hangKH = comBoxHangKH.getValue();
-		DatabaseContext databaseContext = RestaurantApplication.getInstance().getDatabaseContext();
 
 		// Kiểm tra tên khách hàng
 		if (tenKH.isEmpty()) {
@@ -180,15 +182,6 @@ public class ThemKhachHang_Controller {
 				AlertUtil.showAlert("Cảnh Báo", "Số điện thoại không hợp lệ!", Alert.AlertType.WARNING);
 				txtSDT.requestFocus();
 				return null;
-			} else {
-				Map<String, Object> filter = new HashMap<>();
-				filter.put("sdt", sdt);
-				List<KhachHang> listKH = databaseContext.newEntity_DAO(KhachHang_DAO.class).getDanhSach(KhachHang.class,
-						filter);
-				if (!listKH.isEmpty()) {
-					AlertUtil.showAlert("Cảnh Báo", "Số điện thoại đã tồn tại!", Alert.AlertType.WARNING);
-					return null;
-				}
 			}
 		}
 
@@ -229,45 +222,45 @@ public class ThemKhachHang_Controller {
 			return null;
 		}
 
-		if (daTonTai("tenKH", tenKH)) {
+		if (daTonTaiLocal("tenKH", tenKH)) {
 			AlertUtil.showAlert("Cảnh Báo", "Tên khách hàng đã tồn tại!", Alert.AlertType.WARNING);
 			txtKhachHang.requestFocus();
 			return null;
 		}
 
-		if (daTonTai("sdt", sdt)) {
+		if (daTonTaiLocal("sdt", sdt)) {
 			AlertUtil.showAlert("Cảnh Báo", "Số điện thoại đã tồn tại!", Alert.AlertType.WARNING);
 			txtSDT.requestFocus();
 			return null;
 		}
 
-		if (daTonTai("email", email)) {
+		if (daTonTaiLocal("email", email)) {
 			AlertUtil.showAlert("Cảnh Báo", "Email đã tồn tại!", Alert.AlertType.WARNING);
 			txtEmail.requestFocus();
 			return null;
 		}
 
-		KhachHang kh = new KhachHang();
-		kh.setMaKH(AutoIDUitl.phatSinhMaKH()); // quan trọng
-		kh.setTenKH(tenKH);
-		kh.setSdt(sdt);
-		kh.setEmail(email);
-		kh.setDiaChi(diaChi);
-		kh.setDiemTichLuy(diemTichLuy);
-		// Lấy object HangKhachHang tương ứng
-		HangKhachHang hang = danhSachHangKhachHangDB.stream().filter(h -> h.getTenHang().equals(hangKH)).findFirst()
-				.orElse(null);
-		kh.setHangKhachHang(hang);
+		String maHang = danhSachHangKhachHangDB.stream().filter(h -> h != null && hangKH.equals(h.getTenHang()))
+				.map(HangKhachHang_DTO::getMaHang).findFirst().orElse(null);
 
-		return kh;
+		return KhachHang_DTO.builder().maKH(AutoIDUitl.phatSinhMaKH()).tenKH(tenKH).sdt(sdt).email(email).diaChi(diaChi)
+				.diemTichLuy(diemTichLuy).maHangKhachHang(maHang).build();
 	}
 
-	private boolean daTonTai(String field, String value) {
-		Map<String, Object> filter = new HashMap<>();
-		filter.put(field, value);
-		List<KhachHang> list = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(KhachHang_DAO.class).getDanhSach(KhachHang.class, filter);
-		return !list.isEmpty();
+	private boolean daTonTaiLocal(String field, String value) {
+		List<KhachHang_DTO> all = getAllKhachHang();
+		if (all == null || value == null)
+			return false;
+		return all.stream().anyMatch(kh -> {
+			if (kh == null)
+				return false;
+			return switch (field) {
+			case "tenKH" -> value.equalsIgnoreCase(kh.getTenKH());
+			case "sdt" -> value.equals(kh.getSdt());
+			case "email" -> value.equalsIgnoreCase(kh.getEmail());
+			default -> false;
+			};
+		});
 	}
 
 	private void resetAllField() {
@@ -279,21 +272,56 @@ public class ThemKhachHang_Controller {
 		comBoxHangKH.setValue(null);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadData() {
-		Map<String, Object> filter = new HashMap<>();
-		danhSachHangKhachHangDB = RestaurantApplication.getInstance().getDatabaseContext()
-				.newEntity_DAO(HangKhachHang_DAO.class).getDanhSach(HangKhachHang.class, filter);
-		comBoxHangKH.getItems().clear();
-		// comBoxHangKH.getItems().add("Tất cả");
-		for (HangKhachHang hang : danhSachHangKhachHangDB) {
-			comBoxHangKH.getItems().add(hang.getTenHang());
+		try {
+			Request request = Request.builder().commandType(CommandType.HANGKHACHHANG_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+
+			if (!(data instanceof List<?> rawList)) {
+				return;
+			}
+
+			List<HangKhachHang_DTO> list = (List<HangKhachHang_DTO>) rawList;
+			danhSachHangKhachHangDB = list == null ? List.of() : list;
+
+			comBoxHangKH.getItems().clear();
+			for (HangKhachHang_DTO hang : danhSachHangKhachHangDB) {
+				if (hang != null) {
+					comBoxHangKH.getItems().add(hang.getTenHang());
+				}
+			}
+			comBoxHangKH.getSelectionModel().selectFirst();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		comBoxHangKH.getSelectionModel().selectFirst();
 	}
 
 	// Dùng để lấy ra sau đó setText lại cho đường dẫn
 	public void setUrl(String nameUrl, String currentPage) {
 		lblDanhSachKhachHang.setText(nameUrl);
 		this.ui = currentPage;
+	}
+
+	private boolean themKhachHang(KhachHang_DTO dto) throws Exception {
+		Request request = Request.builder().commandType(CommandType.KHACHHANG_ADD).data(dto).build();
+		Response response = client == null ? null : client.send(request);
+		return response != null && response.isSuccess();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<KhachHang_DTO> getAllKhachHang() {
+		try {
+			Request request = Request.builder().commandType(CommandType.KHACHHANG_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			if (!(data instanceof List<?> rawList)) {
+				return List.of();
+			}
+			return (List<KhachHang_DTO>) rawList;
+		} catch (Exception e) {
+			return List.of();
+		}
 	}
 }

@@ -8,18 +8,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
-import dao.Ban_DAO;
-import dao.DonDatBan_DAO;
-import dao.LoaiBan_DAO;
-import dao.impl.Ban_DAOImpl;
-import dao.impl.DonDatBan_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.LoaiBan_DAOImpl;
-import entity.Ban;
-import entity.DonDatBan;
-import entity.KhachHang;
-import entity.LoaiBan;
+import dto.Ban_DTO;
+import dto.DonDatBan_DTO;
+import dto.KhachHang_DTO;
+import dto.LoaiBan_DTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,6 +23,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class ThayDoiBanTruoc_Controller implements Initializable {
 
@@ -51,36 +47,34 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 	@FXML
 	private GridPane gridPaneBan;
 
-	public static DonDatBan donDatBanDuocChon;
-
-	private Ban_DAO banDAO = new Ban_DAOImpl();
-	private DonDatBan_DAO donDAO = new DonDatBan_DAOImpl();
-	private DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
-	private LoaiBan_DAO loaiBanDAO = new LoaiBan_DAOImpl();
-
-	private List<Ban> danhSachBan = new ArrayList<>();
-	private List<Ban> danhSachBanDangChon = new ArrayList<>();
+	public static DonDatBan_DTO donDatBanDuocChon;
+	private List<Ban_DTO> danhSachBan = new ArrayList<>();
+	private List<Ban_DTO> danhSachBanDangChon = new ArrayList<>();
 	private List<Button> danhSachButtonDangChonUI = new ArrayList<>();
+	private Client client;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		client = Client.tryCreate();
 		cmbTrangThai.getItems().addAll("Tất cả", "Trống", "Đã được đặt", "Đang phục vụ");
 		cmbTrangThai.setValue("Tất cả");
-		cmbTrangThai.setOnAction(e -> filterBanTheoTrangThai());
+		cmbTrangThai.setOnAction(e -> loadDanhSachBan());
+		dpNgayDatBan.setValue(LocalDate.now().plusDays(1));
 		loadGioBatDau();
-
+		khoiTaoLoaiBan();
+		loadDanhSachBan();
 		if (donDatBanDuocChon != null) {
 			loadThongTinBan(donDatBanDuocChon.getBan(), donDatBanDuocChon);
 		}
 
-		loadDanhSachBan();
 		if (donDatBanDuocChon != null) {
 			danhDauBanDangDat(donDatBanDuocChon.getBan());
 		}
+
+
 		btnTroLai.setOnAction(event -> onTroLai(event));
 		dpNgayDatBan.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
 		cmbGioBatDau.valueProperty().addListener((obs, oldV, newV) -> loadDanhSachBan());
-		khoiTaoLoaiBan();
 
 		btnTroLai.setTooltip(new Tooltip("Thông báo cho nút Trở lại!"));
 		cmbLoaiBan.setTooltip(new Tooltip("Lọc theo loại bàn!"));
@@ -88,15 +82,24 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		cmbTrangThai.setTooltip(new Tooltip("Lọc theo trạng thái của bàn!"));
 		dpNgayDatBan.setTooltip(new Tooltip("Lọc theo ngày đặt bàn!"));
 		btnXacNhan.setTooltip(new Tooltip("Thông báo cho nút Xác nhận!"));
+
 	}
 
+	@SuppressWarnings("unchecked")
 	private void khoiTaoLoaiBan() {
 		cmbLoaiBan.getItems().clear();
 		cmbLoaiBan.getItems().add("Tất cả");
 
-		List<LoaiBan> dsLoaiBan = loaiBanDAO.getDanhSach("LoaiBan.list", LoaiBan.class);
-		for (LoaiBan lb : dsLoaiBan) {
-			cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
+		try {
+			Request request = Request.builder().commandType(CommandType.LOAIBAN_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			List<LoaiBan_DTO> dsLoaiBan = data instanceof List<?> raw ? (List<LoaiBan_DTO>) raw : List.of();
+			for (LoaiBan_DTO lb : dsLoaiBan) {
+				cmbLoaiBan.getItems().add(lb.getTenLoaiBan());
+			}
+		} catch (Exception e) {
+			// giữ "Tất cả" nếu lỗi kết nối/server
 		}
 		cmbLoaiBan.setValue("Tất cả");
 
@@ -119,7 +122,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn bàn trước khi đổi!");
 			return;
 		}
-		Ban banMoi = danhSachBanDangChon.get(0);
+		Ban_DTO banMoi = danhSachBanDangChon.get(0);
 		LocalDate ngayDat = dpNgayDatBan.getValue();
 		if (ngayDat == null) {
 			showAlert(Alert.AlertType.WARNING, "Vui lòng chọn ngày đổi bàn!");
@@ -135,23 +138,41 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 			return;
 		}
 		try {
-			DonDatBan don = donDatBanDuocChon;
-			Ban banCu = don.getBan();
+			DonDatBan_DTO don = donDatBanDuocChon;
+			Ban_DTO banCu = don.getBan();
 			banCu.setTrangThai("Trống");
-			banDAO.capNhat(banCu);
-			banMoi.setTrangThai("Đã được đặt");
-			banDAO.capNhat(banMoi);
+			updateBan(banCu);
 
-			int hour = Integer.parseInt(gioDat.substring(0, 2));
+			String trangThaiDon = don.getTrangThai();
+			if ("Đã nhận bàn".equalsIgnoreCase(trangThaiDon) || "Đang phục vụ".equalsIgnoreCase(trangThaiDon)) {
+				banMoi.setTrangThai("Đang phục vụ");
+			} else {
+				banMoi.setTrangThai("Đã được đặt");
+			}
+
+			updateBan(banMoi);
+
+//			int hour = Integer.parseInt(gioDat.substring(0, 2));
+
+			String[] timeParts = gioDat.split(":");
+			int hour = Integer.parseInt(timeParts[0]);
+			int minute = Integer.parseInt(timeParts[1]);
 			don.setBan(banMoi);
-			don.setNgayGioLapDon(ngayDat.atTime(hour, 0));
-			don.setGioBatDau(LocalTime.of(hour, 0));
+			don.setNgayGioLapDon(ngayDat.atTime(hour, minute));
+			don.setGioBatDau(LocalTime.of(hour, minute));
 			don.setTrangThai("Chưa nhận bàn");
-			donDAO.capNhat(don);
+			updateDonDatBan(don);
+			try {
+				Thread.sleep(200);
+			} catch (Exception e) {
+			}
 
 			showAlert(Alert.AlertType.INFORMATION, "Đổi bàn thành công!");
 			MenuNV_Controller.instance.readyUI("DatBan/DonDatBan");
-
+			danhSachBanDangChon.clear();
+			danhSachButtonDangChonUI.clear();
+			danhSachBan = getAllBan();
+			loadDanhSachBan();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -168,7 +189,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 
 	private void loadDanhSachBan() {
 		gridPaneBan.getChildren().clear();
-		danhSachBan = banDAO.getDanhSach("Ban.list", Ban.class);
+		danhSachBan = getAllBan();
 		int col = 0, row = 0;
 		final int MAX_COLS = 5;
 		String loaiBanChon = cmbLoaiBan.getValue();
@@ -176,13 +197,18 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		String gioStr = cmbGioBatDau.getValue();
 		LocalTime gio = parseGio(gioStr);
 
-		for (Ban ban : danhSachBan) {
-			String trangThaiThucTe = getTrangThaiThucTe(ban, ngay, gio);
+		for (Ban_DTO ban : danhSachBan) {
+			String trangThaiThucTe = getTrangThaiThucTe(ban, ngay, gio,false);
 			String trangThaiChon = cmbTrangThai.getValue();
+			System.out.println(
+					ban.getMaBan() +
+							" | trạng thái thực tế = " + trangThaiThucTe +
+							" | trạng thái chọn = " + trangThaiChon
+			);
 			if (!"Tất cả".equals(trangThaiChon) && !trangThaiThucTe.equals(trangThaiChon))
 				continue;
 			// Lọc theo loại bàn
-			boolean matchLoai = "Tất cả".equals(loaiBanChon) || ban.getLoaiBan().getTenLoaiBan().equals(loaiBanChon);
+			boolean matchLoai = "Tất cả".equals(loaiBanChon) || (ban.getTenLoaiBan() != null && ban.getTenLoaiBan().equals(loaiBanChon));
 
 			if (!matchLoai)
 				continue;
@@ -195,20 +221,23 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 				row++;
 			}
 		}
+		if (donDatBanDuocChon != null) {
+			danhDauBanDangDat(donDatBanDuocChon.getBan());
+		}
 	}
 
-	private Button taoNutBan(Ban ban) {
-		Button btnBan = new Button(ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
+	private Button taoNutBan(Ban_DTO ban) {
+		Button btnBan = new Button(ban.getMaBan() + "\n(" + ban.getTenLoaiBan() + ")");
 		btnBan.setPrefSize(170, 110);
 		LocalDate ngay = dpNgayDatBan.getValue();
 		String gioStr = cmbGioBatDau.getValue();
 		LocalTime gio = parseGio(gioStr);
-		String trangThai = getTrangThaiThucTe(ban, ngay, gio);
-		btnBan.setStyle(getStyleByStatusAndType(trangThai, ban.getLoaiBan().getMaLoaiBan()));
+		String trangThai = getTrangThaiThucTe(ban, ngay, gio,false);
+		btnBan.setStyle(getStyleByStatusAndType(trangThai, ban.getTenLoaiBan()));
 
 		btnBan.setOnMouseClicked(event -> {
 			String trangThaiThucTe = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(),
-					parseGio(cmbGioBatDau.getValue()));
+					parseGio(cmbGioBatDau.getValue()),false);
 			if (event.getClickCount() == 1) {
 				handleChonBan(ban, btnBan);
 			} else if (event.getClickCount() == 2) {
@@ -223,93 +252,116 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		return btnBan;
 	}
 
-	private void handleChonBan(Ban ban, Button btnBan) {
-		String trangThai = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(), parseGio(cmbGioBatDau.getValue()));
-		if (!trangThai.equals("Trống")) {
+	private void handleChonBan(Ban_DTO ban, Button btnBan) {
+		String trangThai = getTrangThaiThucTe(ban, dpNgayDatBan.getValue(), parseGio(cmbGioBatDau.getValue()),false);
+		if (!"Trống".equals(trangThai)) {
 			showAlert(Alert.AlertType.ERROR, "Chỉ được đổi sang bàn TRỐNG!");
 			return;
 		}
 
 		if (!danhSachBanDangChon.isEmpty()) {
-			Ban banCu = danhSachBanDangChon.get(0);
+			Ban_DTO banCu = danhSachBanDangChon.get(0);
 			Button btnCu = danhSachButtonDangChonUI.get(0);
-			btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getLoaiBan().getTenLoaiBan() + ")");
-			String trangThaiThucTe = getTrangThaiThucTe(banCu, dpNgayDatBan.getValue(),
-					parseGio(cmbGioBatDau.getValue()));
-			btnCu.setStyle(getStyleByStatusAndType(trangThaiThucTe, banCu.getLoaiBan().getMaLoaiBan()));
+
+			String trangThaiCu = getTrangThaiThucTe(banCu, dpNgayDatBan.getValue(), parseGio(cmbGioBatDau.getValue()),true);
+			btnCu.setText(banCu.getMaBan() + "\n(" + banCu.getTenLoaiBan() + ")");
+
+			btnCu.setStyle(getStyleByStatusAndType(trangThaiCu, banCu.getTenLoaiBan()));
 			danhSachBanDangChon.clear();
 			danhSachButtonDangChonUI.clear();
 		}
 
 		danhSachBanDangChon.add(ban);
 		danhSachButtonDangChonUI.add(btnBan);
-		btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getLoaiBan().getTenLoaiBan() + ")");
-		btnBan.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+
+		btnBan.setText("✔ " + ban.getMaBan() + "\n(" + ban.getTenLoaiBan() + ")");
+		btnBan.setStyle("""
+		-fx-background-color: #ffeb3b;
+		-fx-text-fill: black;
+		-fx-font-weight: bold;
+		-fx-background-radius: 15;
+	""");
 	}
 
-	private void danhDauBanDangDat(Ban banDaDat) {
+	private void danhDauBanDangDat(Ban_DTO banDaDat) {
+		danhSachBanDangChon.clear();
+		danhSachButtonDangChonUI.clear();
 		for (javafx.scene.Node node : gridPaneBan.getChildren()) {
-			if (node instanceof Button) {
-				Button btn = (Button) node;
+			if (node instanceof Button btn) {
 				String[] parts = btn.getText().replace("✔", "").split("\n");
 				String ma = parts[0].trim();
+
 				if (ma.equals(banDaDat.getMaBan())) {
 					danhSachBanDangChon.add(banDaDat);
 					danhSachButtonDangChonUI.add(btn);
-					btn.setText("✔ " + banDaDat.getMaBan() + "\n(" + banDaDat.getLoaiBan().getTenLoaiBan() + ")");
-					btn.setStyle("-fx-background-color: #ffeb3b; -fx-text-fill: black; -fx-font-weight: bold;");
+					btn.setText("✔ " + banDaDat.getMaBan() + "\n(" + banDaDat.getTenLoaiBan() + ")");
+					btn.setStyle("""
+                    -fx-background-color: #ffeb3b;
+                    -fx-text-fill: black;
+                    -fx-font-weight: bold;
+                    -fx-background-radius: 15;
+                """);
 					break;
 				}
 			}
 		}
 	}
 
-	private void filterBanTheoTrangThai() {
-		String trangThaiChon = cmbTrangThai.getValue();
-		gridPaneBan.getChildren().clear();
-
-		int col = 0, row = 0;
-		final int MAX_COLS = 5;
-		LocalDate ngay = dpNgayDatBan.getValue();
-		String gioStr = cmbGioBatDau.getValue();
-		LocalTime gio = parseGio(gioStr);
-
-		for (Ban ban : danhSachBan) {
-			String trangThai = getTrangThaiThucTe(ban, ngay, gio);
-			if (!trangThaiChon.equals("Tất cả") && !trangThai.equals(trangThaiChon))
-				continue;
-			Button btnBan = taoNutBan(ban);
-			gridPaneBan.add(btnBan, col, row);
-			col++;
-			if (col >= MAX_COLS) {
-				col = 0;
-				row++;
-			}
-		}
-	}
+//	private void filterBanTheoTrangThai() {
+//		String trangThaiChon = cmbTrangThai.getValue();
+//		gridPaneBan.getChildren().clear();
+//
+//		int col = 0, row = 0;
+//		final int MAX_COLS = 5;
+//		LocalDate ngay = dpNgayDatBan.getValue();
+//		String gioStr = cmbGioBatDau.getValue();
+//		LocalTime gio = parseGio(gioStr);
+//
+//		for (Ban_DTO ban : danhSachBan) {
+//			String trangThai = getTrangThaiThucTe(ban, ngay, gio);
+//			if (!trangThaiChon.equals("Tất cả") && !trangThai.equals(trangThaiChon))
+//				continue;
+//			Button btnBan = taoNutBan(ban);
+//			gridPaneBan.add(btnBan, col, row);
+//			col++;
+//			if (col >= MAX_COLS) {
+//				col = 0;
+//				row++;
+//			}
+//		}
+//	}
 
 	private String getStyleByStatusAndType(String trangThai, String maLoaiBan) {
-		String backgroundColor = "white";
+		String backgroundColor = "#ffffff";
 
 		switch (trangThai) {
-		case "Đã được đặt":
-			backgroundColor = "#ff0000";
-			break;
-		case "Trống":
-			backgroundColor = "#00aa00";
-			break;
-		case "Đang phục vụ":
-			backgroundColor = "#ec9407";
-			break;
+			case "Đã được đặt":
+				backgroundColor = "#ff0000";
+				break;
+			case "Trống":
+				backgroundColor = "#00aa00";
+				break;
+			case "Đang phục vụ":
+				backgroundColor = "#ec9407";
+				break;
+			default:
+				backgroundColor = "#808080";
+				break;
 		}
 
-		return "-fx-background-color: " + backgroundColor + ";" + "-fx-background-radius: 15;" + "-fx-padding: 10;"
-				+ "-fx-font-size: 18px;" + "-fx-font-weight: bold;" + "-fx-text-fill: white;"
-				+ "-fx-font-family: 'Times New Roman';"
-				+ "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);";
+		return String.format("""
+		-fx-background-color: %s;
+		-fx-background-radius: 15;
+		-fx-padding: 10;
+		-fx-font-size: 18px;
+		-fx-font-weight: bold;
+		-fx-text-fill: white;
+		-fx-font-family: 'Times New Roman';
+		-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.6, 2, 2);
+	""", backgroundColor);
 	}
 
-	private void loadThongTinBan(Ban ban, DonDatBan don) {
+	private void loadThongTinBan(Ban_DTO ban, DonDatBan_DTO don) {
 		try {
 			if (don.getNgayGioLapDon() != null) {
 				dpNgayDatBan.setValue(don.getNgayGioLapDon().toLocalDate());
@@ -318,9 +370,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 				String gio = String.format("%02d:00", don.getGioBatDau().getHour());
 				cmbGioBatDau.setValue(gio);
 			}
-			if (ban.getLoaiBan() != null) {
-				cmbLoaiBan.setValue(ban.getLoaiBan().getTenLoaiBan());
-			}
+			cmbLoaiBan.setValue("Tất cả");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -332,7 +382,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 			return;
 		}
 
-		KhachHang kh = new HoaDon_DAOImpl().getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+		KhachHang_DTO kh = null;
 
 		Alert dialog = new Alert(Alert.AlertType.NONE);
 		dialog.setTitle("Thông tin khách hàng");
@@ -341,7 +391,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		TextField txtTenKH = new TextField(kh != null ? kh.getTenKH() : "");
 		txtSDT.textProperty().addListener((obs, oldV, newV) -> {
 			if (newV.matches("\\d{9,11}")) {
-				KhachHang khTim = new KhachHang_DAOlmpl().getKhachHangTheoSDT(newV);
+				KhachHang_DTO khTim = timKhachHangTheoSdt(newV);
 				if (khTim != null) {
 					txtTenKH.setText(khTim.getTenKH());
 				} else {
@@ -375,12 +425,8 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 
 			if (!newV.isEmpty()) {
 				int sl = Integer.parseInt(newV);
-				int sucChuaBanMoi = danhSachBanDangChon.isEmpty() ? donDatBanDuocChon.getBan().getLoaiBan().getSoLuong()
-						: danhSachBanDangChon.get(0).getLoaiBan().getSoLuong();
-
-				if (sl > sucChuaBanMoi) {
-					showAlert(Alert.AlertType.ERROR,
-							"Số lượng khách vượt quá số chỗ ngồi của bàn (" + sucChuaBanMoi + ")!");
+				if (sl <= 0) {
+					showAlert(Alert.AlertType.ERROR, "Số lượng khách phải lớn hơn 0!");
 				}
 			}
 		});
@@ -403,7 +449,7 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		dialog.showAndWait().ifPresent(bt -> {
 			if (bt == javafx.scene.control.ButtonType.OK) {
 				try {
-					KhachHang khUpdate = new HoaDon_DAOImpl().getKhachHangTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+					KhachHang_DTO khUpdate = timKhachHangTheoSdt(txtSDT.getText());
 
 					if (txtSDT.getText().isEmpty() || txtTenKH.getText().isEmpty()) {
 						showAlert(Alert.AlertType.WARNING, "Không được để trống SĐT hoặc Tên khách hàng!");
@@ -415,20 +461,22 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 						return;
 					}
 					String gioStr = cmbGioDat.getValue();
-					int gio = Integer.parseInt(gioStr.substring(0, 2));
-					LocalTime gioDat = LocalTime.of(gio, 0);
+					String[] timeParts = gioStr.split(":");
+					int hour = Integer.parseInt(timeParts[0]);
+					int minute = Integer.parseInt(timeParts[1]);
+					LocalTime gioDat = LocalTime.of(hour, minute);
 					int soLuong = Integer.parseInt(txtSoLuong.getText());
 
 					if (khUpdate != null) {
 						khUpdate.setSdt(txtSDT.getText());
 						khUpdate.setTenKH(txtTenKH.getText());
-						new KhachHang_DAOlmpl().capNhat(khUpdate);
+						// cập nhật khách hàng thực hiện phía server/service
 					}
 
 					donDatBanDuocChon.setNgayGioLapDon(ngayDat.atTime(gioDat));
 					donDatBanDuocChon.setGioBatDau(gioDat);
 					donDatBanDuocChon.setSoLuong(soLuong);
-					donDAO.capNhat(donDatBanDuocChon);
+					updateDonDatBan(donDatBanDuocChon);
 
 					showAlert(Alert.AlertType.INFORMATION, "Cập nhật thông tin khách hàng thành công!");
 				} catch (Exception e) {
@@ -439,41 +487,35 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		});
 	}
 
-	private String getTrangThaiThucTe(Ban ban, LocalDate ngay, LocalTime gio) {
+	private String getTrangThaiThucTe(Ban_DTO ban, LocalDate ngay, LocalTime gio,boolean boQuaDonHienTai) {
 		if (ngay == null || gio == null)
 			return "Trống";
-
-		List<DonDatBan> dsDon = donDatBanDAO.timTheoBan(ban);
+		List<DonDatBan_DTO> dsDon = getDonByBan(ban);
 		if (dsDon == null || dsDon.isEmpty())
 			return "Trống";
-
-		for (DonDatBan don : dsDon) {
-			if (donDatBanDuocChon != null && don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan())
-					&& danhSachBanDangChon.isEmpty()) {
+		for (DonDatBan_DTO don : dsDon) {
+			if (don == null)
+				continue;
+			if (don.getNgayGioLapDon() == null || don.getGioBatDau() == null)
+				continue;
+			if (boQuaDonHienTai && donDatBanDuocChon != null && don.getMaDatBan().equals(donDatBanDuocChon.getMaDatBan())) {
 				continue;
 			}
-
-			if (!don.getNgayGioLapDon().toLocalDate().equals(ngay))
+			LocalDate ngayDat = don.getNgayGioLapDon().toLocalDate();
+			if (!ngayDat.equals(ngay)) {
 				continue;
-
+			}
 			LocalTime gioBatDau = don.getGioBatDau();
-			LocalTime gioChan = gioBatDau.minusHours(1);
-			LocalTime gioKetThuc = gioBatDau.plusHours(1);
+			LocalTime gioKetThuc = gioBatDau.plusHours(2);
+			boolean trungGio = !gio.isBefore(gioBatDau) && gio.isBefore(gioKetThuc);
 
-			boolean trongKhoang;
-			if (gioKetThuc.isAfter(gioChan)) {
-				trongKhoang = !gio.isBefore(gioChan) && !gio.isAfter(gioKetThuc);
-			} else {
-				trongKhoang = !gio.isBefore(gioChan) || !gio.isAfter(gioKetThuc);
-			}
-			if (!trongKhoang)
+			if (!trungGio)
 				continue;
-
-			if ("Đang phục vụ".equalsIgnoreCase(don.getTrangThai())
-					|| "Đã nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
+			String trangThai = don.getTrangThai();
+			if ("Đang phục vụ".equalsIgnoreCase(trangThai) || "Đã nhận bàn".equalsIgnoreCase(trangThai)) {
 				return "Đang phục vụ";
 			}
-			if ("Chưa nhận bàn".equalsIgnoreCase(don.getTrangThai())) {
+			if ("Chưa nhận bàn".equalsIgnoreCase(trangThai)) {
 				return "Đã được đặt";
 			}
 		}
@@ -492,5 +534,67 @@ public class ThayDoiBanTruoc_Controller implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText(msg);
 		alert.showAndWait();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Ban_DTO> getAllBan() {
+		try {
+			Request request = Request.builder().commandType(CommandType.BAN_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			return data instanceof List<?> raw ? (List<Ban_DTO>) raw : List.of();
+		} catch (Exception e) {
+			return List.of();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<DonDatBan_DTO> getDonByBan(Ban_DTO ban) {
+		try {
+			Request request = Request.builder().commandType(CommandType.DONDATBAN_GET_BY_BAN).data(ban).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			return data instanceof List<?> raw ? (List<DonDatBan_DTO>) raw : List.of();
+		} catch (Exception e) {
+			return List.of();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private KhachHang_DTO timKhachHangTheoSdt(String sdt) {
+		try {
+			Request request = Request.builder().commandType(CommandType.KHACHHANG_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			if (!(data instanceof List<?> raw)) {
+				return null;
+			}
+			List<KhachHang_DTO> ds = (List<KhachHang_DTO>) raw;
+			return ds.stream().filter(kh -> kh != null && sdt.equals(kh.getSdt())).findFirst().orElse(null);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private void updateDonDatBan(DonDatBan_DTO dto) {
+		Request request = Request.builder().commandType(CommandType.DONDATBAN_UPDATE).data(dto).build();
+		if (client != null) {
+			try {
+				client.send(request);
+			} catch (Exception e) {
+				// ignore, caller handles UI state
+			}
+		}
+	}
+
+	private void updateBan(Ban_DTO dto) {
+		Request request = Request.builder().commandType(CommandType.BAN_UPDATE).data(dto).build();
+		if (client != null) {
+			try {
+				client.send(request);
+			} catch (Exception e) {
+				// ignore, caller handles UI state
+			}
+		}
 	}
 }

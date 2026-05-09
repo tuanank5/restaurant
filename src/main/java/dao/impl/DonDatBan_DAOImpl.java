@@ -43,6 +43,8 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 		}
 	}
 
+
+
 	@Override
 	public DonDatBan layDonDatTheoBan(String maBan) {
 		EntityManager em = getEntityManager();
@@ -93,6 +95,16 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 			e.printStackTrace();
 			em.getTransaction().rollback();
 			return false;
+		} finally {
+			em.close();
+		}
+	}
+
+	public DonDatBan findById(String maDatBan) {
+		EntityManager em = getEntityManager();
+
+		try {
+			return em.find(DonDatBan.class, maDatBan);
 		} finally {
 			em.close();
 		}
@@ -216,6 +228,25 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 			entityManager.close();
 		}
 		return dsDon;
+	}
+
+	@Override
+	public boolean sua(DonDatBan donDatBan) {
+		EntityManager em = getEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.merge(donDatBan);
+			em.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			return false;
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override

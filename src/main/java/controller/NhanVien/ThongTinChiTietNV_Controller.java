@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
-import entity.NhanVien;
+import dto.NhanVien_DTO;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,7 +61,7 @@ public class ThongTinChiTietNV_Controller implements Initializable {
 	@FXML
 	private TextField txtTenNV;
 
-	private NhanVien nhanVien;
+	private NhanVien_DTO nhanVien;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -94,12 +94,12 @@ public class ThongTinChiTietNV_Controller implements Initializable {
 		}
 	}
 
-	public void setNhanVien(NhanVien nhanVien) {
+	public void setNhanVien(NhanVien_DTO nhanVien) {
 		this.nhanVien = nhanVien;
 		hienThiThongTin(nhanVien);
 	}
 
-	private void hienThiThongTin(NhanVien nv) {
+	private void hienThiThongTin(NhanVien_DTO nv) {
 		txtMaNV.setText(nv.getMaNV());
 		txtTenNV.setText(nv.getTenNV());
 		txtEmail.setText(nv.getEmail());

@@ -1,5 +1,6 @@
 package dto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class DonLapDoiHuyBan_DTO {
+public class DonLapDoiHuyBan_DTO implements Serializable {
 
 	private String maDonDatBan;
 

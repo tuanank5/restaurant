@@ -2,21 +2,17 @@ package service.impl;
 
 import dao.NhanVien_DAO;
 import dao.impl.NhanVien_DAOImpl;
+import db.JPAUtils;
 import dto.NhanVien_DTO;
-import dto.TaiKhoan_DTO;
 import entity.NhanVien;
-import entity.TaiKhoan;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import service.NhanVien_Service;
-import util.MapperUtil;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class NhanVien_ServiceImpl implements NhanVien_Service {
 
 	private NhanVien_DAO nhanVien_DAO;
-
 	public NhanVien_ServiceImpl() {
 		nhanVien_DAO = new NhanVien_DAOImpl();
 	}
@@ -27,20 +23,29 @@ public class NhanVien_ServiceImpl implements NhanVien_Service {
 	}
 
 	@Override
-	public List<NhanVien_DTO> getAll() {
-		List<NhanVien> list = nhanVien_DAO.getDanhSach(NhanVien.class, new HashMap<>());
-
-		if (list == null) {
-			return new ArrayList<>();
+	public NhanVien_DTO findById(String maNV) {
+		EntityManager em = JPAUtils.getEntityManager();
+		try {
+			NhanVien nv = em.find(NhanVien.class, maNV);
+			if (nv == null) {
+				return null;
+			}
+			return NhanVien_DTO.builder()
+					.maNV(nv.getMaNV())
+					.tenNV(nv.getTenNV())
+					.email(nv.getEmail())
+					.namSinh(nv.getNamSinh())
+					.diaChi(nv.getDiaChi())
+					.gioiTinh(nv.isGioiTinh())
+					.ngayVaoLam(nv.getNgayVaoLam())
+					.trangThai(nv.isTrangThai())
+					.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			em.close();
 		}
-
-		return list.stream().map(nv -> {
-
-			NhanVien_DTO dto = MapperUtil.map(nv, NhanVien_DTO.class);
-
-			return dto;
-
-		}).toList();
 	}
 
 }

@@ -13,6 +13,7 @@ import controller.Menu.MenuNV_Controller;
 import dao.HoaDon_DAO;
 import dao.TaiKhoan_DAO;
 import dao.impl.HoaDon_DAOImpl;
+import dto.TaiKhoan_DTO;
 import entity.TaiKhoan;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,7 +62,7 @@ public class CaLamViec_Controller {
 	private ImageView userImage;
 
 	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-	private TaiKhoan taiKhoan;
+	private TaiKhoan_DTO taiKhoan;
 
 	private DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
@@ -77,7 +78,7 @@ public class CaLamViec_Controller {
 			return;
 		}
 
-		System.out.println("✅ CaLamViec nhận NV: " + taiKhoan.getNhanVien().getMaNV());
+		System.out.println("✅ CaLamViec nhận NV: " + taiKhoan.getMaNhanVien());
 		capNhatThongTinNhanVien();
 		capNhatDoanhThu();
 		tinhTienPhaiNop();
@@ -88,8 +89,8 @@ public class CaLamViec_Controller {
 		if (taiKhoan == null)
 			return;
 
-		text_TenNhanVien.setText(taiKhoan.getNhanVien().getTenNV());
-		text_maNV.setText(taiKhoan.getNhanVien().getMaNV());
+		text_TenNhanVien.setText(taiKhoan.getTenNhanVien());
+		text_maNV.setText(taiKhoan.getMaNhanVien());
 	}
 
 	// ================== CẬP NHẬT DOANH THU ==================
@@ -97,7 +98,7 @@ public class CaLamViec_Controller {
 		try {
 			LocalDate today = LocalDate.now();
 			Date homNay = Date.valueOf(today);
-			String maNV = taiKhoan.getNhanVien().getMaNV();
+			String maNV = taiKhoan.getMaNhanVien();
 
 			Double doanhThu = hoaDonDAO.getTongDoanhThuTheoNgayVaNhanVien(homNay, maNV);
 			Long soHoaDon = hoaDonDAO.countHoaDonTheoNgayVaNhanVien(homNay, maNV);
@@ -169,8 +170,19 @@ public class CaLamViec_Controller {
 			LocalDate localDate = LocalDate.now();
 			Date dateNow = Date.valueOf(localDate);
 			this.taiKhoan.setNgayDangXuat(dateNow);
-			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
-					.capNhat(taiKhoan);
+
+			TaiKhoan entity = new TaiKhoan();
+			entity.setMaTaiKhoan(taiKhoan.getMaTaiKhoan());
+			entity.setTenTaiKhoan(taiKhoan.getTenTaiKhoan());
+			entity.setMatKhau(taiKhoan.getMatKhau());
+			entity.setNgayDangNhap(taiKhoan.getNgayDangNhap());
+			entity.setNgayDangXuat(taiKhoan.getNgayDangXuat());
+			entity.setNgaySuaDoi(taiKhoan.getNgaySuaDoi());
+
+			RestaurantApplication.getInstance()
+					.getDatabaseContext()
+					.newEntity_DAO(TaiKhoan_DAO.class)
+					.capNhat(entity);
 
 			try {
 				Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

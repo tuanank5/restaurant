@@ -8,17 +8,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
-import dao.ChiTietHoaDon_DAO;
-import dao.HoaDon_DAO;
-import dao.MonAn_DAO;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import dao.impl.MonAn_DAOImpl;
-import entity.Ban;
-import entity.ChiTietHoaDon;
-import entity.DonDatBan;
-import entity.HoaDon;
-import entity.MonAn;
+import dto.Ban_DTO;
+import dto.ChiTietHoaDon_DTO;
+import dto.DonDatBan_DTO;
+import dto.HoaDon_DTO;
+import dto.MonAn_DTO;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,6 +37,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class DoiMonTruoc_Controller implements Initializable {
 
@@ -59,31 +57,29 @@ public class DoiMonTruoc_Controller implements Initializable {
 	@FXML
 	private GridPane gridPaneMon;
 	@FXML
-	private TableView<ChiTietHoaDon> tblMonCu;
+	private TableView<ChiTietHoaDon_DTO> tblMonCu;
 	@FXML
-	private TableColumn<ChiTietHoaDon, Integer> colSTT;
+	private TableColumn<ChiTietHoaDon_DTO, Integer> colSTT;
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> colTenMonCu;
+	private TableColumn<ChiTietHoaDon_DTO, String> colTenMonCu;
 	@FXML
-	private TableColumn<ChiTietHoaDon, Integer> colSoLuongCu;
+	private TableColumn<ChiTietHoaDon_DTO, Integer> colSoLuongCu;
 	@FXML
-	private TableColumn<ChiTietHoaDon, Double> colDonGia;
+	private TableColumn<ChiTietHoaDon_DTO, Double> colDonGia;
 
-	private ObservableList<ChiTietHoaDon> danhSachMon = FXCollections.observableArrayList();
-	private List<MonAn> dsMonAn;
-	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
+	private ObservableList<ChiTietHoaDon_DTO> danhSachMon = FXCollections.observableArrayList();
+	private List<MonAn_DTO> dsMonAn = List.of();
+	private Map<MonAn_DTO, Integer> dsMonAnDat = new LinkedHashMap<>();
 
-	public static Ban banChonStatic;
-	public static DonDatBan donDatBanDuocChon;
+	public static Ban_DTO banChonStatic;
+	public static DonDatBan_DTO donDatBanDuocChon;
 
-	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-	private MonAn_DAO monAnDAO = new MonAn_DAOImpl();
-	private ChiTietHoaDon_DAO chiTietHoaDonDAO = new ChiTietHoaDon_DAOImpl();
+	private Client client;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		dsMonAn = monAnDAO.getDanhSachMonAn();
+		client = Client.tryCreate();
+		dsMonAn = getAllMonAn();
 		khoiTaoComboBoxPhanLoai();
 
 		if (dsMonAn != null && !dsMonAn.isEmpty()) {
@@ -97,14 +93,15 @@ public class DoiMonTruoc_Controller implements Initializable {
 		colSTT.setCellValueFactory(col -> new ReadOnlyObjectWrapper<>(tblMonCu.getItems().indexOf(col.getValue()) + 1));
 
 		colTenMonCu.setCellValueFactory(c -> {
-			ChiTietHoaDon ct = c.getValue();
-			return new ReadOnlyObjectWrapper<>(ct.getMonAn() == null ? "" : ct.getMonAn().getTenMon());
+			ChiTietHoaDon_DTO ct = c.getValue();
+			return new ReadOnlyObjectWrapper<>(ct.getTenMon() == null ? "" : ct.getTenMon());
 		});
 
 		colSoLuongCu.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getSoLuong()));
 
-		colDonGia.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(
-				c.getValue().getMonAn() == null ? 0.0 : c.getValue().getMonAn().getDonGia()));
+		colDonGia.setCellValueFactory(c ->
+				new ReadOnlyObjectWrapper<>(c.getValue().getDonGia())
+		);
 
 		colDonGia.setCellFactory(column -> new TableCell<>() {
 			@Override
@@ -125,7 +122,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 	}
 
 	// CHỌN MÓN
-	private void chonMon(MonAn mon) {
+	private void chonMon(MonAn_DTO mon) {
 		if (dsMonAnDat.containsKey(mon)) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle("Món đã chọn");
@@ -175,10 +172,16 @@ public class DoiMonTruoc_Controller implements Initializable {
 	// HIỂN THỊ MÓN MỚI
 	private void hienThiMonMoi() {
 		danhSachMon.clear();
-		for (Map.Entry<MonAn, Integer> e : dsMonAnDat.entrySet()) {
-			ChiTietHoaDon ct = new ChiTietHoaDon();
-			ct.setMonAn(e.getKey());
-			ct.setSoLuong(e.getValue());
+		for (Map.Entry<MonAn_DTO, Integer> e : dsMonAnDat.entrySet()) {
+			MonAn_DTO mon = e.getKey();
+			int soLuong = e.getValue();
+			ChiTietHoaDon_DTO ct = ChiTietHoaDon_DTO.builder()
+					.maMonAn(mon != null ? mon.getMaMon() : null)
+					.tenMon(mon != null ? mon.getTenMon() : null)
+					.donGia(mon != null ? mon.getDonGia() : 0.0)
+					.soLuong(soLuong)
+					.thanhTien(mon != null ? mon.getDonGia() * soLuong : 0.0)
+					.build();
 			danhSachMon.add(ct);
 		}
 		tblMonCu.refresh();
@@ -190,18 +193,19 @@ public class DoiMonTruoc_Controller implements Initializable {
 			return;
 		if (donDatBanDuocChon == null)
 			return;
-		HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+		HoaDon_DTO hd = getHoaDonTheoDatBan(donDatBanDuocChon.getMaDatBan());
 
 		if (hd == null)
 			return;
-		List<ChiTietHoaDon> dsCTHD = chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hd.getMaHD());
+		List<ChiTietHoaDon_DTO> dsCTHD = getChiTietByHoaDon(hd.getMaHD());
 
 		dsMonAnDat.clear();
 		danhSachMon.clear();
 
-		for (ChiTietHoaDon ct : dsCTHD) {
-			if (ct.getMonAn() != null) {
-				dsMonAnDat.put(ct.getMonAn(), ct.getSoLuong());
+		for (ChiTietHoaDon_DTO ct : dsCTHD) {
+			MonAn_DTO mon = timMonTheoMa(ct.getMaMonAn());
+			if (mon != null) {
+				dsMonAnDat.put(mon, ct.getSoLuong());
 			}
 		}
 		hienThiMonMoi();
@@ -210,12 +214,12 @@ public class DoiMonTruoc_Controller implements Initializable {
 	// TÌM MÓN
 	private void timMonTheoTen() {
 		String tuKhoa = txtTim.getText().trim().toLowerCase();
-		List<MonAn> dsLoc = new ArrayList<>();
+		List<MonAn_DTO> dsLoc = new ArrayList<>();
 
 		if (tuKhoa.isEmpty())
 			dsLoc = dsMonAn;
 		else {
-			for (MonAn mon : dsMonAn) {
+			for (MonAn_DTO mon : dsMonAn) {
 				if (mon.getTenMon().toLowerCase().contains(tuKhoa))
 					dsLoc.add(mon);
 			}
@@ -227,12 +231,12 @@ public class DoiMonTruoc_Controller implements Initializable {
 	// LỌC LOẠI MÓN
 	private void locMonTheoLoai() {
 		String loaiChon = comBoxPhanLoai.getValue();
-		List<MonAn> dsLoc = new ArrayList<>();
+		List<MonAn_DTO> dsLoc = new ArrayList<>();
 
 		if (loaiChon.equals("Tất cả"))
 			dsLoc = dsMonAn;
 		else {
-			for (MonAn mon : dsMonAn) {
+			for (MonAn_DTO mon : dsMonAn) {
 				if (loaiChon.equals(mon.getLoaiMon()))
 					dsLoc.add(mon);
 			}
@@ -244,7 +248,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 	private void khoiTaoComboBoxPhanLoai() {
 		List<String> dsLoai = new ArrayList<>();
 		dsLoai.add("Tất cả");
-		for (MonAn m : dsMonAn) {
+		for (MonAn_DTO m : dsMonAn) {
 			if (!dsLoai.contains(m.getLoaiMon()))
 				dsLoai.add(m.getLoaiMon());
 		}
@@ -253,7 +257,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 	}
 
 	// LOAD GRID MÓN ĂN
-	private void loadMonAnToGrid(List<MonAn> danhSach) {
+	private void loadMonAnToGrid(List<MonAn_DTO> danhSach) {
 		gridPaneMon.getChildren().clear();
 		gridPaneMon.getColumnConstraints().clear();
 		gridPaneMon.getRowConstraints().clear();
@@ -272,7 +276,7 @@ public class DoiMonTruoc_Controller implements Initializable {
 			gridPaneMon.getRowConstraints().add(new RowConstraints(220));
 		}
 
-		for (MonAn mon : danhSach) {
+		for (MonAn_DTO mon : danhSach) {
 			ImageView img = new ImageView();
 			try {
 				img.setImage(new Image("file:" + mon.getDuongDanAnh()));
@@ -320,10 +324,10 @@ public class DoiMonTruoc_Controller implements Initializable {
 		}
 
 		System.out.println("Đơn đặt bàn: " + donDatBanDuocChon.getMaDatBan());
-		HoaDon hd1 = hoaDonDAO.getHoaDonTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+		HoaDon_DTO hd1 = getHoaDonTheoDatBan(donDatBanDuocChon.getMaDatBan());
 
 		System.out.println("HoaDon: " + hd1);
-		HoaDon hd = hoaDonDAO.getHoaDonTheoMaDatBan(donDatBanDuocChon.getMaDatBan());
+		HoaDon_DTO hd = getHoaDonTheoDatBan(donDatBanDuocChon.getMaDatBan());
 
 		if (hd == null) {
 			alert("Lỗi", "Không tìm thấy hóa đơn!");
@@ -332,17 +336,15 @@ public class DoiMonTruoc_Controller implements Initializable {
 
 		try {
 			// Xóa món cũ
-			chiTietHoaDonDAO.deleteByMaHoaDon(hd.getMaHD());
+			deleteChiTietByHoaDon(hd.getMaHD());
 			// Ghi món mới
-			for (Map.Entry<MonAn, Integer> eMon : dsMonAnDat.entrySet()) {
-				MonAn mon = eMon.getKey();
+			for (Map.Entry<MonAn_DTO, Integer> eMon : dsMonAnDat.entrySet()) {
+				MonAn_DTO mon = eMon.getKey();
 				int sl = eMon.getValue();
-				ChiTietHoaDon ct = new ChiTietHoaDon();
-				ct.setHoaDon(hd);
-				ct.setMonAn(mon);
-				ct.setSoLuong(sl);
-				ct.setThanhTien(mon.getDonGia() * sl);
-				chiTietHoaDonDAO.themChiTiet(ct);
+				ChiTietHoaDon_DTO ct = ChiTietHoaDon_DTO.builder().maHoaDon(hd.getMaHD())
+						.maMonAn(mon == null ? null : mon.getMaMon()).soLuong(sl)
+						.thanhTien((mon == null ? 0 : mon.getDonGia()) * sl).build();
+				addChiTiet(ct);
 			}
 			alert("Thành công", "Đổi món thành công!");
 			MenuNV_Controller.getInstance().readyUI("DatBan/DonDatBan");
@@ -357,6 +359,71 @@ public class DoiMonTruoc_Controller implements Initializable {
 		a.setHeaderText(null);
 		a.setContentText(m);
 		a.showAndWait();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<MonAn_DTO> getAllMonAn() {
+		try {
+			Request request = Request.builder().commandType(CommandType.MONAN_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			return data instanceof List<?> raw ? (List<MonAn_DTO>) raw : List.of();
+		} catch (Exception e) {
+			return List.of();
+		}
+	}
+
+	private MonAn_DTO timMonTheoMa(String maMon) {
+		return dsMonAn.stream().filter(m -> m != null && maMon != null && maMon.equals(m.getMaMon())).findFirst().orElse(null);
+	}
+
+	private double timDonGia(String maMon) {
+		MonAn_DTO mon = timMonTheoMa(maMon);
+		return mon == null ? 0.0 : mon.getDonGia();
+	}
+
+	private HoaDon_DTO getHoaDonTheoDatBan(String maDatBan) {
+		try {
+			Request request = Request.builder().commandType(CommandType.HOADON_GET_BY_MADATBAN).data(maDatBan).build();
+			Response response = client == null ? null : client.send(request);
+			return response != null && response.getData() instanceof HoaDon_DTO dto ? dto : null;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<ChiTietHoaDon_DTO> getChiTietByHoaDon(String maHoaDon) {
+		try {
+			Request request = Request.builder().commandType(CommandType.CTHD_GET_BY_MAHD).data(maHoaDon).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			return data instanceof List<?> raw ? (List<ChiTietHoaDon_DTO>) raw : List.of();
+		} catch (Exception e) {
+			return List.of();
+		}
+	}
+
+	private void deleteChiTietByHoaDon(String maHoaDon) {
+		Request request = Request.builder().commandType(CommandType.CTHD_DELETE_BY_MAHD).data(maHoaDon).build();
+		if (client != null) {
+			try {
+				client.send(request);
+			} catch (Exception e) {
+				// ignore to keep UI responsive
+			}
+		}
+	}
+
+	private void addChiTiet(ChiTietHoaDon_DTO dto) {
+		Request request = Request.builder().commandType(CommandType.CTHD_ADD_BATCH).data(List.of(dto)).build();
+		if (client != null) {
+			try {
+				client.send(request);
+			} catch (Exception e) {
+				// ignore to keep UI responsive
+			}
+		}
 	}
 
 }

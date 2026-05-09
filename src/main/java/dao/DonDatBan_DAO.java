@@ -11,7 +11,8 @@ import entity.LoaiBan;
 
 public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
 	DonDatBan layDonDatTheoBan(String maBan);
-
+	boolean them(DonDatBan donDatBan);
+	DonDatBan findById(String maDatBan);
 	List<DonDatBan> timTheoKhachHang(KhachHang kh);
 
 	List<DonDatBan> timTheoBan(Ban ban);
@@ -55,6 +56,6 @@ public interface DonDatBan_DAO extends Entity_DAO<DonDatBan> {
 	List<DonDatBan> getAllDonDatBanNVTheoThang(int thang, int nam, String maNV);
 
 	List<DonDatBan> getAllDonDatBanTheoNamNVCuThe(int nam, String maNV);
-
+	boolean sua(DonDatBan donDatBan);
 	List<DonDatBan> getAllDonDatBanTheoNgayNVCuThe(LocalDate dateStart, LocalDate dateEnd, String maNV);
 }

@@ -22,7 +22,6 @@ public class App extends Application {
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
 
 		Scene scene = new Scene(root);
-
 		stage.setTitle("Đăng Nhập");
 		stage.setScene(scene);
 		stage.show();

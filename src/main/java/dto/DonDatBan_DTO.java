@@ -1,5 +1,6 @@
 package dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -16,7 +17,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class DonDatBan_DTO {
+public class DonDatBan_DTO implements Serializable {
 
 	private String maDatBan;
 

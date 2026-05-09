@@ -387,15 +387,21 @@ public class ABanHienTai_Controller {
 	}
 
 	private Button taoButtonIcon(String text, String iconPath) {
-		ImageView icon = new ImageView(getClass().getResource(iconPath).toExternalForm());
-		icon.setFitWidth(30);
-		icon.setFitHeight(30);
-
 		Button btn = new Button();
-		btn.setGraphic(icon);
 		btn.setStyle(getButtonStyle());
-		btn.setContentDisplay(javafx.scene.control.ContentDisplay.LEFT);
-		btn.setGraphicTextGap(5);
+		btn.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+
+		var resource = getClass().getResource(iconPath);
+		if (resource != null) {
+			ImageView icon = new ImageView(resource.toExternalForm());
+			icon.setFitWidth(30);
+			icon.setFitHeight(30);
+			btn.setGraphic(icon);
+		} else {
+			// Fallback để tránh crash FXML khi thiếu file icon trong resources.
+			btn.setText(text);
+			btn.setContentDisplay(javafx.scene.control.ContentDisplay.TEXT_ONLY);
+		}
 
 		return btn;
 	}

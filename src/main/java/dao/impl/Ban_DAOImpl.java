@@ -1,11 +1,15 @@
 package dao.impl;
 
 import dao.Ban_DAO;
+import db.JPAUtils;
 import entity.Ban;
 import entity.LoaiBan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+
+import java.util.List;
 
 public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
 
@@ -19,6 +23,16 @@ public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
 					.setParameter("ten", tenLoaiBan).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public Ban timTheoMa(String maBan) {
+		EntityManager em = JPAUtils.getEntityManager();
+		try {
+			return em.find(Ban.class, maBan);
 		} finally {
 			em.close();
 		}
@@ -50,6 +64,21 @@ public class Ban_DAOImpl extends Entity_DAOImpl<Ban> implements Ban_DAO {
 				em.getTransaction().rollback();
 			}
 			return false;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public List<Ban> getAllBan() {
+		EntityManager em = emf.createEntityManager();
+		try {
+			String jqpl = """
+					SELECT b
+					FROM Ban b
+					""";
+			TypedQuery<Ban> query = em.createQuery(jqpl, Ban.class);
+			return query.getResultList();
 		} finally {
 			em.close();
 		}

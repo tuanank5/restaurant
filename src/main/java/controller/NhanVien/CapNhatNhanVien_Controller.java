@@ -8,10 +8,8 @@ import java.time.Period;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
-import dao.NhanVien_DAO;
-import entity.NhanVien;
+import dto.NhanVien_DTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +24,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AlertUtil;
 
 public class CapNhatNhanVien_Controller implements Initializable {
@@ -59,21 +61,24 @@ public class CapNhatNhanVien_Controller implements Initializable {
 	@FXML
 	private Button btnQuayLai;
 
-	private NhanVien nhanVien; // object gốc
+	private NhanVien_DTO nhanVien; // object gốc
+	private Client client;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		cmbGioiTinh.setItems(javafx.collections.FXCollections.observableArrayList("Nam", "Nữ"));
 		cmbChucVu.setItems(javafx.collections.FXCollections.observableArrayList("Nhân viên", "Quản lý"));
 		cmbTrangThai.setItems(javafx.collections.FXCollections.observableArrayList("Đang Làm", "Đã Nghĩ"));
+
+		client = Client.tryCreate();
 	}
 
-	public void setNhanVien(NhanVien nhanVien) {
+	public void setNhanVien(NhanVien_DTO nhanVien) {
 		this.nhanVien = nhanVien;
 		hienThiThongTin(nhanVien);
 	}
 
-	private void hienThiThongTin(NhanVien nv) {
+	private void hienThiThongTin(NhanVien_DTO nv) {
 		txtMaNV.setText(nv.getMaNV());
 		txtTenNV.setText(nv.getTenNV());
 		txtEmail.setText(nv.getEmail());
@@ -112,7 +117,7 @@ public class CapNhatNhanVien_Controller implements Initializable {
 	}
 
 	private void luuCapNhat() {
-		NhanVien nhanVienNew = getNhanVienNew();
+		NhanVien_DTO nhanVienNew = getNhanVienNew();
 		if (nhanVienNew == null)
 			return;
 
@@ -120,8 +125,7 @@ public class CapNhatNhanVien_Controller implements Initializable {
 		if (option.get().getButtonData() == ButtonBar.ButtonData.NO)
 			return;
 
-		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class)
-				.capNhat(nhanVienNew);
+		boolean check = capNhatNhanVien(nhanVienNew);
 
 		if (check) {
 			AlertUtil.showAlert("Thông báo", "Cập nhật nhân viên thành công!", Alert.AlertType.INFORMATION);
@@ -132,21 +136,21 @@ public class CapNhatNhanVien_Controller implements Initializable {
 		}
 	}
 
-	private NhanVien getNhanVienNew() {
+	private NhanVien_DTO getNhanVienNew() {
 		if (!validate())
 			return null;
 
-		NhanVien nv = new NhanVien();
-		nv.setMaNV(txtMaNV.getText().trim());
-		nv.setTenNV(txtTenNV.getText().trim());
-		nv.setEmail(txtEmail.getText().trim());
-		nv.setDiaChi(txtDiaChi.getText().trim());
-		nv.setNamSinh(Date.valueOf(txtNamSinh.getValue()));
-		nv.setNgayVaoLam(Date.valueOf(txtNgayVaoLam.getValue()));
-		nv.setGioiTinh(cmbGioiTinh.getValue().equals("Nữ"));
-		nv.setChucVu(cmbChucVu.getValue());
-		nv.setTrangThai(cmbTrangThai.getValue().equals("Đang Làm"));
-		return nv;
+		return NhanVien_DTO.builder()
+				.maNV(txtMaNV.getText().trim())
+				.tenNV(txtTenNV.getText().trim())
+				.email(txtEmail.getText().trim())
+				.diaChi(txtDiaChi.getText().trim())
+				.namSinh(Date.valueOf(txtNamSinh.getValue()))
+				.ngayVaoLam(Date.valueOf(txtNgayVaoLam.getValue()))
+				.gioiTinh(cmbGioiTinh.getValue().equals("Nữ"))
+				.chucVu(cmbChucVu.getValue())
+				.trangThai(cmbTrangThai.getValue().equals("Đang Làm"))
+				.build();
 	}
 
 	private boolean validate() {
@@ -193,8 +197,7 @@ public class CapNhatNhanVien_Controller implements Initializable {
 		if (buttonType.get().getButtonData() == ButtonBar.ButtonData.NO) {
 			return;
 		}
-		boolean check = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(NhanVien_DAO.class)
-				.capNhat(nhanVien);
+		boolean check = capNhatNhanVien(nhanVien);
 		if (check) {
 			AlertUtil.showAlert("Thông báo", "Hoàn tác thành công!", Alert.AlertType.INFORMATION);
 			hienThiThongTin(nhanVien);
@@ -205,5 +208,16 @@ public class CapNhatNhanVien_Controller implements Initializable {
 
 	private void quayLai() {
 		MenuNVQL_Controller.instance.readyUI("NhanVien/ThongTinChiTietNV");
+	}
+
+	private boolean capNhatNhanVien(NhanVien_DTO dto) {
+		try {
+			Request request = Request.builder().commandType(CommandType.NHANVIEN_UPDATE).data(dto).build();
+			Response response = client == null ? null : client.send(request);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

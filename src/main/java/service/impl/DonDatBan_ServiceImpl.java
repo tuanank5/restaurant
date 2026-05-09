@@ -36,6 +36,16 @@ public class DonDatBan_ServiceImpl implements DonDatBan_Service {
 	}
 
 	@Override
+	public boolean them(DonDatBan_DTO dto) {
+		if (dto == null) {
+			throw new IllegalArgumentException("dto null");
+		}
+		return donDatBan_DAO.them(
+				MapperUtil.map(dto, DonDatBan.class)
+		);
+	}
+
+	@Override
 	public List<DonDatBan_DTO> timTheoKhachHang(KhachHang_DTO kh_DTO) {
 		if (kh_DTO == null) {
 			throw new IllegalArgumentException("kh_DTO không được rỗng");
@@ -294,5 +304,42 @@ public class DonDatBan_ServiceImpl implements DonDatBan_Service {
 		}
 		List<DonDatBan> donDatBans = donDatBan_DAO.getAllDonDatBanTheoNgayNVCuThe(dateStart, dateEnd, maNV);
 		return donDatBans.stream().map(donDatBan -> MapperUtil.map(donDatBan, DonDatBan_DTO.class)).toList();
+	}
+
+	@Override
+	public boolean sua(DonDatBan_DTO dto) {
+		if (dto == null) {
+			throw new IllegalArgumentException("dto null");
+		}
+		DonDatBan entity = MapperUtil.map(dto, DonDatBan.class);
+		if (dto.getBan() != null) {
+			Ban ban = new Ban();
+			ban.setMaBan(dto.getBan().getMaBan());
+			if (dto.getBan().getMaLoaiBan() != null) {
+				LoaiBan loaiBan = new LoaiBan();
+				loaiBan.setMaLoaiBan(dto.getBan().getMaLoaiBan());
+				ban.setLoaiBan(loaiBan);
+			}
+			entity.setBan(ban);
+		}
+		return donDatBan_DAO.sua(entity);
+	}
+
+	@Override
+	public List<DonDatBan_DTO> getByBan(Ban_DTO ban_DTO) {
+		if (ban_DTO == null) {
+			throw new IllegalArgumentException("ban_DTO null");
+		}
+
+		if (ban_DTO.getMaBan() == null || ban_DTO.getMaBan().trim().isEmpty()) {
+			throw new IllegalArgumentException("maBan null");
+		}
+
+		Ban ban = new Ban();
+		ban.setMaBan(ban_DTO.getMaBan());
+		List<DonDatBan> ds = donDatBan_DAO.timTheoBan(ban);
+		return ds.stream()
+				.map(d -> MapperUtil.map(d, DonDatBan_DTO.class))
+				.toList();
 	}
 }

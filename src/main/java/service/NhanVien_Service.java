@@ -1,11 +1,9 @@
 package service;
 
 import dto.NhanVien_DTO;
-
-import java.util.List;
+import entity.NhanVien;
 
 public interface NhanVien_Service {
 	String getMaxMaNV();
-
-	List<NhanVien_DTO> getAll();
+	NhanVien_DTO findById(String maNV);
 }

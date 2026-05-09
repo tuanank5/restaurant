@@ -27,19 +27,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import controller.Menu.MenuNV_Controller;
-import dao.ChiTietHoaDon_DAO;
-import dao.HoaDon_DAO;
-import dao.KhachHang_DAO;
-import dao.KhuyenMai_DAO;
-import dao.impl.ChiTietHoaDon_DAOImpl;
-import dao.impl.HoaDon_DAOImpl;
-import dao.impl.KhachHang_DAOlmpl;
-import dao.impl.KhuyenMai_DAOImpl;
-import entity.ChiTietHoaDon;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.KhuyenMai;
-import entity.MonAn;
+import dto.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -63,6 +51,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import service.ChiTietHoaDon_Service;
+import service.HoaDon_Service;
+import service.KhachHang_Service;
+import service.KhuyenMai_Service;
+import service.impl.ChiTietHoaDon_ServiceImpl;
+import service.impl.HoaDon_ServiceImpl;
+import service.impl.KhachHang_ServiceImpl;
+import service.impl.KhuyenMai_ServiceImpl;
 
 public class AThanhToan_Controller {
 
@@ -79,22 +75,22 @@ public class AThanhToan_Controller {
 	private Button btnThuTien;
 
 	@FXML
-	private ComboBox<KhuyenMai> cmbKM;
+	private ComboBox<KhuyenMai_DTO> cmbKM;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> colDonGia;
+	private TableColumn<ChiTietHoaDon_DTO, String> colDonGia;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, Integer> colSTT;
+	private TableColumn<ChiTietHoaDon_DTO, Integer> colSTT;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> colSoLuong;
+	private TableColumn<ChiTietHoaDon_DTO, String> colSoLuong;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> colTenMon;
+	private TableColumn<ChiTietHoaDon_DTO, String> colTenMon;
 
 	@FXML
-	private TableColumn<ChiTietHoaDon, String> colThanhTien;
+	private TableColumn<ChiTietHoaDon_DTO, String> colThanhTien;
 
 	@FXML
 	private Label lblThanhTien;
@@ -106,7 +102,7 @@ public class AThanhToan_Controller {
 	private Label lblTong;
 
 	@FXML
-	private TableView<ChiTietHoaDon> tblDS;
+	private TableView<ChiTietHoaDon_DTO> tblDS;
 
 	@FXML
 	private TextField txtBan;
@@ -129,16 +125,16 @@ public class AThanhToan_Controller {
 	@FXML
 	private Label lblSauGiam;
 
-	// --- DAO ---
-	private HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-	private ChiTietHoaDon_DAO cthdDAO = new ChiTietHoaDon_DAOImpl();
-	private KhachHang_DAO khachHangDAO = new KhachHang_DAOlmpl();
-	private KhuyenMai_DAO kmDAO = new KhuyenMai_DAOImpl();
+	// --- SERVICE ---
+	private HoaDon_Service hoaDonService = new HoaDon_ServiceImpl();
+	private ChiTietHoaDon_Service chiTietHoaDonService = new ChiTietHoaDon_ServiceImpl();
+	private KhachHang_Service khachHangService = new KhachHang_ServiceImpl();
+	private KhuyenMai_Service khuyenMaiService = new KhuyenMai_ServiceImpl();
 
 	// --- Danh sách và trạng thái ---
-	private List<HoaDon> dsHoaDon = new ArrayList<>();
-	private ObservableList<ChiTietHoaDon> dsCTHD = FXCollections.observableArrayList();
-	private List<ChiTietHoaDon> dsCTHD_DB;
+	private List<HoaDon_DTO> dsHoaDon = new ArrayList<>();
+	private ObservableList<ChiTietHoaDon_DTO> dsCTHD = FXCollections.observableArrayList();
+	private List<ChiTietHoaDon_DTO> dsCTHD_DB;
 
 	private double thanhTien = 0;
 	private double Vat_Rate = 0.1;
@@ -146,9 +142,9 @@ public class AThanhToan_Controller {
 	private int diemHienTai = 0;
 	static int diemSuDung = 0;
 	double tongSauVAT;
-	HoaDon hoaDonHienTai;
-	Map<MonAn, Integer> dsMonAn;
-	KhuyenMai kmDangChon;
+	HoaDon_DTO hoaDonHienTai;
+	Map<ChiTietHoaDon_DTO, Integer> dsMonAn;
+	KhuyenMai_DTO kmDangChon;
 	double thueHD;
 
 	public static AThanhToan_Controller aTT;
@@ -157,19 +153,20 @@ public class AThanhToan_Controller {
 	public void initialize() {
 		aTT = this;
 		String maHD = MenuNV_Controller.aBanHienTai_HD.getMaHD();
-		dsCTHD_DB = cthdDAO.getChiTietTheoMaHoaDon(maHD);
+		dsCTHD_DB = chiTietHoaDonService.getChiTietTheoMaHoaDon(maHD);
 
 		dsMonAn = new HashMap<>();
-		for (ChiTietHoaDon cthd : dsCTHD_DB) {
-			thanhTien += cthd.getMonAn().getDonGia() * cthd.getSoLuong();
-			dsMonAn.put(cthd.getMonAn(), cthd.getSoLuong());
+		for (ChiTietHoaDon_DTO cthd : dsCTHD_DB) {
+			double thanhTienMon = cthd.getDonGia() * cthd.getSoLuong();
+			thanhTien += thanhTienMon;
+			dsMonAn.put(cthd, cthd.getSoLuong());
 		}
 
 		setValueTbl();
 		loadData(dsCTHD_DB);
 
-		dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
-		for (HoaDon hd : dsHoaDon) {
+		dsHoaDon = hoaDonService.getDanhSach("HoaDon.list");
+		for (HoaDon_DTO hd : dsHoaDon) {
 			if (hd.getMaHD().equals(maHD)) {
 				hoaDonHienTai = hd;
 			}
@@ -208,18 +205,18 @@ public class AThanhToan_Controller {
 	}
 
 	private void loadCmbKM() {
-		List<KhuyenMai> dsKMFull = kmDAO.getDanhSach("KhuyenMai.list", KhuyenMai.class);
-		List<KhuyenMai> dsKM = new ArrayList<KhuyenMai>();
+		List<KhuyenMai_DTO> dsKMFull = khuyenMaiService.getDanhSach("KhuyenMai.list");
+		List<KhuyenMai_DTO> dsKM = new ArrayList<KhuyenMai_DTO>();
 		Date currentDate = new Date();
 
-		for (KhuyenMai khuyenMai : dsKMFull) {
+		for (KhuyenMai_DTO khuyenMai : dsKMFull) {
 			if (khuyenMai.getNgayBatDau().compareTo(currentDate) <= 0
 					&& khuyenMai.getNgayKetThuc().compareTo(currentDate) >= 0) {
 				dsKM.add(khuyenMai);
 			}
 		}
 
-		KhuyenMai kmMacDinh = new KhuyenMai();
+		KhuyenMai_DTO kmMacDinh = new KhuyenMai_DTO();
 		kmMacDinh.setMaKM("KM000");
 		kmMacDinh.setPhanTramGiamGia(0);
 		kmMacDinh.setTenKM("Không khuyến mãi");
@@ -228,9 +225,9 @@ public class AThanhToan_Controller {
 		kmMacDinh.setNgayKetThuc(new java.sql.Date(System.currentTimeMillis()));
 
 		dsKM.add(kmMacDinh);
-		dsKM = dsKM.stream().sorted(Comparator.comparingDouble(KhuyenMai::getPhanTramGiamGia).reversed())
+		dsKM = dsKM.stream().sorted(Comparator.comparingDouble(KhuyenMai_DTO::getPhanTramGiamGia).reversed())
 				.collect(Collectors.toList());
-		for (KhuyenMai km : dsKM) {
+		for (KhuyenMai_DTO km : dsKM) {
 			cmbKM.getItems().add(km);
 		}
 
@@ -241,7 +238,7 @@ public class AThanhToan_Controller {
 
 	private void capNhatTongTien() {
 		double tienGiam = 0;
-		KhuyenMai km = cmbKM.getValue();
+		KhuyenMai_DTO km = cmbKM.getValue();
 		kmDangChon = km;
 
 		if (km != null) {
@@ -251,9 +248,9 @@ public class AThanhToan_Controller {
 				break;
 
 			case "Ưu đãi cho khách hàng Kim Cương":
-				KhachHang kh = khachHangDAO.timTheoMa(hoaDonHienTai.getKhachHang().getMaKH());
-				if (kh != null && kh.getHangKhachHang() != null
-						&& kh.getHangKhachHang().getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
+				KhachHang_DTO kh = khachHangService.timTheoMa(hoaDonHienTai.getKhachHang().getMaKH());
+				if (kh != null && kh.getMaHangKhachHang() != null
+						&& kh.getTenHang().equalsIgnoreCase("Hạng Kim Cương")) {
 					tienGiam = thanhTien * km.getPhanTramGiamGia() / 100.0;
 				}
 				break;
@@ -280,23 +277,22 @@ public class AThanhToan_Controller {
 			return new ReadOnlyObjectWrapper<>(index >= 0 ? index + 1 : 0);
 		});
 
-		colTenMon.setCellValueFactory(cell -> {
-			String tenMon = cell.getValue().getMonAn().getTenMon();
-			return new SimpleStringProperty(tenMon);
-		});
+		colTenMon.setCellValueFactory(cell ->
+				new SimpleStringProperty(cell.getValue().getTenMon())
+		);
 
 		colSoLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
 
 		colDonGia.setCellValueFactory(cell -> {
-			double donGia = cell.getValue().getMonAn().getDonGia();
+			double donGia = cell.getValue().getDonGia();
 			return new SimpleStringProperty(formatTienVN(donGia));
 		});
 
 		colThanhTien.setCellValueFactory(cell -> {
-			MonAn mon = cell.getValue().getMonAn();
-			int sl = cell.getValue().getSoLuong();
-			double thanhTien = mon.getDonGia() * sl;
-			return new SimpleStringProperty(formatTienVN(thanhTien));
+			ChiTietHoaDon_DTO cthd = cell.getValue();
+			double thanhTien = cthd.getDonGia() * cthd.getSoLuong();
+			return new SimpleStringProperty(formatTienVN(thanhTien)
+			);
 		});
 	}
 
@@ -356,18 +352,17 @@ public class AThanhToan_Controller {
 
 			// Dữ liệu bảng
 			NumberFormat currencyVN = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("vi-VN"));
-			for (MonAn mon : dsMonAn.keySet()) {
-				int sl = dsMonAn.get(mon);
-				double thanhTien = mon.getDonGia() * sl;
+			for (ChiTietHoaDon_DTO cthd : dsMonAn.keySet()) {
+				int sl = cthd.getSoLuong();
+				double thanhTien = cthd.getDonGia() * sl;
 
-				table.addCell(new PdfPCell(new Phrase(mon.getMaMon(), fontNormal)));
-				table.addCell(new PdfPCell(new Phrase(mon.getTenMon(), fontNormal)));
-
+				table.addCell(new PdfPCell(new Phrase(cthd.getMaMonAn(), fontNormal)));
+				table.addCell(new PdfPCell(new Phrase(cthd.getTenMon(), fontNormal)));
 				PdfPCell slCell = new PdfPCell(new Phrase(String.valueOf(sl), fontNormal));
 				slCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(slCell);
 
-				PdfPCell giaCell = new PdfPCell(new Phrase(currencyVN.format(mon.getDonGia()), fontNormal));
+				PdfPCell giaCell = new PdfPCell(new Phrase(currencyVN.format(cthd.getDonGia()), fontNormal));
 				giaCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				table.addCell(giaCell);
 
@@ -407,7 +402,7 @@ public class AThanhToan_Controller {
 		}
 	}
 
-	private void loadData(List<ChiTietHoaDon> chitietHDs) {
+	private void loadData(List<ChiTietHoaDon_DTO> chitietHDs) {
 		dsCTHD.clear();
 		dsCTHD.addAll(chitietHDs);
 		tblDS.setItems(dsCTHD);
@@ -439,7 +434,7 @@ public class AThanhToan_Controller {
 	}
 
 	private void hienDialogDiemTichLuy() {
-		KhachHang kh = hoaDonHienTai.getKhachHang();
+		KhachHang_DTO kh = hoaDonHienTai.getKhachHang();
 		diemHienTai = kh.getDiemTichLuy(); // lấy điểm từ entity KhachHang
 
 		Stage dialog = new Stage();

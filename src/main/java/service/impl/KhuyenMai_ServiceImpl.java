@@ -1,11 +1,14 @@
 package service.impl;
 
+import Mapper.mapper;
 import dao.KhuyenMai_DAO;
 import dao.impl.KhuyenMai_DAOImpl;
 import dto.KhuyenMai_DTO;
 import entity.KhuyenMai;
 import service.KhuyenMai_Service;
 import util.MapperUtil;
+
+import java.util.List;
 
 public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
 
@@ -46,6 +49,14 @@ public class KhuyenMai_ServiceImpl implements KhuyenMai_Service {
 			throw new IllegalArgumentException("maKM không được rỗng");
 		}
 		return khuyenMai_DAO.xoa(maKM);
+	}
+
+	@Override
+	public List<KhuyenMai_DTO> getDanhSach(String namedQuery) {
+		List<KhuyenMai> entities = khuyenMai_DAO.getDanhSach(namedQuery, KhuyenMai.class);
+		return entities.stream()
+				.map(entity -> mapper.mapper(entity, KhuyenMai_DTO.class))
+				.toList();
 	}
 
 }

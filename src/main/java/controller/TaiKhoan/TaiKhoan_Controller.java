@@ -62,11 +62,7 @@ public class TaiKhoan_Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		cauHinhTable();
 
-		try {
-			client = new Client();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		client = Client.tryCreate();
 
 		loadData();
 		xuLyTimKiem();

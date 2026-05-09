@@ -1,5 +1,6 @@
 package entity;
 
+import dto.KhachHang_DTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -25,7 +26,7 @@ import lombok.ToString;
 @Entity
 @NamedQueries({ @NamedQuery(name = "KhachHang.findAll", query = "SELECT KH FROM KhachHang KH"),
 		@NamedQuery(name = "KhachHang.findByMaKH", query = "SELECT KH FROM KhachHang KH WHERE KH.maKH = :maKH") })
-public class KhachHang {
+public class KhachHang{
 
 	@Id
 	@Column(name = "maKH", nullable = false, length = 20)

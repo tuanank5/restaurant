@@ -4,16 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-import config.RestaurantApplication;
 import controller.Menu.MenuNVQL_Controller;
 import controller.Menu.MenuNV_Controller;
-import dao.TaiKhoan_DAO;
-import entity.TaiKhoan;
+import dto.TaiKhoan_DTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,12 +24,17 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 import util.AlertUtil;
 import util.EmailUtil;
 
 public class Login_Controller implements Initializable {
 
-	private TaiKhoan taiKhoan;
+	private TaiKhoan_DTO taiKhoan;
+	private Client client;
 
 	@FXML
 	private Button btnLogin;
@@ -70,25 +71,24 @@ public class Login_Controller implements Initializable {
 				AlertUtil.showAlert("Cảnh báo", "Mật khẩu phải có ít nhất 6 ký tự!", Alert.AlertType.WARNING);
 				return;
 			} else {
-				Map<String, Object> filter = new HashMap<>();
-				filter.put("tenTaiKhoan", user);
-				List<TaiKhoan> taiKhoans = RestaurantApplication.getInstance().getDatabaseContext()
-						.newEntity_DAO(TaiKhoan_DAO.class).getDanhSach(TaiKhoan.class, filter);
+				List<TaiKhoan_DTO> taiKhoans = getAllTaiKhoan();
+				taiKhoans = taiKhoans.stream().filter(tk -> tk != null && user.equalsIgnoreCase(tk.getTenTaiKhoan()))
+						.toList();
 
 				if (!taiKhoans.isEmpty()) {
 					this.taiKhoan = taiKhoans.get(0);
 
-					if (taiKhoan.kiemTraDangNhap(user, pass)) {
+					if (pass.equals(taiKhoan.getMatKhau())) {
 						// Cập nhật lại ngày giờ đăng nhập
 						LocalDate localDate = LocalDate.now();
 						Date dateNow = Date.valueOf(localDate);
 						this.taiKhoan.setNgayDangNhap(dateNow);
-						RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
-								.capNhat(taiKhoan);
+						capNhatTaiKhoanTaiServer(this.taiKhoan);
 
 						// PHÂN QUYỀN GIAO DIỆN
-						// Lấy chức vụ từ nhân viên liên kết
-						String chucVu = taiKhoan.getNhanVien().getChucVu();
+						String chucVu = taiKhoan.getTenTaiKhoan() != null && taiKhoan.getTenTaiKhoan().startsWith("QL")
+								? "Quản lý"
+								: "Nhân viên";
 
 						FXMLLoader fxmlLoader;
 						Parent root;
@@ -100,7 +100,7 @@ public class Login_Controller implements Initializable {
 							fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));
 							root = fxmlLoader.load();
 							scene = new Scene(root);
-							stage.setTitle("Nhà hàng Út Bi - Nhân viên quản lý: " + taiKhoan.getNhanVien().getTenNV());
+							stage.setTitle("Nhà hàng Út Bi - Nhân viên quản lý: " + taiKhoan.getTenNhanVien());
 							MenuNVQL_Controller menuNVQLController = fxmlLoader.getController();
 							menuNVQLController.setThongTin(taiKhoan);
 						} else {
@@ -108,7 +108,7 @@ public class Login_Controller implements Initializable {
 							fxmlLoader = new FXMLLoader(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 							root = fxmlLoader.load();
 							scene = new Scene(root);
-							stage.setTitle("Nhà hàng Út Bi - Nhân viên: " + taiKhoan.getNhanVien().getTenNV());
+							stage.setTitle("Nhà hàng Út Bi - Nhân viên: " + taiKhoan.getTenNhanVien());
 							MenuNV_Controller menuNhanVienController = fxmlLoader.getController();
 							menuNhanVienController.setThongTin(taiKhoan);
 						}
@@ -123,6 +123,8 @@ public class Login_Controller implements Initializable {
 						AlertUtil.showAlert("Cảnh báo", "Tên đăng nhập hoặc mật khẩu không chính xác! Vui lòng thử lại",
 								Alert.AlertType.WARNING);
 					}
+				} else {
+					AlertUtil.showAlert("Cảnh báo", "Không tìm thấy tài khoản!", Alert.AlertType.WARNING);
 				}
 			}
 		} catch (IOException ex) {
@@ -137,15 +139,13 @@ public class Login_Controller implements Initializable {
 			AlertUtil.showAlert("Cảnh báo", "Vui lòng nhập tên tài khoản", Alert.AlertType.WARNING);
 			return;
 		}
-		Map<String, Object> filter = new HashMap<>();
-		filter.put("tenTaiKhoan", tenTK);
-		List<TaiKhoan> list = RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(TaiKhoan_DAO.class)
-				.getDanhSach(TaiKhoan.class, filter);
+		List<TaiKhoan_DTO> list = getAllTaiKhoan().stream()
+				.filter(tk -> tk != null && tenTK.equalsIgnoreCase(tk.getTenTaiKhoan())).toList();
 		if (list.isEmpty()) {
 			AlertUtil.showAlert("Lỗi", "Không tìm thấy tài khoản", Alert.AlertType.ERROR);
 			return;
 		}
-		TaiKhoan taiKhoan = list.get(0);
+		TaiKhoan_DTO taiKhoan = list.get(0);
 		// Tạo dialog
 		javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
 		dialog.setTitle("Quên mật khẩu");
@@ -172,21 +172,20 @@ public class Login_Controller implements Initializable {
 		});
 
 		dialog.showAndWait().ifPresent(emailInput -> {
-			String emailNV = taiKhoan.getNhanVien().getEmail();
-			if (!emailInput.equalsIgnoreCase(emailNV)) {
-				AlertUtil.showAlert("Lỗi", "Email không khớp với nhân viên", Alert.AlertType.ERROR);
+			if (emailInput == null || emailInput.isBlank()) {
+				AlertUtil.showAlert("Lỗi", "Email không hợp lệ", Alert.AlertType.ERROR);
 				return;
 			}
 			String otp = util.AutoIDUitl.generateOTP();
 			String subject = "Mã xác nhận đặt lại mật khẩu";
 			String contentEmail = "Mã xác nhận của bạn là: " + otp + "\n"
 					+ "Vui lòng không chia sẻ mã này cho bất kỳ ai.";
-			EmailUtil.sendEmail(emailNV, subject, contentEmail);
+			EmailUtil.sendEmail(emailInput, subject, contentEmail);
 			moManHinhQuenMatKhau(taiKhoan, otp);
 		});
 	}
 
-	private void moManHinhQuenMatKhau(TaiKhoan tk, String otp) {
+	private void moManHinhQuenMatKhau(TaiKhoan_DTO tk, String otp) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/QuenMatKhau.fxml"));
 			Parent root = loader.load();
@@ -204,6 +203,32 @@ public class Login_Controller implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		btnLogin.setDefaultButton(true);
+		client = Client.tryCreate();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<TaiKhoan_DTO> getAllTaiKhoan() {
+		try {
+			Request request = Request.builder().commandType(CommandType.TAIKHOAN_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			if (!(data instanceof List<?> rawList)) {
+				return List.of();
+			}
+			return (List<TaiKhoan_DTO>) rawList;
+		} catch (Exception e) {
+			return List.of();
+		}
+	}
+
+	private boolean capNhatTaiKhoanTaiServer(TaiKhoan_DTO dto) {
+		try {
+			Request request = Request.builder().commandType(CommandType.TAIKHOAN_UPDATE_PASSWORD).data(dto).build();
+			Response response = client == null ? null : client.send(request);
+			return response != null && response.isSuccess();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

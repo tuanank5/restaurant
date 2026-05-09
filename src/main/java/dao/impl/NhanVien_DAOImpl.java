@@ -24,4 +24,17 @@ public class NhanVien_DAOImpl extends Entity_DAOImpl<NhanVien> implements NhanVi
 		}
 	}
 
+	@Override
+	public NhanVien findById(String maNV) {
+		EntityManager em = getEntityManager();
+		try {
+			return em.find(NhanVien.class, maNV);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 }

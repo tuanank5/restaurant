@@ -2,19 +2,15 @@ package controller.HoaDon;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import controller.Menu.MenuNV_Controller;
-import dao.HoaDon_DAO;
-import dao.impl.HoaDon_DAOImpl;
-import entity.HoaDon;
+import dto.HoaDon_DTO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -22,6 +18,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
 
 public class HoaDon_Controller implements Initializable {
 
@@ -35,50 +35,50 @@ public class HoaDon_Controller implements Initializable {
 	private ComboBox<String> cmbLoc;
 
 	@FXML
-	private TableColumn<HoaDon, String> colKH;
+	private TableColumn<HoaDon_DTO, String> colKH;
 
 	@FXML
-	private TableColumn<HoaDon, String> colKM;
+	private TableColumn<HoaDon_DTO, String> colKM;
 
 	@FXML
-	private TableColumn<HoaDon, String> colKieuThanhToan;
+	private TableColumn<HoaDon_DTO, String> colKieuThanhToan;
 
 	@FXML
-	private TableColumn<HoaDon, String> colMaHD;
+	private TableColumn<HoaDon_DTO, String> colMaHD;
 
 	@FXML
-	private TableColumn<HoaDon, String> colNV;
+	private TableColumn<HoaDon_DTO, String> colNV;
 
 	@FXML
-	private TableColumn<HoaDon, String> colNgayLap;
+	private TableColumn<HoaDon_DTO, String> colNgayLap;
 
 	@FXML
-	private TableColumn<HoaDon, String> colTongTienThu;
+	private TableColumn<HoaDon_DTO, String> colTongTienThu;
 
 	@FXML
-	private TableColumn<HoaDon, String> colTrangThai;
+	private TableColumn<HoaDon_DTO, String> colTrangThai;
 
 	@FXML
-	private TableView<HoaDon> tableView;
+	private TableView<HoaDon_DTO> tableView;
 
 	@FXML
 	private TextField txtTimKiem;
-	private ObservableList<HoaDon> danhSachHoaDon = FXCollections.observableArrayList();
-	private ObservableList<HoaDon> danhSachHoaDonDB = FXCollections.observableArrayList();
+	private ObservableList<HoaDon_DTO> danhSachHoaDon = FXCollections.observableArrayList();
+	private ObservableList<HoaDon_DTO> danhSachHoaDonDB = FXCollections.observableArrayList();
+	private Client client;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		cauHinhCot();
 		cauHinhLoc();
+		client = Client.tryCreate();
 		loadData();
 		xuLyTimKiem();
 		tableView.setOnMouseClicked(e -> {
 			if (e.getClickCount() == 2) {
-				HoaDon hd = tableView.getSelectionModel().getSelectedItem();
+				HoaDon_DTO hd = tableView.getSelectionModel().getSelectedItem();
 				if (hd != null) {
-					FXMLLoader loader = MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
-					ChiTietHoaDon_Controller controller = loader.getController();
-					controller.setHoaDon(hd);
+					MenuNV_Controller.instance.readyUI("HoaDon/ChiTiet");
 				}
 			}
 		});
@@ -88,11 +88,21 @@ public class HoaDon_Controller implements Initializable {
 		txtTimKiem.setTooltip(new Tooltip("Tìm kiếm hoá đơn theo tên Khách hàng!"));
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadData() {
-		HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
-		List<HoaDon> list = hoaDonDAO.getAllHoaDons();
-		List<HoaDon> hdHT = new ArrayList<HoaDon>();
-		for (HoaDon hd : list) {
+		List<HoaDon_DTO> list = List.of();
+		try {
+			Request request = Request.builder().commandType(CommandType.HOADON_GET_ALL).build();
+			Response response = client == null ? null : client.send(request);
+			Object data = response == null ? null : response.getData();
+			if (data instanceof List<?> rawList) {
+				list = (List<HoaDon_DTO>) rawList;
+			}
+		} catch (Exception e) {
+			list = List.of();
+		}
+		List<HoaDon_DTO> hdHT = FXCollections.observableArrayList();
+		for (HoaDon_DTO hd : list) {
 			if (!hd.getKieuThanhToan().equals("Chưa thanh toán")) {
 				hdHT.add(hd);
 			}
@@ -110,13 +120,13 @@ public class HoaDon_Controller implements Initializable {
 				data.getValue().getNgayLap() != null ? data.getValue().getNgayLap().toString() : ""));
 
 		colKH.setCellValueFactory(data -> new SimpleStringProperty(
-				data.getValue().getKhachHang() != null ? data.getValue().getKhachHang().getTenKH() : ""));
+				data.getValue().getMaKhachHang() != null ? data.getValue().getMaKhachHang() : ""));
 
 		colNV.setCellValueFactory(data -> new SimpleStringProperty(
-				data.getValue().getNhanVien() != null ? data.getValue().getNhanVien().getTenNV() : ""));
+				data.getValue().getMaNhanVien() != null ? data.getValue().getMaNhanVien() : ""));
 
 		colKM.setCellValueFactory(data -> new SimpleStringProperty(
-				data.getValue().getKhuyenMai() != null ? data.getValue().getKhuyenMai().getTenKM() : "Không có"));
+				data.getValue().getMaKhuyenMai() != null ? data.getValue().getMaKhuyenMai() : "Không có"));
 
 		colTrangThai.setCellValueFactory(data -> new SimpleStringProperty(
 				data.getValue().getTrangThai() != null ? data.getValue().getTrangThai() : ""));
@@ -141,7 +151,7 @@ public class HoaDon_Controller implements Initializable {
 				.collect(java.util.stream.Collectors.toList()));
 	}
 
-	private boolean locTheoNgay(HoaDon hd) {
+	private boolean locTheoNgay(HoaDon_DTO hd) {
 		if (hd.getNgayLap() == null)
 			return false;
 		LocalDate from = AfterDay.getValue();
@@ -165,7 +175,7 @@ public class HoaDon_Controller implements Initializable {
 		return !ngayLap.isBefore(from) && !ngayLap.isAfter(to);
 	}
 
-	private boolean locTheoTrangThai(HoaDon hd) {
+	private boolean locTheoTrangThai(HoaDon_DTO hd) {
 		String loc = cmbLoc.getValue();
 		if (loc == null || loc.equals("Tất cả"))
 			return true;
@@ -188,8 +198,9 @@ public class HoaDon_Controller implements Initializable {
 		txtTimKiem.textProperty().addListener((obs, oldText, newText) -> {
 			String keyword = newText.toLowerCase().trim();
 
-			danhSachHoaDon.setAll(danhSachHoaDonDB.stream().filter(hd -> hd.getMaHD().toLowerCase().contains(keyword)
-					|| (hd.getKhachHang() != null && hd.getKhachHang().getTenKH().toLowerCase().contains(keyword)))
+			danhSachHoaDon.setAll(danhSachHoaDonDB.stream()
+					.filter(hd -> hd.getMaHD().toLowerCase().contains(keyword)
+							|| (hd.getMaKhachHang() != null && hd.getMaKhachHang().toLowerCase().contains(keyword)))
 					.filter(this::locTheoNgay).filter(this::locTheoTrangThai)
 					.collect(java.util.stream.Collectors.toList()));
 		});
