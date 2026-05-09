@@ -16,7 +16,7 @@ public class App extends Application {
 	public void start(Stage stage) throws Exception {
 		ClientManager.init();
 
-		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/KhuyenMai/KhuyenMai.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/MonAn/MonAn.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Login.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNV.fxml"));
 //		Parent root = FXMLLoader.load(getClass().getResource("/view/fxml/Menu/MenuNVQL.fxml"));

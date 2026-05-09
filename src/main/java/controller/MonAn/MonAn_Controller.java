@@ -5,9 +5,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import dao.impl.MonAn_DAOImpl;
-import entity.MonAn;
+import dto.MonAn_DTO;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -18,11 +20,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import util.AutoIDUitl;
+import network.Client;
+import network.common.CommandType;
+import network.common.Request;
+import network.common.Response;
+import util.AlertUtil;
 
 public class MonAn_Controller implements Initializable {
 
@@ -36,20 +41,23 @@ public class MonAn_Controller implements Initializable {
 	private ImageView img;
 
 	@FXML
-	private TableView<MonAn> tblMon;
+	private TableView<MonAn_DTO> tblMon;
 
 	@FXML
-	private TableColumn<MonAn, String> colMa, colTen, colLoaiMon;
+	private TableColumn<MonAn_DTO, String> colMa, colTen, colLoaiMon;
 
 	@FXML
-	private TableColumn<MonAn, Double> colDonGia;
+	private TableColumn<MonAn_DTO, String> colDonGia;
 
 	@FXML
 	private TextField txtMaMon, txtTenMon, txtDonGia, txtTimKiem;
 
 	private String duongDanAnh;
 
-	private MonAn_DAOImpl monDAO = new MonAn_DAOImpl();
+	private ObservableList<MonAn_DTO> danhSach = FXCollections.observableArrayList();
+	private FilteredList<MonAn_DTO> filteredList;
+
+	private Client client;
 
 	@FXML
 	private void handleThemAnh() {
@@ -76,25 +84,34 @@ public class MonAn_Controller implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		txtMaMon.setText(AutoIDUitl.sinhMaMon());
-		// --- Cấu hình cột TableView ---
-		colMa.setCellValueFactory(new PropertyValueFactory<>("maMon"));
-		colTen.setCellValueFactory(new PropertyValueFactory<>("tenMon"));
-		colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-		colLoaiMon.setCellValueFactory(
-				cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getLoaiMon()));
-		cmbLoaiMon.getItems().addAll("Món chính", "Tráng miệng", "Nước uống");
+		try {
+			client = new Client();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		tblMon.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-			if (newSelection != null) {
-				hienThiChiTietMon(newSelection);
+		txtMaMon.setEditable(false);
+
+		setTable();
+		setComboBox();
+		loadData();
+		timKiem();
+		generateId();
+
+		btnSua.setDisable(true);
+		btnXoa.setDisable(true);
+
+		tblMon.setOnMouseClicked(e -> {
+			MonAn_DTO mon = tblMon.getSelectionModel().getSelectedItem();
+			if (mon != null) {
+				fillForm(mon);
+				btnSua.setDisable(false);
+				btnXoa.setDisable(false);
 			}
 		});
 
-		loadTable();
-		btnThem.setOnAction(e -> handleThemMon());
-		btnSua.setOnAction(e -> handleSuaMon());
-		btnXoa.setOnAction(e -> handleXoaMon());
+		btnSua.setOnAction(e -> sua());
+		btnXoa.setOnAction(e -> xoa());
 
 		btnSua.setTooltip(new Tooltip("Thông báo cho nút Sửa món!"));
 		btnThem.setTooltip(new Tooltip("Thông báo cho nút Thêm món!"));
@@ -104,249 +121,180 @@ public class MonAn_Controller implements Initializable {
 		txtDonGia.setTooltip(new Tooltip("Nhập đơn giá món!"));
 		cmbLoaiMon.setTooltip(new Tooltip("Chọn loại món!"));
 		txtMaMon.setTooltip(new Tooltip("Mã của món!"));
-		txtTimKiem.textProperty().addListener((obs, oldValue, newValue) -> {
-			timKiemMonAn(newValue);
-		});
-
 	}
 
-	private void timKiemMonAn(String tuKhoa) {
-		if (tuKhoa == null || tuKhoa.trim().isEmpty()) {
-			loadTable(); // nếu ô tìm kiếm rỗng thì load lại toàn bộ
-			return;
-		}
+	// ================= TABLE =================
+	private void setTable() {
+		colMa.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getMaMon()));
 
-		tuKhoa = tuKhoa.toLowerCase().trim();
+		colTen.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getTenMon()));
 
-		List<MonAn> danhSachGoc = monDAO.getDanhSachMonAn();
-		List<MonAn> ketQua = new java.util.ArrayList<>();
+		colDonGia.setCellValueFactory(c ->
+				new SimpleStringProperty(String.valueOf(c.getValue().getDonGia())));
 
-		for (MonAn m : danhSachGoc) {
-			boolean match = m.getMaMon().toLowerCase().contains(tuKhoa) || m.getTenMon().toLowerCase().contains(tuKhoa)
-					|| (m.getLoaiMon() != null && m.getLoaiMon().toLowerCase().contains(tuKhoa));
+		colLoaiMon.setCellValueFactory(c ->
+				new SimpleStringProperty(c.getValue().getLoaiMon()));
+	}
 
-			if (match) {
-				ketQua.add(m);
+	// ================= COMBOBOX =================
+	private void setComboBox() {
+		cmbLoaiMon.setItems(FXCollections.observableArrayList(
+				"Món chính",
+				"Tráng miệng",
+				"Nước uống"
+		));
+	}
+
+	// ================= LOAD DATA =================
+	@SuppressWarnings("unchecked")
+	private void loadData() {
+		try {
+			Request req = new Request(CommandType.MONAN_GET_ALL, null);
+			Response res = client.send(req);
+
+			if (res != null && res.isSuccess()) {
+				List<MonAn_DTO> list = (List<MonAn_DTO>) res.getData();
+				danhSach.setAll(list);
+				filteredList = new FilteredList<>(danhSach, p -> true);
+				tblMon.setItems(filteredList);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
 
-		tblMon.setItems(FXCollections.observableArrayList(ketQua));
+	// ================= GENERATE ID =================
+	private void generateId() {
+		try {
+			Request req = new Request(CommandType.MONAN_GENERATE_ID, null);
+			Response res = client.send(req);
+			if (res != null && res.isSuccess() && res.getData() != null) {
+				txtMaMon.setText(res.getData().toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
 	private void handleXoaMon() {
-		try {
-			MonAn monChon = tblMon.getSelectionModel().getSelectedItem();
-			if (monChon == null) {
-				Alert alert = new Alert(Alert.AlertType.WARNING);
-				alert.setTitle("Thông báo");
-				alert.setHeaderText(null);
-				alert.setContentText("Vui lòng chọn món ăn để xóa!");
-				alert.showAndWait();
-				return;
-			}
-
-			Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-			confirm.setTitle("Xác nhận xóa");
-			confirm.setHeaderText(null);
-			confirm.setContentText("Bạn có chắc muốn xóa món: " + monChon.getTenMon() + " ?");
-
-			// Nếu nhấn Hủy thì thoát
-			if (confirm.showAndWait().get() != ButtonType.OK) {
-				return;
-			}
-
-			boolean xoaThanhCong = monDAO.xoa(monChon.getMaMon());
-			if (xoaThanhCong) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setTitle("Xóa món ăn");
-				alert.setHeaderText(null);
-				alert.setContentText("Xóa món ăn thành công!");
-				alert.showAndWait();
-
-				loadTable(); // load lại bảng
-				tblMon.refresh(); // làm mới hiển thị
-				resetForm(); // xóa dữ liệu trên form
-			} else {
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Lỗi");
-				alert.setHeaderText(null);
-				alert.setContentText("Xóa món ăn thất bại!");
-				alert.showAndWait();
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		xoa();
 	}
 
 	@FXML
 	private void handleSuaMon() {
-		try {
-			MonAn monChon = tblMon.getSelectionModel().getSelectedItem();
-			if (monChon == null) {
-				Alert alert = new Alert(Alert.AlertType.WARNING);
-				alert.setTitle("Thông báo");
-				alert.setHeaderText(null);
-				alert.setContentText("Vui lòng chọn món ăn để sửa!");
-				alert.showAndWait();
-				return;
-			}
-			String tenMon = txtTenMon.getText().trim();
-			String donGiaStr = txtDonGia.getText().trim();
-
-			if (tenMon.isEmpty() || donGiaStr.isEmpty()) {
-				Alert alert = new Alert(Alert.AlertType.WARNING);
-				alert.setTitle("Thông báo");
-				alert.setHeaderText(null);
-				alert.setContentText("Vui lòng nhập đầy đủ thông tin món ăn và chọn khuyến mãi!");
-				alert.showAndWait();
-				return;
-			}
-
-			double donGia;
-			try {
-				donGia = Double.parseDouble(donGiaStr);
-			} catch (NumberFormatException e) {
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Lỗi nhập dữ liệu");
-				alert.setHeaderText(null);
-				alert.setContentText("Đơn giá phải là số hợp lệ!");
-				alert.showAndWait();
-				return;
-			}
-
-			// Cập nhật thông tin cho đối tượng chọn
-			monChon.setTenMon(tenMon);
-			monChon.setDonGia(donGia);
-			monChon.setDuongDanAnh(duongDanAnh); // ảnh có thể thay đổi
-			monChon.setLoaiMon(cmbLoaiMon.getValue());
-
-			boolean suaThanhCong = monDAO.capNhat(monChon); // Gọi phương thức update trong DAO
-			if (suaThanhCong) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setTitle("Sửa món ăn");
-				alert.setHeaderText(null);
-				alert.setContentText("Sửa món ăn thành công!");
-				alert.showAndWait();
-				// Reload TableView
-				loadTable();
-				tblMon.refresh();
-				// Reset form
-				resetForm();
-			} else {
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Lỗi");
-				alert.setHeaderText(null);
-				alert.setContentText("Sửa món ăn thất bại!");
-				alert.showAndWait();
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		sua();
 	}
 
-	// ------------------- Load dữ liệu từ DB lên TableView -------------------
-	private void loadTable() {
-		List<MonAn> danhSachMon = monDAO.getDanhSachMonAn(); // dùng phương thức DAO chuẩn
-		if (danhSachMon != null && !danhSachMon.isEmpty()) {
-			tblMon.setItems(FXCollections.observableArrayList(danhSachMon));
-		} else {
-			tblMon.setItems(FXCollections.observableArrayList());
-			System.out.println("Danh sách món ăn rỗng hoặc dữ liệu chưa đúng FK KhuyenMai!");
-		}
-	}
-
-	// ---------THÊM MÓN------------
 	@FXML
 	private void handleThemMon() {
+		them();
+	}
+
+	// ================= ADD =================
+	private void them() {
+		if (!validate()) return;
+
 		try {
-			String maMon = txtMaMon.getText().trim();
-			String tenMon = txtTenMon.getText().trim();
-			String donGiaStr = txtDonGia.getText().trim();
+			MonAn_DTO mon = getFormData();
+			Request req = new Request(CommandType.MONAN_ADD, mon);
+			Response res = client.send(req);
 
-			// --- Kiểm tra dữ liệu nhập ---
-			if (maMon.isEmpty() || tenMon.isEmpty() || donGiaStr.isEmpty()) {
-				Alert alert = new Alert(Alert.AlertType.WARNING);
-				alert.setTitle("Thông báo");
-				alert.setHeaderText(null);
-				alert.setContentText("Vui lòng nhập đầy đủ thông tin món ăn!");
-				alert.showAndWait();
-				return;
+			if (res != null) {
+				if (res.isSuccess()) {
+					loadData();
+					clearForm();
+					AlertUtil.showAlert("OK", "Thêm thành công", Alert.AlertType.INFORMATION);
+				} else {
+					AlertUtil.showAlert("Lỗi", res.getMessage(), Alert.AlertType.ERROR);
+				}
 			}
-
-			double donGia;
-			try {
-				donGia = Double.parseDouble(donGiaStr);
-			} catch (NumberFormatException e) {
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Lỗi nhập dữ liệu");
-				alert.setHeaderText(null);
-				alert.setContentText("Đơn giá phải là số hợp lệ!");
-				alert.showAndWait();
-				return;
-			}
-
-			// --- Tạo đối tượng MonAn ---
-			String loaiMon = cmbLoaiMon.getValue();
-
-			MonAn mon = new MonAn(maMon, tenMon, donGia, duongDanAnh, loaiMon);
-
-			// --- Thêm vào DB ---
-			boolean themThanhCong = monDAO.them(mon);
-			if (themThanhCong) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setTitle("Thêm món ăn");
-				alert.setHeaderText(null);
-				alert.setContentText("Thêm món ăn thành công!");
-				alert.showAndWait();
-
-				// Cập nhật TableView
-				loadTable();
-
-				// Reset form và tự sinh mã món mới
-				resetForm();
-
-			} else {
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Lỗi");
-				alert.setHeaderText(null);
-				alert.setContentText("Thêm món ăn thất bại! Kiểm tra dữ liệu và FK KhuyenMai.");
-				alert.showAndWait();
-			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void resetForm() {
-		txtMaMon.setText(AutoIDUitl.sinhMaMon()); // tự sinh mã mới
-		txtTenMon.clear();
-		txtDonGia.clear();
-		img.setImage(null);
-		duongDanAnh = null;
+	// ================= UPDATE =================
+	private void sua() {
+		if (!validate()) return;
+
+		MonAn_DTO selected = tblMon.getSelectionModel().getSelectedItem();
+		if (selected == null) return;
+
+		try {
+			MonAn_DTO mon = getFormData();
+			Request req = new Request(CommandType.MONAN_UPDATE, mon);
+			Response res = client.send(req);
+
+			if (res != null) {
+				if (res.isSuccess()) {
+					loadData();
+					clearForm();
+					AlertUtil.showAlert("OK", "Cập nhật thành công", Alert.AlertType.INFORMATION);
+				} else {
+					AlertUtil.showAlert("Lỗi", res.getMessage(), Alert.AlertType.ERROR);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void hienThiChiTietMon(MonAn mon) {
+	// ================= DELETE =================
+	private void xoa() {
+		MonAn_DTO mon = tblMon.getSelectionModel().getSelectedItem();
+		if (mon == null) return;
+
+		if (AlertUtil.showAlertConfirm("Bạn có chắc muốn xóa món: " + mon.getTenMon() + " ?")
+				.filter(bt -> bt.getButtonData() == javafx.scene.control.ButtonBar.ButtonData.YES)
+				.isEmpty()) {
+			return;
+		}
+
+		try {
+			Request req = new Request(CommandType.MONAN_DELETE, mon.getMaMon());
+			Response res = client.send(req);
+
+			if (res != null && res.isSuccess()) {
+				loadData();
+				clearForm();
+				AlertUtil.showAlert("OK", "Xóa thành công", Alert.AlertType.INFORMATION);
+			} else if (res != null) {
+				AlertUtil.showAlert("Lỗi", res.getMessage(), Alert.AlertType.ERROR);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// ================= GET FORM =================
+	private MonAn_DTO getFormData() {
+		double donGia = Double.parseDouble(txtDonGia.getText().trim());
+
+		return new MonAn_DTO(
+				txtMaMon.getText(),
+				txtTenMon.getText().trim(),
+				donGia,
+				duongDanAnh,
+				cmbLoaiMon.getValue()
+		);
+	}
+
+	// ================= FILL FORM =================
+	private void fillForm(MonAn_DTO mon) {
 		txtMaMon.setText(mon.getMaMon());
 		txtTenMon.setText(mon.getTenMon());
 		txtDonGia.setText(String.valueOf(mon.getDonGia()));
 
-		// Hiển thị Loại Món
-		if (mon.getLoaiMon() != null && !mon.getLoaiMon().isEmpty()) {
-			cmbLoaiMon.getSelectionModel().select(mon.getLoaiMon());
-		} else {
-			cmbLoaiMon.getSelectionModel().clearSelection();
-		}
+		cmbLoaiMon.setValue(mon.getLoaiMon());
 
-		// Hiển thị ảnh và lưu đường dẫn vào biến
-		if (mon.getDuongDanAnh() != null && !mon.getDuongDanAnh().isEmpty()) {
+		if (mon.getDuongDanAnh() != null && !mon.getDuongDanAnh().isBlank()) {
 			File file = new File(mon.getDuongDanAnh());
 			if (file.exists()) {
 				img.setImage(new Image(file.toURI().toString()));
-				duongDanAnh = mon.getDuongDanAnh(); // <-- giữ đường dẫn
+				duongDanAnh = mon.getDuongDanAnh();
 			} else {
 				img.setImage(null);
 				duongDanAnh = null;
@@ -355,5 +303,70 @@ public class MonAn_Controller implements Initializable {
 			img.setImage(null);
 			duongDanAnh = null;
 		}
+	}
+
+	// ================= CLEAR =================
+	private void clearForm() {
+		txtTenMon.clear();
+		txtDonGia.clear();
+		img.setImage(null);
+		duongDanAnh = null;
+
+		cmbLoaiMon.getSelectionModel().clearSelection();
+		tblMon.getSelectionModel().clearSelection();
+
+		btnSua.setDisable(true);
+		btnXoa.setDisable(true);
+
+		generateId();
+	}
+
+	// ================= SEARCH =================
+	private void timKiem() {
+		txtTimKiem.textProperty().addListener((obs, oldV, newV) -> {
+			if (filteredList == null) return;
+
+			String f = newV == null ? "" : newV.toLowerCase().trim();
+
+			filteredList.setPredicate(m ->
+					m.getMaMon().toLowerCase().contains(f)
+							|| m.getTenMon().toLowerCase().contains(f)
+							|| (m.getLoaiMon() != null && m.getLoaiMon().toLowerCase().contains(f))
+			);
+		});
+	}
+
+	// ================= VALIDATE =================
+	private boolean validate() {
+
+		if (txtTenMon.getText().isBlank()) {
+			AlertUtil.showAlert("Lỗi", "Tên món ăn không được rỗng", Alert.AlertType.WARNING);
+			return false;
+		}
+
+		if (txtDonGia.getText().isBlank()) {
+			AlertUtil.showAlert("Lỗi", "Đơn giá không được rỗng", Alert.AlertType.WARNING);
+			return false;
+		}
+
+		double donGia;
+		try {
+			donGia = Double.parseDouble(txtDonGia.getText().trim());
+		} catch (Exception e) {
+			AlertUtil.showAlert("Lỗi", "Đơn giá phải là số hợp lệ", Alert.AlertType.WARNING);
+			return false;
+		}
+
+		if (donGia <= 0) {
+			AlertUtil.showAlert("Lỗi", "Đơn giá phải > 0", Alert.AlertType.WARNING);
+			return false;
+		}
+
+		if (cmbLoaiMon.getValue() == null || cmbLoaiMon.getValue().isBlank()) {
+			AlertUtil.showAlert("Lỗi", "Vui lòng chọn loại món", Alert.AlertType.WARNING);
+			return false;
+		}
+
+		return true;
 	}
 }

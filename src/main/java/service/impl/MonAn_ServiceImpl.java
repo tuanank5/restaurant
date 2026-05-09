@@ -1,65 +1,87 @@
 package service.impl;
 
+import config.RestaurantApplication;
+import dao.MonAn_DAO;
 import java.util.List;
 
-import dao.MonAn_DAO;
-import dao.impl.MonAn_DAOImpl;
 import dto.MonAn_DTO;
 import entity.MonAn;
 import service.MonAn_Service;
-import util.MapperUtil;
+import util.MonAnMapper;
 
 public class MonAn_ServiceImpl implements MonAn_Service {
 
-	private MonAn_DAO monAn_DAO;
+	private final MonAn_DAO dao =
+			RestaurantApplication.getInstance()
+					.getDatabaseContext()
+					.newEntity_DAO(MonAn_DAO.class);
 
-	public MonAn_ServiceImpl() {
-		monAn_DAO = new MonAn_DAOImpl();
+	@Override
+	public List<MonAn_DTO> getAll() {
+		List<MonAn> list = dao.getDanhSach(MonAn.class, null);
+		return list.stream().map(MonAnMapper::toDTO).toList();
 	}
 
 	@Override
-	public List<MonAn_DTO> getDanhSachMonAn() {
-		List<MonAn> monAns = monAn_DAO.getDanhSachMonAn();
-		return monAns.stream().map(ma -> MapperUtil.map(ma, MonAn_DTO.class)).toList();
+	public boolean add(MonAn_DTO dto) {
+		MonAn mon = MonAnMapper.toEntity(dto);
+
+		// AUTO ID (server)
+		mon.setMaMon(generateMaMon());
+
+		if (!validateAdd(mon)) return false;
+
+		return dao.them(mon);
 	}
 
 	@Override
-	public MonAn_DTO timTheoMa(String maMon) {
-		if (maMon == null || maMon.trim().isEmpty()) {
-			throw new IllegalArgumentException("maMon không được rỗng");
-		}
-		MonAn monAn = monAn_DAO.timTheoMa(maMon);
-		return MapperUtil.map(monAn, MonAn_DTO.class);
+	public boolean update(MonAn_DTO dto) {
+		MonAn mon = MonAnMapper.toEntity(dto);
+
+		if (!validateUpdate(mon)) return false;
+
+		return dao.capNhat(mon);
 	}
 
 	@Override
-	public boolean them(MonAn_DTO mon_DTO) {
-		if (mon_DTO == null) {
-			throw new IllegalArgumentException("mon_DTO không được rỗng");
-		}
-		if (mon_DTO.getMaMon() == null || mon_DTO.getMaMon().trim().isEmpty()) {
-			throw new IllegalArgumentException("mon_DTO.maMon không được rỗng");
-		}
-		return monAn_DAO.them(MapperUtil.map(mon_DTO, MonAn.class));
+	public boolean delete(String maMon) {
+		return dao.xoa(maMon);
 	}
 
 	@Override
-	public boolean capNhat(MonAn_DTO mon_DTO) {
-		if (mon_DTO == null) {
-			throw new IllegalArgumentException("mon_DTO không được rỗng");
-		}
-		if (mon_DTO.getMaMon() == null || mon_DTO.getMaMon().trim().isEmpty()) {
-			throw new IllegalArgumentException("mon_DTO.maMon không được rỗng");
-		}
-		return monAn_DAO.capNhat(MapperUtil.map(mon_DTO, MonAn.class));
+	public String generateId() {
+		return generateMaMon();
 	}
 
-	@Override
-	public boolean xoa(String maMon) {
-		if (maMon == null || maMon.trim().isEmpty()) {
-			throw new IllegalArgumentException("maMon không được rỗng");
+	// ================= AUTO ID =================
+	private String generateMaMon() {
+		String maxId = dao.getMaxMaMon();
+
+		if (maxId == null || maxId.isEmpty()) {
+			return "M001";
 		}
-		return monAn_DAO.xoa(maMon);
+
+		try {
+			int num = Integer.parseInt(maxId.replace("M", ""));
+			num++;
+			return String.format("M%03d", num);
+		} catch (Exception e) {
+			return "M001";
+		}
 	}
 
+	// ================= VALIDATE ADD =================
+	private boolean validateAdd(MonAn mon) {
+		if (mon == null) return false;
+		if (mon.getTenMon() == null || mon.getTenMon().isBlank()) return false;
+		if (mon.getDonGia() <= 0) return false;
+		return mon.getLoaiMon() != null && !mon.getLoaiMon().isBlank();
+	}
+
+	// ================= VALIDATE UPDATE =================
+	private boolean validateUpdate(MonAn mon) {
+		if (!validateAdd(mon)) return false;
+		if (mon.getMaMon() == null || mon.getMaMon().isBlank()) return false;
+		return dao.timTheoMa(mon.getMaMon()) != null;
+	}
 }
