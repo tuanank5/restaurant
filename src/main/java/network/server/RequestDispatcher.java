@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import handler.BanHandler;
 import handler.ChiTietHoaDonHandler;
+import handler.DonDatBanHandler;
 import handler.HoaDonHandler;
 import handler.KhachHangHandler;
 import handler.KhuyenMaiHandler;
@@ -26,6 +27,7 @@ public class RequestDispatcher {
         handlerMap.put("BAN", new BanHandler());
         handlerMap.put("CTHD", new ChiTietHoaDonHandler());
         handlerMap.put("HOADON", new HoaDonHandler());
+        handlerMap.put("DONDATBAN", new DonDatBanHandler());
         handlerMap.put("KHACHHANG", new KhachHangHandler());
     }
 

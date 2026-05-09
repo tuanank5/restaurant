@@ -5,14 +5,21 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.net.URL;
 
 import controller.Menu.MenuNV_Controller;
+import dao.Ban_DAO;
+import dao.ChiTietHoaDon_DAO;
+import dao.DonDatBan_DAO;
+import dao.HoaDon_DAO;
+import dao.impl.Ban_DAOImpl;
+import dao.impl.ChiTietHoaDon_DAOImpl;
+import dao.impl.DonDatBan_DAOImpl;
+import dao.impl.HoaDon_DAOImpl;
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.DonDatBan;
 import entity.HoaDon;
 import entity.KhachHang;
@@ -30,11 +37,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import network.Client;
-import network.common.CommandType;
-import network.common.Request;
-import network.common.Response;
-import dto.ChiTietHoaDon_DTO;
 
 public class ABanHienTai_Controller {
 
@@ -86,7 +88,10 @@ public class ABanHienTai_Controller {
 	@FXML
 	private TextField txtTongDatBan;
 
-	private Client client;
+	private final Ban_DAO banDAO = new Ban_DAOImpl();
+	private final HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
+	private final DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
+	private final ChiTietHoaDon_DAO chiTietHoaDonDAO = new ChiTietHoaDon_DAOImpl();
 
 	// --- Danh sách và trạng thái ---
 	private List<HoaDon> dsHoaDon = new ArrayList<>();
@@ -114,15 +119,9 @@ public class ABanHienTai_Controller {
 
 	@FXML
 	public void initialize() {
-		try {
-			client = new Client();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		aBHT = this;
 		checkTTbangKo = false;
 		refreshData();
-		capNhatTrangThaiBanMacDinh();
 		capNhatTrangThaiBanTheoDonDatTruoc();
 		khoiTaoComboBoxes();
 		loadDanhSachHoaDon();
@@ -138,13 +137,7 @@ public class ABanHienTai_Controller {
 	}
 
 	private void capNhatTrangThaiBanMacDinh() {
-		for (Ban ban : dsBan) {
-			if (!ban.getTrangThai().equals("Trống")) {
-				ban.setTrangThai("Trống");
-				updateBan(ban);
-			}
-		}
-
+		// Giữ nguyên trạng thái thực tế trong DB, không reset toàn bộ về "Trống".
 	}
 
 	private void capNhatTrangThaiBanTheoDonDatTruoc() {
@@ -320,7 +313,6 @@ public class ABanHienTai_Controller {
 				GridPane.setMargin(borderPane, new Insets(5.0));
 				gridPaneHD.add(borderPane, col, row);
 
-				capNhatTrangThaiBanTheoHD(hoaDon);
 				tongDatBan += 1;
 
 				col++;
@@ -331,15 +323,6 @@ public class ABanHienTai_Controller {
 			}
 		}
 		txtTongDatBan.setText(tongDatBan + "");
-	}
-
-	private void capNhatTrangThaiBanTheoHD(HoaDon hd) {
-		for (Ban ban : dsBan) {
-			if (hd.getDonDatBan().getBan().equals(ban)) {
-				ban.setTrangThai("Đang phục vụ");
-				updateBan(ban);
-			}
-		}
 	}
 
 	private void showAlert(Alert.AlertType type, String msg) {
@@ -361,21 +344,19 @@ public class ABanHienTai_Controller {
 	}
 
 	private double tinhTongTienMon(HoaDon hoaDon) {
-		try {
-			Response res = client.send(new Request(CommandType.CTHD_GET_BY_MAHD, hoaDon.getMaHD()));
-			if (res != null && res.isSuccess()) {
-				@SuppressWarnings("unchecked")
-				List<ChiTietHoaDon_DTO> dsCT = (List<ChiTietHoaDon_DTO>) res.getData();
-				double tong = 0;
-				for (ChiTietHoaDon_DTO ct : dsCT) {
-					tong += ct.getSoLuong() * ct.getDonGia();
-				}
-				return tong;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (hoaDon == null) return 0;
+		if (hoaDon.getTongTien() > 0) return hoaDon.getTongTien();
+
+		List<ChiTietHoaDon> dsChiTiet = chiTietHoaDonDAO.getChiTietTheoMaHoaDon(hoaDon.getMaHD());
+		double tong = dsChiTiet.stream()
+				.mapToDouble(ct -> ct.getMonAn().getDonGia() * ct.getSoLuong())
+				.sum();
+
+		if (tong > 0) {
+			hoaDon.setTongTien(tong);
+			hoaDonDAO.capNhat(hoaDon);
 		}
-		return 0;
+		return tong;
 	}
 
 	private Button taoButtonIcon(String text, String iconPath) {
@@ -397,69 +378,29 @@ public class ABanHienTai_Controller {
 		return btn;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void refreshData() {
-		try {
-			Response hoaDonRes = client.send(new Request(CommandType.HOADON_GET_ALL, null));
-			if (hoaDonRes != null && hoaDonRes.isSuccess() && hoaDonRes.getData() != null) {
-				dsHoaDon = (List<HoaDon>) hoaDonRes.getData();
-			}
-
-			Response banRes = client.send(new Request(CommandType.BAN_GET_ALL_ENTITY, null));
-			if (banRes != null && banRes.isSuccess() && banRes.getData() != null) {
-				dsBan = (List<Ban>) banRes.getData();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		dsHoaDon = hoaDonDAO.getDanhSach("HoaDon.list", HoaDon.class);
+		dsBan = banDAO.getDanhSach("Ban.list", Ban.class);
 	}
 
 	private void updateBan(Ban ban) {
-		try {
-			client.send(new Request(CommandType.BAN_UPDATE, dtoFromBan(ban)));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		banDAO.capNhat(ban);
 	}
 
 	private void updateHoaDonStatus(String maHD, String trangThai) {
-		try {
-			Map<String, Object> payload = new HashMap<>();
-			payload.put("maHD", maHD);
-			payload.put("trangThai", trangThai);
-			client.send(new Request(CommandType.HOADON_UPDATE_STATUS, payload));
-		} catch (Exception e) {
-			e.printStackTrace();
+		HoaDon hd = hoaDonDAO.timTheoMa(maHD);
+		if (hd != null) {
+			hd.setTrangThai(trangThai);
+			hoaDonDAO.capNhat(hd);
 		}
 	}
 
 	private void updateDonDatBan(DonDatBan ddb) {
-		try {
-			client.send(new Request(CommandType.DONDATBAN_UPDATE, ddb));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		donDatBanDAO.capNhat(ddb);
 	}
 
 	private KhachHang getKhachHangTheoMaDatBan(String maDatBan) {
-		try {
-			Response res = client.send(new Request(CommandType.DONDATBAN_GET_KH_BY_MADATBAN, maDatBan));
-			if (res != null && res.isSuccess()) {
-				return (KhachHang) res.getData();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	private dto.Ban_DTO dtoFromBan(Ban ban) {
-		return dto.Ban_DTO.builder()
-				.maBan(ban.getMaBan())
-				.viTri(ban.getViTri())
-				.trangThai(ban.getTrangThai())
-				.maLoaiBan(ban.getLoaiBan() != null ? ban.getLoaiBan().getMaLoaiBan() : null)
-				.build();
+		return donDatBanDAO.getKhachHangTheoMaDatBan(maDatBan);
 	}
 
 }

@@ -368,7 +368,7 @@ public class KhuyenMai_Controller implements Initializable {
 
 		txtTimKiem.textProperty().addListener((obs, oldV, newV) -> {
 
-			String f = newV.toLowerCase();
+			String f = newV == null ? "" : newV.toLowerCase().trim();
 
 			filteredList.setPredicate(km ->
 

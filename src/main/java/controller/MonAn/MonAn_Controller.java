@@ -225,6 +225,10 @@ public class MonAn_Controller implements Initializable {
 
 		try {
 			MonAn_DTO mon = getFormData();
+			if ((mon.getDuongDanAnh() == null || mon.getDuongDanAnh().isBlank())
+					&& selected.getDuongDanAnh() != null && !selected.getDuongDanAnh().isBlank()) {
+				mon.setDuongDanAnh(selected.getDuongDanAnh());
+			}
 			Request req = new Request(CommandType.MONAN_UPDATE, mon);
 			Response res = client.send(req);
 

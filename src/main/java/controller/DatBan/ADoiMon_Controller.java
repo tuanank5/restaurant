@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
 import dao.ChiTietHoaDon_DAO;
+import dao.HoaDon_DAO;
 import dto.ChiTietHoaDon_DTO;
 import dto.MonAn_DTO;
 import entity.Ban;
@@ -50,6 +51,7 @@ import network.Client;
 import network.common.CommandType;
 import network.common.Request;
 import network.common.Response;
+import dao.impl.HoaDon_DAOImpl;
 
 public class ADoiMon_Controller implements Initializable {
 
@@ -106,6 +108,7 @@ public class ADoiMon_Controller implements Initializable {
 	private Map<MonAn, Integer> dsMonAnDat = new LinkedHashMap<>();
 	private DonDatBan donDatBanHienTai;
 	private HoaDon hoaDonHienTai;
+	private final HoaDon_DAO hoaDonDAO = new HoaDon_DAOImpl();
 
 	@FXML
 	void btnQuayLai(ActionEvent event) {
@@ -138,6 +141,7 @@ public class ADoiMon_Controller implements Initializable {
 				showAlert("Lỗi", "Không thể cập nhật món ăn!", Alert.AlertType.ERROR);
 				return;
 			}
+			updateTongTienHoaDon();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showAlert("Lỗi", "Không thể cập nhật món ăn!", Alert.AlertType.ERROR);
@@ -435,6 +439,12 @@ public class ADoiMon_Controller implements Initializable {
 	}
 
 	private void loadThongTinKhachVaSoLuong() {
+		if (donDatBanHienTai == null) {
+			txtKhachHang.setText("Khách lẻ");
+			txtSoLuongKhach.clear();
+			txtMaBan.clear();
+			return;
+		}
 
 		// ===== TÊN KHÁCH =====
 		if (hoaDonHienTai != null && hoaDonHienTai.getKhachHang() != null) {
@@ -450,6 +460,16 @@ public class ADoiMon_Controller implements Initializable {
 
 		// ===== MÃ BÀN =====
 		txtMaBan.setText(donDatBanHienTai.getBan().getMaBan());
+	}
+
+	private void updateTongTienHoaDon() {
+		if (hoaDonHienTai == null) return;
+		double tongTienMoi = dsMonAnDat.entrySet()
+				.stream()
+				.mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
+				.sum();
+		hoaDonHienTai.setTongTien(tongTienMoi);
+		hoaDonDAO.capNhat(hoaDonHienTai);
 	}
 
 	@SuppressWarnings("unchecked")

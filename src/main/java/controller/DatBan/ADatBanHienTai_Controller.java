@@ -222,6 +222,7 @@ public class ADatBanHienTai_Controller implements Initializable {
 									err.setHeaderText("Số điện thoại không hợp lệ!");
 									err.setContentText("Vui lòng nhập số điện thoại của khách hàng");
 									err.show();
+									return;
 								}
 
 								if (txtKH.getText().trim().isEmpty()) {

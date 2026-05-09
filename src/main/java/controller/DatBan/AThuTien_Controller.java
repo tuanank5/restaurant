@@ -25,7 +25,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import config.RestaurantApplication;
 import controller.Menu.MenuNV_Controller;
+import dao.Ban_DAO;
+import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
+import dao.impl.Ban_DAOImpl;
+import dao.impl.DonDatBan_DAOImpl;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.KhuyenMai;
@@ -113,6 +117,8 @@ public class AThuTien_Controller {
 
 	private int tienKH = 0;
 	private double tienTra;
+	private final Ban_DAO banDAO = new Ban_DAOImpl();
+	private final DonDatBan_DAO donDatBanDAO = new DonDatBan_DAOImpl();
 
 	@FXML
 	public void initialize() {
@@ -251,6 +257,7 @@ public class AThuTien_Controller {
 				// Kiểm tra kết quả thêm
 				if (check) {
 					capNhatDiemTichLuySauThanhToan();
+					capNhatTrangThaiSauThanhToan();
 					xuatHD();
 					Stage stage = (Stage) btnHuy.getScene().getWindow();
 					stage.close();
@@ -279,6 +286,7 @@ public class AThuTien_Controller {
 			// Kiểm tra kết quả thêm
 			if (check) {
 				capNhatDiemTichLuySauThanhToan();
+				capNhatTrangThaiSauThanhToan();
 				xuatHDChuyenKhoan();
 				Stage stage = (Stage) btnHuy.getScene().getWindow();
 				stage.close();
@@ -568,6 +576,25 @@ public class AThuTien_Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	private void capNhatTrangThaiSauThanhToan() {
+		if (hoaDonHienTai == null || hoaDonHienTai.getDonDatBan() == null) return;
+
+		try {
+			entity.DonDatBan ddb = hoaDonHienTai.getDonDatBan();
+			ddb.setTrangThai("Đã thanh toán");
+			donDatBanDAO.capNhat(ddb);
+
+			if (ddb.getBan() != null) {
+				entity.Ban ban = ddb.getBan();
+				ban.setTrangThai("Trống");
+				banDAO.capNhat(ban);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			showAlert("Cảnh báo", "Thanh toán thành công nhưng chưa cập nhật trạng thái bàn.", Alert.AlertType.WARNING);
 		}
 	}
 }

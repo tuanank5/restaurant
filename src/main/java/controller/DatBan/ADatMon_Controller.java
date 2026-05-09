@@ -20,6 +20,8 @@ import dao.ChiTietHoaDon_DAO;
 import dao.DonDatBan_DAO;
 import dao.HoaDon_DAO;
 import dao.MonAn_DAO;
+import dao.KhachHang_DAO;
+import dao.NhanVien_DAO;
 import dao.impl.Ban_DAOImpl;
 import dao.impl.MonAn_DAOImpl;
 import entity.Ban;
@@ -290,10 +292,16 @@ public class ADatMon_Controller implements Initializable {
 		} else {
 			if (checkTTbangKo == true) {
 				showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
-				themChiTietHoaDon(MenuNV_Controller.aBanHienTai_HD, dsMonAnDat);
+				HoaDon hdHienTai = MenuNV_Controller.aBanHienTai_HD;
+				themChiTietHoaDon(hdHienTai, dsMonAnDat);
+				capNhatTongTienHoaDon(hdHienTai);
 				MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
 			} else {
 				DonDatBan ddb = themDDB();
+				if (ddb == null) {
+					showAlert("Lỗi", "Không tạo được đơn đặt bàn", Alert.AlertType.ERROR);
+					return;
+				}
 				themHD(ddb);
 			}
 		}
@@ -302,12 +310,17 @@ public class ADatMon_Controller implements Initializable {
 	private DonDatBan themDDB() {
 		LocalDateTime nowDate = LocalDateTime.now();
 		LocalTime nowHour = LocalTime.now();
+		Ban banManaged = RestaurantApplication.getInstance()
+				.getDatabaseContext()
+				.newEntity_DAO(Ban_DAO.class)
+				.timTheoMa(MenuNV_Controller.banDangChon.getMaBan());
+		if (banManaged == null) return null;
 
 		DonDatBan ddb = new DonDatBan();
 		ddb.setMaDatBan(AutoIDUitl.sinhMaDonDatBan());
 		ddb.setNgayGioLapDon(nowDate);
 		ddb.setSoLuong(MenuNV_Controller.soLuongKhach);
-		ddb.setBan(MenuNV_Controller.banDangChon);
+		ddb.setBan(banManaged);
 		ddb.setGioBatDau(nowHour);
 		ddb.setTrangThai("Đã nhận bàn");
 
@@ -319,6 +332,24 @@ public class ADatMon_Controller implements Initializable {
 	}
 
 	private void themHD(DonDatBan ddb) {
+		KhachHang khManaged = RestaurantApplication.getInstance()
+				.getDatabaseContext()
+				.newEntity_DAO(KhachHang_DAO.class)
+				.timTheoMa(MenuNV_Controller.khachHangDangChon.getMaKH());
+		if (khManaged == null) {
+			showAlert("Lỗi", "Không tìm thấy khách hàng để lưu hóa đơn", Alert.AlertType.ERROR);
+			return;
+		}
+
+		entity.NhanVien nvManaged = RestaurantApplication.getInstance()
+				.getDatabaseContext()
+				.newEntity_DAO(NhanVien_DAO.class)
+				.timTheoMa(MenuNV_Controller.taiKhoan.getNhanVien().getMaNV());
+		if (nvManaged == null) {
+			showAlert("Lỗi", "Không tìm thấy nhân viên để lưu hóa đơn", Alert.AlertType.ERROR);
+			return;
+		}
+
 		HoaDon hd = new HoaDon();
 		hd.setMaHD(AutoIDUitl.sinhMaHoaDon());
 		LocalDate localDate = LocalDate.now();
@@ -327,13 +358,17 @@ public class ADatMon_Controller implements Initializable {
 
 		hd.setTrangThai("Hiện tại");
 		hd.setKieuThanhToan("Chưa thanh toán");
+		double tongTienMon = tinhTongTienMonDangDat();
+		hd.setTongTien(tongTienMon);
+		hd.setThue(0);
+		hd.setTienNhan(0);
+		hd.setTienThua(0);
 
 		// --- Gán khách hàng ---
-		KhachHang kh = MenuNV_Controller.khachHangDangChon;
-		hd.setKhachHang(kh);
+		hd.setKhachHang(khManaged);
 
 		hd.setKhuyenMai(null);
-		hd.setNhanVien(MenuNV_Controller.taiKhoan.getNhanVien());
+		hd.setNhanVien(nvManaged);
 		hd.setDonDatBan(ddb);
 		hd.setCoc(null);
 
@@ -345,6 +380,7 @@ public class ADatMon_Controller implements Initializable {
 				showAlert("Thông báo", "Lưu hóa đơn tạm thành công!", Alert.AlertType.INFORMATION);
 				if (!dsMonAnDat.isEmpty()) {
 					themChiTietHoaDon(hd, dsMonAnDat);
+					capNhatTrangThaiBanSauKhiDat(ddb);
 					MenuNV_Controller.instance.readyUI("DatBan/aBanHienTai");
 				}
 			} else {
@@ -357,15 +393,51 @@ public class ADatMon_Controller implements Initializable {
 	}
 
 	private void themChiTietHoaDon(HoaDon hd, Map<MonAn, Integer> dsMonAn) {
-		ChiTietHoaDon cthd = new ChiTietHoaDon();
 		for (Map.Entry<MonAn, Integer> entry : dsMonAn.entrySet()) {
+			ChiTietHoaDon cthd = new ChiTietHoaDon();
 			MonAn monAn = entry.getKey(); // Lấy món ăn
 			Integer soLuong = entry.getValue(); // Lấy số lượng tương ứng
 			cthd.setHoaDon(hd);
 			cthd.setMonAn(monAn);
 			cthd.setSoLuong(soLuong);
+			cthd.setThanhTien(monAn.getDonGia() * soLuong);
 			RestaurantApplication.getInstance().getDatabaseContext().newEntity_DAO(ChiTietHoaDon_DAO.class).them(cthd);
 		}
+	}
+
+	private double tinhTongTienMonDangDat() {
+		return dsMonAnDat.entrySet()
+				.stream()
+				.mapToDouble(e -> e.getKey().getDonGia() * e.getValue())
+				.sum();
+	}
+
+	private void capNhatTongTienHoaDon(HoaDon hd) {
+		if (hd == null) return;
+		double tongTienMon = tinhTongTienMonDangDat();
+		hd.setTongTien(tongTienMon);
+		hd.setThue(0);
+		hd.setTienNhan(0);
+		hd.setTienThua(0);
+		RestaurantApplication.getInstance()
+				.getDatabaseContext()
+				.newEntity_DAO(HoaDon_DAO.class)
+				.capNhat(hd);
+	}
+
+	private void capNhatTrangThaiBanSauKhiDat(DonDatBan ddb) {
+		if (ddb == null || ddb.getBan() == null) return;
+
+		Ban ban = RestaurantApplication.getInstance()
+				.getDatabaseContext()
+				.newEntity_DAO(Ban_DAO.class)
+				.timTheoMa(ddb.getBan().getMaBan());
+		if (ban == null) return;
+		ban.setTrangThai("Đang phục vụ");
+		RestaurantApplication.getInstance()
+				.getDatabaseContext()
+				.newEntity_DAO(Ban_DAO.class)
+				.capNhat(ban);
 	}
 
 	private void loadMonAnToGrid(List<MonAn> danhSach) {
