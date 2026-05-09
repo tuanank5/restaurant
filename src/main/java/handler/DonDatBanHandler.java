@@ -110,7 +110,7 @@ public class DonDatBanHandler implements CommandHandler {
                 return new Response(true, result, "OK");
             }
 
-            case DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_CUTHE -> {
+            case DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE -> {
 
                 Map<String, Object> map =
                         (Map<String, Object>) request.getData();
@@ -121,10 +121,13 @@ public class DonDatBanHandler implements CommandHandler {
                 LocalDate dateEnd =
                         (LocalDate) map.get("dateEnd");
 
+                String maNV = (String) map.get("maNV");
+
                 List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoNgayCuThe(
+                        service.getAllDonDatBanTheoNgayNVCuThe(
                                 dateStart,
-                                dateEnd
+                                dateEnd,
+                                maNV
                         );
 
                 return new Response(true, list, "OK");
@@ -253,7 +256,7 @@ public class DonDatBanHandler implements CommandHandler {
                 return new Response(true, result, "OK");
             }
 
-            case DONDATBAN_GET_ALL_THEO_NGAY_CUTHE -> {
+            case DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_CUTHE -> {
 
                 Map<String, Object> map =
                         (Map<String, Object>) request.getData();
@@ -302,33 +305,6 @@ public class DonDatBanHandler implements CommandHandler {
                         service.countLoaiBanTheoNgayCuThe(dateStart, dateEnd);
 
                 return new Response(true, result, "OK");
-            }
-
-            case DONDATBAN_GET_ALL_THEO_THANG -> {
-
-                Map<String, Object> map =
-                        (Map<String, Object>) request.getData();
-
-                int thang = (int) map.get("thang");
-                int nam = (int) map.get("nam");
-
-                List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoThang(thang, nam);
-
-                return new Response(true, list, "OK");
-            }
-
-            case DONDATBAN_GET_ALL_THEO_NAM -> {
-
-                Map<String, Object> map =
-                        (Map<String, Object>) request.getData();
-
-                int nam = (int) map.get("nam");
-
-                List<DonDatBan_DTO> list =
-                        service.getAllDonDatBanTheoNam(nam);
-
-                return new Response(true, list, "OK");
             }
         }
 

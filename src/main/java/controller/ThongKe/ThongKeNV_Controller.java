@@ -363,10 +363,11 @@ public class ThongKeNV_Controller {
 		List<DonDatBan_DTO> dsDon =
 				(List<DonDatBan_DTO>) client.send(
 						new Request(
-								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_CUTHE,
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE,
 								Map.of(
 										"dateStart", dateStart,
-										"dateEnd", dateEnd
+										"dateEnd", dateEnd,
+										"maNV", nhanVien.getMaNV()
 								)
 						)
 				).getData();
@@ -494,10 +495,11 @@ public class ThongKeNV_Controller {
 			Double previousTotalDoanhThu =
 					(Double) client.send(
 							new Request(
-									CommandType.HOADON_GET_TONG_DOANHTHU_THEO_THANG,
+									CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_THANG,
 									Map.of(
-											"thang", thang - 1,
-											"nam", nam
+											"thang", thang,
+											"nam", nam,
+											"maNV", nhanVien.getMaNV()
 									)
 							)
 					).getData();
@@ -756,10 +758,11 @@ public class ThongKeNV_Controller {
 			int previousTotalDoanhThu =
 					((List<DonDatBan_DTO>) client.send(
 							new Request(
-									CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_THANG,
+									CommandType.DONDATBAN_GET_ALL_DONDATBAN_NV_THEO_THANG,
 									Map.of(
-											"thang", thang - 1,
-											"nam", nam
+											"thang", thang,
+											"nam", nam,
+											"maNV", nhanVien.getMaNV()
 									)
 							)
 					).getData()).size();
@@ -987,9 +990,10 @@ public class ThongKeNV_Controller {
 		Double totalDoanhThu =
 				(Double) client.send(
 						new Request(
-								CommandType.HOADON_GET_TONG_DOANHTHU_THEO_NAM,
+								CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_NAM,
 								Map.of(
-										"nam", nam
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
 								)
 						)
 				).getData();
@@ -999,9 +1003,10 @@ public class ThongKeNV_Controller {
 		Double previousTotalDoanhThu =
 				(Double) client.send(
 						new Request(
-								CommandType.HOADON_GET_TONG_DOANHTHU_THEO_NAM,
+								CommandType.HOADON_GET_TONG_DOANHTHU_NV_THEO_NAM,
 								Map.of(
-										"nam", nam - 1
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
 								)
 						)
 				).getData();
@@ -1098,9 +1103,10 @@ public class ThongKeNV_Controller {
 		int previousTotalDoanhThu =
 				((List<DonDatBan_DTO>) client.send(
 						new Request(
-								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NAM,
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NAM_NV_CUTHE,
 								Map.of(
-										"nam", nam - 1
+										"nam", nam,
+										"maNV", nhanVien.getMaNV()
 								)
 						)
 				).getData()).size();

@@ -120,7 +120,7 @@ public class DashboardNV_Controller {
 		List<DonDatBan_DTO> dsDon =
 				(List<DonDatBan_DTO>) client.send(
 						new Request(
-								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_CUTHE,
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_NV_CUTHE,
 								Map.of(
 										"dateStart", dateStart,
 										"dateEnd", dateEnd

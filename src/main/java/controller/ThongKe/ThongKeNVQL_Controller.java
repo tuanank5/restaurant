@@ -369,7 +369,7 @@ public class ThongKeNVQL_Controller {
 		List<DonDatBan_DTO> dsDon =
 				(List<DonDatBan_DTO>) client.send(
 						new Request(
-								CommandType.DONDATBAN_GET_ALL_THEO_NGAY_CUTHE,
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NGAY_CUTHE,
 								Map.of(
 										"dateStart", dateStart,
 										"dateEnd", dateEnd
@@ -771,7 +771,7 @@ public class ThongKeNVQL_Controller {
 			int previousTotalDoanhThu =
 					((List<DonDatBan_DTO>) client.send(
 							new Request(
-									CommandType.DONDATBAN_GET_ALL_THEO_THANG,
+									CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_THANG,
 									Map.of(
 											"thang", thang - 1,
 											"nam", nam
@@ -1116,7 +1116,7 @@ public class ThongKeNVQL_Controller {
 		int previousTotalDoanhThu =
 				((List<DonDatBan_DTO>) client.send(
 						new Request(
-								CommandType.DONDATBAN_GET_ALL_THEO_NAM,
+								CommandType.DONDATBAN_GET_ALL_DONDATBAN_THEO_NAM,
 								Map.of(
 										"nam", nam - 1
 								)
