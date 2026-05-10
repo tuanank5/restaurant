@@ -564,11 +564,12 @@ public class HoaDon_DAOImpl extends Entity_DAOImpl<HoaDon> implements HoaDon_DAO
 			hd.setKhachHang(kh);
 		}
 
-		if(dto.getMaNhanVien() != null) {
-			NhanVien nv = entityManager.find(
-					NhanVien.class,
-					dto.getMaNhanVien()
-			);
+		String maNV = dto.getMaNhanVien();
+		if ((maNV == null || maNV.isBlank()) && dto.getNhanVien() != null) {
+			maNV = dto.getNhanVien().getMaNV();
+		}
+		if (maNV != null && !maNV.isBlank()) {
+			NhanVien nv = entityManager.find(NhanVien.class, maNV.trim());
 			hd.setNhanVien(nv);
 		}
 

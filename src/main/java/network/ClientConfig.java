@@ -10,7 +10,7 @@ public final class ClientConfig {
 			System.getProperty("restaurant.socket.host", "100.104.223.6");
 
 	public static final int DEFAULT_PORT =
-			Integer.parseInt(System.getProperty("restaurant.socket.port", "9090"));
+			Integer.parseInt(System.getProperty("restaurant.socket.port", "9091"));
 
 	private ClientConfig() {
 	}

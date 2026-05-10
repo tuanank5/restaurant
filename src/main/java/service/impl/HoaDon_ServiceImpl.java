@@ -67,6 +67,21 @@ public class HoaDon_ServiceImpl implements HoaDon_Service {
 			hoaDon.setMaKhachHang(kh.getMaKH());
 		}
 
+		String maNV = hoaDon_DTO.getMaNhanVien();
+		if ((maNV == null || maNV.isBlank()) && hoaDon_DTO.getNhanVien() != null) {
+			maNV = hoaDon_DTO.getNhanVien().getMaNV();
+		}
+		if (maNV == null || maNV.isBlank()) {
+			throw new IllegalArgumentException("maNhanVien không được rỗng");
+		}
+		NhanVien_ServiceImpl nhanVienService = new NhanVien_ServiceImpl();
+		NhanVien_DTO nv = nhanVienService.findById(maNV.trim());
+		if (nv == null) {
+			throw new RuntimeException("Không tìm thấy nhân viên: " + maNV);
+		}
+		hoaDon.setMaNhanVien(nv.getMaNV());
+		hoaDon.setNhanVien(nv);
+
 		return hoaDon_DAO.themHoaDon(hoaDon);
 	}
 
