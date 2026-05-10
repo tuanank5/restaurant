@@ -16,6 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonDatBan_DAO {
@@ -529,11 +530,46 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 	public String getMaxMaDatBan() {
 		EntityManager em = getEntityManager();
 		try {
-			return em.createQuery("SELECT MAX(d.maDatBan) FROM DonDatBan d", String.class).getSingleResult();
+			// Không dùng MAX(chuỗi): với mã DDBxxx so sách từ điển sai (ví dụ "DDB99" > "DDB175")
+			String jpql = "SELECT d.maDatBan FROM DonDatBan d ORDER BY CAST(SUBSTRING(d.maDatBan, 4) AS int) DESC";
+			return em.createQuery(jpql, String.class).setMaxResults(1).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} catch (PersistenceException e) {
+			return getMaxMaDatBanFallback(em);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		} finally {
 			em.close();
+		}
+	}
+
+	/** Quét số trong mã khi ORDER BY CAST không chạy được (dữ liệu lệch format). */
+	private static String getMaxMaDatBanFallback(EntityManager em) {
+		try {
+			List<String> all = em.createQuery("SELECT d.maDatBan FROM DonDatBan d", String.class).getResultList();
+			int maxNum = 0;
+			for (String ma : all) {
+				if (ma == null) {
+					continue;
+				}
+				String digits = ma.replaceAll("\\D+", "");
+				if (digits.isEmpty()) {
+					continue;
+				}
+				try {
+					int n = Integer.parseInt(digits);
+					if (n > maxNum) {
+						maxNum = n;
+					}
+				} catch (NumberFormatException ignored) {
+				}
+			}
+			return maxNum > 0 ? "DDB" + String.format("%03d", maxNum) : null;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
 		}
 	}
 

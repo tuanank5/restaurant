@@ -116,18 +116,12 @@ public class AutoIDUitl {
 		DonDatBan_DAO ddbDAO = RestaurantApplication.getInstance().getDatabaseContext()
 				.newEntity_DAO(DonDatBan_DAO.class);
 
-		String max = ddbDAO.getMaxMaDatBan(); // ví dụ: DDB012
-
-		if (max == null) {
-			return "DDB001";
+		String max = ddbDAO.getMaxMaDatBan();
+		int next = extractNumber(max) + 1;
+		if (next <= 0) {
+			next = 1;
 		}
-
-		try {
-			int so = Integer.parseInt(max.substring(3)); // "DDB012" -> 12
-			return "DDB" + String.format("%03d", so + 1);
-		} catch (Exception e) {
-			return "DDB001";
-		}
+		return formatID("DDB", next, 3);
 	}
 
 	public static String sinhMaHoaDon() {
