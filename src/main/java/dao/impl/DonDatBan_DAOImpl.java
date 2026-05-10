@@ -23,8 +23,45 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
 
+	/** Đồng bộ sinh mã + insert để tránh hai luồng cùng đọc max và chọn một maDatBan. */
+	private static final Object DDB_INSERT_LOCK = new Object();
+
 	private EntityManager getEntityManager() {
 		return emf.createEntityManager();
+	}
+
+	private static int extractNumericSuffixMaDatBan(String ma) {
+		if (ma == null || ma.isBlank()) {
+			return 0;
+		}
+		String digits = ma.replaceAll("\\D+", "");
+		if (digits.isEmpty()) {
+			return 0;
+		}
+		try {
+			return Integer.parseInt(digits);
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+	}
+
+	private void assignNextMaDatBanFromDbMax(DonDatBan d) {
+		String max = getMaxMaDatBan();
+		int next = extractNumericSuffixMaDatBan(max) + 1;
+		if (next <= 0) {
+			next = 1;
+		}
+		d.setMaDatBan("DDB" + String.format("%03d", next));
+	}
+
+	private static boolean isDuplicatePrimaryKey(Throwable e) {
+		for (Throwable t = e; t != null; t = t.getCause()) {
+			String msg = t.getMessage();
+			if (msg != null && (msg.contains("duplicate key") || msg.contains("PRIMARY KEY"))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// --- Lấy đơn đặt bàn mới nhất ---
@@ -86,18 +123,36 @@ public class DonDatBan_DAOImpl extends Entity_DAOImpl<DonDatBan> implements DonD
 
 	@Override
 	public boolean them(DonDatBan donDatBan) {
-		EntityManager em = getEntityManager();
-		try {
-			em.getTransaction().begin();
-			em.persist(donDatBan);
-			em.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			em.getTransaction().rollback();
+		synchronized (DDB_INSERT_LOCK) {
+			if (donDatBan.getMaDatBan() == null || donDatBan.getMaDatBan().isBlank()) {
+				assignNextMaDatBanFromDbMax(donDatBan);
+			} else if (findById(donDatBan.getMaDatBan()) != null) {
+				assignNextMaDatBanFromDbMax(donDatBan);
+			}
+
+			final int maxAttempts = 30;
+			for (int attempt = 0; attempt < maxAttempts; attempt++) {
+				EntityManager em = getEntityManager();
+				try {
+					em.getTransaction().begin();
+					em.persist(donDatBan);
+					em.getTransaction().commit();
+					return true;
+				} catch (Exception e) {
+					if (em.getTransaction().isActive()) {
+						em.getTransaction().rollback();
+					}
+					if (isDuplicatePrimaryKey(e) && attempt + 1 < maxAttempts) {
+						assignNextMaDatBanFromDbMax(donDatBan);
+						continue;
+					}
+					e.printStackTrace();
+					return false;
+				} finally {
+					em.close();
+				}
+			}
 			return false;
-		} finally {
-			em.close();
 		}
 	}
 

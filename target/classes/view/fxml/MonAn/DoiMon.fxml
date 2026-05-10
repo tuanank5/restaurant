@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DatMon.DoiMonTruoc_Controller">
+   <left>
+      <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <center>
+            <TableView fx:id="tblMonCu" styleClass="tbl" stylesheets="@../../css/SystemDesign.css">
+   <columns>
+      <TableColumn fx:id="colSTT" prefWidth="50.0" text="STT" />
+      <TableColumn fx:id="colTenMonCu" prefWidth="150.0" text="Tên món" />
+      <TableColumn fx:id="colSoLuongCu" prefWidth="50.0" text="SL" />
+      <TableColumn fx:id="colDonGia" prefWidth="150.0" text="Đơn giá" />
+   </columns>
+</TableView>
+         </center>
+         <bottom>
+            <BorderPane>
+               <bottom>
+                  <AnchorPane prefHeight="100.0" prefWidth="200.0" style="-fx-border-width: 2px 1px 0 0; -fx-border-color: #dddddd;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="btnXacNhan" mnemonicParsing="false" onAction="#hanhDongXacNhan" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font></Button>
+                     </children>
+                  </AnchorPane>
+               </bottom>
+            </BorderPane>
+         </bottom>
+      </BorderPane>
+   </left>
+   <center>
+      <BorderPane prefWidth="800.0" BorderPane.alignment="CENTER">
+         <center>
+            <ScrollPane fx:id="scrollPaneMon" prefHeight="200.0" prefWidth="200.0">
+               <content>
+                  <GridPane fx:id="gridPaneMon" prefHeight="608.0" prefWidth="798.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </center>
+   <top>
+      <BorderPane prefHeight="90.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+         <left>
+            <AnchorPane prefWidth="400.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ComboBox fx:id="comBoxPhanLoai" layoutX="10.0" prefWidth="150.0" promptText="Phân loại" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+               </children>
+            </AnchorPane>
+         </left>
+         <right>
+            <AnchorPane prefWidth="800.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="txtTim" prefWidth="300.0" promptText="Nhập tên món ăn để tìm" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <Button fx:id="btnTroLai" layoutX="700.0" mnemonicParsing="false" onAction="#hanhDongTroLai" styleClass="btn" stylesheets="@../../css/SystemDesign.css" text="Trở lại" />
+               </children>
+            </AnchorPane>
+         </right>
+         <top>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" styleClass="h1" stylesheets="@../../css/SystemDesign.css" text="Đổi món" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+         </top></BorderPane>
+   </top>
+</BorderPane>

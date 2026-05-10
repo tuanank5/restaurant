@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane_main" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ThongKe.ThongKeNVQL_Controller">
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <children>
+      <HBox prefHeight="100.0" prefWidth="1100.0">
+         <children>
+            <AnchorPane prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
+               <children>
+                  <JFXRadioButton fx:id="radThangNam" layoutX="15.0" layoutY="15.0" styleClass="rad" stylesheets="@../../css/SystemDesign.css" text="Thống kê theo tháng/năm" />
+                  <JFXComboBox fx:id="cmbThang" layoutX="15.0" layoutY="50.0" promptText="Tháng" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+                  <JFXComboBox fx:id="cmbNam" layoutX="125.0" layoutY="50.0" promptText="Năm" styleClass="cmb" stylesheets="@../../css/SystemDesign.css" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefWidth="525.0" styleClass="pane" stylesheets="@../../css/Dashboard.css">
+               <children>
+                  <JFXRadioButton fx:id="radNgay" layoutX="15.0" layoutY="15.0" styleClass="rad" stylesheets="@../../css/SystemDesign.css" text="Thống kê theo ngày" />
+                  <Label layoutX="15.0" layoutY="55.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" text="Từ ngày:" />
+                  <DatePicker fx:id="txtDateStart" layoutX="80.0" layoutY="49.0" prefWidth="160.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+                  <Label layoutX="260.0" layoutY="55.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" text="Đến ngày:" />
+                  <DatePicker fx:id="txtDateEnd" layoutX="340.0" layoutY="49.0" prefWidth="160.0" styleClass="txt" stylesheets="@../../css/SystemDesign.css" />
+               </children>
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </AnchorPane>
+            <JFXButton fx:id="btnLoc" prefHeight="100.0" prefWidth="240.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" text="LỌC (F5)">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin></JFXButton>
+         </children>
+      </HBox>
+      <HBox layoutY="120.0" prefHeight="100.0" prefWidth="1100.0">
+         <children>
+            <VBox alignment="CENTER" prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
+               <children>
+                  <FontAwesomeIconView glyphName="BAR_CHART" size="30" />
+                  <Label fx:id="lblDoanhThu" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="0" />
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Doanh thu" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+               <children>
+                  <FontAwesomeIconView glyphName="FILE_TEXT" size="30" />
+                  <Label fx:id="lblHoaDon" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="0" />
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Hóa đơn" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+               <children>
+                  <FontAwesomeIconView glyphName="LIST_ALT" size="30" />
+                  <Label fx:id="lblDonDatBan" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="0" />
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Đơn đặt bàn" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefWidth="237.5" styleClass="pane" stylesheets="@../../css/Dashboard.css">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+               <children>
+                  <FontAwesomeIconView glyphName="USERS" size="30" />
+                  <Label fx:id="lblKhachHang" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="0" />
+                  <Label styleClass="lbl" stylesheets="@../../css/SystemDesign.css" text="Khách hàng" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <VBox layoutY="240.0" prefHeight="500.0" prefWidth="1100.0">
+         <children>
+            <AnchorPane prefHeight="350.0" prefWidth="1100.0">
+               <children>
+                  <AreaChart fx:id="areaChart_DoanhThu" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css">
+                    <xAxis>
+                      <CategoryAxis fx:id="axis" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </AreaChart>
+                  <BarChart fx:id="barChart_DoanhThuNam" prefHeight="350.0" prefWidth="1100.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="DOANH THU THÁNG NĂM">
+                    <xAxis>
+                      <CategoryAxis label="Tháng" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis label="Doanh thu" side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </AnchorPane>
+            <Label fx:id="lblThongTinDoanhThu" prefHeight="150.0" prefWidth="1100.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" />
+         </children>
+      </VBox>
+      <HBox layoutY="740.0" prefHeight="30.0" prefWidth="1100.0">
+         <children>
+            <BorderPane prefWidth="1100.0">
+               <center>
+                  <Label styleClass="h2" stylesheets="@../../css/SystemDesign.css" text="Đơn đặt bàn">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </center>
+            </BorderPane>
+         </children>
+      </HBox>
+      <HBox layoutY="770.0" prefHeight="350.0" prefWidth="1100.0">
+         <children>
+            <VBox prefHeight="500.0" prefWidth="750.0">
+               <children>
+                  <AnchorPane>
+                     <children>
+                        <BarChart fx:id="barChart_DonDatBan" prefHeight="350.0" prefWidth="700.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="SỐ LƯỢNG ĐƠN ĐẶT BÀN">
+                          <xAxis>
+                            <CategoryAxis label="Thời gian" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis label="Số lượng" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+            <AnchorPane>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <children>
+                  <PieChart fx:id="pieChart_LoaiBan" prefHeight="350.0" prefWidth="350.0" styleClass="pane" stylesheets="@../../css/Dashboard.css" title="TỶ LỆ ĐƠN ĐẶT BÀN THEO LOẠI BÀN" />
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+      <Label fx:id="lblThongTinDonDatBan" layoutY="1120.0" prefHeight="150.0" prefWidth="1100.0" styleClass="lbl" stylesheets="@../../css/SystemDesign.css" />
+   </children>
+</AnchorPane>

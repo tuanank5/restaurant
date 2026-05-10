@@ -40,9 +40,12 @@ public class DonDatBan_ServiceImpl implements DonDatBan_Service {
 		if (dto == null) {
 			throw new IllegalArgumentException("dto null");
 		}
-		return donDatBan_DAO.them(
-				MapperUtil.map(dto, DonDatBan.class)
-		);
+		DonDatBan entity = MapperUtil.map(dto, DonDatBan.class);
+		boolean ok = donDatBan_DAO.them(entity);
+		if (ok && entity.getMaDatBan() != null) {
+			dto.setMaDatBan(entity.getMaDatBan());
+		}
+		return ok;
 	}
 
 	@Override

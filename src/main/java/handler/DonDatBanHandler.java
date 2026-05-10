@@ -389,6 +389,7 @@ public class DonDatBanHandler implements CommandHandler {
 
                 return Response.builder()
                         .success(result)
+                        .data(result ? dto : null)
                         .message(result
                                 ? "Thêm đơn đặt bàn thành công"
                                 : "Thêm đơn đặt bàn thất bại")

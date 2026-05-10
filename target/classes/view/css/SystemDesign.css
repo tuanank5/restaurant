@@ -1,0 +1,107 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.h1 {
+	-fx-font-family: "Times New Roman";
+    -fx-font-weight: bold;
+    -fx-font-size: 32px;
+}
+
+.h2 {
+	-fx-font-family: "Times New Roman";
+    -fx-font-weight: normal;
+    -fx-font-size: 24px;
+}
+
+.lbl {
+    -fx-font-family: "Times New Roman";
+    -fx-font-weight: normal;
+    -fx-font-size: 16px;
+}
+
+.txt {
+	-fx-font-family: "Times New Roman";
+    -fx-font-weight: normal;
+    -fx-font-size: 16px;
+}
+
+.btn {
+    -fx-font-family: "Times New Roman";
+    -fx-font-weight: normal;
+    -fx-font-size: 16px;
+}
+.btnQuayLai {
+    -fx-font-family: "Times New Roman";
+    -fx-font-weight: normal;
+    -fx-font-size: 16px;
+    -fx-text-fill: white  ;
+     -fx-background-color: #2C3E50;
+}
+.btn-red {
+    -fx-background-color:  #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Green */
+.btn-green {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Blue */
+.btn-blue {
+    -fx-background-color:  #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.btn-cam {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.btn-question-simple {
+    /* Size 20 */
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
+
+    /* Hình tròn */
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
+
+    /* Giữ nền mặc định của Button */
+    -fx-background-color: -fx-background;
+
+    /* Dấu hỏi */
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0;
+    -fx-alignment: center;
+}
+
+.tbl {
+	-fx-font-family: "Times New Roman";
+	-fx-font-size: 14px;
+}
+
+.cmb {
+	-fx-font-family: "Times New Roman";
+	-fx-font-weight: normal;
+	-fx-font-size: 16px;
+}
+
+.chk {
+	-fx-font-family: "Times New Roman";
+	-fx-font-weight: normal;
+	-fx-font-size: 16px;
+}
+
+.rad {
+	-fx-font-family: "Times New Roman";
+	-fx-font-weight: normal;
+	-fx-font-size: 16px;
+}
